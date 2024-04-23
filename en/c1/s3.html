@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Introduction to Computer Graphics, Section 1.3 -- Hardware and Software</title>
+<link type="text/css" rel="stylesheet" href="../resource/graphicstext.css">
+</head>
+<body>
+<div class="page">
+<div align="right">
+<small>
+        [  <a href="s2.html">Previous Section</a> |
+           <a href="index.html">Chapter Index</a> | 
+	    <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+<hr>
+<div class="content section">
+<h3 class="section_title">Section 1.3</h3>
+<h2 class="section_title">Hardware and Software</h2>
+<hr class="break">
+
+
+<p class="firstpar">We will be using OpenGL as the primary basis for 3D graphics programming.
+The original version of <span class="word" data-term="OpenGL" data-definition="A family of computer graphics APIs that is implemented in many graphics
+hardware devices.  There are several versions of the API, and there are implementations,
+or &quot;bindings&quot; for several different programming languages.  Versions of OpenGL for embedded
+systems such as mobile phones are known as OpenGL ES.  WebGL is a version for use on 
+Web pages.  OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly
+associated with 3D." title="Click for a definition of OpenGL.">OpenGL</span> was released in 1992 by a company named
+Silicon Graphics, which was known for its graphics workstations&mdash;powerful,
+expensive computers designed for intensive graphical applications.  (Today,
+you have more graphics computing power on your smart phone.)  OpenGL
+is supported by the graphics hardware in most modern computing devices, including
+desktop computers, laptops, and many mobile devices.  In the form of <span class="word" data-term="WebGL" data-definition="A 3D graphics API for use on web pages.  WebGL programs are written
+in the JavaScript programming language and display their images in HTML canvas
+elements.  WebGL is based on OpenGL ES, the version of OpenGL for embedded systems, with
+a few changes to adapt it to the JavaScript language and the Web environment." title="Click for a definition of WebGL.">WebGL</span>,
+it is the used for most 3D graphics on the Web.  This section will give
+you a bit of background about the history of OpenGL and about the graphics 
+hardware that supports it.</p>
+
+
+<p>In the first desktop computers, the contents of the screen were managed
+directly by the <span class="word" data-term="CPU" data-definition="The Central Processing Unit in a computer, the component that actually
+executes programs.  The CPU reads machine language instructions from the computer's memory
+and carries them out." title="Click for a definition of CPU.">CPU</span>.  For example, to draw a line segment on the screen, the CPU
+would run a loop to set the color of each pixel that lies along the line.
+Needless to say, graphics could take up a lot of the CPU's time.  And graphics
+performance was very slow, compared to what we expect today.  So what has changed?
+Computers are much faster in general, of course, but the big change is that
+in modern computers, graphics processing is done by a specialized component
+called a <span class="newword" data-term="GPU" data-definition="Graphics Processing Unit, a computer hardware component that performs graphical
+computations that create and manipulate images.  Operations such as drawing a line on the screen 
+or rendering a 3D image are done in the GPU, which is optimized to perform such operations very
+quickly." title="Click for a definition of GPU.">GPU</span>, or Graphics Processing Unit.  A GPU includes processors
+for doing graphics computations; in fact, it can include a large number of such
+processors that work in parallel to greatly speed up graphical operations.  
+It also includes its own dedicated memory for storing things like images and 
+lists of coordinates.  GPU processors have very fast
+access to data that is stored in GPU memory&mdash;much faster than their access to data
+stored in the computer's main memory.</p>
+
+
+<p>To draw a line or perform some other graphical operation, the CPU simply has to
+send commands, along with any necessary data, to the GPU, which is responsible
+for actually carrying out those commands.  The CPU offloads most of the graphical
+work to the GPU, which is optimized to carry out that work very quickly.
+The set of commands that the GPU understands make up the <span class="word" data-term="API" data-definition="Application Programming Interface.  A collection of related classes, functions,
+constants, etc., for performing some task.  An API is an &quot;interface&quot; in the sense that it
+can be used without understanding how its functionality is actually implemented." title="Click for a definition of API.">API</span>
+of the GPU.  OpenGL is an example of a graphics API, and most GPUs support
+OpenGL in the sense that they can understand OpenGL commands, or at least
+that OpenGL commands can efficiently be translated into commands that the
+GPU can understand.</p>
+
+
+<p>OpenGL is not the only graphics API.  In fact, it is in the process of
+being replaced by more modern alternatives, including <span class="word" data-term="Vulkan" data-definition="An open-source cross-platform API for 3D graphics and computation, designed as a
+more modern and efficient replacement for OpenGL." title="Click for a definition of Vulkan.">Vulkan</span>
+an open API from the same group that is responsible for OpenGL.  There
+are also proprietary APIs used by Apple and Microsoft: <span class="word" data-term="Metal" data-definition="Apple's proprietary API for 3D graphics and computation on MacOS computers and iOS devices." title="Click for a definition of Metal.">Metal</span>
+and <span class="word" data-term="Direct3D" data-definition="Microsoft's proprietary API for 3D graphics on the Windows operating system." title="Click for a definition of Direct3D.">Direct3D</span>.  As for the Web, a new API called <span class="word" data-term="WebGPU" data-definition="A new JavaScript graphics API, similar to WebGL, but designed to let web programs access
+modern GPU capabilities such as compute shaders." title="Click for a definition of WebGPU.">WebGPU</span>
+has been under development for some time and is already implemented in
+some Web browsers.  These newer APIs are complex and low-level.
+They are designed more for speed and efficiency rather than ease-of-use.  Metal, 
+Direct3D, and Vulkan are not covered in this textbook, but WebGPU
+is introduced in <a href="../c9/index.html">Chapter&nbsp;9</a>.  For most of the book, we will
+use OpenGL, because it provides an easier
+introduction to 3D graphics, and WebGL, because it is still the major
+API for 3D graphics in Web browsers.</p>
+
+
+<hr class="break">
+
+
+<p>I have said that OpenGL is an API, but in fact it is a series of APIs that have
+been subject to repeated extension and revision.  In 2023, the current (and perhaps final) version
+is 4.6, which was first released in 2017.  It is very different from the 1.0 version from 1992.
+Furthermore,
+there is a specialized version called OpenGL&nbsp;ES for "embedded systems" such
+as mobile phones and tablets.  And there is also WebGL, for use in Web browsers,
+which is basically a port of OpenGL ES.  It will be useful to know something
+about how and why OpenGL has changed.</p>
+
+
+<p>First of all, you should know that OpenGL was designed as a "client/server"
+system.  The server, which is responsible for controlling the computer's
+display and performing graphics computations, carries out commands issued by the
+client.  Typically, the server is a GPU, including its graphics processors and memory.
+The server executes OpenGL commands.  The client is the CPU in the same computer, along 
+with the application program that it is running. OpenGL commands come from the
+program that is running on the CPU.  However,
+it is actually possible to run OpenGL programs remotely over a network.  That
+is, you can execute an application program on a remote computer (the OpenGL client), while
+the graphics computations and display are done on the computer that you are
+actually using (the OpenGL server).</p>
+
+
+<p>The key idea is that the client and the server are separate components, and there
+is a communication channel between those components.  OpenGL commands and the
+data that they need are communicated from the client (the CPU) to the server (the GPU)
+over that channel.  The capacity of the channel can be a limiting factor in graphics
+performance.  Think of drawing an image onto the screen.  If the GPU can draw the
+image in microseconds, but it takes milliseconds to send the data for the image
+from the CPU to the GPU, then the great speed of the GPU is irrelevant&mdash;most of
+the time that it takes to draw the image is communication time.</p>
+
+
+<p>For this reason, one of the driving factors in the evolution of OpenGL has been
+the desire to limit the amount of communication that is needed between the CPU and
+the GPU.  One approach is to store information in the GPU's memory.  If some data
+is going to be used several times, it can be transmitted to the GPU once and
+stored in memory there, where it will be immediately accessible to the GPU.
+Another approach is to try to decrease the number of OpenGL commands that must
+be transmitted to the GPU to draw a given image.</p>
+
+
+<p>OpenGL draws <span class="word" data-term="geometric primitive" data-definition="Geometric objects in a graphics system, such as OpenGL, that are
+not made up of simpler objects.  Examples in OpenGL include points, lines, and triangles,
+but the set of available primitives depends on the graphics system.  (Note that as the term
+is used in OpenGL, a single primitive can be made up of many points, line segments, or triangles.)" title="Click for a definition of geometric primitive.">primitives</span> such as triangles.
+Specifying a primitive means specifying <span class="word" data-term="coordinate system" data-definition="A way of assigning numerical coordinates to geometric points.  In two
+dimensions, each point corresponds to a pair of numbers.  In three dimensions, each point corresponds
+to a triple of numbers." title="Click for a definition of coordinate system.">coordinates</span>
+and <span class="word" data-term="attribute" data-definition="A property, such as color, of a graphical object.  An image can be specified
+by the geometric shapes that it contains, together with their attributes." title="Click for a definition of attribute.">attributes</span> for each of its <span class="word" data-term="vertex" data-definition="One of the points that define a geometric primitive, such as the
+two endpoints of a line segment or the three vertices of a triangle.  (The plural is &quot;vertices.&quot;)
+A vertex can be specified in a coordinate system by giving its x and y coordinates in
+2D graphics, or its x, y, and z coordinates in 3D graphics." title="Click for a definition of vertex.">vertices</span>.  In the
+original OpenGL&nbsp;1.0, a separate command was used to specify the coordinates of each vertex,
+and a command was needed each time the value of an attribute changed.  To draw a single 
+triangle would require three or more commands.  Drawing a complex object made up of
+thousands of triangles would take many thousands of commands.  Even in OpenGL&nbsp;1.1,
+it became possible to draw such an object with a single command instead of thousands.  All the data
+for the object would be loaded into arrays, which could then be sent in a single
+step to the GPU.  Unfortunately, if the object was going to be drawn more than
+once, then the data would have to be retransmitted each time the object was drawn.
+This was fixed in OpenGL&nbsp;1.5 with <span class="newword" data-term="VBO" data-definition="Vertex Buffer Object.  A block of memory that can hold the
+coordinates or other attributes for a set of vertices.  A VBO can be stored on a GPU.
+VBOs make it possible to send
+such data to the GPU once and then reuse it several times.  In OpenGL, VBOs are
+used with the functions glDrawArrays and glDrawElements." title="Click for a definition of VBO.">Vertex Buffer Objects</span>.
+A VBO is a block of memory in the GPU that can store the coordinates or attribute values for
+a set of vertices.  This makes it possible to reuse the data without having to retransmit it
+from the CPU to the GPU every time it is used.</p>
+
+
+<p>Similarly, OpenGL 1.1 introduced <span class="newword" data-term="texture object" data-definition="A data structure that can potentially be stored
+on the graphics card, and which can hold a texture image, a set of mipmaps, 
+and configuration data such as the current setting for the minification and magnification
+filters.  Using texture objects makes it possible to switch rapidly between textures
+without having to reload the data into the graphics card." title="Click for a definition of texture object.">texture objects</span>
+to make it possible to store several images on the GPU for use as <span class="word" data-term="texture" data-definition="Variation in some property from point-to-point on an object.  The most common type
+is image texture.  When an image texture is applied to a surface, the surface color varies from
+point to point." title="Click for a definition of texture.">textures</span>.
+This means that texture images that are going to be reused several times can be loaded once
+into the GPU, so that the GPU can easily switch between images without having to reload them.</p>
+
+
+<hr class="break">
+
+
+<p>As new capabilities were added to OpenGL, the API grew in size.  But the growth was still
+outpaced by the invention of new, more sophisticated techniques for doing graphics.  Some
+of these new techniques were added to OpenGL, but
+the problem is that no matter how many features you add, there will always be demands for 
+new features&mdash;as well as complaints that all the new features are making things too 
+complicated! OpenGL was a giant machine, with new pieces always being tacked onto it, 
+but still not pleasing everyone. The real solution was to make the machine <b>programmable</b>.
+With OpenGL 2.0, it became possible to write programs to be executed as part of the
+graphical computation in the GPU.  The programs are run on the GPU at GPU speed.
+A programmer who wants to use a new graphics technique can write a program to 
+implement the feature and just hand it to the GPU.  The OpenGL API doesn't have to
+be changed.  The only thing that the API has to support is the ability to send programs
+to the GPU for execution.</p>
+
+
+<p>The programs are called <span class="newword" data-term="shader" data-definition="A program to be executed at some stage of the rendering pipeline.  OpenGL
+shaders are written in the GLSL programming languages.  For WebGL, only vertex shaders
+and fragment shaders are supported.  WebGPU also has compute shaders, which are used
+in compute pipelines." title="Click for a definition of shader.">shaders</span> (although the term doesn't
+really describe what most of them actually do).  The first shaders to be introduced were
+<span class="newword" data-term="vertex shader" data-definition="A shader program that will be executed once for each vertex in a primitive.
+A vertex shader must compute the vertex coordinates in the clip coordinate system.
+It can also compute other properties, such as color." title="Click for a definition of vertex shader.">vertex shaders</span> and <span class="newword" data-term="fragment shader" data-definition="A shader program that will be executed once for
+each pixel in a primitive.  A fragment shader must compute a color for the pixel,
+or discard it.  Fragment shaders are also called pixel shaders." title="Click for a definition of fragment shader.">fragment shaders</span>.
+When a <span class="word" data-term="geometric primitive" data-definition="Geometric objects in a graphics system, such as OpenGL, that are
+not made up of simpler objects.  Examples in OpenGL include points, lines, and triangles,
+but the set of available primitives depends on the graphics system.  (Note that as the term
+is used in OpenGL, a single primitive can be made up of many points, line segments, or triangles.)" title="Click for a definition of geometric primitive.">primitive</span> is drawn, some work has to be done at each vertex of the primitive,
+such as applying a <span class="word" data-term="geometric transform" data-definition="A coordinate transformation; that is, a function that can
+be applied to each of the points in a geometric object to produce a new object.  Common
+transforms include scaling, rotation, and translation. " title="Click for a definition of geometric transform.">geometric transform</span> to the vertex coordinates or
+using the <span class="word" data-term="attribute" data-definition="A property, such as color, of a graphical object.  An image can be specified
+by the geometric shapes that it contains, together with their attributes." title="Click for a definition of attribute.">attributes</span> and global <span class="word" data-term="lighting" data-definition="Using light sources in a 3D scene, so that the appearance of objects in
+the scene can be computed based on the interaction of light with the objects' material properties." title="Click for a definition of lighting.">lighting</span> environment
+to compute the color of that vertex.  A vertex shader is a program that can take over the
+job of doing such "per-vertex" computations.  Similarly, some work has to be done for each
+pixel inside the primitive.  A fragment shader can take over the job of performing such
+"per-pixel" computations.  (Fragment shaders are also called pixel shaders.)</p>
+
+
+<p>The idea of programmable graphics hardware was very successful&mdash;so successful that
+in OpenGL&nbsp;3.0, the usual per-vertex and per-fragment processing
+was deprecated (meaning that its use was discouraged). 
+And in OpenGL&nbsp;3.1, it was removed from
+the OpenGL standard, although it is still present as an optional extension.  In practice,
+all the original features of OpenGL are still supported in desktop versions of OpenGL and will
+probably continue to be available in the future.  On the embedded system side, however,
+with OpenGL&nbsp;ES&nbsp;2.0 and later, the use of shaders is mandatory, and a large part
+of the OpenGL&nbsp;1.1 API has been completely removed.
+WebGL, the version of OpenGL for use in web browsers, 
+is based on OpenGL&nbsp;ES, and it also requires shaders to get anything at all done.
+Nevertheless, we will begin our study of OpenGL with version 1.1.  Most of the concepts and
+many of the details from that version are still relevant, and it offers an easier entry point
+for someone new to 3D graphics programming.</p>
+
+
+<p>OpenGL shaders are written in <span class="newword" data-term="GLSL" data-definition="OpenGL Shader Language, the programming language that is used to write
+shader programs for use with OpenGL." title="Click for a definition of GLSL.">GLSL</span> (OpenGL Shading Language).  Like
+OpenGL itself, GLSL has gone through several versions. We will spend some time later in the
+course studying GLSL&nbsp;ES, the version used with WebGL and
+OpenGL&nbsp;ES.  GLSL uses a syntax similar to the C programming language.</p>
+
+
+<hr class="break">
+
+
+<p>As a final remark on GPU hardware, I should note that the computations that are done for
+different vertices are pretty much independent, and so can potentially be done in parallel.
+The same is true of the computations for different fragments.  In fact, GPUs can
+have hundreds or thousands of processors that can operate in parallel.  Admittedly, the
+individual processors are much less powerful than a CPU, but then typical per-vertex
+and per-fragment computations are not very complicated.  The large number of processors,
+and the large amount of parallelism that is possible in graphics computations, makes
+for impressive graphics performance even on fairly inexpensive GPUs.</p>
+
+
+</div>
+<hr>
+<div align="right">
+<small>
+        [  <a href="s2.html">Previous Section</a> |
+           <a href="index.html">Chapter Index</a> | 
+	    <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+</div>
+</body>
+<script src="../resource/glossary.js"></script>
+</html>

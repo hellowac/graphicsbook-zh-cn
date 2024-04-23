@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Introduction to Computer Graphics, Section 9.3 -- WGSL</title>
+<link type="text/css" rel="stylesheet" href="../resource/graphicstext.css">
+</head>
+<body>
+<div class="page">
+<div align="right">
+<small>
+        [  <a href="s2.html">Previous Section</a> |
+           <a href="s4.html">Next Section</a> |
+           <a href="index.html">Chapter Index</a> | 
+	    <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+<hr>
+<table class="subsections" cellpadding="5" border="2">
+<tr>
+<td>
+<div align="center">
+<b>Subsections</b>
+<hr>
+<small><a href="#webgpu.3.1">Address Spaces and Alignment</a>
+<br>
+<a href="#webgpu.3.2">Data Types</a>
+<br>
+<a href="#webgpu.3.3">Declarations and Annotations</a>
+<br>
+<a href="#webgpu.3.4">Expressions and Built-in Functions</a>
+<br>
+<a href="#webgpu.3.5">Statements and Control</a>
+<br>
+<a href="#webgpu.3.6">Function Definitions</a>
+<br>
+</small>
+</div>
+</td>
+</tr>
+</table>
+<div class="content section">
+<h3 class="section_title">Section 9.3</h3>
+<h2 class="section_title">WGSL</h2>
+<hr class="break">
+
+
+<p class="firstpar">
+<span class="newword" data-term="WGSL" data-definition="The WebGPU Shader Language, the programming language in which 
+shaders for use in WebGPU are written." title="Click for a definition of WGSL.">WGSL</span> is the shader programming language for <span class="word" data-term="WebGPU" data-definition="A new JavaScript graphics API, similar to WebGL, but designed to let web programs access
+modern GPU capabilities such as compute shaders." title="Click for a definition of WebGPU.">WebGPU</span>.  
+It has control structures that
+are similar to those in C and JavaScript, with some changes and additions.  And it has
+data types and a large set of built in functions that are similar to those in
+<span class="word" data-term="GLSL" data-definition="OpenGL Shader Language, the programming language that is used to write
+shader programs for use with OpenGL." title="Click for a definition of GLSL.">GLSL</span>.  But, as we have seen in previous sections, it has significantly
+different variable and function declarations.</p>
+
+
+<p>This rather technical section covers major aspects of the syntax and semantics of 
+WGSL.  Note that the parts of the language that deal with textures are not covered
+here; they are postponed until the <a href="../c9/s4.html">next section</a>.
+And some details about working with <span class="word" data-term="compute shader" data-definition="A stage in a GPU pipeline that does purely computational
+work, rather than participating directly in graphical rendering." title="Click for a definition of compute shader.">compute shaders</span>
+are postponed until <a href="../c9/s6.html">Section&nbsp;9.6</a>.
+I will assume that you are already familiar with a language like C or JavaScript,
+but see <a href="../a1/index.html">Appendix&nbsp;A</a> if you need a refresher.
+Familiarity with GLSL (<a href="../c6/s3.html">Section&nbsp;6.3</a>) would also be useful, but not essential.
+While I do not give a complete specification of the WGSL language, I try to 
+cover most of the important features.  For the very long complete specification,
+see <a href="https://www.w3.org/TR/WGSL/">https://www.w3.org/TR/WGSL/</a>.</p>
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.3.1">9.3.1&nbsp;&nbsp;Address Spaces and Alignment</h3>
+
+
+<p>To avoid a lot of frustration when working with WGSL data values, you will need to 
+understand two aspects of WGSL that are not common in other programming languages: 
+<span class="word" data-term="address space (in WGSL)" data-definition="WGSL memory is divided into address spaces.  
+From the WGSL specification: &quot;Each address space has unique properties 
+determining mutability, visibility, the values it may contain, and 
+how to use variables with it.&quot;" title="Click for a definition of address space (in WGSL).">address spaces</span> and 
+<span class="word" data-term="alignment (in WGSL)" data-definition="Restrictions on the legal location of
+a value in memory, depending on the data type.  For example, the address
+of a vec3f variable in WGSL must be a multiple of 16." title="Click for a definition of alignment (in WGSL).">alignment</span>.</p>
+
+
+<p>Memory that is accessible to a <span class="word" data-term="GPU" data-definition="Graphics Processing Unit, a computer hardware component that performs graphical
+computations that create and manipulate images.  Operations such as drawing a line on the screen 
+or rendering a 3D image are done in the GPU, which is optimized to perform such operations very
+quickly." title="Click for a definition of GPU.">GPU</span> is divided into address spaces, which have
+different accessibility rules and which might be physically accessed in different ways.
+Every variable lives in a particular address space, and that address space is part of the
+variable's type.  For example, we have seen how a global variable can be declared using 
+<span class="code">var&lt;uniform&gt;</span>.  That variable lives in the <i>uniform</i> address space,
+which holds values that generally come from the JavaScript side of the program.  Here are the
+available address spaces:</p>
+
+
+<ul>
+
+
+<li>
+<b>function</b> address space &mdash; The <i>function</i> address space is for
+local variables and parameters in functions.  It is basically the function call stack
+for a single processor in the GPU, which is stored in the dedicated local memory for that processor.
+Local variables can be declared using
+<span class="code">var&lt;function&gt;</span>, but the <i>function</i> address space is the only 
+possibility for local variables, and they can declared using simply <span class="code">var</span>.</li>
+
+
+<li>
+<b>private</b> address space &mdash; The <i>private</i> address space is used for
+global variables in shader programs, but each GPU processor has its own copy of the
+variable, stored in the dedicated local memory for that processor.
+As a global variable, a variable declared using <span class="code">var&lt;private&gt;</span> can be used
+in any function in the shader program, but a given copy of the variable is only shared by
+function calls in the same invocation of the shader.</li>
+
+
+<li>
+<b>uniform</b> address space &mdash; The <i>uniform</i> address space holds global
+variables that are shared by all GPU processors.  Uniform variables are read-only.  A variable
+declaration using <span class="code">var&lt;uniform&gt;</span> cannot include an initial value for the
+variable, and a shader cannot assign a new value to the variable.  The values in a uniform
+variable are "resources" that come from a bind group, and every uniform variable declaration
+must have  <span class="code">@group</span> and <span class="code">@binding</span> annotations that are used to
+specify the source of the resource.</li>
+
+
+<li>
+<b>storage</b> address space &mdash; The <i>storage</i> address space is similar to
+the <i>uniform</i> space.  Storage variables require <span class="code">@group</span> and <span class="code">@binding</span>
+annotations and cannot be assigned an initial value in the shader program.  Storage variables
+by default are read-only, but read-write access is also possible.  (A storage variable with
+read-write access can be used in fragment and compute shaders, but not in vertex shaders.)
+A storage variable with read-write access is declared using <span class="code">var&lt;storage,read_write&gt;</span>.</li>
+
+
+<li>
+<b>workgroup</b> address space &mdash; This address space can only be used in
+compute shaders and will be covered later.</li>
+
+
+</ul>
+
+
+<p>Values for uniform and storage variables come from bind groups.  The JavaScript side
+of the program provides their values using buffers, bind groups, and bind group
+layouts (<a href="../c9/s1.html#webgpu.1.3">Subsection&nbsp;9.1.3</a>).  There are certain requirements: For a uniform variable, the <span class="code">usage</span>
+property of the buffer in <span class="code">device.createBuffer()</span>
+must include <span class="code">GPUBufferUsage.UNIFORM</span>, and the buffer
+in the bind group layout must have its <span class="code">type</span> property set to "uniform" (which
+is the default).  In the bind group itself, the <span class="code">offset</span> property for each
+entry must be a multiple of 256.  This is an example of an alignment rule.
+For example, if there are two uniform variables in the shader program</p>
+
+
+<pre>@group(0) @binding(0) var&lt;uniform&gt; x : f32;
+@group(0) @binding(1) var&lt;uniform&gt; y : f32;</pre>
+
+
+<p class="noindent">and if one buffer is used to hold both variables, then the  buffer must 
+be at least 300 bytes and the bind group would be something like</p>
+
+
+<pre>bindGroup = device.createBindGroup({
+   layout: bindGroupLayout,
+   entries: [{
+      binding: 0,
+      resource: {
+         buffer: buffer, offset: 0, size: 4
+      }
+   },
+   {
+      binding: 1,
+      resource: {
+         buffer: buffer, offset: <b>256</b>, size: 4
+      }
+   }]
+});</pre>
+
+
+<p class="noindent">For storage variables the alignment rule is the same.  The <span class="code">usage</span> when
+creating the buffer must include <span class="code">GPUBufferUsage.STORAGE</span>.  And the
+<span class="code">type</span> in the bind group layout must be "read-only-storage" for the
+default read-only storage variables, or "storage" for read-write storage variables.</p>
+
+
+<hr class="break">
+
+
+<p>In addition to the alignment rule for uniform and storage bindings, GLSL has
+alignment rules for its data types.  The alignment value for a data type can be
+4, 8, or 16.  An alignment is always a power of&nbsp;2.
+(Alignment 2 is also possible for a 16-bit floating point type that
+can only be used if a language extension is enabled; 16-bit floats are not
+covered in this textbook.)  If the alignment for a data type is N, then
+the memory address of any value of that type must be a multiple of&nbsp;N.
+When the value is part of a data structure, the offset of that value from 
+the start of the data structure must be a multiple of&nbsp;N.</p>
+
+
+<p>Ordinarily, you will only need to worry about alignment for data structures
+in the uniform or storage address space.  But in that case, knowing the
+alignment is essential, since you have to take it into account on the JavaScript
+side when writing data to buffers.</p>
+
+
+<p>The basic (scalar) data types in WGSL are 4-byte integers and floats, which have
+alignment&nbsp;4.  WGSL has vectors of 2, 3, and 4 scalar values, which have size
+8, 12, and 16.  The alignments for 2-vectors and 4-vectors are 8 and 16, as you
+might expect.  But the size of a 3-vector is 12, which is not a legal alignment,
+so the alignment for 3-vectors is 16.  That is, the address in memory of the
+first byte of a 3-vector must be a multiple of 16.</p>
+
+
+<p>For an array data structure, the elements of the array must be aligned within the
+array.  This means that in an array of 3-vectors, each element must start
+at a multiple of 16 bytes from the start of the array.  Since a 3-vector
+such as a <span class="code">vec3f</span> only occupies 12 bytes, four extra bytes of padding must be inserted after
+each element.  No padding is needed in an array of 2-vectors or 4-vectors.
+So, an array of <span class="code">vec3f</span> takes up just as much memory as an array
+of <span class="code">vec4f</span> with the same number of elements.  The alignment of an 
+array type is equal to the alignment of its elements.</p>
+
+
+<p>For structs, each element of the struct must satisfy the alignment rule for
+the data type of that element, which might require padding between some elements.
+The alignment for the struct itself is the maximum of the alignments of its
+elements. And the size of the struct must be a multiple of its alignment, which
+might require some padding at the end.</p>
+
+
+<p>Let's look at an example that might appear in a shader program that does
+3D graphics (see the <a href="../c9/s4.html">next section</a>).
+Some of the syntax has not been covered yet, but you should be able to 
+follow it:</p>
+
+
+<pre>struct LightProperties {
+    position : vec4f,      //  size 16,  offset  0
+    color : vec3f,         //  size 12,  offset 16 bytes (4 floats)
+    spotDirection: vec3f,  //  size 12,  offset 32 bytes (8 floats)
+    spotCosineCutoff: f32, //  size  4,  offset 44 bytes (11 floats)
+    spotExponent: f32,     //  size  4,  offset 48 bytes (12 floats)
+    enabled : f32          //  size  4,  offset 52 bytes (13 floats)
+}
+
+@group(0) @binding(0) var&lt;uniform&gt; lights : array&lt;LightProperties,4&gt;</pre>
+
+
+<p class="noindent">The first <span class="code">vec3f</span> in the struct, <span class="code">color</span>, ends with byte
+number 27, but the next <span class="code">vec3f</span>, <span class="code">spotDirection</span>,
+can't start at byte 28 because the alignment rule says that it must start
+at a multiple of 16. So, four bytes of padding are added.  Then, <span class="code">spotDirection</span>
+starts at byte number 32 and ends with byte number 43.  The next element is the 32-bit float
+<span class="code">spotCosineCutoff</span>, with alignment 4, and it can start at the next
+byte number,&nbsp;44.  Note that there is no padding after <span class="code">spotDirection</span>.
+The alignment rule for <span class="code">vec3f</span> does <b>not</b> say that every 
+<span class="code">vec3f</span> is followed by four bytes of padding.  Alignment rules
+are restrictions on where a variable can start.  (Yes, this example did trip me
+up the first time I tried it.)</p>
+
+
+<p>The array in the example, <span class="code">lights</span>, is an array of four
+structs of type <span class="code">LightProperties</span>.  The alignment for a
+<span class="code">LightProperties</span> struct is 16 (the maximum of the alignments
+of its elements).  The size, which must be a multiple of the alignment,
+is 64, with 8 bytes of padding at the end.  The size of the array
+is therefore 256 bytes, or 64 32-bit floats.  On the JavaScript side,
+data for the WGSL array could come from a <span class="classname">Float32Array</span>
+of length 64.  When storing values into that <span class="classname">Float32Array</span>,
+you would have to be very careful to take the data alignments into
+account.</p>
+
+
+<p>WGSL also has data types for matrices of floating point values.  
+A matrix in WGSL is essentially an array of column vectors, and 
+it follows the same alignment rules.  In particular, a matrix
+with 3 rows is an array of <span class="code">vec3f</span>, with four bytes of
+padding after each column.  This will become important when we work 
+with normal transformation metrics in 3D graphics.</p>
+
+
+</div>
+
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.3.2">9.3.2&nbsp;&nbsp;Data Types</h3>
+
+
+<p>The basic, or "scalar," types in WGSL include the boolean type, <span class="code">bool</span>,
+with values <span class="code">true</span> and <span class="code">false</span>; the 32-bit unsigned integer type,
+<span class="code">u32</span>; the 32-bit signed integer type, <span class="code">i32</span>; and the
+32-bit floating point type, <span class="code">f32</span>.  Note in particular that there are no
+8-bit, 16-bit, or 64-bit numeric types (although the 16-bit floating point type,
+<span class="code">f16</span>, is available as a language extension).</p>
+
+
+<p>The <span class="code">bool</span> type is not "host sharable," which means that a variable of
+type <span class="code">bool</span> cannot be in the storage or uniform address space, and it can't
+get its value from the JavaScript side.  This also means that any data structure that 
+includes a <span class="code">bool</span> cannot be in the storage or uniform address space.</p>
+
+
+<p>Literals of integer type can be written in the usual decimal form, or in 
+hexadecimal form with a leading <span class="code">0x</span> or <span class="code">0X</span>.  An integer
+literal of type <span class="code">u32</span> is written with a "u" suffix, and one of type
+<span class="code">i32</span> with an "i" suffix.  Some examples:  17i, 0u, 0xfadeu, 0X7Fi.
+Integer literals without suffixes are also possible; they are considered to be
+"abstract integers."  Curiously, an abstract integer can be automatically converted
+into a <span class="code">u32</span>, <span class="code">i32</span>, or <span class="code">f32</span>, even though
+WGSL will not do automatic conversions between the regular types.
+So, if <span class="code">N</span> is a variable of type <span class="code">f32</span>,
+then the expression <span class="code">N+2</span> is legal, with the abstract integer <span class="code">2</span> 
+being automatically converted into an <span class="code">f32</span>. But the expression <span class="code">N+2u</span> 
+is illegal because the <span class="code">u32</span> <span class="code">2u</span> is not automatically converted 
+to&nbsp;<span class="code">f32</span>.  The main point of abstract integers seems to be to make
+it possible to write expressions involving constants in a more natural way.</p>
+
+
+<p>Floating point literals include either a decimal point, or an exponent, or an "f" suffix."
+A floating point literal with an "f" suffix has type <span class="code">f32</span>.  Without
+the suffix, it is an "abstract float," which can be automatically converted to
+type <span class="code">f32</span>.  Examples include: .0, 17.0, 42f, 0.03e+10f.  (There are also
+hexadecimal floating point literals, but they are not covered here.)</p>
+
+
+<hr class="break">
+
+
+<p>WGSL has vector types with 2, 3, and 4 elements.  The elements in a vector can be any scalar
+type: <span class="code">bool</span>, <span class="code">u32</span>, <span class="code">i32</span>, or <span class="code">f32</span>.  The vector
+types have official names like <span class="code">vec3&lt;f32&gt;</span> for a vector of three <span class="code">f32</span> values
+and <span class="code">vec4&lt;bool&gt;</span> for a vector of four <span class="code">bools</span>.  But the type
+names for numeric vectors have "aliases" that are more commonly used instead of the official names:
+<span class="code">vec4f</span> is an alias for <span class="code">vec4&lt;f32&gt;</span>, <span class="code">vec2i</span> is an alias for 
+<span class="code">vec2&lt;i32&gt;</span>, and <span class="code">vec3u</span> is an alias for <span class="code">vec3&lt;u32&gt;</span>.</p>
+
+
+<p>Vectors are similar to arrays, and the elements of a vector can be referred to using
+array notation.  For example, if <span class="code">V</span> is a <span class="code">vec4f</span>, then its
+elements are <span class="code">V[0]</span>, <span class="code">V[1]</span>, <span class="code">V[2]</span>, and <span class="code">V[3]</span>.
+The elements can also be referred to using <span class="word" data-term="swizzler" data-definition="In GLSL and WGSL, a notation such as v.yzx, where v is a vector and
+v.yzx represents the three-component vector made up of the y, z, and x components of v.  Technically,
+any use of the dot notation with vectors is considered to be a swizzler." title="Click for a definition of swizzler.">swizzlers</span> as
+<span class="code">V.x</span>, <span class="code">V.y</span>, <span class="code">V.z</span>, and <span class="code">V.w</span>.
+By using multiple letters after the dot, you can construct vectors made up of
+selected elements of <span class="code">V</span>.  For example, <span class="code">V.yx</span> is a <span class="code">vec4f</span>
+containing the first two elements of <span class="code">V</span> in reversed order, and
+<span class="code">V.zzzz</span> is a <span class="code">vec4f</span> made up of four copies of the third element of&nbsp;<span class="code">V</span>.
+The letters <span class="code">rgba</span> can also be used instead of <span class="code">xyzw</span>.
+(All this is similar to GLSL, <a href="../c6/s3.html#webgl.3.1">Subsection&nbsp;6.3.1</a>.)</p>
+
+
+<p>WGSL also has matrix types, but only for matrices of floating point values.
+There are types for N-by-M matrices for all a N and M equal to 2, 3, or&nbsp;4,
+with official names like <span class="code">mat3x2&lt;f32&gt;</span> and <span class="code">mat4x4&lt;f32&gt;</span>.
+But again these types have simpler aliases like <span class="code">mat3x2f</span> and <span class="code">mat4x4f</span>.</p>
+
+
+<p>The elements of an array are stored in column-major order: the elements of the first column,
+followed by the elements of the second column, and so on.  Each column is a vector, and the
+column vectors can be accessed using array notation.  For example, if <span class="code">M</span> is
+a <span class="code">mat4x4f</span>, then <span class="code">M[1]</span> is the <span class="code">vec4f</span> that is the second
+column of <span class="code">M</span>, and <span class="code">M[1][0]</span> is the first element of that vector.</p>
+
+
+<hr class="break">
+
+
+<p>For building data structures, WGSL has arrays and structs.  The data type for
+an array with element type <span class="code">T</span> and length <span class="code">N</span> is
+<span class="code">array&lt;T,N&gt;</span>.  The array length must be a constant.  Array types
+without a length are also possible, but only in the storage address space.
+Array elements are referred to as usual; for example, <span class="code">A[i]</span>.</p>
+
+
+<p>A struct data type contains a list of member declarations, which can be of
+different types.  See, for example, the definition of the <span class="code">LightProperties</span>
+type, above.  A member can be a scalar, a vector, a matrix, an array, or a struct.
+Members are accessed using the usual dot notation.  For example, if
+<span class="code">L</span> is of type <span class="code">LightProperties</span>, then <span class="code">L.color</span>
+is the <span class="code">color</span> member of <span class="code">L</span>.  I will note that the 
+individual members of a struct can have annotations.  For example,</p>
+
+
+<pre>struct VertexOutput {
+   @builtin(position) position: vec4f,
+   @location(0) color : vec3f
+}</pre>
+
+
+<hr class="break">
+
+
+<p>WGSL has pointer types, but as far as I can tell, they can only be used for
+the types of formal parameters in function definitions.  A pointer type name 
+takes the form <span class="code">ptr&lt;A,T&gt;</span>, where <span class="code">A</span> is an
+address space name and <span class="code">T</span> is a type; for example:  
+<span class="code">ptr&lt;function,i32&gt;</span> or <span class="code">ptr&lt;private,array&lt;f32,5&gt;&gt;</span>.
+A pointer of type <span class="code">ptr&lt;A,T&gt;</span> can only point to a value of type
+<span class="code">T</span> in address space&nbsp;<span class="code">A</span>.</p>
+
+
+<p>If <span class="code">P</span> is a pointer, then <span class="code">*P</span> is the value that it
+points to.  If <span class="code">V</span> is a variable, then <span class="code">&amp;V</span> is a pointer
+to&nbsp;<span class="code">V</span>.  Pointer types can be used to implement pass-by-reference
+to a function.  For example,</p>
+
+
+<pre>fn array5sum( A : ptr&lt;function,array&lt;f32,5&gt;&gt; ) -&gt; f32 {
+    var sum = 0;
+    for (var i = 0; i &lt; 5; i++) {
+        sum += (*A)[i];
+    }
+    return sum;
+}</pre>
+
+
+<p class="noindent">Note the use of <span class="code">*A</span> to name the array that <span class="code">A</span> points to.
+The parentheses in <span class="code">(*A)[i]</span> are required by precedence rules.  This
+function could be called as <span class="code">array5sum(&amp;Nums)</span>
+where <span class="code">Nums</span> is a variable of type <span class="code">array&lt;f32,5&gt;</span> in
+the function address space.  (That is, <span class="code">Nums</span> must be a local variable.)</p>
+
+
+<hr class="break">
+
+
+<p>Scalar types, vectors, matrices, arrays, and structs are constructible.  That is,
+a value of the given type can be constructed from an appropriate list of values.
+The notation looks like a function call, with the function name being the name of
+the type. Here are some examples:</p>
+
+
+<pre>var a = u32(23.67f);           // a is 23u
+var b = f32(a);                // b is 23.0f
+var c = vec3f(1, 2, 3);        // the abstract ints 1,2,3 are converted to f32
+var d = vec4f(c.xy, 0, 1);     // c.xy contributes two values to the vec4f
+var e = mat2x2f(1, 0, 0, 1);   // constructs the 2-by-2 identity matrix
+var f = mat3x3f(c, c, c);      // each column of f is the vec3f c
+var g = array&lt;u32,4&gt;(1,2,3,4); // construct an array of length 4
+var h = MyStruct( 17u, 42f );  // MyStruct is a struct made of a u32 and an f32
+var i = vec4i(2);              // Same as vec4i(2,2,2,2); the 2 is repeated</pre>
+
+
+</div>
+
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.3.3">9.3.3&nbsp;&nbsp;Declarations and Annotations</h3>
+
+
+<p>We have seen how to declare variables using <span class="code">var&lt;A&gt;</span>, where
+<span class="code">A</span> is an address space.  Local variables in functions can be
+declared using either <span class="code">var&lt;function&gt;</span> or simply <span class="code">var</span>.
+For global variables, an address space&mdash;private, uniform, storage, or
+workgroup&mdash;is required (but texture-related global variables follow a
+different rule).</p>
+
+
+<p>The type of a variable can be specified in a declaration by following
+the variable name with a colon and then the name of the type.  For example</p>
+
+
+<pre>var&lt;private&gt; sum : f32;</pre>
+
+
+<p class="noindent">The declaration of a variable in the function or private address space
+can include an initial value for the variable.  The initial value can
+be a constant, a variable, or an expression.  When an initial value is
+included in the declaration, the type of the variable generally does not have
+to be specified because the GLSL compiler can determine the type from the
+initial value.  When a variable is initialized using an abstract int,
+and no type is specified, the type is taken to be <span class="code">i32.</span>
+</p>
+
+
+<p>In a function body, an identifier can be declared using <span class="code">let</span>
+instead of <span class="code">var</span>.  The result is a named value rather than
+a variable.  A&nbsp;<span class="code">let</span> declaration must include an initial
+value.  The value cannot be changed after initialization.  The declaration
+can optionally include a type, but it is usually not necessary.  
+An address space cannot be specified.
+Using <span class="code">let</span> makes it clear that you do not expect the
+value to change and makes it impossible to change the value accidentally.</p>
+
+
+<p>Named values can also be declared using <span class="code">const</span>, but the
+initial value in a <span class="code">const</span> declaration must be a constant that
+is known at compile time.  The initial value can be given as an expression,
+as long as the expression only contains constants.  While <span class="code">let</span>
+can only be used in functions, <span class="code">const</span> declarations can 
+be used anywhere.</p>
+
+
+<p>A declaration can only declare one identifier.  So something like
+"<span class="code">var a = 1, b = 2;</span>" is not legal.  This applies to
+<span class="code">const</span> and <span class="code">let</span>, as well as to <span class="code">var</span>.</p>
+
+
+<hr class="break">
+
+
+<p>We have seen that annotations like <span class="code">@location(0)</span> can be 
+used on variable declarations, function definitions, function formal parameters, 
+and the return type of a function.  (The WGSL documentation calls them "attributes", but I prefer
+to save the term "attribute" for vertex attributes.) This textbook only covers the
+most common annotations.  We encountered some of them in previous
+sections, and a few more will come up later when we discuss compute shaders.
+Common annotations include:</p>
+
+
+<ul>
+
+<li>
+<span class="code">group(N)</span> and <span class="code">@binding(M)</span>, where N and M are integers,
+are used on <span class="code">var</span> declarations in the uniform and storage address spaces
+to specify the source of resource.  The association is specified by a bind group layout.
+See <a href="../c9/s1.html#webgpu.1.3">Subsection&nbsp;9.1.3</a>.</li>
+
+<li>
+<span class="code">@vertex</span>, <span class="code">@fragment</span>, and <span class="code">@compute</span> 
+are used on a function definition to specify that that function can be used as
+the entry point function for a vertex, fragment, or compute shader.
+See <a href="../c9/s1.html#webgpu.1.2">Subsection&nbsp;9.1.2</a>.</li>
+
+<li>
+<span class="code">@location(N)</span>, where N is an integer, can be used on inputs and outputs
+of vertex shader and fragment shader entry point functions.  It can be applied to
+their formal parameters and return types and to members of structs that
+are used to specify the type of their formal parameters and return types.
+The meaning depends on context.  On an input to a vertex shader entry point, it
+specifies the source of the input in a vertex buffer (<a href="../c9/s1.html#webgpu.1.6">Subsection&nbsp;9.1.6</a>).
+On the return type of a fragment shader entry point function, it specifies the color attachment that is the
+destination of that output (<a href="../c9/s1.html#webgpu.1.3">Subsection&nbsp;9.1.3</a>.)
+And when used on a vertex shader output or a fragment shader input,
+it associates a particular output of the vertex shader with the corresponding
+input to the fragment shader (<a href="../c9/s1.html#webgpu.1.6">Subsection&nbsp;9.1.6</a>).</li>
+
+<li>
+<span class="code">@interpolate(flat)</span> can be applied to an output from the
+vertex shader entry point function and the corresponding input to the fragment shader
+program.  If it is applied to one, it must be applied to both.  Usually, the
+values for a fragment shader input are interpolated from the output values of
+the vertex shader at all vertices of the triangle or line that
+is being drawn.  The <span class="code">@interpolate(flat)</span> annotation turns off
+interpolation; instead, the value from the first vertex is used for all fragments.
+This annotation is required for values of integer or boolean type and can also
+be applied to floating point values.</li>
+
+<li>
+<span class="code">@builtin(vertex_index)</span> and <span class="code">@builtin(instance_index)</span> 
+are used on inputs to a vertex shader entry point function to specify the vertex number
+or instance number that is being processed.  See <a href="../c9/s2.html#webgpu.2.4">Subsection&nbsp;9.2.4</a>.</li>
+
+<li>
+<span class="code">@builtin(position)</span>  when used on an output from a
+vertex shader entry point function specifies that the output is the (x,y,z,w) coordinates
+of the vertex in the clip coordinate system.
+Every vertex shader entry point function is required to have an output with this annotation.
+When used on an input to a fragment shader program, it specifies that
+the input is the interpolated position of the fragment being processed, 
+in viewport coordinates. (See <a href="../c9/s4.html#webgpu.4.2">Subsection&nbsp;9.4.2</a> for a discussion
+of coordinate systems in WebGPU.)</li>
+
+<li>
+<span class="code">@builtin(front_facing)</span> is used on an input of type <span class="code">bool</span> to a fragment
+shader program.  The value will be true if the fragment that is being processed is part
+of a <span class="word" data-term="front face" data-definition="One of the two sides of a polygon in 3D.
+A polygon has two sides. One is taken to be the front face, and the other is the back face.  In OpenGL, the
+difference is determined by the order in which the vertices of the polygon are
+enumerated.  The default is that, seen from the front, the vertices are enumerated
+in counterclockwise order around the polygon." title="Click for a definition of front face.">front facing</span> triangle.
+This can be useful, for example, when doing two-sided lighting in 
+3D graphics (<a href="../c7/s2.html#webgl3d.2.4">Subsection&nbsp;7.2.4</a>).</li>
+
+</ul>
+
+
+</div>
+
+
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.3.4">9.3.4&nbsp;&nbsp;Expressions and Built-in Functions</h3>
+
+
+<p>WGSL has all the familiar arithmetic, logical, bitwise, and comparison operators:
+<span class="code">+,&nbsp;-,&nbsp;*, /, %, &amp;&amp;, ||, !, &amp;, |, ~, ^, &lt;&lt;, &gt;&gt;, ==, !=, &lt;, &gt;,&nbsp;&lt;=,&nbsp;&gt;=</span>.
+It does not have the conditional <span class="code">?:</span>&nbsp;operator, but it has an equivalent built-in
+function, <span class="code">select(false_case,true_case,boolean)</span>.  Note that assignment (<span class="code">=</span>,
+<span class="code">+=</span>, etc.) is not an operator; that is, <span class="code">A&nbsp;=&nbsp;B</span> is a statement,
+not an expression, and it does not have a value like it would in C or JavaScript.</p>
+
+
+<p>The interesting thing is that operators are extended in many ways to work with vectors and matrices as well as
+with scalars.  For example, if <span class="code">A</span> is an n-by-m matrix and <span class="code">B</span> is an m-by-r matrix,
+then <span class="code">A*B</span> computes the matrix product of A and B.  And if <span class="code">V</span> is a vector
+of m floats, then <span class="code">A*V</span> is the vector that is the linear algebra product of the matrix
+and the vector.</p>
+
+
+<p>The arithmetic operators can be applied to two vectors of the same numeric type.  The operation is
+applied component-wise. That is,</p>
+
+
+<pre>vec3f(2.0f, 3.0f, 7.0f) / vec3f(5.0f, 8.0f, 9.0f)</pre>
+
+
+<p class="noindent">is <span class="code">vec3f(2.0f/5.0f, 3.0f/8.0f, 7.0f/9.0f)</span>.  Numeric vectors of the same numeric
+type can also be combined using a comparison operator.  The result is a <span class="code">bool</span> vector
+of the same length.</p>
+
+
+<p>Even more interesting, the arithmetic operators can be applied to a vector and a scalar.
+The operation then applies to each component of the vector:
+<span class="code">2+vec2f(5,12)</span> is <span class="code">vec2f(7,14)</span>, and
+<span class="code">vec4i(2,5,10,15)/2</span> is <span class="code">vec4i(1,2,5,7)</span>.</p>
+
+
+<p>Expressions, of course, can also include calls to functions, both built-in and 
+user-defined.  WGSL has many built-in functions.  It has mathematical functions
+such as <span class="code">abs</span>, <span class="code">cos</span>, <span class="code">atan</span>, <span class="code">exp</span>, <span class="code">log</span>,
+and <span class="code">sqrt</span>.  (<span class="code">log</span> is the natural logarithm.)
+Except for <span class="code">abs</span>, the parameter must be of floating point type.  The
+parameter can be either a scalar or a vector. When it is a vector, the function
+is applied component-wise: <span class="code">sqrt(vec2f(16.0,9.0))</span> is <span class="code">vec2f(4.0,3.0)</span>.</p>
+
+
+<p>There are several built-in functions for doing linear algebra operations on vectors,
+including: <span class="code">length(v)</span> for the <span class="word" data-term="length of a vector" data-definition="A vector is defined by its length and its direction, so length
+is a fundamental property.  When a vector is represented as an arrow, its length is just the length
+of that arrow.  For a 2D vector given by coordinates (x,y), the length is the square root of
+x*x+y*y.  For a 3D vector given as (x,y,z), the length is the square root of x*x+y*y+z*z." title="Click for a definition of length of a vector.">length</span> 
+of vector&nbsp;<span class="code">v</span>; <span class="code">normalize(v)</span> for a <span class="word" data-term="unit vector" data-definition="A vector of length one." title="Click for a definition of unit vector.">unit vector</span> pointing in
+the same direction as&nbsp;<span class="code">v</span>; <span class="code">dot(v,w)</span> for the <span class="word" data-term="dot product" data-definition="The dot product of two vectors is the sum of the products of corresponding
+coordinates.  For 3D vectors v=(x,y,z) and w=(a,b,c), the dot product of v and w is
+x*a+y*b+z*c.  The dot product is equal to the cosine of the angle between the vectors,
+divided by the product of their lengths." title="Click for a definition of dot product.">dot product</span>
+of <span class="code">v</span> and&nbsp;<span class="code">w</span>; <span class="code">cross(v,w)</span> for the <span class="word" data-term="cross product" data-definition="A vector product of two 3D vectors.  The cross product of
+v and w is a vector that is perpendicular to both v and w and whose length is equal to
+the absolute value of the sine of the angle between v and w.  If v=(x,y,z) and
+w=(a,b,c), then their cross product is the vector (yc-zb,za-xc,xb-ya)." title="Click for a definition of cross product.">cross product</span>
+of two 3-vectors; and <span class="code">distance(v,w)</span> for the distance between
+<span class="code">v</span> and&nbsp;<span class="code">w</span>.  In all cases, these functions only work for vectors
+of floats.  There are several functions that do operations that are common in computer graphics:</p>
+
+
+<ul>
+
+<li>
+<span class="code">clamp(value, min, max)</span>  clamps value to the range min to max, that is, returns value if value is
+between min and max, returns min if value&nbsp;&lt;=&nbsp;min, and returns max if value&nbsp;&gt;=&nbsp;max.</li>
+
+
+<li>
+<span class="code">mix(a, b, blend_factor)</span> returns the weighted average of a and b, that is, returns
+(1-blend_factor)*a + blend_factor*b.</li>
+
+
+<li>
+<span class="code">step(edge, x)</span> returns 0 if x &lt;= edge and 1 if x &gt; edge.</li>
+
+
+<li>
+<span class="code">smoothstep(low_edge, high_edge, x)</span> returns 0 if x &lt; low_edge, 
+returns 1 if x&nbsp;&gt;&nbsp;high_edge, and the return value increases smoothly from 
+0 to&nbsp;1 as x increases from low_edge to high_edge.</li>
+
+
+<li>
+<span class="code">reflect(L,N)</span>, where L and N are <span class="word" data-term="unit vector" data-definition="A vector of length one." title="Click for a definition of unit vector.">unit vectors</span>, computes the vector L reflected
+by a surface with <span class="word" data-term="normal vector" data-definition="A normal vector to a surface at a point on that 
+surface is a vector that is perpendicular to the surface at that point.
+Normal vectors to curves are defined similarly.  Normal vectors are important
+for lighting calculations." title="Click for a definition of normal vector.">normal vector</span>&nbsp;N.  (See <a href="../c4/s1.html#gl1light.1.4">Subsection&nbsp;4.1.4</a>, except that
+the L in the illustration in that section points from the surface towards the light source, but the L in
+<span class="code">reflect(L,N)</span> points from the light source towards the surface.)</li>
+
+
+<li>
+<span class="code">refract(L,N,ior)</span>, where L and N are unit vectors, and 
+<span class="word" data-term="IOR" data-definition="Index of Refraction.  A property of a medium, such as air or glass, that transmits light.
+The refraction, or bending, of light rays that pass from one medium to another depends on the ratio of
+the IORs of the two media.  The index of refraction of a medium depends on the speed of light in that
+medium." title="Click for a definition of IOR.">ior</span> is the ratio of indices of refraction, computes the 
+<span class="word" data-term="refraction" data-definition="The bending of light as it passes from one transparent or translucent
+medium into another." title="Click for a definition of refraction.">refracted</span> vector when light from direction 
+L hits a surface with normal vector N separating regions with different indices of refraction.</li>
+
+
+</ul>
+
+
+</div>
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.3.5">9.3.5&nbsp;&nbsp;Statements and Control</h3>
+
+
+<p>Statements in WGSL are in large part similar to those in C, but there are some 
+restrictions and extensions.</p>
+
+
+<p>Basic statements in WGSL include assignment (using <span class="code">=</span>);
+compound assignment (using <span class="code">+=</span>, <span class="code">*=</span>, etc.);
+increment (using&nbsp;<span class="code">++</span> as in <span class="code">x++</span>); decrement (using&nbsp;<span class="code">--</span>);
+function call statements; <span class="code">return</span> statements; <span class="code">break</span>;
+<span class="code">continue</span>; and <span class="code">discard</span>.  Increment and decrement are postfix only; that is,
+<span class="code">x++</span> is allowed, but not <span class="code">++x</span>. And&mdash;like assignment statements&mdash;increment
+and decrement statements are not expressions; that is, they don't have a value and cannot be used as
+part of a larger expression. The <span class="code">discard</span> statement can only be used in a fragment
+shader entry point function.  It stops the output of the fragment shader from being written to its destination.</p>
+
+
+<p>As for control structures, <span class="code">for</span> loops, <span class="code">while</span> loops, and <span class="code">if</span> 
+statements in WGSL have the
+same form as in C, Java, and JavaScript, except that braces, <span class="code">{</span>&nbsp;and&nbsp;<span class="code">}</span>,
+are always required around the body of a loop and around the statements inside an <span class="code">if</span> statement,
+even if the braces enclose just a single statement.  <span class="code">break</span> and <span class="code">continue</span> can be used
+in loops as usual, but note that statements cannot have labels and there is no labeled <span class="code">break</span>
+or labeled <span class="code">continue</span> statement. There is an additional looping statement in WGSL that takes the form</p>
+
+
+<pre>loop {
+   <span class="bnf">statements</span>
+}</pre>
+
+
+<p class="noindent">This kind of loop is exited with a <span class="code">break</span> or <span class="code">return</span> statement.
+It is basically the same as a "<span class="code">while(true)</span>" loop.</p>
+
+
+<p>The <span class="code">switch</span> statement in WGSL is significantly changed from its usual form.
+Cases can be combined (<span class="code">case&nbsp;1,2,3</span>).  The colon after a case is optional.
+The code in each case must be enclosed in braces.  There is no fallthrough from one case to the
+next in the absence of a <span class="code">break</span> statement, so <span class="code">break</span> statements
+are optional in cases.  However, <span class="code">break</span> and <span class="code">return</span> can still be
+used to end a case early.  A <span class="code">default</span> case is required.  The switch expression
+must be of type <span class="code">i32</span> or <span class="code">u32</span>, and all of the case constants must either
+be of the same type, or be abstract integers.  For an example, see the
+<span class="code">switch</span> statement in the shader source code in
+<span class="sourceref"><a href="../source/webgpu/indices_in_shader.html">webgpu/indices_in_shader.html</a></span>.</p>
+
+
+<p>WGSL does not have the concept of exceptions, and there is no <span class="code">try..catch</span> statement.</p>
+
+
+</div>
+
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.3.6">9.3.6&nbsp;&nbsp;Function Definitions</h3>
+
+
+<p>We have seen examples of function definitions in <a href="../c9/s1.html">Section&nbsp;9.1</a> and <a href="../c9/s2.html">Section&nbsp;9.2</a>.
+All of the examples in those sections were shader entry point functions, annotated with 
+<span class="code">@vertex</span> or <span class="code">@fragment</span>.  It is possible to define additional functions
+in a shader, and those functions can then be called in the usual way.  Note however that it
+is <b>not</b> legal to call an entry point function; they can only be called by the system
+as part of a pipeline.</p>
+
+
+<p>I will remark that the vertex shader and the fragment shader for a pipeline can be
+defined in different shader modules.  Also, a shader module can contain any number of
+shader entry points.  The entry point functions to be used by a pipeline are specified
+in a pipeline descriptor (<a href="../c9/s1.html#webgpu.1.3">Subsection&nbsp;9.1.3</a>).</p>
+
+
+<p>A function is defined using <span class="code">fn</span> followed by the function name, then the
+formal parameter list, followed optionally by <span class="code">-&gt;</span> and the return type, and finally
+the function body, which must be enclosed in braces.  A user-defined function, other than
+an entry point function, can be called from anywhere in the same shader module.</p>
+
+
+<p>There are some restrictions on functions.  Recursion, direct or indirect, is not allowed.
+There is no nesting: a function definition cannot be inside another function definition.
+Array parameters must have a specified size.  Pointer types for parameters must be in
+the function or private namespace.  Function names can't be overloaded; that is,
+you can't have two functions with the same name, even if they have different parameter lists.
+(But some of the built-in functions are overloaded.)
+Also, a function cannot have the same name as a global variable.</p>
+
+
+<p>To finish this section, here are a few user-defined functions:</p>
+
+
+<pre>fn invertedColor( color : vec4f ) -&gt; vec4f { // return the inverted color
+   return vec4f( 1 - color.rgb, color.a );
+}
+
+fn grayify( color : ptr&lt;function,vec4f&gt; ) { // modify color in place
+    let c = *color;
+    let gray = c.r * 0.3 + c.g * 0.59 + c.b * 0.11;
+    *color = vec4f( gray, gray, gray, c.a );  
+}
+
+fn min10( A : array&lt;f32,10&gt; ) -&gt; f32 { // parameter is passed by value!
+    var min = A[0];
+    for (var i = 1; i &lt; 5; i++) {
+       if ( A[i] &lt; min ) {
+           min = A[i];
+       }
+    }
+    return min;
+}
+
+fn simpleLighting(N : vec3f, L : vec3f, V : vec3f, diffuse : vec3f) -&gt; vec3f {
+       // N is the unit surface normal vector.
+       // L is the unit vector pointing towards the light.
+       // V is the unit vector pointing towards viewer
+    if ( dot(N,L) &lt;= 0 ) { // wrong side of surface to be illuminated
+        return vec3f(0);   // return the zero vector (black)
+    }
+    var color = diffuse * dot(N,L);
+    let R = -reflect(L,N);  // reflected ray;
+    if ( dot(R,V) &gt; 0 ) { // add in specular lighting
+         // specular color is gray, specular exponent is 10
+       color += vec3f(0.5) * pow(dot(R,V), 10);
+    }
+    return color;
+}</pre>
+
+
+</div>
+
+
+
+
+</div>
+<hr>
+<div align="right">
+<small>
+        [  <a href="s2.html">Previous Section</a> |
+           <a href="s4.html">Next Section</a> |
+           <a href="index.html">Chapter Index</a> | 
+	    <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+</div>
+</body>
+<script src="../resource/glossary.js"></script>
+</html>

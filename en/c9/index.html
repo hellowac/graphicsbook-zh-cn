@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Introduction to Computer Graphics, Chapter 9 -- Introduction to WebGPU</title>
+<link type="text/css" rel="stylesheet" href="../resource/graphicstext.css">
+</head>
+<body>
+<div class="page">
+<div align="right">
+<small>
+        [  <a href="s1.html">First Section</a> |
+           <a href="../c8/index.html">Previous Chapter</a> |
+           <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+<hr>
+<div class="content">
+<h3 class="chapter_title">Chapter 9</h3>
+<h2 class="chapter_title">Introduction to WebGPU</h2>
+<hr class="break">
+
+
+<p class="firstpar">This chapter introduces <span class="newword" data-term="WebGPU" data-definition="A new JavaScript graphics API, similar to WebGL, but designed to let web programs access
+modern GPU capabilities such as compute shaders." title="Click for a definition of WebGPU.">WebGPU</span>, 
+the new graphics <span class="word" data-term="API" data-definition="Application Programming Interface.  A collection of related classes, functions,
+constants, etc., for performing some task.  An API is an &quot;interface&quot; in the sense that it
+can be used without understanding how its functionality is actually implemented." title="Click for a definition of API.">API</span> for the web.
+WebGPU has been under development for several years, but it is only
+recently that it has begun to be included as a standard feature in
+web browsers.  In some browsers, you might find that it is
+available as an experimental feature that has to be explicitly 
+enabled before it can be used.  Some browsers might not support
+it at all.</p>
+
+
+<p>WebGPU will not replace <span class="word" data-term="WebGL" data-definition="A 3D graphics API for use on web pages.  WebGL programs are written
+in the JavaScript programming language and display their images in HTML canvas
+elements.  WebGL is based on OpenGL ES, the version of OpenGL for embedded systems, with
+a few changes to adapt it to the JavaScript language and the Web environment." title="Click for a definition of WebGL.">WebGL</span>, which will continue to be well-supported
+in almost all browsers for the foreseeable future.  However, WebGL,
+like the OpenGL API on which it is based, is not likely to see much
+further development.  WebGPU, on the other hand, is inspired by and
+similar to modern graphics APIs such as <span class="word" data-term="Vulkan" data-definition="An open-source cross-platform API for 3D graphics and computation, designed as a
+more modern and efficient replacement for OpenGL." title="Click for a definition of Vulkan.">Vulkan</span>, <span class="word" data-term="Direct3D" data-definition="Microsoft's proprietary API for 3D graphics on the Windows operating system." title="Click for a definition of Direct3D.">Direct3D</span>,
+and <span class="word" data-term="Metal" data-definition="Apple's proprietary API for 3D graphics and computation on MacOS computers and iOS devices." title="Click for a definition of Metal.">Metal</span>, and it is likely to evolve along with those APIs.
+So WebGPU should be thought of as the Web graphics API of the future.</p>
+
+
+<p>WebGPU is similar to WebGL in many ways. For example, it has
+<span class="word" data-term="vertex shader" data-definition="A shader program that will be executed once for each vertex in a primitive.
+A vertex shader must compute the vertex coordinates in the clip coordinate system.
+It can also compute other properties, such as color." title="Click for a definition of vertex shader.">vertex shaders</span> and 
+<span class="word" data-term="fragment shader" data-definition="A shader program that will be executed once for
+each pixel in a primitive.  A fragment shader must compute a color for the pixel,
+or discard it.  Fragment shaders are also called pixel shaders." title="Click for a definition of fragment shader.">fragment shaders</span>,
+and a lot of the programmer's work involves managing the flow
+of data into and through the rendering <span class="word" data-term="pipeline" data-definition="A sequence of computational stages in a GPU that are applied to
+incoming data to produce some result.  Some of the stages can be programmable shaders,
+such as vertex shaders, fragment shaders, and compute shaders.  In a graphics rendering 
+pipeline, the output is the colors of the pixels in an image." title="Click for a definition of pipeline.">pipeline</span>.
+But WebGPU is an even lower level API than WebGL.
+It is more verbose, and it puts more responsibility on the 
+programmer for managing details of the rendering process.  At
+the same time, however, it gives the programmer more control,
+access to more powerful capabilities of modern <span class="word" data-term="GPU" data-definition="Graphics Processing Unit, a computer hardware component that performs graphical
+computations that create and manipulate images.  Operations such as drawing a line on the screen 
+or rendering a 3D image are done in the GPU, which is optimized to perform such operations very
+quickly." title="Click for a definition of GPU.">GPUs</span>, 
+and the possibility of more efficient code.</p>
+
+
+<p>The WebGPU specification is at
+<a href="https://www.w3.org/TR/webgpu/">https://www.w3.org/TR/webgpu/</a>,
+but it is not very useful for learning.  A simpler and more useful API reference can
+be found on the Mozilla Developer Network:
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API">https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API</a>.
+Hopefully, though, this chapter has enough information to get you
+started with WebGPU.</p>
+
+
+<p>As this chapter is being written in July 2023, the official WebGPU documentation
+describes itself as a "Working Draft."  Some details need to be filled in, and there
+could still be some minor changes in the API.  It is unlikely that changes in the
+final version will affect anything in this textbook, but that can't be guaranteed.</p>
+
+
+<hr class="break">
+<h3>Contents of Chapter 9:</h3>
+<ul class="contents">
+<li>Section 1: <a href="s1.html">WebGPU Basics</a>
+</li>
+<li>Section 2: <a href="s2.html">Instances and Indices</a>
+</li>
+<li>Section 3: <a href="s3.html">WGSL</a>
+</li>
+<li>Section 4: <a href="s4.html">3D Graphics With WebGPU</a>
+</li>
+<li>Section 5: <a href="s5.html">Textures</a>
+</li>
+<li>Section 6: <a href="s6.html">Compute Shaders</a>
+</li>
+<li>Section 7: <a href="s7.html">Some Details</a>
+</li>
+</ul>
+</div>
+<hr>
+<div align="right">
+<small>
+        [  <a href="s1.html">First Section</a> |
+           <a href="../c8/index.html">Previous Chapter</a> |
+           <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+</div>
+</body>
+<script src="../resource/glossary.js"></script>
+</html>

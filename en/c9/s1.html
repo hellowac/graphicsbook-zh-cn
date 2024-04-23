@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Introduction to Computer Graphics, Section 9.1 -- WebGPU Basics</title>
+<link type="text/css" rel="stylesheet" href="../resource/graphicstext.css">
+</head>
+<body>
+<div class="page">
+<div align="right">
+<small>
+        [  <a href="s2.html">Next Section</a> |
+           <a href="index.html">Chapter Index</a> | 
+	    <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+<hr>
+<table class="subsections" cellpadding="5" border="2">
+<tr>
+<td>
+<div align="center">
+<b>Subsections</b>
+<hr>
+<small><a href="#webgpu.1.1">Adapter, Device, and Canvas</a>
+<br>
+<a href="#webgpu.1.2">Shader Module</a>
+<br>
+<a href="#webgpu.1.3">Render Pipeline</a>
+<br>
+<a href="#webgpu.1.4">Buffers</a>
+<br>
+<a href="#webgpu.1.5">Drawing</a>
+<br>
+<a href="#webgpu.1.6">Multiple Vertex Inputs</a>
+<br>
+<a href="#webgpu.1.7">Auto Bind Group Layout</a>
+<br>
+</small>
+</div>
+</td>
+</tr>
+</table>
+<div class="content section">
+<h3 class="section_title">Section 9.1</h3>
+<h2 class="section_title">WebGPU Basics</h2>
+<hr class="break">
+
+
+<p class="firstpar">WebGPU is a new API for computer graphics on the Web.  Where <span class="word" data-term="WebGL" data-definition="A 3D graphics API for use on web pages.  WebGL programs are written
+in the JavaScript programming language and display their images in HTML canvas
+elements.  WebGL is based on OpenGL ES, the version of OpenGL for embedded systems, with
+a few changes to adapt it to the JavaScript language and the Web environment." title="Click for a definition of WebGL.">WebGL</span>
+was based on OpenGL, WebGPU has been completely designed from scratch.  It is similar
+to more modern computer graphics APIs such as <span class="word" data-term="Vulkan" data-definition="An open-source cross-platform API for 3D graphics and computation, designed as a
+more modern and efficient replacement for OpenGL." title="Click for a definition of Vulkan.">Vulkan</span>, <span class="word" data-term="Metal" data-definition="Apple's proprietary API for 3D graphics and computation on MacOS computers and iOS devices." title="Click for a definition of Metal.">Metal</span>, 
+and <span class="word" data-term="Direct3D" data-definition="Microsoft's proprietary API for 3D graphics on the Windows operating system." title="Click for a definition of Direct3D.">Direct3D</span>.  WebGPU is a very low-level API, which makes the programmer
+do more work but also offers more power and efficiency.  On the other hand,
+you might find that WebGPU is a cleaner, more logical API than WebGL, which
+is filled with strange remnants of old OpenGL features.</p>
+
+
+<p>We begin the chapter with an overview of WebGPU.  For now, we will stick to
+basic 2D graphics, with no <span class="word" data-term="geometric transform" data-definition="A coordinate transformation; that is, a function that can
+be applied to each of the points in a geometric object to produce a new object.  Common
+transforms include scaling, rotation, and translation. " title="Click for a definition of geometric transform.">transformations</span>
+or <span class="word" data-term="lighting" data-definition="Using light sources in a 3D scene, so that the appearance of objects in
+the scene can be computed based on the interaction of light with the objects' material properties." title="Click for a definition of lighting.">lighting</span>.  Although I will make some references to WebGL,
+I will try to make the discussion accessible even
+for someone who has not already studied WebGL or OpenGL; however, if you are not
+familiar with those older APIs, you might need to refer to earlier sections
+of this book for background information.</p>
+
+
+<p>Our WebGPU examples will be programmed in <span class="word" data-term="JavaScript" data-definition="A programming language for web pages.  JavaScript code on a web
+page is executed by a web browser that displays the page, and it can interact with the contents
+of the web page and with the user.  There are JavaScript APIs for 2D and for 3D graphics" title="Click for a definition of JavaScript.">JavaScript</span>.
+A short introduction to JavaScript can be found in <a href="../a1/s3.html">Section&nbsp;3</a>
+of Appendix&nbsp;A.  WebGPU makes extensive use of <span class="word" data-term="typed array" data-definition="In JavaScript, an array type that is limited to holding numerical values
+of a single type.  For example, the type Float32Array represents arrays that can hold 32-bit floating
+point values, and Uint8Array arrays can hold only 8-bit integer values.  Such arrays are more efficient
+than general JavaScript arrays for numerical calculations.  The were introduced into JavaScript
+along with HTML canvas graphics and WebGL." title="Click for a definition of typed array.">typed arrays</span>
+such as <span class="classname">Float32Array</span> and of the notations for creating objects (using <span class="code">{...}</span>)
+and arrays (using <span class="code">[...]</span>).
+And it uses <span class="word" data-term="async function" data-definition="In JavaScript, an async function is one that can use
+an &quot;await&quot; statement to wait for the result of a promise.  When an await statement is
+executed, the execution of the async function is suspended until the promise has either
+been fulfilled or rejected, giving other JavaScript code a chance to run in the
+meantime." title="Click for a definition of async function.">async</span> functions and 
+<span class="word" data-term="promise (in JavaScript)" data-definition="In JavaScript programming, a promise represents a result
+that might be available immediately or at some time in the future.  A programmer can provide
+a function to be called if and when the promise is fulfilled (that is when the result becomes
+available).  A programmer can also provide a function to be called when the promise is
+rejected (for example, if some error occurs).  Promises are asynchronous since the function
+that handles success or failure will be called at some unpredictable time." title="Click for a definition of promise (in JavaScript).">promises</span>, advanced JavaScript
+features that are discussed in <a href="../a1/s4.html">Section&nbsp;4</a>
+of that appendix.</p>
+
+
+<p>The environment for a WebGPU application has two parts that I will call the JavaScript side
+and the GPU side.   The JavaScript side is executed on the <span class="word" data-term="CPU" data-definition="The Central Processing Unit in a computer, the component that actually
+executes programs.  The CPU reads machine language instructions from the computer's memory
+and carries them out." title="Click for a definition of CPU.">CPU</span> (the Central
+Processing Unit of the computer), while WebGPU computational and rendering operations are 
+executed on the <span class="word" data-term="GPU" data-definition="Graphics Processing Unit, a computer hardware component that performs graphical
+computations that create and manipulate images.  Operations such as drawing a line on the screen 
+or rendering a 3D image are done in the GPU, which is optimized to perform such operations very
+quickly." title="Click for a definition of GPU.">GPU</span> (Graphical Processing Unit).  The CPU and GPU each have
+their own dedicated memory, but they also have some shared memory that can be used for
+sharing data and sending messages.  Communication between the JavaScript side and 
+the GPU side of the application is relatively slow and inefficient.  A lot of the
+design of WebGPU, which can seem cumbersome and a little strange, can be explained by
+the need to manage that communication as efficiently as possible.  Now, WebGPU can
+in fact be implemented in many ways on many different systems.  It can even be emulated
+entirely in software with no physical GPU involved.  But the design has to be 
+efficient for all cases, and the case that you should keep in mind when trying
+to understand the design is one with separate CPU and GPU that have access to 
+some shared memory.</p>
+
+
+<p>In this section we will mostly be looking at one sample program:
+<span class="sourceref"><a href="../source/webgpu/basic_webgpu_1.html">basic_webgpu_1.html</a></span>,
+which simply draws a colored triangle.
+The source code for this example is extensively commented, and you are
+encouraged to read it.  You can run it to test whether your browser supports WebGPU.
+Here is a demo version (with source code that does not
+include all the comments):</p>
+
+
+<div class="demo">
+<noscript>
+<h4 style="color:red; text-align:center">Demos require JavaScript.<br>Since JavaScript is not available,<br>the demo is not functional.</h4>
+</noscript>
+<p align="center">
+<iframe src="../demos/c9/first-webgpu-demo.html" width="390" height="450"></iframe>
+</p>
+</div>
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.1.1">9.1.1&nbsp;&nbsp;Adapter, Device, and Canvas</h3>
+
+
+<p>Any WebGPU application must begin by obtaining a WebGPU "device," which represents the
+programmer's interface to almost all WebGPU features. To produce visible graphics images 
+on a web page, WebGPU <span class="word" data-term="rendering" data-definition="The process of producing a 2D image from a 3D scene description." title="Click for a definition of rendering.">renders</span> to an <span class="word" data-term="HTML canvas" data-definition="A canvas element on a web page. The canvas appears as a rectangular area on the page.
+The JavaScript programming language can use a canvas element as a drawing surface.  
+HTML is a language for specifying the content of a web page.  JavaScript is the
+programming language for web pages.  The canvas element supports a 2D graphics API.
+In many browsers, it also supports the 3D graphics API, WebGL." title="Click for a definition of HTML canvas.">HTML canvas</span> 
+element on the page.  For that, the application will need a WebGPU context for the canvas.
+(WebGPU can do other things besides render to a canvas, but we will stick to that for now).
+The code for obtaining the device and context can be the same in any application:</p>
+
+
+<pre>async function initWebGPU() {
+
+   if (!navigator.gpu) {
+      throw Error("WebGPU not supported in this browser.");
+   }
+   let adapter = await navigator.gpu.requestAdapter();
+   if (!adapter) {
+      throw Error("WebGPU is supported, but couldn't get WebGPU adapter.");
+   }
+
+   device = await adapter.requestDevice();
+   
+   let canvas = document.getElementById("webgpuCanvas");
+   context = canvas.getContext("webgpu");
+   context.configure({
+      device: device,
+      format: navigator.gpu.getPreferredCanvasFormat(),
+      alphaMode: "premultiplied" // (the alternative is "opaque")
+   });
+    .
+    .
+    .</pre>
+    
+
+<p class="noindent">Here, <span class="code">device</span> and <span class="code">context</span> are global variables,
+<span class="code">navigator</span> is a predefined variable representing the web browser, and
+the other variables, <span class="code">adapter</span> and <span class="code">canvas</span>, are probably
+not needed outside the initialization function.  (If a reference to the
+canvas is needed, it is available as <span class="code">context.canvas</span>.)
+The functions <span class="code">navigator.gpu.requestAdapter()</span> and
+<span class="code">adapter.requestDevice()</span> return promises.
+The function is declared as <span class="code">async</span> because it uses <span class="code">await</span>
+to wait for the results from those promises.  (Async functions are used in the
+same way as other functions, except that sometimes you have to take into account that
+other parts of the program can in theory run while <span class="code">await</span>
+is waiting for a result.)</p>
+
+
+<p>The only thing you might want to change in this initialization is the
+<span class="code">alphaMode</span> for the <span class="code">context</span>.  The value
+"premultiplied" allows the <span class="word" data-term="alpha color component" data-definition="An extra component (that is, one of the numbers that are used
+to specify a color) in a color model that is not part of the actual color specification.  The
+alpha component is extra information.  It is most often used to specify the degree of
+transparency of a color." title="Click for a definition of alpha color component.">alpha</span> 
+value of a pixel in the canvas to
+determine the degree of transparency of that pixel when the canvas
+is drawn on the web page.  The alternative value, "opaque", means that
+the alpha value of a pixel is ignored, and the pixel is opaque.</p>
+
+
+<p>This initialization code does some error checking and can throw an
+error if a problem is encountered.  Presumably, the program would catch
+that error elsewhere and report it to the user.  However, as a WebGPU
+developer, you should be aware that WebGPU does extensive
+validity checks on programs and reports all errors and warnings 
+to the web browser console.  So, it is a good idea to keep 
+the console open when testing your work.</p>
+
+
+</div>
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.1.2">9.1.2&nbsp;&nbsp;Shader Module</h3>
+
+
+<p>Like WebGL and OpenGL, WebGPU draws <span class="word" data-term="geometric primitive" data-definition="Geometric objects in a graphics system, such as OpenGL, that are
+not made up of simpler objects.  Examples in OpenGL include points, lines, and triangles,
+but the set of available primitives depends on the graphics system.  (Note that as the term
+is used in OpenGL, a single primitive can be made up of many points, line segments, or triangles.)" title="Click for a definition of geometric primitive.">primitives</span>
+(points, lines, and triangles) that are defined by <span class="word" data-term="vertex" data-definition="One of the points that define a geometric primitive, such as the
+two endpoints of a line segment or the three vertices of a triangle.  (The plural is &quot;vertices.&quot;)
+A vertex can be specified in a coordinate system by giving its x and y coordinates in
+2D graphics, or its x, y, and z coordinates in 3D graphics." title="Click for a definition of vertex.">vertices</span>.
+The rendering process involves some computation for each vertex of a primitive, and
+some computation for each pixel (or "fragment") that is part of the primitive.  A
+WebGPU programmer must define functions to specify those computations.  Those functions
+are <span class="word" data-term="shader" data-definition="A program to be executed at some stage of the rendering pipeline.  OpenGL
+shaders are written in the GLSL programming languages.  For WebGL, only vertex shaders
+and fragment shaders are supported.  WebGPU also has compute shaders, which are used
+in compute pipelines." title="Click for a definition of shader.">shaders</span>.  To render an image, a WebGPU program must
+provide a vertex shader main function and a fragment shader main function.  In the documentation,
+those functions are referred to as the vertex shader entry point and the fragment shader entry point.
+Shader functions and
+supporting code for WebGPU are written in <span class="newword" data-term="WGSL" data-definition="The WebGPU Shader Language, the programming language in which 
+shaders for use in WebGPU are written." title="Click for a definition of WGSL.">WGSL</span>, the WebGPU Shader Language.
+Shader source code is given as an ordinary JavaScript string. The
+<span class="code">device.createShaderModule()</span> method, in the WebGPU device object,
+is used to compile the source code, check it for syntax errors, and package it
+into a shader module that can then be used in a rendering pipeline:</p>
+
+
+<pre>shader = device.createShaderModule({
+    code: shaderSource
+});</pre>
+
+
+<p class="noindent">The parameter here is an object that in this example has just one property, named <span class="code">code</span>;
+<span class="code">shaderSource</span> is the string that contains the shader source code; and the return value,
+<span class="code">shader</span>, represents the compiled source code, which will be used later, when configuring
+the render pipeline.  Syntax errors in the source code will not throw an exception.  However,
+compilation errors and warnings will be reported in the web console. You should always check the
+console for WebGPU messages during development.</p>
+
+
+<hr class="break">
+
+
+<p>We will look at WGSL in some detail in <a href="../c9/s3.html">Section&nbsp;9.3</a>.  WGSL is 
+similar in many ways to <span class="word" data-term="GLSL" data-definition="OpenGL Shader Language, the programming language that is used to write
+shader programs for use with OpenGL." title="Click for a definition of GLSL.">GLSL</span>, the shading language for WebGL,
+but its variable and function declarations are very different.  I will give
+just a short discussion here, to help you understand the relationship between
+the JavaScript part and the WGSL part of a WebGPU application.  Here is the short
+shader source code from our <span class="sourceref"><a href="../source/webgpu/basic_webgpu_1.html">first WebGPU example</a></span>.
+It is defined (on the JavaScript side) as a template string, which can extend over
+multiple lines:</p>
+
+
+<pre>const shaderSource = `
+   
+   @group(0) @binding(0) var&lt;uniform&gt; color : vec3f;
+
+   @vertex
+   fn vertexMain( @location(0) coords : vec2f ) -&gt; @builtin(position) vec4f {
+      return vec4f( coords, 0, 1 );
+   }
+   
+   @fragment
+   fn fragmentMain() -&gt; @location(0) vec4f {
+      return vec4f( color, 1 ); 
+   }
+`;</pre>
+
+
+<p class="noindent">The syntax for a function definition in WGSL is</p>
+
+
+<pre>fn <span class="bnf">function_name</span> ( <span class="bnf">parameter_list</span> ) -&gt; <span class="bnf">return_type</span> { . . . }</pre>
+
+
+<p class="noindent">The types used in this example&mdash;<span class="code">vec2f</span>, <span class="code">vec3f</span>, and
+<span class="code">vec4f</span>&mdash;represent vectors of two, three, and four 32-bit floating point numbers.
+Variable declarations can have several forms.  The one example in this code has the
+form</p>
+
+
+<pre>var&lt;uniform&gt; <span class="bnf">variable_name</span> : <span class="bnf">type</span> ;</pre>
+
+
+<p class="noindent">This declares a global variable in the "uniform address space," which will be discussed below.
+A variable in the uniform address space gets its value from the JavaScript side.</p>
+
+
+<p>The words beginning with "@" are annotations or modifiers.  For example, 
+<span class="code">@vertex</span> means that the following function can be used as a vertex shader
+entry point, and <span class="code">@fragment</span> means that the following function can be used as a fragment shader
+entry point.  The <span class="code">@builtin(position)</span> annotation says that the return value from
+<span class="code">vertexMain()</span> gives the coordinates of the
+vertex in the standard WebGPU coordinate system.  And <span class="code">@location(0)</span>,
+<span class="code">@group(0)</span>, and <span class="code">@binding(0)</span> in this example are used to specify
+connections between data in the shader and data on the JavaScript side, as will be
+discussed below.</p>
+
+
+<p>The vertex and fragment shader functions that are used here are very simple.  
+The vertex shader simply takes the (x,y) coordinates from its parameter, which
+comes from the JavaScript side, and adds z- and w-coordinates to get the
+final <span class="word" data-term="homogeneous coordinates" data-definition="A way of representing n-dimensional vectors as
+(n+1)-dimensional vectors where two (n+1) vectors represent the same n-dimensional vector
+if they differ by a scalar multiple.  In 3D, for example, if w is not zero, then the
+homogeneous coordinates (x,y,z,w) are equivalent to homogeneous coordinates 
+(x/w,y/w,z/w,1), since they differ by
+multiplication by the scalar w.  Both sets of coordinates represent the 3D vector (x/w,y/w,z/w)" title="Click for a definition of homogeneous coordinates.">homogeneous coordinates</span> for the vertex.
+The expression <span class="code">vec4f(coords,0,1)</span> for the return value constructs
+a <span class="code">vec4f</span> (a vector of four floats) from the four floating-point
+values in its parameter list.  The fragment shader, which outputs an
+<span class="word" data-term="RGBA color" data-definition="An RGB color&mdash;specified by red, green, and blue component values&mdash;together
+with an alpha component.  The alpha component is most often take to specify the degree of transparency
+of the color, with a maximal alpha value giving a fully opaque color." title="Click for a definition of RGBA color.">RGBA</span> color for the pixel that it is processing, simple uses
+the three RGB components from the uniform <span class="code">color</span> variable, which
+comes from the JavaScript side, and adds a 1 for the alpha component of the color.</p>
+
+
+</div>
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.1.3">9.1.3&nbsp;&nbsp;Render Pipeline</h3>
+
+
+<p>In WebGPU, an image is produced as the output of a series of processing stages that
+make up a "render pipeline."  The vertex shader and fragment shader are programmable stages
+in the pipeline, but there are other fixed function stages that are built into WebGPU.
+Input to the pipeline comes from data structures in the <span class="word" data-term="GPU" data-definition="Graphics Processing Unit, a computer hardware component that performs graphical
+computations that create and manipulate images.  Operations such as drawing a line on the screen 
+or rendering a 3D image are done in the GPU, which is optimized to perform such operations very
+quickly." title="Click for a definition of GPU.">GPU</span>.  If the data originates 
+on the JavaScript side of the application, it must be copied to the GPU before 
+it can be used in the pipeline.  Here is an illustration of the general structure 
+of a render pipeline:</p>
+
+
+<p align="center">
+<img src="webgpu-render-pipeline.png" width="601" height="274" alt="Data flow in a WebGPU render pipeline."></p>
+   
+
+<p class="noindent">This diagram shows two types of input to the pipeline, <span class="newword" data-term="vertex buffer" data-definition="In WebGPU, a vertex buffer is a GPU data structure that
+holds values to be used as input the vertex shader." title="Click for a definition of vertex buffer.">vertex buffers</span>
+and <span class="newword" data-term="bind group (in WebGPU)" data-definition="A data structure that can hold resources
+such as buffers, textures, and samples, for input into a pipeline." title="Click for a definition of bind group (in WebGPU).">bind groups</span>.  Recall that when a primitive is drawn, the vertex shader is called once for
+each vertex in the primitive.  Each invocation of the vertex shader can get different values
+for the parameters in the vertex shader entry point function.  Those values come from vertex buffers.
+The buffers must be loaded with values for the parameters for every vertex.
+A fixed function stage of the pipeline, shown as the dots between the 
+vertex buffers and the vertex shader, calls the vertex shader once for each vertex, pulling
+the appropriate set of parameter values for that vertex from the buffers.  (Vertex buffers
+also hold data for <span class="word" data-term="instanced drawing" data-definition="The ability to render multiple versions of a primitive
+with a single function call.  Each copy can have its own values for certain attributes, such as
+color or transformation." title="Click for a definition of instanced drawing.">instanced drawing</span>, which will be covered in the
+<a href="../c9/s2.html">next section</a>).</p>
+
+
+<p>The vertex shader outputs some values, which must include the coordinates of the vertex
+but can also include other values such as color, <span class="word" data-term="texture coordinates" data-definition="Refers to the 2D coordinate system on a texture image, or to
+similar coordinate systems for 1D and 3D textures.  Texture coordinates typically range from 0 to 1
+both vertically and horizontally, with (0,0) at the lower left corner of the image.  The
+term also refers to coordinates that are given for a surface and that are used to specify
+how a texture image should be mapped to the surface." title="Click for a definition of texture coordinates.">texture coordinates</span>,
+and <span class="word" data-term="normal vector" data-definition="A normal vector to a surface at a point on that 
+surface is a vector that is perpendicular to the surface at that point.
+Normal vectors to curves are defined similarly.  Normal vectors are important
+for lighting calculations." title="Click for a definition of normal vector.">normal vector</span> for the vertex.  Intermediate stages of the pipeline between
+the vertex shader and the fragment shader process the values in various ways.  For example,
+the coordinates of the vertices are used to determine which pixels lie in the primitive.
+Coordinates for the pixels are computed by <span class="word" data-term="interpolation" data-definition="Given values for some quantity at certain reference points, computing
+a value for that quantity at other points by some kind of averaging applied to the values at
+the reference points." title="Click for a definition of interpolation.">interpolating</span>
+the vertex coordinates.  Values like color and texture coordinates are also generally 
+interpolated to get different values for each pixel.  All these values are available
+as inputs to the fragment shader, which will be called once for each pixel in the
+primitive with appropriate values for its parameters.</p>
+   
+
+<p>Vertex buffers are special because of the way that they are used to supply
+vertex shader parameters.  Other kinds of input are stored in the data structures 
+called bind groups.  Values from bind groups are made available to vertex and
+fragment shaders as global variables in the shader programs.</p>
+
+
+<p>The fragment shader can output several values.  The destinations for those
+values lie outside the pipeline and are referred to as the "color attachments"
+for the pipeline.  In the most common case, there is just one output that
+represents the color to be assigned to the pixel, and the associated color
+attachment is the image that is being rendered (or, rather, the block of
+memory that holds the color data for that image).  Multiple outputs
+can be used for advanced applications such as <span class="word" data-term="deferred shading" data-definition="A multi-pass rendering technique where a first pass processes the geometry and
+saves relevant information such as transformed coordinates, normal vectors, and material properties.  The
+data can be stored in textures, which are called &quot;geometry buffers&quot; or &quot;G-buffers&quot; in this context.
+Lighting and other effects can then be computed in additional passes, using the pre-computed
+information from the geometry buffers instead of re-computing it for each pass." title="Click for a definition of deferred shading.">deferred shading</span>
+(see <a href="../c7/s5.html#webgl3d.5.3">Subsection&nbsp;7.5.4</a>).</p>
+
+
+<p>A WebGPU program is responsible for creating pipelines and providing
+many details of their configuration.  (Fortunately, a lot of the detail
+can be handled by the tried-and-true method of cut-and-paste.)
+Let's look at the relatively simple example from our first sample program.
+The goal is to create a render pipeline as the final step in the following code
+excerpt.  Before that, the program creates some objects to
+specify the pipeline configuration:</p>
+
+
+<pre>let vertexBufferLayout = [ // An array of vertex buffer specifications.
+   { 
+      attributes: [ { shaderLocation:0, offset:0, format: "float32x2" } ],
+      arrayStride: 8, 
+      stepMode: "vertex"
+   }
+ ];
+
+let uniformBindGroupLayout = device.createBindGroupLayout({
+    entries: [ // An array of resource specifications.
+       {
+          binding: 0,
+          visibility: GPUShaderStage.FRAGMENT,
+          buffer: {
+             type: "uniform"
+          }
+       }
+    ]
+  });
+ 
+let pipelineDescriptor = {
+    vertex: { // Configuration for the vertex shader.
+       module: shader, 
+       entryPoint: "vertexMain", 
+       buffers: vertexBufferLayout 
+    },
+    fragment: { // Configuration for the fragment shader.
+       module: shader, 
+       entryPoint: "fragmentMain", 
+       targets: [{
+         format: navigator.gpu.getPreferredCanvasFormat()
+       }]
+    },
+    primitive: {
+       topology: "triangle-list"
+    },
+    layout: device.createPipelineLayout({
+       bindGroupLayouts: [uniformBindGroupLayout]
+    })
+ };
+ 
+pipeline = device.createRenderPipeline(pipelineDescriptor);</pre>
+
+
+<p class="noindent">(You can read the same code with more comments in the source code
+for the <span class="sourceref"><a href="../source/webgpu/basic_webgpu_1.html">program</a></span>.)</p>
+
+
+<p>There is a lot going on here!
+The <span class="code">vertex</span> and <span class="code">fragment</span> properties of
+the pipeline descriptor describe the shaders that are used in the
+pipeline.  The <span class="code">module</span> property is the compiled shader
+module that contains the shader function.  The <i>entryPoint</i>
+property gives the name used for the shader entry point function in the shader
+source code.  The <span class="code">buffers</span> and <span class="code">targets</span>
+properties are concerned with inputs for the vertex shader function
+and outputs from the fragment shader function.</p>
+
+
+<p>The vertex buffer and bind group "layouts" specify what inputs will
+be required for the pipeline.  They specify only the structure of the
+inputs. They basically create attachment points where actual input sources
+can be plugged in later.  This allows one pipeline to draw different 
+things by providing it with different inputs.</p>
+
+
+<p>Note the use of arrays 
+throughout the specification.  For example, a pipeline can be configured
+to use multiple vertex buffers for input. The vertex buffer layout is
+an array, in which each element of the array specifies one input buffer.
+The index of an element in the array is important, since it identifies
+the attachment point for the corresponding buffer.  The index will
+be used later, when attaching an actual buffer.</p>
+
+
+<p>Similarly, a pipeline can take inputs from multiple bind groups.
+In this case, the index for a bind group comes from the <span class="code">bindGroupLayouts</span>
+property in the <span class="code">pipelineDescriptor</span>, and that index will be
+required when attaching an actual bind group to the pipeline.
+The index is also used in the shader program. For example, if you look
+back at the shader source code above, you'll see that the uniform
+variable declaration is annotated with <span class="code">@group(0)</span>.  This 
+means that the value for that variable will be found in the bind
+group at index&nbsp;0 in the <span class="code">bindGroupLayouts</span> array.</p>
+
+
+<p>Furthermore, each bind group can hold a 
+list of resources, which are specified by the <span class="code">entries</span> 
+property of the bind group layout for that bind group.  An entry
+can provide the value for a global variable in the shader.
+In this case, confusingly, it is not the index of the entry in
+the <span class="code">entries</span> array that is important; instead, 
+the entry has a <span class="code">binding</span> property to identify it.
+In the sample program, the double annotation <span class="code">@group(0) @binding(0)</span>
+on the uniform variable declaration says that the value for the variable
+comes specifically from the entry with binding number 0 in the
+bind group at index&nbsp;0.</p>
+
+
+<p>The pipeline also has outputs, which come from the fragment shader entry point function,
+and the pipeline needs attachment points for the destinations of those outputs.
+The <span class="code">targets</span> property in the <span class="code">pipelineDescriptor</span>
+is an array with one entry for each attachment point.   When the shader
+source code defines the fragment shader with
+<span class="code">fn&nbsp;fragmentMain() -&gt; @location(0)&nbsp;vec4f</span>,
+the annotation <span class="code">@location(0)</span> on the output says that that
+output will be sent to color attachment number&nbsp;0, corresponding to
+the element at index&nbsp;0 in the <span class="code">targets</span> array.
+The value for the <span class="code">format</span> property in that element specifies 
+that the output will be in the appropriate format for colors
+in a canvas.  (The system will automatically translate the shader output,
+which uses a 32-bit float for each color component, into the canvas
+format, which uses an 8-bit unsigned integer for each component.)</p>
+
+
+<p>That leaves the <span class="code">primitive</span> property of the <span class="code">pipelineDescriptor</span>
+to be explained: It specifies the kind of <span class="word" data-term="geometric primitive" data-definition="Geometric objects in a graphics system, such as OpenGL, that are
+not made up of simpler objects.  Examples in OpenGL include points, lines, and triangles,
+but the set of available primitives depends on the graphics system.  (Note that as the term
+is used in OpenGL, a single primitive can be made up of many points, line segments, or triangles.)" title="Click for a definition of geometric primitive.">geometric primitive</span> that the
+pipeline can draw.  The <span class="code">topology</span> specifies the primitive type, which in
+this example is "triangle-list."  That is, when the pipeline is executed, each
+group of three vertices will define a triangle.  WebGPU has only five primitive types: 
+"point-list", "line-list", "line-strip", "triangle-list", and "triangle-strip",
+corresponding to <span class="code">POINTS</span>, <span class="code">LINES</span>, <span class="code">LINE_STRIP</span>, 
+<span class="code">TRIANGLES</span>, and <span class="code">TRIANGLE_STRIP</span> in WebGL or OpenGL.
+This illustration shows how the same six vertices would be interpreted in
+each topology (except that outlines of triangles and endpoints of line segments
+would not be part of the actual output):</p>
+
+
+<p align="center">
+<img src="webgpu-primitives.png" width="511" height="133" alt="Pictures of the five WebGPU primitive topologies."></p>
+
+
+<p class="noindent">(See <a href="../c3/s1.html#gl1geom.1.1">Subsection&nbsp;3.1.1</a> for more discussion of how primitives 
+are rendered.)</p>
+
+
+<p>You don't have to create a pipeline every time you draw an image.
+A pipeline can be used any number of times.  It can be used to draw different
+things by attaching different input sources.  Drawing a single image
+might require several pipelines, each of which might be executed several
+times.  It is common for programs to create pipelines during initialization
+and store them in global variables.</p>
+
+
+</div>
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.1.4">9.1.4&nbsp;&nbsp;Buffers</h3>
+
+
+<p>Inputs to a pipeline come from vertex buffers and from general purpose buffers and
+other resources in bind groups.  (The other possible resources relate to <span class="word" data-term="texture" data-definition="Variation in some property from point-to-point on an object.  The most common type
+is image texture.  When an image texture is applied to a surface, the surface color varies from
+point to point." title="Click for a definition of texture.">textures</span>,
+which we will not encounter until <a href="../c9/s5.html">Section&nbsp;9.5</a>).  You need to know how
+to create a buffer, fill it with data, and attach it to a pipeline.</p>
+
+
+<p>The function <span class="code">device.createBuffer()</span> is used for creating buffers.  It takes
+a parameter that specifies the size of the buffer in bytes and how the buffer will be used.
+For example, the sample program creates a vertex buffer with</p>
+
+
+<pre>vertexBuffer = device.createBuffer({
+     size: vertexCoords.byteLength,
+     usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST
+});</pre>
+
+
+<p class="noindent">The purpose of a vertex buffer is to hold inputs for a vertex shader on the
+GPU side of the program.  The data will come from a <span class="word" data-term="typed array" data-definition="In JavaScript, an array type that is limited to holding numerical values
+of a single type.  For example, the type Float32Array represents arrays that can hold 32-bit floating
+point values, and Uint8Array arrays can hold only 8-bit integer values.  Such arrays are more efficient
+than general JavaScript arrays for numerical calculations.  The were introduced into JavaScript
+along with HTML canvas graphics and WebGL." title="Click for a definition of typed array.">typed array</span>, such as
+a <span class="classname">Float32Array</span>, or from a related JavaScript data type such as
+<span class="classname">ArrayBuffer</span>. In this case,
+<span class="code">vertexCoords</span> is a <span class="classname">Float32Array</span> that holds the xy-coordinates
+of the vertices of a triangle, and <span class="code">vertexCoords.byteLength</span> gives the
+number of bytes in that array.  (Alternatively, the size could be specified as
+<span class="code">4*vertexCoords.length</span> or as the constant&nbsp;24.)</p>
+
+
+<p>The <span class="code">usage</span> property in this example says that the buffer is a vertex 
+buffer and that it can be used as a destination for copying data.  The value for
+the <span class="code">usage</span> can be given as a usage constant such as <span class="code">GPUBufferUsage.VERTEX</span>
+or by the bitwise <span class="code">OR</span> of several such constants.</p>
+
+
+<p>The program also uses a buffer to hold the value for the uniform <span class="code">color</span>
+variable in the shader.  The color value consists of three four-byte floats, and the
+buffer can be created with</p>
+
+
+<pre>uniformBuffer = device.createBuffer({
+   size: 3*4,
+   usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+});</pre>
+
+
+<p class="noindent">Only vertex buffers are attached directly to pipelines.  Other buffers
+must be part of a bind group that is attached to the pipeline.  The sample
+program creates a bind group to hold <span class="code">uniformBuffer</span>:</p>
+
+
+<pre>uniformBindGroup = device.createBindGroup({
+   layout: uniformBindGroupLayout,
+   entries: [ 
+     {
+        binding: 0, // Corresponds to the binding 0 in the layout.
+        resource: { buffer: uniformBuffer, offset: 0, size: 3*4 }
+     }
+   ]
+});</pre>
+
+
+<p class="noindent">Recall that <span class="code">uniformBindGroupLayout</span> was created to specify 
+the structure of the bind group.  The bind group layout has <span class="code">entries</span>
+that specify resources; a corresponding bind group has <span class="code">entries</span>
+the provide the actual resources. The resource in this case is a 
+<span class="code">buffer</span>.  The <span class="code">offset</span> and <span class="code">size</span>
+properties of the <span class="code">resource</span> make it possible to use just
+a segment of a buffer; <span class="code">offset</span> is the starting byte number of
+the segment, and <span class="code">size</span> is the number of bytes in the segment.</p>
+
+
+<p>To be useful, a buffer must loaded with data.  The buffer exists on
+the GPU side of the program.  For data that originates
+on the JavaScript side, the function <span class="code">device.queue.writeBuffer()</span> 
+is the easiest way to copy the data into a GPU buffer.  For example the function call</p>
+
+
+<pre>device.queue.writeBuffer(vertexBuffer, 0, vertexCoords);</pre>
+
+
+<p class="noindent">copies the entire contents of the <span class="code">vertexCoords</span> array
+into <span class="code">vertexBuffer</span>, starting at byte number 0 in the buffer.
+It is possible to a copy a subarray of a typed array to any position in the buffer.
+The general form is</p>
+
+
+<pre>device.queue.writeBuffer(<span class="bnf">buffer</span>,<span class="bnf">startByte</span>,<span class="bnf">array</span>,<span class="bnf">startIndex</span>,<span class="bnf">count</span>)</pre>
+
+
+<p class="noindent">where <span class="code">count</span> gives the number of elements of <span class="code">array</span> to be
+copied into <span class="code">buffer</span>.  (This is when the data source is a typed
+array; for other data sources, the starting position in the source and the size
+of the data to be copied are measured in bytes.)</p>
+
+
+<p>In the sample program, the buffers and bind group are created just once, during initialization. And
+<span class="code">vertexBuffer</span> and <span class="code">uniformBuffer</span> are global 
+variables&mdash;<span class="code">vertexBuffer</span> because it must be attached to the pipeline each time
+the pipeline is used to draw a triangle, and <span class="code">uniformBuffer</span> 
+so that the data stored in it can be changed.  A new value is written to <span class="code">uniformBuffer</span>
+every time the color of the triangle is to be changed.
+Similarly, <span class="code">uniformBindGroup</span> is a global variable because it
+must be attached to the pipeline each time a triangle is drawn.</p>
+
+
+<hr class="break">
+
+
+<p>It is interesting to think about why the <span class="code">writeBuffer()</span> function is
+a method in the object <span class="code">device.queue</span>.  The queue in question is
+a queue of operations to be performed on the GPU.  When <span class="code">writeBuffer()</span>
+returns, it is not necessarily true that the data has been written to the buffer.
+However, the operation that does the copying has been added to the queue.  What you
+are guaranteed is that the data will be copied to the buffer before it is needed
+by operations that come later in the queue.  That can include drawing operations
+that use the buffer.  It is also possible that the queue already contains
+operations that depend on the previous value in the buffer, so the new
+data can't be copied into the buffer until those operations have completed.</p>
+
+
+<p>When <span class="code">device.queue.writeBuffer()</span> is called, it immediately
+copies the data into an intermediate "staging" buffer that exists in memory
+that is shared by the JavaScript and GPU sides.  This means that you are
+free to reuse the array immediately; you don't have to wait for the data
+to be copied to its final destination.  Instead of calling <span class="code">writeBuffer()</span>,
+it's possible to do the work yourself&mdash;create a staging buffer, copy
+the data into the staging buffer, enqueue a command to copy the data from
+the staging buffer to the destination buffer&mdash;but
+<span class="code">writeBuffer()</span> makes the process much easier.</p>
+
+
+
+</div>
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.1.5">9.1.5&nbsp;&nbsp;Drawing</h3>
+
+
+<p>With the pipeline set up and the input buffers ready, it's time to 
+actually draw the triangle!  The drawing commands are specified on the
+JavaScript side but executed on the GPU side.   A "command encoder"
+is used on the JavaScript side to create a list of commands in a
+form that can be added to the queue of commands for processing on
+the GPU.  The command encoder is created by the WebGPU device:</p>
+
+
+<pre>let commandEncoder = device.createCommandEncoder();</pre>
+
+
+<p class="noindent">For drawing, we need to encode a "render pass," and for
+that, we need a render pass descriptor:</p>
+
+
+<pre>let renderPassDescriptor = {
+   colorAttachments: [{
+       clearValue: { r: 0.5, g: 0.5, b: 0.5, a: 1 },  // gray background
+       loadOp: "clear", // Alternative is "load".
+       storeOp: "store",  // Alternative is "discard".
+       view: context.getCurrentTexture().createView()  // Draw to the canvas.
+   }]
+};</pre>
+
+
+<p class="noindent">The <span class="code">colorAttachments</span> property of the <span class="code">renderPassDescriptor</span>
+corresponds to the output <span class="code">targets</span> of the pipeline.  Each element of
+the <span class="code">colorAttachments</span> array specifies the destination for the
+corresponding element in the array of output targets.  In this case, we want
+to draw to the canvas on the web page.  The value for the <span class="code">loadOp</span> property 
+is "clear" if the canvas is to be filled with the clear
+color before drawing; it is "load" if you want to draw over the previous
+contents of the canvas.  The <span class="code">clearValue</span> gives the <span class="word" data-term="RGBA color" data-definition="An RGB color&mdash;specified by red, green, and blue component values&mdash;together
+with an alpha component.  The alpha component is most often take to specify the degree of transparency
+of the color, with a maximal alpha value giving a fully opaque color." title="Click for a definition of RGBA color.">RGBA</span>
+components of the clear color as floating point values in the range 0.0 to&nbsp;1.0.
+The <span class="code">storeOp</span> will almost always be "store".  The <span class="code">view</span>
+property specifies where the image will be drawn.  In this case, the ultimate
+destination is the canvas, but the actual destination is a texture that
+will be copied to the canvas when the content of the web page is refreshed.
+The function <span class="code">context.getCurrentTexture()</span> has to be called each
+time the canvas is redrawn, so we can't simply make a render pass descriptor
+and use it unchanged for every render.</p>
+
+
+<p>The drawing commands themselves are encoded by a render pass encoder,
+which is obtained from the command encoder.  The pass encoder in our example
+assembles the resources required for the drawing (pipeline, vertex buffer, and
+bind group), and it issues the command that actually does the drawing.
+A call to <span class="code">passEncoder.end()</span> terminates the render pass:</p>
+
+
+<pre>let passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+passEncoder.setPipeline(pipeline);            // Specify pipeline.
+passEncoder.setVertexBuffer(0,vertexBuffer);  // Attach vertex buffer.
+passEncoder.setBindGroup(0,uniformBindGroup); // Attach bind group.
+passEncoder.draw(3);                          // Generate vertices.
+passEncoder.end();</pre>
+
+
+<p class="noindent">The draw command in this case, <span class="code">passEncoder.draw(3)</span>, will
+simply generate three vertices when it is executed.  Since the pipeline uses the "triangle-list"
+topology, those vertices form a triangle.  The vertex shader function,
+which was specified as part of the pipeline, will be called three times,
+with inputs that are pulled from the vertex buffer.  The outputs from the
+three invocations of the vertex shader specify the positions of the three
+vertices of a triangle.  The fragment shader function is then called for each pixel
+in the triangle. The fragment shader gets the color for the pixel from the uniform
+buffer that is part of the bind group.  All the set up that was done
+earlier in the program will finally be used to produce an image!
+This is a simple example.  More generally, a render pass can involve 
+other options, multiple draw commands, and other commands.</p>
+
+
+<p>You should note that all of this has not actually done any drawing!
+It has just encoded the commands that are needed to do the drawing, and has
+added them to the command encoder.  The final step is to get
+the list of encoded commands from the command encoder and submit
+them to the GPU for execution:</p>
+   
+
+<pre>let commandBuffer = commandEncoder.finish();
+device.queue.submit( [ commandBuffer ] );</pre>
+
+
+<p class="noindent">The parameter to <span class="code">device.queue.submit()</span> is an array
+of command buffers, although in this case there is only one.
+(The command encoder cannot be reused; if you want to submit
+multiple command buffers, you will need to create a new command
+encoder for each one.)</p>
+
+
+<p>Note that commands are submitted to the device queue.  The
+<span class="code">submit()</span> function returns immediately after enqueueing
+the commands.  They will be executed in a separate process on the
+GPU side of the application.</p>
+
+
+</div>
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.1.6">9.1.6&nbsp;&nbsp;Multiple Vertex Inputs</h3>
+
+
+
+<img src="rgb-triangle.png" width="100" height="83" align="right" alt="The standard RGB triangle example">
+
+
+<p>Before ending this section, we look at two variations on our basic example:
+<span class="sourceref"><a href="../source/webgpu/basic_webgpu_2.html">basic_webgpu_2.html</a></span> 
+and <span class="sourceref"><a href="../source/webgpu/basic_webgpu_3.html">basic_webgpu_3.html</a></span>.
+Instead of drawing a solid colored triangle, these programs draw a triangle in which
+each vertex has a different color.  The colors for the interior pixels are interpolated
+from the vertex colors.  This is the standard "RGB triangle" example.</p>
+
+
+<p>Since each vertex has a different color, the color is a vertex attribute that
+has to be passed as a parameter to the vertex shader entry point.  In the new examples, 
+that function has two
+parameters, the 2D vertex coordinates and the vertex RGB color.  Interpolated
+versions of these two values are used by the fragment shader, so the 
+vertex shader also needs two outputs.  Since a function can have only one
+return value, the two outputs have to be combined into a single data structure.
+In WGSL, as in <span class="word" data-term="GLSL" data-definition="OpenGL Shader Language, the programming language that is used to write
+shader programs for use with OpenGL." title="Click for a definition of GLSL.">GLSL</span>, that data structure is a <span class="code">struct</span>
+(see <a href="../c6/s3.html#webgl.3.2">Subsection&nbsp;6.3.2</a>).  Here is the shader source code that is used
+in both of the new examples:</p>
+
+
+<pre>struct VertexOutput {  // type for return value of vertex shader
+   @builtin(position) position: vec4f,
+   @location(0) color : vec3f  
+}
+
+@vertex
+fn vertexMain(
+         @location(0) coords : vec2f, 
+         @location(1) color : vec3f  
+      ) -&gt; VertexOutput {  
+   var output: VertexOutput;  
+   output.position = vec4f( coords, 0, 1 );
+   output.color = color; 
+   return output;
+}
+
+@fragment
+fn fragmentMain(@location(0) fragColor : vec3f) -&gt; @location(0) vec4f {
+   return vec4f(fragColor,1);
+}</pre>
+
+
+<p class="noindent">The <span class="code">fragColor</span> parameter to the fragment shader function is
+the interpolated version of the <span class="code">color</span> output from the vertex shader,
+even though the name is not the same.  In fact, the names don't matter at all;
+the association between the two values is specified by the <span class="code">@location(0)</span>
+modifier on both the vertex shader output, <span class="code">color</span>, and the 
+fragment shader parameter, <span class="code">fragColor</span>.  Note that the meaning of <span class="code">@location(0)</span>
+here is very different from the <span class="code">@location(0)</span> annotation on
+the vertex shader parameter, <span class="code">coords</span>.  (Recall that a
+<span class="code">@location</span> annotation on a vertex shader parameter corresponds
+to a <span class="code">shaderLocation</span> in the vertex buffer layout on the JavaScript
+side, and it specifies where the values for that parameter come from.)</p>
+
+
+<p>I will note again that even though the <span class="code">position</span> output
+from the vertex shader is not used explicitly in the fragment shader 
+function in this example, it is used implicitly.  A vertex shader
+function is always required to have a <span class="code">@builtin(position)</span>
+output.</p>
+
+
+<hr class="break">
+
+
+<p>The JavaScript side of the application must now provide two inputs
+for the vertex shader function.  In the first variation, the two inputs
+are provided in two separate vertex buffers, and the new vertex buffer
+layout reflects this, with two array elements corresponding to the
+two vertex buffers:</p>
+
+
+<pre>let vertexBufferLayout = [
+   { // First vertex buffer, for coords (two 32-bit floats per vertex).
+      attributes: [ { shaderLocation:0, offset:0, format: "float32x2" } ],
+      arrayStride: 8,  // 8 bytes between values in the buffer
+      stepMode: "vertex" 
+   },
+   { // Second vertex buffer, for colors (three 32-bit floats per vertex).
+      attributes: [ { shaderLocation:1, offset:0, format: "float32x3" } ],
+      arrayStride: 12,  // 12 bytes between values in the buffer
+      stepMode: "vertex" 
+   }
+];</pre>
+
+
+<p class="noindent">The second variation does something more interesting: It uses just one
+vertex buffer that contains the values for both parameters.  The values for
+the colors are interleaved with the values for the coordinates.  Here
+is what the data looks like on the JavaScript side:</p>
+
+
+<pre>const vertexData = new Float32Array([
+   /* coords */     /* color */
+    -0.8, -0.6,      1, 0, 0,      // data for first vertex
+    0.8, -0.6,       0, 1, 0,      // data for second vertex
+    0.0, 0.7,        0, 0, 1       // data for third vertex
+]);</pre>
+
+
+<p class="noindent">This array will be copied into the single vertex buffer.  The
+vertex buffer layout reflects the layout of the data in the buffer:</p>
+
+
+<pre>let vertexBufferLayout = [
+   {   // One vertex buffer, containing values for two attributes.
+      attributes: [
+          { shaderLocation:0, offset:0, format: "float32x2" },
+          { shaderLocation:1, offset:8, format: "float32x3" }
+        ],
+      arrayStride: 20,
+      stepMode: "vertex" 
+   }
+];</pre>
+
+
+<p class="noindent">Note that the data for each buffer takes up 20 bytes (five 4-byte floats).
+This becomes the <span class="code">arrayStride</span> in the layout, which gives the distance,
+in bytes, from the values for one vertex to the values for the next vertex.
+The <span class="code">offset</span> property for an <span class="code">attribute</span> tells
+where to find the value for that attribute within the block of data for
+a given vertex: The offset for <span class="code">coords</span> is 0 because it
+is found at the start of the data; the offset for <span class="code">color</span>
+is 8 because it is found 8 bytes from the start of the data.</p>
+
+
+<p>There are other differences between our first example
+and the two new variations.  I encourage you to look at the source code 
+for the two new programs and read the comments.  Only the new features 
+of each program are commented.</p>
+
+
+</div>
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.1.7">9.1.7&nbsp;&nbsp;Auto Bind Group Layout</h3>
+
+
+<p>One final note.  A bind group layout contains information about each binding in the
+group: what kind of resource the binding refers to and which shader stage it is used in.  In general,
+that information can be deduced from the shader program.  The full shader program is assembled when
+the pipeline is created, and the pipeline can automatically construct the bind group layouts that
+it uses.  You can ask the pipeline to create the bind group layouts by setting the <span class="code">layout</span>
+property of the pipeline descriptor to <span class="code">"auto"</span>:</p>
+
+
+<pre>pipelineDescriptor = {
+     .
+     .
+     .
+   <span class="newcode">layout: "auto"</span>
+};
+pipeline = device.createRenderPipeline( pipelineDescriptor );</pre>
+
+
+<p>You can then use the function <span class="code">pipeline.getBindGroupLayout(N)</span>, where N is
+the bind group number, to get the layout from the pipeline.  The layout is needed to create
+the actual bind group:</p>
+
+
+<pre>bndGroup = device.createBindGroup({
+   layout: <span class="newcode">pipeline.getBindGroupLayout(0),</span>,
+   entries: [ 
+      .
+      .
+      .</pre>
+      
+
+<p class="noindent">I will use auto bind group layout in most of my examples from now on, but I will 
+occasionally specify the layout myself, to show what it looks like for various
+kinds of resources.</p>
+
+
+</div>
+
+
+
+</div>
+<hr>
+<div align="right">
+<small>
+        [  <a href="s2.html">Next Section</a> |
+           <a href="index.html">Chapter Index</a> | 
+	    <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+</div>
+</body>
+<script src="../resource/glossary.js"></script>
+</html>

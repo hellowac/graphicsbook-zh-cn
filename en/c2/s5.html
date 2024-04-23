@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Introduction to Computer Graphics, Section 2.5 -- Java Graphics2D</title>
+<link type="text/css" rel="stylesheet" href="../resource/graphicstext.css">
+</head>
+<body>
+<div class="page">
+<div align="right">
+<small>
+        [  <a href="s4.html">Previous Section</a> |
+           <a href="s6.html">Next Section</a> |
+           <a href="index.html">Chapter Index</a> | 
+	    <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+<hr>
+<table class="subsections" cellpadding="5" border="2">
+<tr>
+<td>
+<div align="center">
+<b>Subsections</b>
+<hr>
+<small><a href="#graphics2d.5.1">Graphics2D</a>
+<br>
+<a href="#graphics2d.5.2">Shapes</a>
+<br>
+<a href="#graphics2d.5.3">Stroke and Fill</a>
+<br>
+<a href="#graphics2d.5.4">Transforms</a>
+<br>
+<a href="#graphics2d.5.5">BufferedImage and Pixels</a>
+<br>
+</small>
+</div>
+</td>
+</tr>
+</table>
+<div class="content section">
+<h3 class="section_title">Section 2.5</h3>
+<h2 class="section_title">Java Graphics2D</h2>
+<hr class="break">
+
+
+<p class="firstpar">In the rest of this chapter, we look at specific implementations
+of two-dimensional graphics.  There are a few new ideas here,
+but mostly you will see how the general concepts that we have covered are used in several
+real graphics systems.</p>
+
+
+<p>In this section, our focus is on the Java programming language.
+Java remains one of the most popular programming languages.  Its
+standard desktop version includes a sophisticated 2D graphics API,
+which is our topic here.  Before reading this section, you should
+already know the basics of Java programming. But even if you don't,
+you should be able to follow most of the discussion of the
+graphics API itself.  (See <a href="../a1/s1.html">Section&nbsp;A.1</a> in <a href="../a1/index.html">Appendix&nbsp;A</a> for a very basic
+introduction to Java.)</p>
+
+
+<p>The graphics <span class="word" data-term="API" data-definition="Application Programming Interface.  A collection of related classes, functions,
+constants, etc., for performing some task.  An API is an &quot;interface&quot; in the sense that it
+can be used without understanding how its functionality is actually implemented." title="Click for a definition of API.">API</span> that is discussed here is part of Swing, an API for
+graphical user interface programming that is included as part of the standard distribution
+of Java.  Many Java programs are now written using an alternative API called JavaFX,
+which is not part of the standard distribution.  JavaFX is not discussed in this
+textbook.  Its graphics API is, in fact, quite similar to the API for 
+HTML canvas graphics, which is discussed in <a href="../c2/s6.html">Section&nbsp;2.6</a>.</p>
+
+
+<p>The original version of Java had a much smaller graphics API.  It was
+tightly focused on pixels, and it used only integer coordinates.  The API
+had subroutines for stroking and filling a variety of basic shapes,
+including lines, rectangles, ovals, and polygons (although Java uses the
+term <i>draw</i> instead of <i>stroke</i>).  Its specification
+of the meaning of drawing operations was very precise on the pixel
+level.  Integer coordinates are defined to refer to the lines
+between pixels.  For example, a 12-by-8 pixel grid has
+<i>x</i>-coordinates from 0 to 12 and <i>y</i>-coordinates from
+0 to 8, as shown below.  The lines between pixels are numbered,
+not the pixels.</p>
+
+
+<p align="center">
+<img src="Java-pixel-graphics.png" width="448" height="145" alt=""></p>
+
+
+<p class="noindent">The command <i>fillRect</i>(3,2,5,3)
+fills the rectangle with upper left corner at (3,2), with
+width 5, and with height 3, as shown on the left above.  The command
+<i>drawRect</i>(3,2,5,3) conceptually drags a "pen" around the outline
+of this rectangle.  However, the pen is a 1-pixel square, and it is the
+upper left corner of the pen that moves along the outline.  As the pen
+moves along the right edge of the rectangle, the pixels to the <i>right</i>
+of that edge are colored; as the pen moves along the bottom edge, the
+pixels below the edge are colored.  The result is as shown on the right above.
+My point here is not to belabor the details, but to point out that having
+a precise specification of the meaning of graphical operations gives you very
+fine control over what happens on the pixel level.</p>
+
+
+<p>Java's original graphics did not support things like real-number coordinates, 
+<span class="word" data-term="geometric transform" data-definition="A coordinate transformation; that is, a function that can
+be applied to each of the points in a geometric object to produce a new object.  Common
+transforms include scaling, rotation, and translation. " title="Click for a definition of geometric transform.">transforms</span>, <span class="word" data-term="antialiasing" data-definition="A technique used to reduce the jagged or &quot;staircase&quot; appearance
+of diagonal lines, text, and other shapes that are drawn using pixels.  When a pixel is only partly
+covered by a geometric shape, then the color of the pixel is a blend of the color of the shape and
+the color of the background, with the degree of blending depending on the fraction of the
+pixel that is covered by the geometric shape." title="Click for a definition of antialiasing.">antialiasing</span>, or 
+<span class="word" data-term="gradient" data-definition="A pattern of color produced by assigning colors to certain reference points and
+computing color for other points by interpolating or extrapolating colors from the reference points.
+The effect is a color progression along line segments between reference points.  Different rules
+for extending the colors beyond those lines produce different types of gradient, such as
+linear gradients and radial gradients." title="Click for a definition of gradient.">gradients</span>.  Just a few years after Java was first introduced,
+a new graphics API was added that does support all of these.  It is that
+more advanced API that we will look at here.</p>
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="graphics2d.5.1">2.5.1&nbsp;&nbsp;Graphics2D</h3>
+
+
+<p>Java is an object-oriented language.  Its API is defined as a large set
+of classes,   The actual drawing operations in the original graphics API
+were mostly contained in the class named <span class="classname">Graphics</span>.  
+In the newer Swing API, drawing operations are methods in a class named <span class="classname">Graphics2D</span>,
+which is a subclass of <span class="classname">Graphics</span>, so that all the original drawing operations
+are still available.  (A class in Java is contained in a collection of classes known as a "package."
+<span class="classname">Graphics</span> and <span class="classname">Graphics2D</span>, for example, are in the
+package named <i>java.awt</i>.  Classes that define shapes and transforms are in a package
+named <i>java.awt.geom</i>.)</p>
+
+
+<p>A graphics system needs a place to draw.  In Java, the drawing surface is often an object
+of the class <span class="classname">JPanel</span>, which represents a rectangular area on the
+screen.  The <span class="classname">JPanel</span> class has a method named <i>paintComponent</i>()
+to draw its content.  To create a drawing surface, you can create a subclass of
+<span class="classname">JPanel</span> and provide a definition for its <i>paintComponent</i>()
+method.  All drawing should be done inside <i>paintComponent</i>(); when it is necessary
+to change the contents of the drawing, you can call the panel's <i>repaint</i>() method
+to trigger a call to <i>paintComponent</i>().  The <i>paintComponent</i>() method has
+a parameter of type <span class="classname">Graphics</span>, but the parameter that is passed
+to the method is actually an object of type <span class="classname">Graphics2D</span>, and
+it can be type-cast to <span class="classname">Graphics2D</span> to obtain access to the
+more advanced graphics capabilities.  So, the definition of the <i>paintComponent</i>()
+method usually looks something like this:</p>
+
+
+<pre>protected void paintComponent( Graphics g ) {
+    Graphics2D g2;
+    g2 = (Graphics2D)g;  // Type-cast the parameter to Graphics2D.
+       .
+       .  // Draw using g2.
+       .
+}</pre>
+
+
+<p class="noindent">In the rest of this section, I will assume that <i>g2</i> is a variable of
+type <span class="classname">Graphics2D</span>, and I will discuss some of the things
+that you can do with it.  As a first example, I note that <span class="classname">Graphics2D</span>
+supports <span class="word" data-term="antialiasing" data-definition="A technique used to reduce the jagged or &quot;staircase&quot; appearance
+of diagonal lines, text, and other shapes that are drawn using pixels.  When a pixel is only partly
+covered by a geometric shape, then the color of the pixel is a blend of the color of the shape and
+the color of the background, with the degree of blending depending on the fraction of the
+pixel that is covered by the geometric shape." title="Click for a definition of antialiasing.">antialiasing</span>, but it is not turned on by default.  It
+can be enabled in a graphics context <i>g2</i> with the rather intimidating
+command</p>
+
+
+<pre>g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                             RenderingHints.VALUE_ANTIALIAS_ON);</pre>
+
+
+<p>For simple examples of graphics in complete Java programs,
+you can look at the sample programs <span class="sourceref"><a href="../source/java2d/GraphicsStarter.java">java2d/GraphicsStarter.java</a></span>
+and <span class="sourceref"><a href="../source/java2d/AnimationStarter.java">java2d/AnimationStarter.java</a></span>.  They provide very minimal
+frameworks for drawing static and animated images, respectively, using <span class="classname">Graphics2D</span>.
+The program <span class="sourceref"><a href="../source/java2d/EventsStarter.java">java2d/EventsStarter.java</a></span> is a similar framework for
+working with mouse and key events in a graphics program.
+You can use these programs as the basis for some experimentation if you want to explore
+Java graphics.</p>
+
+
+</div>
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="graphics2d.5.2">2.5.2&nbsp;&nbsp;Shapes</h3>
+
+
+<p>Drawing with the original <span class="classname">Graphics</span> class is done using integer coordinates, 
+with the measurement given in pixels. This works well in the standard coordinate system, but is
+not appropriate when real-number coordinates are used, since the unit of measure in such a 
+coordinate system will not be equal to a pixel.  We need to be able to specify shapes using
+real numbers.  The Java package <i>java.awt.geom</i> provides support for shapes defined using real number 
+coordinates.  For example, the class <span class="classname">Line2D</span> in that package represents line segments
+whose endpoints are given as pairs of real numbers.</p>
+
+
+<p>Now, Java has two real number types: <span class="ptype">double</span> and <span class="ptype">float</span>.
+The <span class="ptype">double</span> type can represent a larger range of numbers than <span class="ptype">float</span>, with a greater
+number of significant digits, and <span class="ptype">double</span> is the
+more commonly used type.  In fact, <span class="ptype">doubles</span> are simply easier to use in Java.
+However, <span class="ptype">float</span>  values generally have enough accuracy
+for graphics applications, and they have the advantage of taking up less space in memory.
+Furthermore, computer graphics hardware often uses float values internally.</p>
+
+
+<p>So, given
+these considerations, the <i>java.awt.geom</i> package actually provides
+two versions of each shape, one using coordinates of type <span class="ptype">float</span> and
+one using coordinates of type <span class="ptype">double</span>.  This is done in a rather strange way.
+Taking <span class="classname">Line2D</span> as an example, the class <span class="classname">Line2D</span>
+itself is an <span class="word" data-term="abstract class" data-definition="In object-oriented programming, a class that is meant to be used
+only as a basis for subclasses. Objects can be created from the subclasses, but not from
+the abstract class itself.  The purpose of an abstract class is to define the properties
+and behaviors that all of its subclasses have in common." title="Click for a definition of abstract class.">abstract class</span>.  It has two subclasses, one that represents lines using
+<span class="ptype">float</span> coordinates and one using <span class="ptype">double</span> coordinates.
+The strangest part is that these subclasses are defined as nested classes
+inside <span class="classname">Line2D</span>: <span class="classname">Line2D.Float</span> and
+<span class="classname">Line2D.Double</span>.  This means that you can declare a variable of
+type <span class="classname">Line2D</span>, but to create an object, you need to use
+<span class="classname">Line2D.Double</span> or <span class="classname">Line2D.Float</span>:
+</p>
+
+
+<pre>Line2D line1, line2;
+line1 = new Line2D.Double(1,2,5,7); // Line from (1.0,2.0) to (5.0,7.0)
+line2 = new Line2D.Float(2.7F,3.1F,1.5F,7.1F); // (2.7,3.1) to (1.5,7.1)</pre>
+
+
+<p class="noindent">Note that when using constants of type <span class="ptype">float</span> in Java,
+you have to add "F" as a suffix to the value.  This is one reason why <span class="ptype">doubles</span>
+are easier in Java.  For simplicity, you might want to stick to using
+<span class="classname">Line2D.Double</span>.  However, <span class="classname">Line2D.Float</span> might give
+slightly better performance.</p>
+
+
+<hr class="break">
+
+
+<p>Let's take a look at some of the other classes from <i>java.awt.geom</i>.
+The abstract class <span class="classname">Point2D</span>&mdash;with its concrete subclasses 
+<span class="classname">Point2D.Double</span> and <span class="classname">Point2D.Float</span>&mdash;represents
+a point in two dimensions, specified by two real number coordinates.  A point is not a
+shape; you can't fill or stroke it.  A point can be
+constructed from two real numbers ("<span class="code">new Point2D.Double(1.2,3.7)</span>").  If <i>p</i>
+is a variable of type <span class="classname">Point2D</span>, you can use <i>p.getX</i>() and
+<i>p.getY</i>() to retrieve its coordinates, and you can use <i>p.setX</i>(<i>x</i>),
+<i>p.setY</i>(<i>y</i>), or <i>p.setLocation</i>(<i>x</i>,<i>y</i>) to set its coordinates.
+If <i>pd</i> is a variable of type <span class="classname">Point2D.Double</span>, you can also refer
+directly to the coordinates as <i>pd.x</i> and <i>pd.y</i>
+(and similarly for <span class="classname">Point2D.Float</span>).
+Other classes in <i>java.awt.geom</i> offer a similar variety of ways
+to manipulate their properties, and I won't try to list them all here.
+</p>
+
+
+<p>There is a variety of classes that represent geometric shapes, including  <span class="classname">Line2D</span>,
+<span class="classname">Rectangle2D</span>, <span class="classname">RoundRectangle2D</span>,
+<span class="classname">Ellipse2D</span>, <span class="classname">Arc2D</span>,
+and <span class="classname">Path2D</span>.
+All of these are abstract classes, and each of them contains a pair of subclasses such as
+<span class="classname">Rectangle2D.Double</span> and <span class="classname">Rectangle2D.Float</span>.
+Some shapes, such as rectangles, have
+interiors that can be filled; such shapes also have
+outlines that can be stroked.  Some shapes, such as lines, are purely one-dimensional
+and can only be stroked.</p>
+
+
+<p>Aside from lines, rectangles are probably the simplest shapes.  A <span class="classname">Rectangle2D</span>
+has a corner point (<i>x</i>,<i>y</i>), a <i>width</i>, and a <i>height</i>, and
+can be constructed from that data ("<span class="code">new&nbsp;Rectangle2D.Double(x,y,w,h)</span>").  The corner point
+(<i>x</i>,<i>y</i>) specifies the minimum <i>x</i>- and <i>y</i>-values in the rectangle.
+For the usual pixel coordinate
+system, (<i>x</i>,<i>y</i>) is the upper left corner.  However, in a coordinate system in which the
+minimum value of <i>y</i> is at the bottom, (<i>x</i>,<i>y</i>) would be the lower left corner.
+The sides of the rectangle are parallel to the coordinate axes.  A variable
+<i>r</i> of type <span class="classname">Rectangle2D.Double</span>
+has public instance variables <i>r.x</i>, <i>r.y</i>, <i>r.width</i>, and <i>r.height</i>.
+If the width or the height is less than or equal to zero, nothing will be drawn when the rectangle
+is filled or stroked.   A common task is to define a rectangle from two corner points (<i>x1</i>,<i>y1</i>)
+and (<i>x2</i>,<i>y2</i>).  This can be accomplished by creating a rectangle with height and width
+equal to zero and then <i>adding</i> the second point to the rectangle.
+Adding a point to a rectangle causes the rectangle to grow just enough to include that point:
+</p>
+
+
+<pre>Rectangle2D.Double r = new Rectangle2D.Double(x1,y1,0,0);
+r.add(x2,y2);</pre>
+
+
+
+<p>The classes <span class="classname">Line2D</span>,
+<span class="classname">Ellipse2D</span>, <span class="classname">RoundRectangle2D</span>
+and <span class="classname">Arc2D</span> create other basic shapes and work similarly
+to <span class="classname">Rectangle2D</span>.  You can check the Java API documentation for details.</p>
+
+
+<p>The <span class="classname">Path2D</span> class is more interesting. It represents general
+paths made up of segments that can be lines and <span class="word" data-term="Bezier curve" data-definition="A smooth curve between two points defined by parametric
+polynomial equations.  A cubic Bezier curve segment is defined by its two endpoints P1 and P2 and
+by two control points C1 and C2.  The tangent to the curve (its direction and speed) at P1 is
+given by the line from P1 to C1.  The tangent vector to the curve at P2 is given by 
+the line from C2 to P2.  A quadratic Bezier curve is defined by its two endpoints and
+a single control point C.  The tangent at each endpoint is the line between that endpoint
+and&nbsp;C." title="Click for a definition of Bezier curve.">Bezier curves</span>.
+Paths are created using methods similar to the <i>moveTo</i> and <i>lineTo</i>
+subroutines that were discussed in <a href="../c2/s2.html#graphics2d.2.3">Subsection&nbsp;2.2.3</a>.  To create a
+path, you start by constructing an object of type <span class="classname">Path2D.Double</span>
+(or <span class="classname">Path2D.Float</span>):</p>
+
+
+<pre>Path2D.Double p = new Path2D.Double();</pre>
+
+
+<p class="noindent">The path <i>p</i> is empty when it is first created.
+You construct the path by moving an imaginary "pen" along the path that you want to create.
+The method <i>p.moveTo</i>(<i>x</i>,<i>y</i>) moves the pen to the point (<i>x</i>,<i>y</i>) without
+drawing anything.  It is used to specify the initial point of the path or
+the starting point of a new piece of the path.
+The method <i>p.lineTo</i>(<i>x</i>,<i>y</i>) draws a line
+from the current pen position to (<i>x</i>,<i>y</i>), leaving the pen at (<i>x</i>,<i>y</i>).
+The method <i>p.close</i>() can be used to close the path (or the current piece of the path) 
+by drawing a line back to its starting point.
+For example, the following code creates a triangle with vertices at (0,5), (2,-3), and (-4,1):
+</p>
+
+
+<pre>Path2D.Double p = new Path2D.Double();
+p.moveTo(0,5);
+p.lineTo(2,-3);
+p.lineTo(-4,1);
+p.close();
+</pre>
+
+
+<p>You can also add Bezier curve segments to a <span class="classname">Path2D</span>.  
+Bezier curves were discussed in <a href="../c2/s2.html#graphics2d.2.3">Subsection&nbsp;2.2.3</a>.   You can
+add a cubic Bezier curve to a <span class="classname">Path2D</span> <i>p</i> with the method
+</p>
+
+
+<pre>p.curveTo( cx1, cy1, cx2, cy2, x, y );</pre>
+
+
+<p class="noindent">This adds a curve segment that starts at the current pen position and ends at
+(<i>x</i>,<i>y</i>), using (<i>cx1</i>,<i>cy1</i>) and (<i>cx2</i>,<i>cy2</i>) as
+the two <span class="word" data-term="control point" data-definition="A point that does not lie on the curve but that is used to help control
+the shape of the curve.  For example, a control point for a Bezier curve segment is used to specify the
+tangent vector (direction and speed) of the curve at an endpoint." title="Click for a definition of control point.">control points</span> for the curve.  The
+method for adding a quadratic Bezier curve segment to a path is <i>quadTo</i>.
+It requires only a single control point:</p>
+
+
+<pre>p.quadTo( cx, cy, x, y );</pre>
+
+
+<p>When a path intersects itself, its interior is determined by looking at
+the <span class="word" data-term="winding number" data-definition="The winding number of a path about a point that does not lie on the path
+is the number of times that the path winds around the point, counting each 360-degree rotation in the positive direction
+about the point as one and each 360-degree turn in the negative direction as minus one.  To compute the
+winding number, draw a ray extending from the point to infinity.  Each crossing of the ray by the
+path counts as 1 if it crosses the ray going in the positive direction and as negative 1 if it 
+crosses in the negative direction." title="Click for a definition of winding number.">winding number</span>, as discussed in <a href="../c2/s2.html#graphics2d.2.2">Subsection&nbsp;2.2.2</a>.
+There are two possible rules for determining whether a point is interior:
+asking whether the winding number of the curve about that point is non-zero, 
+or asking whether it is odd.  You can set the winding rule used by a <span class="classname">Path2D</span>
+<i>p</i> with</p>
+
+
+<pre>p.setWindingRule( Path2D.WIND_NON_ZERO );
+p.setWindingRule( Path2D.WIND_EVEN_ODD );</pre>
+
+
+<p class="noindent">The default is <span class="code">WIND_NON_ZERO</span>.</p>
+
+
+<p>Finally, I will note that it is possible to draw a copy of an image into a graphics context.
+The image could be loaded from a file or created by the program.  I discuss the second possibility
+later in this section.  An image is represented by an object of type <span class="classname">Image</span>.
+In fact, I will assume here that the object is of type <span class="classname">BufferedImage</span>,
+which is a subclass of <span class="classname">Image</span>.  If <i>img</i> is such an object, then</p>
+
+
+<pre>g2.drawImage( img, x, y, null );</pre>
+
+
+<p class="noindent">will draw the image with its upper left corner at the point (<i>x</i>,<i>y</i>).  (The fourth
+parameter is hard to explain, but it should be specified as <i>null</i> for <span class="classname">BufferedImages</span>.)  
+This draws the image
+at its natural width and height, but a different width and height can be specified in the method:</p>
+
+
+<pre>g2.drawImage( img, x, y, width, height, null );</pre>
+
+
+<p class="noindent">There is also a method for drawing a string of text.  The method specifies the
+string and the basepoint of the string.  (The basepoint is the lower left corner of
+the string, ignoring "descenders" like the tail on the letter "g".)  For example,</p>
+
+
+<pre>g2.drawString( "Hello World", 100, 50 );</pre>
+
+
+<p class="noindent">Images and strings are subject to transforms in the same way as other shapes. Transforms
+are the only way to get rotated text and images.  As an example, here is what can happen
+when you apply a rotation to some text and an image:</p>
+
+
+<p align="center">
+<img src="RotatedStringAndImage.jpg" width="408" height="210" alt="" class="bordered"></p>
+
+
+
+</div>
+
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="graphics2d.5.3">2.5.3&nbsp;&nbsp;Stroke and Fill</h3>
+
+
+<p>Once you have an object that represents a shape, you can fill the shape or stroke it.
+The <span class="classname">Graphics2D</span> class defines methods for doing this.
+The method for stroking a shape is called <i>draw</i>:</p>
+
+
+<pre>g2.fill(shape);
+g2.draw(shape);</pre>
+
+
+<p class="noindent">Here, <i>g2</i> is of type <span class="classname">Graphics2D</span>, and
+shape can be of type <span class="classname">Path2D</span>, <span class="classname">Line2D</span>,
+<span class="classname">Rectangle2D</span> or any of the other shape classes.  These are
+often used on a newly created object, when that object represents a shape that
+will only be drawn once.  For example</p>
+
+
+<pre>g2.draw( new Line2D.Double( -5, -5, 5, 5 ) );</pre>
+
+
+<p class="noindent">Of course, it is also possible to create shape objects and reuse them many
+times.</p>
+
+
+<p>The "pen" that is used for stroking a shape is usually represented by an
+object of type <span class="classname">BasicStroke</span>.  The default stroke has line
+width equal to&nbsp;1.  That's one unit in the current coordinate system, not
+one pixel.  To get a line with a different width, you can install a new stroke
+with</p>
+
+
+<pre>g2.setStroke( new BasicStroke(width) );</pre>
+
+
+<p class="noindent">The <i>width</i> in the constructor is of type <span class="ptype">float</span>.  It is possible to
+add parameters to the constructor to control the shape of a stroke at its endpoints and
+where two segments meet.  (See <a href="../c2/s2.html#graphics2d.2.1">Subsection&nbsp;2.2.1</a>.)  For example,</p>
+
+
+<pre>g2.setStroke( new BasicStroke( 5.0F,
+           BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL) );</pre>
+           
+
+<p class="noindent">It is also possible to make strokes out of dashes and dots, but I won't discuss how
+to do it here.</p>
+
+
+<hr class="break">
+
+
+<p>Stroking or filling a shape means setting the colors of certain pixels.  In Java, the rule
+that is used for coloring those pixels is called a "paint."  Paints can be solid colors,
+<span class="word" data-term="gradient" data-definition="A pattern of color produced by assigning colors to certain reference points and
+computing color for other points by interpolating or extrapolating colors from the reference points.
+The effect is a color progression along line segments between reference points.  Different rules
+for extending the colors beyond those lines produce different types of gradient, such as
+linear gradients and radial gradients." title="Click for a definition of gradient.">gradients</span>, or <span class="word" data-term="pattern fill" data-definition="Using copies of an image to fill the interior of a two-dimensional shape. The image
+can be repeated horizontally and vertically as necessary to cover the shape." title="Click for a definition of pattern fill.">patterns</span>.
+Like most things in Java, paints are represented by objects.  If <i>paint</i> is
+such an object, then</p>
+
+
+<pre>g2.setPaint(paint);</pre>
+
+
+<p class="noindent">will set <i>paint</i> to be used in the graphics context <i>g2</i> for subsequent
+drawing operations, until the next time the paint is changed.  (There is also an
+older method, <i>g2.setColor</i>(<i>c</i>), that works only for colors and is
+equivalent to calling <i>g2.setPaint</i>(<i>c</i>).)</p>
+
+
+<p>Solid colors are represented by objects of type <span class="classname">Color</span>.  A color
+is represented internally as an <span class="word" data-term="RGBA color" data-definition="An RGB color&mdash;specified by red, green, and blue component values&mdash;together
+with an alpha component.  The alpha component is most often take to specify the degree of transparency
+of the color, with a maximal alpha value giving a fully opaque color." title="Click for a definition of RGBA color.">RGBA color</span>. An opaque color, with maximal
+alpha component, can be created using the constructor</p>
+
+
+<pre>new Color( r, g, b );</pre>
+
+
+<p class="noindent">where <i>r</i>, <i>g</i>, and <i>b</i> are integers in the range 0 to 255 that give
+the red, green, and blue components of the color.  To get a translucent color, you can
+add an alpha component, also in the range 0 to 255:</p>
+
+
+<pre>new Color( r, b, g, a );</pre>
+
+
+<p class="noindent">There is also a function, <i>Color.getHSBColor</i>(<i>h,s,b</i>), that creates a color
+from values in the HSB color model (which is another name for <span class="word" data-term="HSV color" data-definition="A color specified by three numbers giving the hue, saturation, and value
+of the component.  The hue represents the basic color.
+The saturation is the purity of the color, with a saturation value of zero producing a shade of gray, 
+that is a color with no actual hue at all.  The value represents the brightness of the color,
+with a value of zero giving black.  (Value is also called brightness, and the name HSB is sometimes
+used instead of HSV.)" title="Click for a definition of HSV color.">HSV</span>).
+In this case, the hue, saturation, and brightness color components must be given as values of
+type <span class="ptype">float</span>.  And there are constants to represent about a dozen common
+colors, such as <i>Color.WHITE</i>, <i>Color.RED</i>, and <i>Color.YELLOW</i>.
+For example, here is how I might draw a square with a black outline and a light
+blue interior:</p>
+
+
+<pre>Rectangle2D square = new Rectangle2D.Double(-2,-2,4,4);
+g2.setPaint( new Color(200,200,255) );
+g2.fill( square );
+g2.setStroke( new BasicStroke(0.1F) );
+g2.setPaint( Color.BLACK );
+g2.draw( square );
+</pre>
+
+
+<p>Beyond solid colors, Java has the class <span class="classname">GradientPaint</span>, to represent
+simple <span class="word" data-term="linear gradient" data-definition="A color gradient pattern in which there is a color variation along
+a certain line, with constant color along lines perpendicular to that line." title="Click for a definition of linear gradient.">linear gradients</span>, and <span class="classname">TexturePaint</span>
+to represent <span class="word" data-term="pattern fill" data-definition="Using copies of an image to fill the interior of a two-dimensional shape. The image
+can be repeated horizontally and vertically as necessary to cover the shape." title="Click for a definition of pattern fill.">pattern fills</span>.  (Image patterns
+used in a similar way in 3D graphics are called <span class="word" data-term="texture" data-definition="Variation in some property from point-to-point on an object.  The most common type
+is image texture.  When an image texture is applied to a surface, the surface color varies from
+point to point." title="Click for a definition of texture.">textures</span>.)
+Gradients and patterns were discussed in <a href="../c2/s2.html#graphics2d.2.2">Subsection&nbsp;2.2.2</a>.
+For these paints, the color that is applied to a pixel depends on the coordinates of the
+pixel.</p>
+
+
+<p>To create a <span class="classname">TexturePaint</span>, you need a <span class="classname">BufferedImage</span>
+object to specify the image that it will use as a pattern.  You also
+have to say how coordinates in the image will map
+to drawing coordinates in the display.  You do this by specifying a rectangle
+that will hold one copy of the image.  So the constructor takes the form:</p>
+
+
+<pre>new TexturePaint( image, rect );</pre>
+
+
+<p class="noindent">where <i>image</i> is the <span class="classname">BufferedImage</span> and <i>rect</i> 
+is a <span class="classname">Rectangle2D</span>.  Outside that specified rectangle, the image is
+repeated horizontally and vertically. The constructor for a <span class="classname">GradientPaint</span> 
+takes the form</p>
+
+
+<pre>new GradientPaint( x1, y1, color1, x2, y2, color2, cyclic )</pre>
+
+
+<p class="noindent">Here, <i>x1</i>, <i>y1</i>, <i>x2</i>, and <i>y2</i> are values of type <span class="ptype">float</span>;
+<i>color1</i> and <i>color2</i> are of type <span class="classname">Color</span>; and
+<i>cyclic</i> is <span class="ptype">boolean</span>.  The gradient color will vary along the line
+segment from the point (<i>x1</i>,<i>y1</i>) to the point (<i>x2</i>,<i>y2</i>).
+The color is <i>color1</i> at the first endpoint and is <i>color2</i> at the second
+endpoint.  Color is constant along lines perpendicular to that line segment.  The
+boolean parameter <i>cyclic</i> says whether or not the color pattern repeats.
+As an example, here is a command that will install a <span class="classname">GradientPaint</span>
+into a graphics context:</p>
+
+
+<pre>g2.setPaint( new GradientPaint( 0,0, Color.BLACK, 200,100, Color.RED, true ) );</pre>
+
+
+<p class="noindent">You should, by the way, note that the current paint is used for strokes as well
+as for fills.</p>
+
+
+<p>The sample Java program <span class="sourceref"><a href="../source/java2d/PaintDemo.java">java2d/PaintDemo.java</a></span> displays a polygon
+filled with a <span class="classname">GradientPaint</span> or a <span class="classname">TexturePaint</span> 
+and lets you adjust their properties.  The image files <span class="sourceref"><a href="../source/java2d/QueenOfHearts.png">java2d/QueenOfHearts.png</a></span>
+and <span class="sourceref"><a href="../source/java2d/TinySmiley.png">java2d/TinySmiley.png</a></span> are part of that program, and they must be
+in the same location as the compiled class files that make up that program when it is run.</p>
+
+
+</div>
+
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="graphics2d.5.4">2.5.4&nbsp;&nbsp;Transforms</h3>
+
+
+<p>Java implements <span class="word" data-term="geometric transform" data-definition="A coordinate transformation; that is, a function that can
+be applied to each of the points in a geometric object to produce a new object.  Common
+transforms include scaling, rotation, and translation. " title="Click for a definition of geometric transform.">geometric transformations</span> as
+methods in the <span class="classname">Graphics2D</span> class. For example, if <i>g2</i> is a
+<span class="classname">Graphics2D</span>, then calling <i>g2.translate</i>(1,3) will apply
+a translation by (1,3) to objects that are drawn after the method is called. The methods
+that are available correspond to the transform functions discussed in <a href="../c2/s3.html">Section&nbsp;2.3</a>:</p>
+
+
+<ul>
+
+<li>
+<span class="codedef">g2.scale(sx,sy)</span> &mdash; scales by a horizontal scale factor
+<i>sx</i> and a vertical scale factor <i>sy</i>.</li>
+
+<li>
+<span class="codedef">g2.rotate(r)</span> &mdash; rotates by the angle <i>r</i> about the origin,
+where the angle is measured in radians.  A positive angle rotates the positive x-axis in the
+direction of the positive y-axis.</li>
+
+<li>
+<span class="codedef">g2.rotate(r,x,y)</span> &mdash; rotates by the angle <i>r</i> about 
+the point (<i>x</i>,<i>y</i>).</li>
+
+<li>
+<span class="codedef">g2.translate(dx,dy)</span> &mdash; translates by <i>dx</i> horizontally and
+<i>dy</i> vertically.</li>
+
+<li>
+<span class="codedef">g2.shear(sx,sy)</span> &mdash; applies a horizontal shear amount <i>sx</i> and
+a vertical shear amount <i>sy</i>.  (Usually, one of the shear amounts is 0, giving a pure
+horizontal or vertical shear.)</li>
+
+</ul>
+
+
+
+<p>A transform in Java is represented as an object of the class <span class="classname">AffineTransform</span>.
+You can create a general <span class="word" data-term="affine transform" data-definition="A transform that preserves parallel lines.
+That is, when the transform is applied to a pair of lines that are parallel, then the
+resulting transformed lines are also parallel.  An affine transform, T, has the property
+that the transform of the line segment between a point (x1,y1) and a point (x2,y2) is
+the line between the points T(x1,y1) and T(x2,y2).  Effectively, the transform of a line
+segment can be computed just by transforming its two endpoints.  This makes affine
+transforms very efficient for computer graphics.  Any affine transform can be represented
+as a composition of rotations, translations, and scalings." title="Click for a definition of affine transform.">affine transform</span> with the constructor
+</p>
+
+
+<pre>AffineTransform trns = new AffineTransform(a,b,c,d,e,f);</pre>
+
+
+<p class="noindent">The transform <i>trns</i> will transform a point (<i>x,y</i>) to the point (<i>x1,y1</i>) given by</p>
+
+
+<pre>x1 = a*x + c*y + e
+y1 = b*x + d*y + f;</pre>
+
+
+<p class="noindent">You can apply the transform <i>trns</i> to a graphics context <i>g2</i> by calling
+<i>g2.transform</i>(<i>trns</i>).</p>
+
+
+<p>The graphics context <i>g2</i> includes the current affine transform, which is the
+composition of all the transforms that have been applied.  Commands such as
+<i>g2.rotate</i> and <i>g2.transform</i> modify the current transform.  You can
+get a copy of the current transform by calling <i>g2.getTransform</i>(), which returns
+an <span class="classname">AffineTransform</span> object.
+You can set the current transform using <i>g2.setTransform</i>(<i>trns</i>).
+This replaces the current transform in <i>g2</i> with the <span class="classname">AffineTransform</span>
+<i>trns</i>.  (Note that <i>g2.setTransform</i>(<i>trns</i>) is different from <i>g2.transform</i>(<i>trns</i>);
+the first command <b>replaces</b> the current transform in <i>g2</i>, while the second
+<b>modifies</b> the current transform by composing it with <i>trns</i>.)</p>
+
+
+<p>The <i>getTransform</i> and <i>setTransform</i> methods can be used to implement
+<span class="word" data-term="hierarchical modeling" data-definition="Creating complex geometric models in a hierarchical fashion,
+starting with geometric primitives, combining them into components that can then be further
+combined into more complex components, and so on." title="Click for a definition of hierarchical modeling.">hierarchical modeling</span>.  The idea, as discussed in <a href="../c2/s4.html">Section&nbsp;2.4</a>,
+is that before drawing an object, you should save the current transform.  
+After drawing the object, restore the saved transform.  Any additional modeling
+transformations that are applied while drawing the object and its sub-objects will have
+no effect outside the object.  In Java, this looks like</p>
+
+
+<pre>AffineTransform savedTransform = g2.getTransform();
+drawObject();
+g2.setTransform( savedTransform );</pre>
+
+
+<p class="noindent">For hierarchical graphics, we really need a <span class="word" data-term="stack" data-definition="A data structure with the operations push() and pop().  Pushing an item
+onto a stack just adds that item to the stack.  Popping from the stack will remove and
+return the item that was most recently pushed onto the stack." title="Click for a definition of stack.">stack</span> of transforms.  However, if the hierarchy is implemented
+using subroutines, then the above code would be part of a subroutine, and the value of the local
+variable <i>savedTransform</i> would be stored on the subroutine call stack.  Effectively, we
+would be using the subroutine call stack to implement the stack of saved transforms.</p>
+
+
+<p>In addition to modeling transformations, transforms are used to set up the
+<span class="word" data-term="view window" data-definition="As used in this book, the window, or view window, for 2D graphics
+is the rectangle in the xy-plane that contains the portion of the plane that will be displayed
+in the image.  (The corresponding term in 3D graphics is &quot;view volume.&quot;)" title="Click for a definition of view window.">window</span>-to-<span class="word" data-term="viewport" data-definition="The rectangular area in which the image for 2D or 3D graphics is 
+displayed.  The coordinates on the viewport are pixel coordinates, more properly called 
+device coordinates since they are actual physical coordinates on the device where the 
+image is being displayed." title="Click for a definition of viewport.">viewport</span> transformation that
+establishes the <span class="word" data-term="coordinate system" data-definition="A way of assigning numerical coordinates to geometric points.  In two
+dimensions, each point corresponds to a pair of numbers.  In three dimensions, each point corresponds
+to a triple of numbers." title="Click for a definition of coordinate system.">coordinate system</span> that will be used for drawing.
+This is usually done in Java just after the graphics context has been created,
+before any drawing operations.  It can be done with a Java version of the
+<i>applyWindowToViewportTransformation</i> 
+function from <a href="../c2/s3.html#graphics2d.3.7">Subsection&nbsp;2.3.7</a>.  See the sample program
+<span class="sourceref"><a href="../source/java2d/GraphicsStarter.java">java2d/GraphicsStarter.java</a></span> for an example.</p>
+
+
+<hr class="break">
+
+
+<p>I will mention one more use for <span class="classname">AffineTransform</span> objects:  Sometimes,
+you do need to explicitly transform coordinates.  For example, given <span class="word" data-term="object coordinates" data-definition="The coordinate system in which the coordinates for points in an 
+object are originally specified, before they are transformed by any modeling or other transform that
+will be applied to the object." title="Click for a definition of object coordinates.">object coordinates</span>
+(<i>x</i>,<i>y</i>), I might need to know where they will actually end up on the screen, in 
+pixel coordinates.  That is, I would like to transform (<i>x</i>,<i>y</i>) by the current transform
+to get the corresponding pixel coordinates.  The <span class="classname">AffineTransform</span> class
+has a method for applying the affine transform to a point.  It works with objects of type
+<span class="classname">Point2D</span>.  Here is an example:</p>
+
+
+<pre>AffineTransform trns = g2.getTransform();
+Point2D.Double originalPoint = new Point2D.Double(x,y);
+Point2D.Double transformedPoint = new Point2D.Double();
+trns.transform( originalPoint, transformedPoint );
+// transformedPoint now contains the pixel coords corresponding to (x,y)
+int pixelX = (int)transformedPoint.x;
+int pixelY = (int)transformedPoint.y;</pre>
+
+
+<p class="noindent">One way I have used this is when working with strings.  Often when displaying a string in a
+transformed coordinate system, I want to transform the basepoint of a string, but not
+the string itself.  That is, I want the transformation to affect the location of the string
+but not its size or rotation.  To accomplish this, I use the above technique to obtain
+the pixel coordinates for the transformed basepoint, and then draw the string at
+those coordinates, using an original, untransformed graphics context.</p>
+
+
+<p>The reverse operation is also sometimes necessary.  That is, given pixel coordinates
+(<i>px</i>,<i>py</i>), find the point (<i>x</i>,<i>y</i>) that is transformed to (<i>px</i>,<i>py</i>)
+by a given affine transform.  For example, when implementing mouse interaction, you will
+generally know the pixel coordinates of the mouse, but you will want to find the corresponding
+point in your own chosen coordinate system.  For that, you need an <span class="newword" data-term="inverse transform" data-definition="Given a transform T, the inverse transform of T is a transform
+that reverses the operation of T.  For example, for a 2D transform, for R to be the inverse of T
+means that R(T(x,y)) = (x,y).  Scaling by 0.5 is the inverse of scaling by 2.  Translation by
+(-3,5) is the inverse of translation by (3,-5).  Not every transform has an inverse.  For example,
+scaling by a factor of zero has no inverse." title="Click for a definition of inverse transform.">inverse transform</span>.
+The inverse of an affine transform <b>T</b> is another transform that performs the opposite transformation.
+That is, if <b>T</b>(<i>x</i>,<i>y</i>) = (<i>px</i>,<i>py</i>), 
+and if <b>R</b> is the inverse transform, then <b>R</b>(<i>px</i>,<i>py</i>)
+= (<i>x</i>,<i>y</i>). In Java, the inverse transform of an <span class="classname">AffineTransform</span>
+<i>trns</i> can be obtained with</p>
+
+
+<pre>AffineTransform inverse = trns.createInverse();</pre>
+
+
+<p>(A final note: The older drawing
+methods from <span class="classname">Graphics</span>, such as <i>drawLine</i>, use integer coordinates.
+It's important to note that any shapes drawn using these older methods are subject to the same transformation
+as shapes such as <span class="classname">Line2D</span> that are specified with real
+number coordinates. For example, drawing a line with <i>g.drawLine</i>(1,2,5,7)
+will have the same effect as drawing a <span class="classname">Line2D</span> that
+has endpoints (1.0,2.0) and (5.0,7.0).  In fact, all drawing is affected by
+the transformation of coordinates.)</p>
+
+
+</div>
+
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="graphics2d.5.5">2.5.5&nbsp;&nbsp;BufferedImage and Pixels</h3>
+
+
+<p>In some graphics applications, it is useful to be able to work with images that
+are not visible on the screen.  That is, you need what I call an <span class="newword" data-term="off-screen canvas" data-definition="My term for a segment of the computer's memory that can be
+used as a drawing surface, for drawing images that are not visible on the screen.  Some method
+should exist for copying the image from an off-screen canvas onto the screen.  In Java, for example, an
+off-screen canvas can be implemented as an object of type BufferedImage." title="Click for a definition of off-screen canvas.">off-screen canvas</span>.
+You also need a way to quickly copy the off-screen canvas onto the screen.
+For example, it can be useful to store a copy of the on-screen image in an off-screen canvas.
+The canvas is the official copy of the image.  Changes to the image are made to the canvas,
+then copied to the screen.  One reason to do this is that you can then draw extra stuff on
+top of the screen image without changing the official copy.  For example, you might draw
+a box around a selected region in the on-screen image.  You can do this without damaging the
+official copy in the off-screen canvas.  To remove the box from the screen, you just have
+to copy the off-screen canvas image onto the screen.</p>
+
+
+<p>In Java, an off-screen image can be implemented as an object of type <span class="classname">BufferedImage</span>.
+A <span class="classname">BufferedImage</span> represents a region in memory where you can draw, in exactly the
+same way that you can draw to the screen.  That is, you can obtain a graphics context
+<i>g2</i> of type <span class="classname">Graphics2D</span> that you can use for drawing on the image.
+A <span class="classname">BufferedImage</span> is an <span class="classname">Image</span>, and you can draw
+it onto the screen&mdash;or into any other graphics context&mdash;like any other <span class="classname">Image</span>,
+that is, by using the <i>drawImage</i> method of the graphics context where you want to display the
+image.  In a typical setup, there are variables</p>
+
+
+<pre>BufferedImage OSC;  // The off-screen canvas.
+Graphics2D OSG;     // graphics context for drawing to the canvas</pre>
+
+
+<p class="noindent">The objects are created using, for example,</p>
+
+
+<pre>OSC = new BufferedImage( 640, 480, BufferedImage.TYPE_INT_RGB );
+OSG = OSC.createGraphics();</pre>
+
+
+<p class="noindent">The constructor for <span class="classname">BufferedImage</span> specifies the
+width and height of the image along with its type.  The type tells what
+colors can be represented in the image and how they are stored.  Here,
+the type is <span class="code">TYPE_INT_RGB</span>, which means the image uses
+regular <span class="word" data-term="RGB color" data-definition="A color specified by three numbers giving the amount of red, green, and blue
+in the color." title="Click for a definition of RGB color.">RGB colors</span> with 8 bits for each
+color component.  The three color components for a pixel are packed
+into a single integer value.</p>
+
+
+<p>In a program that uses a <span class="classname">BufferedImage</span> to store a copy of
+the on-screen image, the <i>paintComponent</i> method generally has the form</p>
+
+
+<pre>protected void paintComponent(Graphics g) {
+    g.drawImage( OSC, 0, 0, null );
+    Graphics2D g2 = (Graphics2D)g.create();
+      .
+      . // Draw extra stuff on top of the image.
+      .
+}</pre>
+
+
+<p>A sample program that uses this technique is <span class="sourceref"><a href="../source/java2d/JavaPixelManipulation.java">java2d/JavaPixelManipulation.java</a></span>.
+In that program, the user can draw lines, rectangles, and ovals by dragging the mouse.
+As the mouse moves, the shape is drawn between the starting point of the mouse and its
+current location.  As the mouse moves, parts of the existing image can be repeatedly covered 
+and uncovered, without changing the existing image.  In fact, the image is in an off-screen 
+canvas, and the shape that the user is drawing is actually drawn by <i>paintComponent</i>
+over the contents of the canvas.  The shape is not drawn to the official image in the canvas
+until the user releases the mouse and ends the drag operation.</p>
+
+
+<p>But my main reason for writing the program was to illustrate pixel manipulation, that is,
+computing with the color components of individual pixels.  The <span class="classname">BufferedImage</span>
+class has methods for reading and setting the color of individual pixels.  An image consists of
+rows and columns of pixels.  If <i>OSC</i> is a <span class="classname">BufferedImage</span>, then</p>
+
+
+<pre>int color = OSC.getRGB(x,y)</pre>
+
+
+<p class="noindent">gets the integer that represents the color of the pixel in column number <i>x</i> and row
+number <i>y</i>.  Each color component is stored in an 8-bit field in the integer <i>color</i>
+value.  The individual color components can be extracted for processing using Java's bit
+manipulation operators:</p>
+
+
+<pre>int red = (color &gt;&gt; 16) &amp; 255;
+int green = (color &gt;&gt; 8) &amp; 255;
+int blue = color &amp; 255;</pre>
+
+
+<p>Similarly, given red, green, and blue color component values in the range 0 to 255,
+we can combine those component values into a single integer and use it to set the
+color of a pixel in the image:</p>
+
+
+<pre>int color = (red &lt;&lt; 16) | (green &lt;&lt; 8) | blue;
+OSC.setRGB(x,y,color);</pre>
+
+
+<p class="noindent">There are also methods for reading and setting the colors of an entire rectangular
+region of pixels.</p>
+
+
+<p>Pixel operations are used to implement two features of the sample program.  First, there is a
+"Smudge" tool.  When the user drags with this tool, it's like smearing wet paint.  When
+the user first clicks the mouse, the color components from a small square of pixels surrounding
+the mouse position are copied into arrays.  As the user moves the mouse, color from the
+arrays is blended into the color of the pixels near the mouse position, while those colors
+are blended into the colors in the arrays.  Here is a
+small rectangle that has been "smudged":</p>
+
+
+<p align="center">
+<img src="smudge.png" width="94" height="44" alt="" class="bordered"></p>
+
+
+<p>The second use of pixel manipulation is in implementing "filters."  A filter, in this
+program, is an operation that modifies an image by replacing the color of each 
+pixel with a weighted average of the colors of a 3-by-3 square of pixels.
+A "Blur" filter for example, uses equal weights for all pixels in the average, 
+so the color of a pixel is changed to the simple average of the colors of that 
+pixel and its neighbors.  Using different weights for each pixel can produce some 
+striking effects.</p>
+
+
+<p>The pixel manipulation in the sample program produces effects that can't be achieved
+with pure <span class="word" data-term="vector graphics" data-definition="Shape-based graphics in which an image is specified as a list of the shapes or
+objects that appear in the image." title="Click for a definition of vector graphics.">vector graphics</span>.  I encourage you to learn more by looking at
+the <span class="sourceref"><a href="../source/java2d/JavaPixelManipulation.java">source code</a></span>.
+You might also take a look at the live demos in the  <a href="../c2/s6.html">next section</a>,
+which implement the same effects using <span class="word" data-term="HTML canvas" data-definition="A canvas element on a web page. The canvas appears as a rectangular area on the page.
+The JavaScript programming language can use a canvas element as a drawing surface.  
+HTML is a language for specifying the content of a web page.  JavaScript is the
+programming language for web pages.  The canvas element supports a 2D graphics API.
+In many browsers, it also supports the 3D graphics API, WebGL." title="Click for a definition of HTML canvas.">HTML canvas</span> graphics.</p>
+
+
+</div>
+
+
+
+
+
+</div>
+<hr>
+<div align="right">
+<small>
+        [  <a href="s4.html">Previous Section</a> |
+           <a href="s6.html">Next Section</a> |
+           <a href="index.html">Chapter Index</a> | 
+	    <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+</div>
+</body>
+<script src="../resource/glossary.js"></script>
+</html>

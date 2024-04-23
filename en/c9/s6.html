@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Introduction to Computer Graphics, Section 9.6 -- Compute Shaders</title>
+<link type="text/css" rel="stylesheet" href="../resource/graphicstext.css">
+</head>
+<body>
+<div class="page">
+<div align="right">
+<small>
+        [  <a href="s5.html">Previous Section</a> |
+           <a href="s7.html">Next Section</a> |
+           <a href="index.html">Chapter Index</a> | 
+	    <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+<hr>
+<table class="subsections" cellpadding="5" border="2">
+<tr>
+<td>
+<div align="center">
+<b>Subsections</b>
+<hr>
+<small><a href="#webgpu.6.1">Workgroups and Dispatches</a>
+<br>
+<a href="#webgpu.6.2">Compute Shaders</a>
+<br>
+<a href="#webgpu.6.3">A Simulation</a>
+<br>
+<a href="#webgpu.6.4">Retrieving Output</a>
+<br>
+</small>
+</div>
+</td>
+</tr>
+</table>
+<div class="content section">
+<h3 class="section_title">Section 9.6</h3>
+<h2 class="section_title">Compute Shaders</h2>
+<hr class="break">
+
+
+<p class="firstpar">One of the major differences between WebGL and WebGPU is the addition
+of <span class="newword" data-term="compute shader" data-definition="A stage in a GPU pipeline that does purely computational
+work, rather than participating directly in graphical rendering." title="Click for a definition of compute shader.">compute shaders</span>.  A compute shader
+performs a purely computational task that is not directly a part of
+an image <span class="word" data-term="rendering" data-definition="The process of producing a 2D image from a 3D scene description." title="Click for a definition of rendering.">rendering</span> task (although it can produce results
+that will be used later for rendering).  While vertex and fragment
+shaders are used in a render <span class="word" data-term="pipeline" data-definition="A sequence of computational stages in a GPU that are applied to
+incoming data to produce some result.  Some of the stages can be programmable shaders,
+such as vertex shaders, fragment shaders, and compute shaders.  In a graphics rendering 
+pipeline, the output is the colors of the pixels in an image." title="Click for a definition of pipeline.">pipeline</span>, compute shaders
+can only be used in another type of pipeline, called a
+compute pipeline.  This section discusses how to create
+and use compute shaders and compute pipelines.</p>
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.6.1">9.6.1&nbsp;&nbsp;Workgroups and Dispatches</h3>
+
+
+<p>For image rendering, the <span class="code">draw()</span> or <span class="code">drawIndexed()</span> function
+is used in a render pass encoder to start processing of a render pipeline.  The processing
+involves multiple invocations of the vertex shader entry-point function and then multiple
+invocations of the fragment shader entry-point.  For a compute pipeline, a
+compute pass encoder is used, and processing is started with a call to the
+function <span class="code">dispatchWorkgroups()</span>.  I will discuss the JavaScript and
+WGSL code in the next subsection, but before that, you need to have some basic
+understanding of workgroups and what it means to dispatch them.</p>
+
+
+<p>The job performed by a compute shader is thought of as one-, two-, or three-dimensional.
+This is a way to organize the work, based on the structure of the data that is processed.
+A job that works with an image is likely to be two-dimensional.  A job that processes
+an array is likely to be one-dimensional.  So, the invocations of a compute shader
+are arranged logically in a one-, two-, or three-dimension grid.  Each invocation
+has a "global invocation ID," consisting of one, two, or three integers that give
+its position in the grid.</p>
+
+
+<p>To complicate things, the invocations are broken into smaller groups called
+workgroups.  Invocations in the same workgroup can work more closely together.
+For example, there is a workgroup <span class="word" data-term="address space (in WGSL)" data-definition="WGSL memory is divided into address spaces.  
+From the WGSL specification: &quot;Each address space has unique properties 
+determining mutability, visibility, the values it may contain, and 
+how to use variables with it.&quot;" title="Click for a definition of address space (in WGSL).">address space</span>
+that contains data shared by invocations in the same workgroup but not visible to
+invocations in other workgroups.  The invocations in a workgroup are arranged in
+a grid with the same dimension as the overall job.  Every invocation has a
+"local invocation ID" that gives its position in its workgroup.  The workgroup
+as a whole has a size, consisting of one, two, or three integers giving its
+size in each dimension.  All workgroups in a job have the same size.  The invocations
+for a 2D job can be visualized something like this:</p>
+
+
+<p align="center">
+<img src="gpu-workgroups.png" width="382" height="149" alt=""></p>
+
+
+<p class="noindent">The tiny yellow squares are individual invocations of the compute shader.  The workgroup size
+is (4,4), so each workgroup consists of a 4-by-4 grid.  The local invocation ID of an invocation
+is a pair of numbers in the range 0 to&nbsp;3.  The workgroups are organized in a 4-by-3 grid.
+The global invocation ID is a pair (x,y) where x is in the range 0 to&nbsp;15 and
+y is the range 0 to&nbsp;11.</p>
+
+
+<p>The structure of the invocations for a job is determined by two things:  The size of an
+individual workgroup is specified in the WGSL source code for the shader, and
+the number of workgroups in each dimension of the overall job grid is specified in
+the call to <span class="code">dispatchWorkgroups()</span> on the JavaScript side.
+For the example shown in the illustration, the workgroup size is (4,4), and the
+job would be created with a call to <span class="code">dispatchWorkgroups(4,3)</span>.
+</p>
+
+
+<p>The number of invocations in a workgroup is limited to 256.  Workgroups as small
+as a single invocation are allowed.  However, 64 is recommended as a reasonable 
+workgroup size in most cases, and I use that value in most of my examples.</p>
+
+
+<p>(You might wonder why workgroups should exist at all.  It has to do with the
+physical structure of GPUs.  The processors in a typical <span class="word" data-term="GPU" data-definition="Graphics Processing Unit, a computer hardware component that performs graphical
+computations that create and manipulate images.  Operations such as drawing a line on the screen 
+or rendering a 3D image are done in the GPU, which is optimized to perform such operations very
+quickly." title="Click for a definition of GPU.">GPU</span> are physically
+divided into groups.  Processors in a group are not independent; they all run
+the same code, and they share some local memory that they can access very 
+quickly.  It is possible that using a WebGPU workgroup size that is less than
+the physical size of processor groups on the GPU might leave some processors
+in a group with nothing to do.  The performance of some programs can be 
+optimized by making use of the physical structure of a GPU.
+However, I suspect that that optimization really needs to 
+be tuned to a particular GPU structure.  For a WebGPU program that is designed
+to run on multiple platforms, I'm not sure how much optimization can be done.
+In any case, such optimization is beyond my expertise, and none of my examples
+use workgroups in a significant way.)</p>
+
+
+</div>
+
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.6.2">9.6.2&nbsp;&nbsp;Compute Shaders</h3>
+
+
+<p>My first compute shader example,
+<span class="sourceref"><a href="../source/webgpu/first_compute_shader.html">webgpu/first_compute_shader.html</a></span>, is a modification
+of earlier programs that showed colored disks moving in the canvas and
+bouncing off the edges.  In the earlier programs, the positions of the
+disks were updated on the JavaScript side and then written to a buffer
+on the GPU.  The new version moves that computation into a compute
+shader that runs on the GPU.  This increases efficiency both because
+the GPU parallelizes the computation and because the new values
+do not have be copied to the GPU.</p>
+
+
+<p>Working with compute pipelines is similar to working with render pipelines:
+Create the WGSL source code for the shader; create a compute pipeline to process
+the shader and create the bind groups and resources used by the pipeline; use a command
+encoder and compute pass encoder to assemble the commands that are needed to
+run the pipeline; and submit the commands to the WebGPU device queue.</p>
+
+
+<p>In WGSL source code, the entry-point function for a compute shader
+is marked by the annotation <span class="code">@compute</span> (in the same way that
+a vertex shader entry-point is annotated with <span class="code">@vertex</span>).
+The compute shader entry-point also requires another annotation to specify
+the workgroup size.  For example, the annotation <span class="code">@workgroup_size(16,8)</span>
+specifies a two-dimensional workgroup with size 16 in the x direction and
+8 in the y direction.</p>
+
+
+<p>Several builtin values are available as parameters to a compute
+shader entry-point function.  The most useful is probably
+<span class="code">@builtin(global_invocation_id)</span>, which gives the 
+global invocation ID of the current invocation as a vec3u.
+For a one-dimensional task, the y and z component of the vector will be&nbsp;1;
+for a two-dimensional problem, the z component will be&nbsp;1.
+As far as WGSL is concerned, all problems are three-dimensional, with
+the sizes for missing dimensions set to&nbsp;1. 
+Here, for example, is the start of the entry-point function from
+the first sample program:</p>
+
+
+<pre>@compute @workgroup_size(64)
+fn main( @builtin(global_invocation_id) global_id : vec3u ) { . . .</pre>
+
+
+<p class="noindent">Other builtins for the compute shader include:</p>
+
+
+<ul>
+
+<li>
+<span class="code">@builtin(local_invocation_id)</span> &mdash; The local
+invocation ID of the current invocation in its workgroup.</li>
+
+<li>
+<span class="code">@builtin(num_workgroups)</span> &mdash; The number of
+workgroups in each direction.  The values are just the
+parameters from the call to <span class="code">dispatchWorkgroups()</span>
+that started the current job.</li>
+
+<li>
+<span class="code">@builtin(workgroup_id)</span> &mdash; The position
+in the grid of workgroups of the workgroup that contains the
+current invocation.</li>
+
+</ul>
+
+
+<p class="noindent">All of these are of type vec3u, with values for missing dimensions
+set to 1.</p>
+
+
+<p>The compute shader can get input from the JavaScript side in bind groups.
+There is nothing like a vertex buffer to provide parameter values for the
+compute shader entry point function, so the only parameters will be
+builtins.  The function also has no return type.  A compute shader
+produces output by writing it to a <span class="word" data-term="storage buffer" data-definition="In WebGPU, a general purpose buffer on the GPU,
+which can be used in compute shaders as well as in vertex and fragment shaders." title="Click for a definition of storage buffer.">storage buffer</span> or storage texture
+that is part of a bind group.</p>
+
+
+<p>In the sample program, the data for the animation consists of the positions of the 
+moving disks and their velocities.  The compute shader is run between frames of the
+animation to update the positions.  When a disk bounces off an edge, it reverses direction,
+and in that case the velocity of the disk also changes.  The x and y components of the
+positions and velocities have to be updated.  The computation is the same for both
+components. The task for one invocation of the compute shader is to
+update the position and velocity of one disk in either the x or y direction.
+If there are <span class="code">N</span> disks, we need <span class="code">2*N</span> invocations of the shader.</p>
+
+
+<p>The positions and velocities are stored in two storage buffers, which
+are represented in the shader program by variables of type <span class="code">array&lt;32&gt;</span>.  Initial values
+are written to the buffers by the JavaScript side of the program.  After that, the buffers
+are used entirely on the GPU side.  An additional
+storage buffer holds an array of three floats giving other data needed for the computation: 
+the number of disks, the radius of the disks, and the change in time since the previous update.
+The shader variables are declared as</p>
+
+
+<pre>@group(0) @binding(0) var&lt;storage,read_write&gt; diskOffsets : array&lt;f32&gt;;
+@group(0) @binding(1) var&lt;storage,read_write&gt; diskVelocities : array&lt;f32&gt;;
+@group(0) @binding(2) var&lt;storage&gt; params : array&lt;f32,3&gt;;</pre>
+
+
+<p class="noindent">The first two arrays need <span class="code">read_write</span> access since their contents will
+be updated.  To call the shader, a pipeline and a bind group will be needed.  The
+pipeline descriptor for a compute shader is fairly simple.  It has a <span class="code">layout</span>
+property, and a <span class="code">compute</span> property to specify the shader module and shader 
+entry point function.  The pipeline itself is created with the function
+<span class="code">device.createComputePipeline()</span>.  Here is how the sample program
+creates the compute pipeline and a bind group that will be attached to the pipeline:</p>
+
+
+<pre>function createComputePipelineConfig() {
+   
+   let pipelineDescriptor = {
+       <span class="newcode">compute:</span> {
+          module: computeShader,
+          entryPoint: "main"
+       },
+       layout: "auto"
+   };
+    
+   computePipeline = <span class="newcode">device.createComputePipeline</span>(pipelineDescriptor);
+   
+   computeBindGroup = device.createBindGroup({ 
+      layout: computePipeline.getBindGroupLayout(0),
+      entries: [
+         {    // For positions of the disks.
+            binding: 0,
+            resource: {buffer: offsetBuffer} 
+         },
+         {    // For velocities of the disks.
+            binding: 1,
+            resource: {buffer: velocityBuffer} 
+         },
+         {   // Other data for the computation.
+            binding: 2,
+            resource: {buffer: paramsBuffer} 
+         }
+      ]
+   });
+}</pre>
+
+
+<p class="noindent">The pipeline is run by a JavaScript function that is called
+between frames of the animation.  The compute pass encoder method
+<span class="code">dispatchWorkgroups()</span> is used to invoke the shader, with
+a parameter that specifies the number of workgroups.  We need
+<span class="code">2*DISK_COUNT</span> invocations of the shader, and the 
+size of a workgroup is 64, so we need at least <span class="code">(2*DISK_COUNT)/64</span>
+workgroups.  Since the number of workgroups must be an integer, we need
+to round the number up to an integer value using <span class="code">Math.ceil()</span>.</p>
+
+
+<pre>/**
+ *  Use a compute pass to update the disk positions, based on their
+ *  velocities and the change in time since the previous animation frame.
+ *  Velocities can also change.  The parameter, dt, is the change in time.
+ */
+function update(dt) {
+   
+   /* Write the change in time to the third position in the paramsBuffer */
+   
+   device.queue.writeBuffer(paramsBuffer,8,new Float32Array([dt]));
+   
+   /* Encode a compute pass that will do the work. */
+   
+   let commandEncoder = device.createCommandEncoder();
+   let passEncoder = commandEncoder.<span class="newcode">beginComputePass()</span>;
+   passEncoder.setPipeline(computePipeline);
+   passEncoder.setBindGroup(0, computeBindGroup);
+   let workGroupCount = Math.ceil( (2*DISK_COUNT) / 64 );
+   passEncoder.<span class="newcode">dispatchWorkgroups( workGroupCount )</span>;
+   passEncoder.end();
+   
+   /* Submit the work to the GPU device queue. */
+   
+   device.queue.submit([commandEncoder.finish()]);
+}</pre>
+
+
+<p class="noindent">As you can see, all of this is very similar to working with render pipelines
+and render passes.</p>
+
+
+<hr class="break">
+
+
+<p>My second compute shader example is <span class="sourceref"><a href="../source/webgpu/life_3.html">webgpu/life_3.html</a></span>, which implements
+Conway's Game of Life. It is a modification of <span class="sourceref"><a href="../source/webgpu/life_1.html">life_1.html</a></span> 
+from <a href="../c9/s5.html#webgpu.5.5">Subsection&nbsp;9.5.5</a>.  The original version computed the new generation of the board
+in the fragment shader, at the same time that it was displaying the current generation.  The
+new version moves that computation into a compute shader.  The compute shader version is,
+if anything, <b>less</b> efficient than the original version&mdash;which can be taken as
+a reminder that fragment shaders can do computational work.</p>
+
+
+<p>Life is naturally a two-dimensional problem, since each invocation processes one
+cell of a two-dimensional board.  The workgroup size has two components, and
+<span class="code">dispatchWorkgroups()</span> will need two parameters.  I use (8,8) as the
+workgroup size, giving 64 invocations per workgroup.</p>
+
+
+<p>This example shows, in particular, that compute shaders can work with textures.
+The current state of the board is stored in a texture.  The new state is written to a second
+texture.  Both textures are resources for the compute pipeline.  The first, which is used
+for input, is a resource of type texture; the second, which is used for output, is a
+resource of type storage texture.  A compute shader can use <span class="code">textureLoad()</span>
+to read from a texture resource, and it can use <span class="code">textureStore()</span> to write
+to a storage texture resource.  (See <a href="../c9/s5.html#webgpu.5.5">Subsection&nbsp;9.5.5</a> for information
+about storage textures, <span class="code">textureLoad()</span>, and <span class="code">textureStore()</span>.)
+Note that a compute shader cannot use <span class="code">textureSample()</span>.</p>
+
+
+<p>Here is the source code for the compute shader, omitting the details of the
+computation:</p>
+
+
+<pre>@group(0) @binding(0) var currentGen : texture_2d&lt;u32&gt;;
+@group(0) @binding(1) var nextGen : texture_storage_2d&lt;r32uint,write&gt;;
+
+@compute @workgroup_size(8,8)
+fn main( @builtin(global_invocation_id) id: vec3u) {
+   let boardSize = textureDimensions(currentGen);
+   let cell = id.xy; // Row and column for the cell that is being processed.
+   if (cell.x &gt;= boardSize.x || cell.y &gt;= boardSize.y) {
+      return;  // The assigned cell is outside the board.
+   }
+   let alive = textureLoad(currentGen, cell, 0).r;
+         .
+         . // (Compute new "alive" value for this cell.)
+         .
+   textureStore( nextGen, cell, vec4u(newAlive,0,0,1) );
+}</pre>
+
+
+
+<p class="noindent">When dispatching workgroups, the number of invocations that we
+need depends on the size of the board, which is the same as the
+size of the canvas.  Again, we have to divide the number of invocations
+by the workgroup size and round up to an integer value:</p>
+
+
+<pre>/**
+ *  Compute the next generation and copy it to the currentGeneration texture.
+ *  (Only currentGenertion is used in the render shader.)
+ */
+function computeNextGeneration() {
+   let commandEncoder = device.createCommandEncoder();
+   let passEncoder = commandEncoder.beginComputePass();
+   passEncoder.setPipeline(computePipeline);
+   passEncoder.setBindGroup(0,computeBindGroup);
+   let workgroupCountX = Math.ceil(context.canvas.width/8);
+   let workgroupCountY = Math.ceil(context.canvas.height/8);
+   passEncoder.dispatchWorkgroups( workgroupCountX, workgroupCountY );
+   passEncoder.end();
+   commandEncoder.copyTextureToTexture(  // Copy result to nextGeneration.
+      { texture: nextGeneration },
+      { texture: currentGeneration },
+      [ context.canvas.width, context.canvas.height ]
+   );
+   let commandBuffer = commandEncoder.finish();
+   device.queue.submit([commandBuffer]);
+}</pre>
+
+
+<p class="noindent">Note the call to a new function, <span class="code">commandEncoder.copyTextureToTexture()</span>.
+This function takes three parameters, giving the source texture, the destination
+texture, and the size of the region to be copied.  The first two parameters are objects,
+with optional parameters to specify the <span class="code">mipLevel</span> and the top-left corner,
+or <span class="code">origin</span>, of the region to be copied.</p>
+
+
+<hr class="break">
+
+
+<p>In the first compute shader example, the shader reads values from a buffer and
+writes new values back to the same buffer.  In the second, two textures are used, one
+for input and one for output.   You might wonder why we didn't use one texture and
+let the shader update the values in that texture.  (In fact we couldn't do that with
+textures, since there is no way to use <span class="code">textureLoad()</span> and 
+<span class="code">textureStore()</span> on the same texture, but we could solve that problem by using
+a storage buffer instead of a texture to hold the state of the board.)  In the Life game, 
+a shader invocation has
+to read the states of the cell's eight neighbors.  The problem is that other
+invocations are writing new states for those neighbors.  If they are writing
+the new values to same resource where old values are stored, there is no way to
+ensure that an invocation reads the old values of the neighbors rather than the
+new values.  It would be nice if we could force all of the reads to be done before
+any of the writes are done.  WebGPU has a way to do that sort of thing within
+a single workgroup, but it has no way to do it for a compute job as a whole.
+The moving disk example doesn't have this problem because each invocation of
+the shader works on a single element of the data array and does not depend on
+values being written by other invocations.</p>
+
+
+</div>
+
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.6.3">9.6.3&nbsp;&nbsp;A Simulation</h3>
+
+
+<p>Computers are often used to do physical simulations, and many simulations can benefit
+from the parallelism of a GPU.  The sample program <span class="sourceref"><a href="../source/webgpu/diffusion.html">webgpu/diffusion.html</a></span> is
+a fairly simple example of what can be done.  The program shows a large number of white dots
+moving randomly. Each dot is a pixel. The motion is a "random walk": In each time step, the
+particle chooses a random direction&mdash;up, down, left, or right&mdash;and moves one pixel
+in that direction.  There are also yellow and cyan particles, which don't move.  Initially,
+there is a line of yellow particles on the left and a line of cyan particles on the right.
+When a white particle hits a yellow or cyan particle, it changes color to match and stops
+moving.  The result is a buildup of colored particles in an interesting, branching pattern.
+The process is interesting to watch. Here is a demo version of the program:
+</p>
+
+
+
+<div class="demo">
+<noscript>
+<h4 style="color:red; text-align:center">Demos require JavaScript.<br>Since JavaScript is not available,<br>the demo is not functional.</h4>
+</noscript>
+<p align="center">
+<iframe src="../demos/c9/diffusion-demo.html" width="530" height="480"></iframe>
+</p>
+</div>
+
+
+
+
+<p class="noindent">(The idea for this simulation is not original with me.  I read about a similar
+simulation some time ago, though I can't remember where.)</p>
+
+
+<p>One point of interest is the use of pseudo-random numbers in the compute shader.  There
+is no random number generator in the WGSL shading language.  But pseudo-random numbers are
+produced in other languages using simple mathematical formulas.  Starting from an initial
+"seed" value, the formula produces a sequence of numbers.  The sequence is completely determined
+by the initial seed value, but it looks statistically random.  My program takes the formula
+from the pseudo-random number generator that used in the Java programming language.
+Each particle runs its own pseudo-random number generator, starting from different
+seed values.  The seed values are created on the JavaScript side using JavaScript's
+<span class="code">Math.random()</span> function.</p>
+
+
+<p>The program uses two storage buffers, one holding information about each particle
+and one holding color information for each pixel in the canvas.  Particle information includes
+the current seed value for the particle's random number generator, the x and y coordinates of
+the particle, and the particle's color.  Color is encoded as an integer: 1, 2, or 3 representing
+white, yellow, or cyan.  The color buffer also represents color as an integer code number,
+adding 0 as a code for black, the background color.</p>
+
+
+<p>There are two compute shaders.  For both shaders, each invocation processes one particle.
+The first shader does nothing for a yellow or cyan particle.  For a white particle,
+it updates data in the particle buffer by moving the particle in a random direction,
+except that if it tries to move into a pixel that contains a colored particle, 
+then the particle changes color and does not move.   The shader needs access to the color 
+buffer so that it can check whether the pixel to which the white particle wants to move 
+already contains a colored particle.  After the first shader runs, the color buffer is cleared.
+Then the second compute shader updates the color buffer: For each particle, it sets the
+color of the pixel that contains the particle to match the color of the particle.</p>
+
+
+<p>The program also has a render shader, which is invoked once for each pixel.  It consults
+the color buffer to determine what color should be assigned to a pixel.</p>
+
+
+<p>I will not discuss the details of this example, but I encourage you to take a
+look at the <span class="sourceref"><a href="../source/webgpu/diffusion.html">source code</a></span>.</p>
+
+
+</div>
+
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.6.4">9.6.4&nbsp;&nbsp;Retrieving Output</h3>
+
+
+<p>In my examples so far, the compute shaders were used to process data that was used
+by a render shader.  But some tasks are purely computational, with no visible component.
+There has to be some way to retrieve the output of a computational task so that it can
+be used on the JavaScript side of the program.</p>
+
+
+<p>A compute shader can output data to a storage buffer.  A storage buffer is typically
+stored in GPU memory that is not accessible to JavaScript, so we need a way to copy
+the contents of the buffer into memory that JavaScript can access.  The solution
+is to use a second buffer whose <span class="code">usage</span> property includes <span class="code">MAP_READ</span>
+and <span class="code">COPY_DST</span>.  Such buffers are often referred to as "staging buffers."
+The GPU can copy data into a staging buffer, and JavaScript can then "map" that
+staging buffer for reading.  Once JavaScript has retrieved the data from the
+staging buffer, it must "unmap" the buffer, because the GPU cannot access the
+buffer while it is mapped.</p>
+
+
+<p>The sample program <span class="sourceref"><a href="../source/webgpu/map_buffer_for_read.html">webgpu/map_buffer_for_read.html</a></span> performs
+a simple computation on the GPU that outputs an array of floating point numbers.
+(The specific computation is not important here.)  The program uses a storage
+buffer and a staging buffer, which are created like this:</p>
+
+
+<pre>buffer = device.createBuffer({
+   size: 4*intervals,
+   usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC
+});
+stagingBuffer = device.createBuffer({
+   size: 4*intervals,
+   usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST
+});</pre>
+
+
+<p class="noindent">The compute shader outputs to <span class="code">buffer</span>, then the
+<span class="code">buffer</span> is copied to <span class="code">stagingBuffer</span>.  You might
+wonder why we don't just add <span class="code">MAP_READ</span> usage to the storage buffer.
+But <span class="code">MAP_READ</span> can only be combined with <span class="code">COPY_DST</span>.
+Storage buffers are meant to live in GPU memory; staging buffers are meant to
+live in shared memory.  So, in general, a buffer can't be both.</p>
+
+
+<p>After the compute job is submitted to the GPU, the output won't be
+available until the job has been completed.  JavaScript must wait for 
+that to happen before mapping the staging buffer.  This type of synchroniztion
+is handled in WebGPU using <span class="word" data-term="promise (in JavaScript)" data-definition="In JavaScript programming, a promise represents a result
+that might be available immediately or at some time in the future.  A programmer can provide
+a function to be called if and when the promise is fulfilled (that is when the result becomes
+available).  A programmer can also provide a function to be called when the promise is
+rejected (for example, if some error occurs).  Promises are asynchronous since the function
+that handles success or failure will be called at some unpredictable time." title="Click for a definition of promise (in JavaScript).">promises</span>
+(<a href="../a1/s4.html">Section&nbsp;A.4</a>).  A staging buffer is mapped using the method 
+<span class="code">mapAsync()</span>, which returns a promise.  The promise resolves when the buffer is ready to
+be mapped.  <span class="code">mapAsync()</span> is typically called using <span class="code">await</span>.
+For example, in the sample program,</p>
+
+
+<pre>await stagingBuffer.mapAsync(GPUMapMode.READ, 0, intervals*4);</pre>
+
+
+<p class="noindent">The first parameter can be either <span class="code">GPUMapMode.READ</span>
+or <span class="code">GPUMapMode.WRITE</span>.  The other two parameters specify the
+starting point and size, in bytes, of the region in the buffer to be mapped.</p>
+
+
+<p>Once the mapping is ready, the staging buffer method <span class="code">getMappedRange()</span>
+can be used to view all or part of the mapped region as an <span class="classname">ArrayBuffer</span>.
+An <span class="classname">ArrayBuffer</span> is just a container for bytes.  In the sample
+program, those bytes are actually an array of floats.  To access the data as an
+array of floats, we can wrap the <span class="classname">ArrayBuffer</span> in a
+<span class="classname">Float32Array</span>.  The sample program does that and then addes up the
+numbers in the array to get a final answer.  Both sides of the computation are
+done in the following function:</p>
+
+
+<pre>async function compute() {
+
+   /* Run the compute shader and copy the output to the staging buffer. */
+
+   let commandEncoder = device.createCommandEncoder();
+   let passEncoder = commandEncoder.beginComputePass();
+   passEncoder.setPipeline(pipeline);
+   passEncoder.setBindGroup(0, bindGroup);
+   passEncoder.dispatchWorkgroups( Math.ceil(intervals/64) );
+   passEncoder.end();
+   commandEncoder.copyBufferToBuffer(buffer, 0, stagingBuffer, 0, intervals*4);
+   device.queue.submit([commandEncoder.finish()]);
+   
+   /* Map staging buffer, interpret it as a Float32Array, and find the sum. */
+   
+   await stagingBuffer.mapAsync(GPUMapMode.READ, 0, intervals*4);
+      
+   let data = new Float32Array(stagingBuffer.getMappedRange(0,intervals*4));
+   let sum = 0;
+   for (let i = 0; i &lt; data.length; i++) {
+       sum = sum + data[i];
+   }
+   
+   /* Unmap the staging buffer, and return the sum. */
+   
+   stagingBuffer.unmap();
+   
+   return sum;
+}</pre>
+
+
+<p>Note in particular the use of <span class="code">stagingBuffer.unmap()</span> at the end.
+The buffer must be unmapped before it can be reused by the GPU.  If processing
+the data will take a nontrivial amount of time, it is a good idea to make a
+copy of the data and unmap the buffer before doing the processing.</p>
+
+
+<p>It is also possible to map a buffer for writing, to provide input to the GPU.
+The staging buffer would be created with <span class="code">MAP_WRITE</span> and
+<span class="code">COPY_DST</span> usage. JavaScript would map the buffer for writing,
+copy data into the mapped buffer, and unmap the buffer.  It could then
+submit a WebGPU job that includes copying the data from the staging buffer into
+GPU memory.  We have been using <span class="code">device.writeBuffer()</span>
+to copy data from JavaScript into GPU memory.  That function could
+complete its task using a staging buffer (although how it actually
+works is not part of the WebGPU specification).</p>
+
+
+<hr class="break">
+
+
+<p>To add some interest to the program, I added an implementation of an important
+parallel algorithm called "reduce."  In the computation discussed above, an array
+is copied to the JavaScript side of the program.  The array is added up there using a loop,
+an operation that takes N steps for an array of size&nbsp;N.  The same numbers can be
+added in the GPU using reduce, with on the order of log<sub>2</sub>(N) steps. 
+The basic idea is to add each number in the second half of the array to a
+partner in the first half.  In pseudocode, for an array <span class="code">A</span> of
+length <span class="code">N</span>,</p>
+
+
+<pre>for (index = 0; index &lt; N/2; index++)
+    A[index] = A[index] + A[index+N/2]</pre>
+
+
+<p class="noindent">This loop can be replaced by one application of a simple
+compute shader.  The result is that the sum of the numbers in the original
+array is equal to the sum of the numbers in the first N/2 elements of
+the modified array.  Now, consider those N/2 elements to be a new, shorter
+array, and apply the same process, so that the original sum is now
+concentrated into N/4 elements.  Continue like that until the original
+sum is concentrated into the single element&nbsp;A[0].  At that point,
+the compute shader has been applied just log<sub>2</sub>(N) times.</p>
+
+
+<p>Now, all this really works as stated only if the size of the array
+is a power of two.  Things are a little more complicated if at any point
+you have to work with an array whose length is an odd number.  However,
+the sample program handles that case as well, and you can look at
+the source code to see how its done.</p>
+
+
+</div>
+
+
+
+
+</div>
+<hr>
+<div align="right">
+<small>
+        [  <a href="s5.html">Previous Section</a> |
+           <a href="s7.html">Next Section</a> |
+           <a href="index.html">Chapter Index</a> | 
+	    <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+</div>
+</body>
+<script src="../resource/glossary.js"></script>
+</html>

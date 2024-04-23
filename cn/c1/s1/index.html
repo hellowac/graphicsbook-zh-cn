@@ -1,0 +1,1298 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="计算机图形学概论(graphicsbook)">
+      
+      
+      
+        <link rel="canonical" href="https://hellowac.github.io/graphicsbook-zh-cn/cn/c1/s1/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../s2/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+    
+    
+      
+        <title>第 1 节：绘画与绘图 - 计算机图形学概论</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.50c56a3b.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+  
+  
+  
+  
+  <style>:root{--md-annotation-icon:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 12a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10M6 13h8l-3.5 3.5 1.42 1.42L17.84 12l-5.92-5.92L10.5 7.5 14 11H6v2Z"/></svg>');}</style>
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+        html.glightbox-open { overflow: initial; height: 100%; }
+        .gslide-title { margin-top: 0px; user-select: text; }
+        .gslide-desc { color: #666; user-select: text; }
+        .gslide-image img { background: white; }
+        
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}
+            </style> <script src="../../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="default" data-md-color-accent="red">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#第-11-节-绘画与绘图" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="计算机图形学概论" class="md-header__button md-logo" aria-label="计算机图形学概论" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            计算机图形学概论
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第 1 节：绘画与绘图
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04M18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12m-2.62 7 1.62-4.33L19.12 17h-3.24Z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/graphicsbook-zh-cn/en/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/graphicsbook-zh-cn/cn/" hreflang="cn" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hellowac/graphicsbook-zh-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    graphicsbook
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link">
+        
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../preface/" class="md-tabs__link">
+        
+  
+    
+  
+  前言
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+    
+  
+  1简介
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c2/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  2二维图形
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c3/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  3几何
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c4/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  4灯光和材质
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c5/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  5three.js
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c6/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  6WebGL
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c7/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  7WebGL 3D
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c8/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  8高阶3D
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c9/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  9WEBGPU
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../a1/" class="md-tabs__link">
+          
+  
+    
+  
+  附录
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="计算机图形学概论" class="md-nav__button md-logo" aria-label="计算机图形学概论" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    计算机图形学概论
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hellowac/graphicsbook-zh-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    graphicsbook
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    首页
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    前言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    1简介
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            1简介
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    第 1 节：绘画与绘图
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 2 节：三维(3D)图形的要素
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 3 节：硬件与软件
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2二维图形
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3几何
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c4/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4灯光和材质
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c5/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5three.js
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6WebGL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7WebGL 3D
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c8/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8高阶3D
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9WEBGPU
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../a1/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    附录
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            附录
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a2/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Blender 3D建模
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a3/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gimp和Inkscape
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../source/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    示例程序源代码
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    术语表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    关于
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="第-11-节-绘画与绘图">第 1.1 节 绘画与绘图<a class="headerlink" href="#第-11-节-绘画与绘图" title="Permanent link">&para;</a></h1>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">中文</label><label for="__tabbed_1_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>本书的主要重点是三维（3D）图形，其中大部分工作都是为了产生场景的三维模型。但最终，在几乎所有情况下，计算机图形项目的最终结果是一个二维图像。当然，直接制作和操纵二维图像也是一个重要的课题。此外，许多思想从二维到三维都是通用的。因此，从二维图形开始是有意义的。</p>
+<p>在计算机屏幕上呈现的图像由像素组成。屏幕由<strong>像素(<abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr>)</strong><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>的矩形网格组成， 排列成行和列。像素足够小，以至于它们不容易被单独看到。事实上，对于许多非常高分辨率的显示器，它们基本上变得看不见了。在给定时间，每个像素只能显示一种颜色。如今，大多数屏幕使用24位颜色，其中颜色可以由三个8位数字指定，分别给出颜色中的红色、绿色和蓝色的级别。屏幕上可以显示的任何颜色都由这三种“主”颜色的某种组合构成。还有其他格式，例如<strong>灰度(<abbr title="Refers to a color scheme or image in which each color is a shade of gray (where the term &quot;shade of gray&quot; here includes black and white). Typically, 256 shades of gray are used. Grayscale is also called &quot;monochrome.&quot;">grayscale</abbr>)</strong><sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>，其中每个像素都是一些灰度的阴影，并且像素颜色由一个数字给出，该数字指定了黑到白比例上的灰度级别。通常使用256个灰度级别。早期的计算机屏幕使用<strong>索引色(<abbr title="A color scheme in which colors are selected from a limited palette of colors. For example, if the palette contains 256 colors, then a color can be specified by an eight-bit integer, giving its position, or index, in the list of colors.">indexed color</abbr>)</strong><sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>，其中只能显示一小部分颜色，通常是16或256种。对于索引色显示器，有一个可能颜色的编号列表，像素的颜色由一个整数指定，该整数给出了颜色在列表中的位置。</p>
+<p>无论如何，屏幕上所有像素的颜色值都存储在一个称为<strong>帧缓冲区(<abbr title="A region of memory that contains color data for a digital image. Most often refers to the memory containing the image that appears on the computer's screen.">frame buffer</abbr>)</strong><sup id="fnref:4"><a class="footnote-ref" href="#fn:4">4</a></sup>的大型内存块中。更改屏幕上的图像需要更改存储在帧缓冲区中的颜色值。屏幕每秒重绘许多次，因此几乎在帧缓冲区中的颜色值更改后，屏幕上像素的颜色就会更改以匹配，并且显示的图像会更改。</p>
+<p>以这种方式使用的计算机屏幕是<strong>光栅图形(<abbr title="Creating a scene by specifying the geometric objects contained in the scene, together with geometric transforms to be applied to them and attributes that determine their appearance.">raster graphics</abbr>)</strong><sup id="fnref:5"><a class="footnote-ref" href="#fn:5">5</a></sup>的基本模型。术语“光栅”在技术上指的是旧的真空管计算机监视器上使用的机制：电子束将沿着像素行移动，使它们发光。电子束是通过强大的磁铁将其偏转以横穿屏幕的，束越强，像素的发光就越亮，因此可以通过调制电子束的强度来控制像素的亮度。存储在帧缓冲区中的颜色值用于确定电子束的强度。（对于彩色屏幕，每个像素都有一个红点、一个绿点和一个蓝点，由束分别照亮。）</p>
+<p>现代的平板计算机监视器不是以同样的方式光栅。没有移动的电子束。控制像素颜色的机制因屏幕类型而异。但屏幕仍然由像素组成，并且所有像素的颜色值仍然存储在帧缓冲区中。图像由像素网格组成，每个像素都有数字颜色值，这就是光栅图形的概念。</p>
+</div>
+<div class="tabbed-block">
+<p>The main focus of this book is three-dimensional (3D) graphics, where most of the work goes into producing a 3D model of a scene. But ultimately, in almost all cases, the end result of a computer graphics project is a two-dimensional image. And of course, the direct production and manipulation of 2D images is an important topic in its own right. Furthermore, a lot of ideas carry over from two dimensions to three. So, it makes sense to start with graphics in 2D.</p>
+<p>An image that is presented on the computer screen is made up of <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr>. The screen consists of a rectangular grid of <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr>, arranged in rows and columns. The <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr> are small enough that they are not easy to see individually. In fact, for many very high-resolution displays, they become essentially invisible. At a given time, each pixel can show only one color. Most screens these days use 24-bit color, where a color can be specified by three 8-bit numbers, giving the levels of red, green, and blue in the color. Any color that can be shown on the screen is made up of some combination of these three "primary" colors. Other formats are possible, such as <abbr title="Refers to a color scheme or image in which each color is a shade of gray (where the term &quot;shade of gray&quot; here includes black and white). Typically, 256 shades of gray are used. Grayscale is also called &quot;monochrome.&quot;">grayscale</abbr>, where each pixel is some shade of gray and the pixel color is given by one number that specifies the level of gray on a black-to-white scale. Typically, 256 shades of gray are used. Early computer screens used <abbr title="A color scheme in which colors are selected from a limited palette of colors. For example, if the palette contains 256 colors, then a color can be specified by an eight-bit integer, giving its position, or index, in the list of colors.">indexed color</abbr>, where only a small set of colors, usually 16 or 256, could be displayed. For an <abbr title="A color scheme in which colors are selected from a limited palette of colors. For example, if the palette contains 256 colors, then a color can be specified by an eight-bit integer, giving its position, or index, in the list of colors.">indexed color</abbr> display, there is a numbered list of possible colors, and the color of a pixel is specified by an integer giving the position of the color in the list.</p>
+<p>In any case, the color values for all the <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr> on the screen are stored in a large block of memory known as a <abbr title="A region of memory that contains color data for a digital image. Most often refers to the memory containing the image that appears on the computer's screen.">frame buffer</abbr>. Changing the image on the screen requires changing color values that are stored in the <abbr title="A region of memory that contains color data for a digital image. Most often refers to the memory containing the image that appears on the computer's screen.">frame buffer</abbr>. The screen is redrawn many times per second, so that almost immediately after the color values are changed in the <abbr title="A region of memory that contains color data for a digital image. Most often refers to the memory containing the image that appears on the computer's screen.">frame buffer</abbr>, the colors of the <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr> on the screen will be changed to match, and the displayed image will change.</p>
+<p>A computer screen used in this way is the basic model of <abbr title="Creating a scene by specifying the geometric objects contained in the scene, together with geometric transforms to be applied to them and attributes that determine their appearance.">raster graphics</abbr>. The term "raster" technically refers to the mechanism used on older vacuum tube computer monitors: An electron beam would move along the rows of <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr>, making them glow. The beam was moved across the screen by powerful magnets that would deflect the path of the electrons. The stronger the beam, the brighter the glow of the pixel, so the brightness of the <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr> could be controlled by modulating the intensity of the electron beam. The color values stored in the <abbr title="A region of memory that contains color data for a digital image. Most often refers to the memory containing the image that appears on the computer's screen.">frame buffer</abbr> were used to determine the intensity of the electron beam. (For a color screen, each pixel had a red dot, a green dot, and a blue dot, which were separately illuminated by the beam.)</p>
+<p>A modern flat-screen computer monitor is not a raster in the same sense. There is no moving electron beam. The mechanism that controls the colors of the <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr> is different for different types of screen. But the screen is still made up of <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr>, and the color values for all the <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr> are still stored in a <abbr title="A region of memory that contains color data for a digital image. Most often refers to the memory containing the image that appears on the computer's screen.">frame buffer</abbr>. The idea of an image consisting of a grid of <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr>, with numerical color values for each pixel, defines <abbr title="Creating a scene by specifying the geometric objects contained in the scene, together with geometric transforms to be applied to them and attributes that determine their appearance.">raster graphics</abbr>.</p>
+</div>
+</div>
+</div>
+<hr />
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">中文</label><label for="__tabbed_2_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>虽然计算机屏幕上的图像是使用像素表示的，但指定单个像素颜色并不总是创建图像的最佳方式。另一种方法是指定图像包含的基本几何对象，例如线条、圆形、三角形和矩形等形状。这就是定义<strong>矢量图形(<abbr title="Shape-based graphics in which an image is specified as a list of the shapes or objects that appear in the image.">vector graphics</abbr>)</strong><sup id="fnref:6"><a class="footnote-ref" href="#fn:6">6</a></sup>的理念：将图像表示为其包含的几何形状的列表。为了增加趣味性，这些形状可以具有<strong>属性(<abbr title="A property, such as color, of a graphical object. An image can be specified by the geometric shapes that it contains, together with their attributes.">attributes</abbr>)</strong><sup id="fnref:7"><a class="footnote-ref" href="#fn:7">7</a></sup>，例如线条的粗细或填充矩形的颜色。当然，并非每个图像都可以由简单的几何形状组成。对于美丽的日落照片（或大多数其他摄影图像），这种方法显然不适用。然而，对于许多类型的图像，例如建筑蓝图和科学插图，它效果很好。</p>
+<p>事实上，在计算机发展的早期历史中，矢量图形甚至直接用于计算机屏幕上。当第一批图形计算机显示器问世时，光栅显示器的速度太慢、价格太高，不切实际。幸运的是，可以以另一种方式使用真空管技术：电子束可以直接在屏幕上绘制一条线，只需沿着该线移动束。矢量图形显示器将存储一个应出现在屏幕上的线段<strong>显示列表(<abbr title="A list of graphics primitives and attributes which can be traversed to create all or part of an image. Display lists were used in some early vector-graphics hardware. They were also available in traditional OpenGL.">display list</abbr>)</strong><sup id="fnref:8"><a class="footnote-ref" href="#fn:8">8</a></sup>。由于屏幕上的点只会在被电子束照射后短暂发光，图形显示器会一遍又一遍地遍历显示列表，不断地重绘列表中的所有线条。要更改图像，只需要更改显示列表的内容。当然，如果显示列表变得太长，图像就会开始闪烁，因为一条线在下次重新绘制之前会有机会可见地淡去。</p>
+<p>但这是重点：对于可以指定为相对较少数量的几何形状的图像来说，使用矢量表示来表示图像所需的信息量要比使用光栅表示小得多。考虑一个由一千条线段组成的图像。对于图像的矢量表示，您只需要存储两千个点的坐标，即线段的端点。这只需要几千字节的内存。要将图像存储在用于光栅显示的帧缓冲区中，将需要更多的内存。同样，矢量显示可以比光栅显示更快地在屏幕上绘制线条，后者将相同的图像从帧缓冲区复制到屏幕上（然而，一旦光栅显示器变得快速且价格合理，它们很快就会取代矢量显示器，因为它们能够相当好地显示所有类型的图像。）</p>
+</div>
+<div class="tabbed-block">
+<p>Although images on the computer screen are represented using <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr>, specifying individual pixel colors is not always the best way to create an image. Another way is to specify the basic geometric objects that it contains, shapes such as lines, circles, triangles, and rectangles. This is the idea that defines <abbr title="Shape-based graphics in which an image is specified as a list of the shapes or objects that appear in the image.">vector graphics</abbr>: Represent an image as a list of the geometric shapes that it contains. To make things more interesting, the shapes can have <abbr title="A property, such as color, of a graphical object. An image can be specified by the geometric shapes that it contains, together with their attributes.">attributes</abbr>, such as the thickness of a line or the color that fills a rectangle. Of course, not every image can be composed from simple geometric shapes. This approach certainly wouldn't work for a picture of a beautiful sunset (or for most any other photographic image). However, it works well for many types of images, such as architectural blueprints and scientific illustrations.</p>
+<p>In fact, early in the history of computing, <abbr title="Shape-based graphics in which an image is specified as a list of the shapes or objects that appear in the image.">vector graphics</abbr> was even used directly on computer screens. When the first graphical computer displays were developed, raster displays were too slow and expensive to be practical. Fortunately, it was possible to use vacuum tube technology in another way: The electron beam could be made to directly draw a line on the screen, simply by sweeping the beam along that line. A <abbr title="Shape-based graphics in which an image is specified as a list of the shapes or objects that appear in the image.">vector graphics</abbr> display would store a <abbr title="A list of graphics primitives and attributes which can be traversed to create all or part of an image. Display lists were used in some early vector-graphics hardware. They were also available in traditional OpenGL.">display list</abbr> of lines that should appear on the screen. Since a point on the screen would glow only very briefly after being illuminated by the electron beam, the graphics display would go through the <abbr title="A list of graphics primitives and attributes which can be traversed to create all or part of an image. Display lists were used in some early vector-graphics hardware. They were also available in traditional OpenGL.">display list</abbr> over and over, continually redrawing all the lines on the list. To change the image, it would only be necessary to change the contents of the <abbr title="A list of graphics primitives and attributes which can be traversed to create all or part of an image. Display lists were used in some early vector-graphics hardware. They were also available in traditional OpenGL.">display list</abbr>. Of course, if the <abbr title="A list of graphics primitives and attributes which can be traversed to create all or part of an image. Display lists were used in some early vector-graphics hardware. They were also available in traditional OpenGL.">display list</abbr> became too long, the image would start to flicker because a line would have a chance to visibly fade before its next turn to be redrawn.</p>
+<p>But here is the point: For an image that can be specified as a reasonably small number of geometric shapes, the amount of information needed to represent the image is much smaller using a vector representation than using a raster representation. Consider an image made up of one thousand line segments. For a vector representation of the image, you only need to store the coordinates of two thousand points, the endpoints of the lines. This would take up only a few kilobytes of memory. To store the image in a <abbr title="A region of memory that contains color data for a digital image. Most often refers to the memory containing the image that appears on the computer's screen.">frame buffer</abbr> for a raster display would require much more memory. Similarly, a vector display could draw the lines on the screen more quickly than a raster display could copy the same image from the <abbr title="A region of memory that contains color data for a digital image. Most often refers to the memory containing the image that appears on the computer's screen.">frame buffer</abbr> to the screen. (As soon as raster displays became fast and inexpensive, however, they quickly displaced vector displays because of their ability to display all types of images reasonably well.)</p>
+</div>
+</div>
+</div>
+<hr />
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">中文</label><label for="__tabbed_3_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>光栅图形和矢量图形之间的界限在计算机图形的多个领域中仍然存在。例如，在可以用于创建图像的两类程序之间存在明显的区别：<strong>绘画程序(<abbr title="A computer program for creating images using raster-style graphics, where the user creates the image by controlling the colors of each pixel.">painting programs</abbr>)</strong><sup id="fnref:9"><a class="footnote-ref" href="#fn:9">9</a></sup>和<strong>绘图程序(<abbr title="A computer program for creating images using vector-style graphics, where the user creates the image by specifying shapes that make up the image and their attributes.">drawing programs</abbr>)</strong><sup id="fnref:10"><a class="footnote-ref" href="#fn:10">10</a></sup>。在绘画程序中，图像表示为像素网格，并且用户通过为像素分配颜色来创建图像。这可能通过使用像画家的画笔那样的“绘图工具”，甚至通过绘制线条或矩形等几何形状的工具来完成。但绘画程序的重点是对单个像素着色，而只保存像素的颜色。为了使这一点更清楚，假设您使用绘画程序绘制了一幢房子，然后在房子前面画了一棵树。如果您然后擦除了树，您只会看到一个空白的背景，而不是一栋房子。事实上，图像从来没有真正包含“房子”——只是独立着色的像素，观看者可能会将其视为组成房子图片的部分。</p>
+<p>在绘图程序中，用户通过添加几何形状来创建图像，图像表示为这些形状的列表。如果您在图像中放置了一个房子形状（或组成房子的形状集合），然后在房子上放置了一棵树形状，那么房子仍然存在，因为它存储在图像包含的形状列表中。如果删除了树，房子仍将存在于图像中，就像在添加树之前一样。此外，您应该能够选择图像中的一个形状并移动它或改变其大小，因此绘图程序提供了一套丰富的编辑操作，这在绘画程序中是不可能的。（然而，反之亦然。）</p>
+<p>一个实用的图像创建和编辑程序可能会结合绘画和绘图的元素，尽管其中一种通常占主导地位。例如，绘图程序可以允许用户包含光栅类型的图像，将其视为一个形状。绘画程序可能允许用户创建“图层”，这些是可以叠加在一起以创建最终图像的单独图像。然后，可以像绘图程序中的形状一样操作这些图层（因此，即使房子的图像在树的后面，您也可以将房子和树保持在单独的图层中）。</p>
+<p>两个众所周知的图形程序是Adobe Photoshop和Adobe Illustrator。Photoshop属于绘画程序类别，而Illustrator更像是绘图程序。在自由软件领域，GNU图像处理程序Gimp是Photoshop的一个不错的替代品，而Inkscape是一个相当能干的免费绘图程序。Gimp和Inkscape的简要介绍可以在<a href="../../a3/">附录C</a>中找到。</p>
+</div>
+<div class="tabbed-block">
+<p>The divide between <abbr title="Creating a scene by specifying the geometric objects contained in the scene, together with geometric transforms to be applied to them and attributes that determine their appearance.">raster graphics</abbr> and <abbr title="Shape-based graphics in which an image is specified as a list of the shapes or objects that appear in the image.">vector graphics</abbr> persists in several areas of computer graphics. For example, it can be seen in a division between two categories of programs that can be used to create images: <abbr title="A computer program for creating images using raster-style graphics, where the user creates the image by controlling the colors of each pixel.">painting programs</abbr> and <abbr title="A computer program for creating images using vector-style graphics, where the user creates the image by specifying shapes that make up the image and their attributes.">drawing programs</abbr>. In a painting program, the image is represented as a grid of <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr>, and the user creates an image by assigning colors to <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr>. This might be done by using a "drawing tool" that acts like a painter's brush, or even by tools that draw geometric shapes such as lines or rectangles. But the point in a painting program is to color the individual <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr>, and it is only the pixel colors that are saved. To make this clearer, suppose that you use a painting program to draw a house, then draw a tree in front of the house. If you then erase the tree, you'll only reveal a blank background, not a house. In fact, the image never really contained a "house" at all—only individually colored <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr> that the viewer might perceive as making up a picture of a house.</p>
+<p>In a drawing program, the user creates an image by adding geometric shapes, and the image is represented as a list of those shapes. If you place a house shape (or collection of shapes making up a house) in the image, and you then place a tree shape on top of the house, the house is still there, since it is stored in the list of shapes that the image contains. If you delete the tree, the house will still be in the image, just as it was before you added the tree. Furthermore, you should be able to select one of the shapes in the image and move it or change its size, so <abbr title="A computer program for creating images using vector-style graphics, where the user creates the image by specifying shapes that make up the image and their attributes.">drawing programs</abbr> offer a rich set of editing operations that are not possible in <abbr title="A computer program for creating images using raster-style graphics, where the user creates the image by controlling the colors of each pixel.">painting programs</abbr>. (The reverse, however, is also true.)</p>
+<p>A practical program for image creation and editing might combine elements of painting and drawing, although one or the other is usually dominant. For example, a drawing program might allow the user to include a raster-type image, treating it as one shape. A painting program might let the user create "layers," which are separate images that can be layered one on top of another to create the final image. The layers can then be manipulated much like the shapes in a drawing program (so that you could keep both your house and your tree in separate layers, even if in the image of the house is in back of the tree).</p>
+<p>Two well-known graphics programs are Adobe Photoshop and Adobe Illustrator. Photoshop is in the category of <abbr title="A computer program for creating images using raster-style graphics, where the user creates the image by controlling the colors of each pixel.">painting programs</abbr>, while Illustrator is more of a drawing program. In the world of free software, the GNU image-processing program, Gimp, is a good alternative to Photoshop, while Inkscape is a reasonably capable free drawing program. Short introductions to Gimp and Inkscape can be found in <a href="../a3/">Appendix C</a>.</p>
+</div>
+</div>
+</div>
+<hr />
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">中文</label><label for="__tabbed_4_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>光栅图形和矢量图形之间的差异也出现在图形文件格式领域。有许多方法可以将图像表示为存储在文件中的数据。如果要从文件中存储的位中恢复原始图像，则表示必须遵循某些确切的、已知的规范。这样的规范称为<strong>图形文件格式(graphics file format)</strong>。一些流行的图形文件格式包括GIF、PNG、JPEG、WebP和SVG。大多数在Web上使用的图像都是GIF、PNG或JPEG格式，但大多数浏览器也支持SVG图像和较新的WebP格式。</p>
+<p>GIF、PNG、JPEG和WebP基本上是光栅图形格式；图像是通过为每个像素存储一个颜色值来指定的。GIF是一种较老的文件格式，大部分已被PNG取代，但您仍然可以在Web上找到GIF图像。（GIF格式支持动画图像，因此经常用于Web页面上的简单动画。）GIF使用索引色模型，最多可包含256种颜色。PNG可以使用索引色或全24位颜色，而JPEG适用于全彩色图像。</p>
+<p>表示光栅图像所需的数据量可能相当大。然而，数据通常包含大量冗余，并且数据可以进行“压缩”以减小其大小。GIF和PNG使用<strong>无损数据压缩(<abbr title="A scheme for reducing the size of a dataset without losing any of the information in that dataset. The original data can be recovered exactly from the compressed data. The image formats GIF and PNG use lossless data compression to reduce the size of the image file.">lossless data compression</abbr>)</strong><sup id="fnref:11"><a class="footnote-ref" href="#fn:11">11</a></sup>，这意味着可以从压缩数据完美地恢复原始图像。JPEG使用<strong>有损数据压缩(<abbr title="A scheme for reducing the size of a dataset in which some of the information in the dataset can be lost. The data that is recovered from the compressed data can differ from the original data. The image format JPEG use lossy data compression to reduce the size of the image file.">lossy data compression</abbr>)</strong><sup id="fnref:12"><a class="footnote-ref" href="#fn:12">12</a></sup>算法，这意味着从JPEG文件中恢复的图像与原始图像并不完全相同；一些信息已经丢失。这听起来可能不是一个好主意，但实际上，差异通常并不是很明显，使用有损压缩通常可以更大程度地减小压缩数据的大小。JPEG通常适用于摄影图像，但对于具有不同颜色之间清晰边缘的图像效果不佳。它对于线条绘图和包含文本的图像特别不适用；PNG是此类图像的首选格式。WebP可以使用无损和有损压缩。</p>
+<p>另一方面，SVG基本上是一种矢量图形格式（尽管SVG图像可以包含光栅图像）。SVG实际上是一种用于描述二维矢量图形图像的基于XML的语言。“SVG”代表“可缩放矢量图形(Scalable Vector Graphics)”，而“可缩放(scalable)”一词表示矢量图形的一个优点：当图像的大小增加时，不会丢失质量。两点之间的线条可以以任何比例表示，仍然是同一条完美的几何线。另一方面，如果尝试大幅增加光栅图像的大小，您会发现您没有足够的颜色值来覆盖新图像中所有像素；原始图像中的每个像素将扩展为覆盖缩放图像中像素的矩形，并且您将获得均匀颜色的多像素块。SVG图像的可扩展特性使其成为Web浏览器和计算机桌面上图形元素的良好选择。事实上，一些桌面环境现在正在使用SVG图像作为其桌面图标。</p>
+</div>
+<div class="tabbed-block">
+<p>The divide between raster and <abbr title="Shape-based graphics in which an image is specified as a list of the shapes or objects that appear in the image.">vector graphics</abbr> also appears in the field of graphics file formats. There are many ways to represent an image as data stored in a file. If the original image is to be recovered from the bits stored in the file, the representation must follow some exact, known specification. Such a specification is called a graphics file format. Some popular graphics file formats include GIF, PNG, JPEG, WebP, and SVG. Most images used on the Web are GIF, PNG, or JPEG, but most browsers also have support for SVG images and for the newer WebP format.</p>
+<p>GIF, PNG, JPEG, and WebP are basically <abbr title="Creating a scene by specifying the geometric objects contained in the scene, together with geometric transforms to be applied to them and attributes that determine their appearance.">raster graphics</abbr> formats; an image is specified by storing a color value for each pixel. GIF is an older file format, which has largely been superseded by PNG, but you can still find GIF images on the web. (The GIF format supports animated images, so GIFs are often used for simple animations on Web pages.) GIF uses an <abbr title="A color scheme in which colors are selected from a limited palette of colors. For example, if the palette contains 256 colors, then a color can be specified by an eight-bit integer, giving its position, or index, in the list of colors.">indexed color</abbr> model with a maximum of 256 colors. PNG can use either indexed or full 24-bit color, while JPEG is meant for full color images.</p>
+<p>The amount of data necessary to represent a raster image can be quite large. However, the data usually contains a lot of redundancy, and the data can be "compressed" to reduce its size. GIF and PNG use <abbr title="A scheme for reducing the size of a dataset without losing any of the information in that dataset. The original data can be recovered exactly from the compressed data. The image formats GIF and PNG use lossless data compression to reduce the size of the image file.">lossless data compression</abbr>, which means that the original image can be recovered perfectly from the compressed data. JPEG uses a <abbr title="A scheme for reducing the size of a dataset in which some of the information in the dataset can be lost. The data that is recovered from the compressed data can differ from the original data. The image format JPEG use lossy data compression to reduce the size of the image file.">lossy data compression</abbr> algorithm, which means that the image that is recovered from a JPEG file is not exactly the same as the original image; some information has been lost. This might not sound like a good idea, but in fact the difference is often not very noticeable, and using lossy compression usually permits a greater reduction in the size of the compressed data. JPEG generally works well for photographic images, but not as well for images that have sharp edges between different colors. It is especially bad for line drawings and images that contain text; PNG is the preferred format for such images. WebP can use both lossless and lossy compression.</p>
+<p>SVG, on the other hand, is fundamentally a <abbr title="Shape-based graphics in which an image is specified as a list of the shapes or objects that appear in the image.">vector graphics</abbr> format (although SVG images can include raster images). SVG is actually an XML-based language for describing two-dimensional <abbr title="Shape-based graphics in which an image is specified as a list of the shapes or objects that appear in the image.">vector graphics</abbr> images. "SVG" stands for "Scalable Vector Graphics," and the term "scalable" indicates one of the advantages of <abbr title="Shape-based graphics in which an image is specified as a list of the shapes or objects that appear in the image.">vector graphics</abbr>: There is no loss of quality when the size of the image is increased. A line between two points can be represented at any scale, and it is still the same perfect geometric line. If you try to greatly increase the size of a raster image, on the other hand, you will find that you don't have enough color values for all the <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr> in the new image; each pixel from the original image will be expanded to cover a rectangle of <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr> in the scaled image, and you will get multi-pixel blocks of uniform color. The scalable nature of SVG images make them a good choice for web browsers and for graphical elements on your computer's desktop. And indeed, some desktop environments are now using SVG images for their desktop icons.</p>
+</div>
+</div>
+</div>
+<hr />
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">中文</label><label for="__tabbed_5_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>无论图像的格式如何，数字图像都是使用<strong>坐标系(<abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>)</strong><sup id="fnref:13"><a class="footnote-ref" href="#fn:13">13</a></sup>指定的。坐标系建立了数字和几何点之间的对应关系。在二维中，每个点被分配了一对数字，称为点的坐标。点的两个坐标通常称为其x坐标和y坐标，尽管名称"x"和"y"是任意的。</p>
+<p>光栅图像是一个二维的像素网格，排列成行和列。因此，它有一个自然的坐标系，其中每个像素对应于一对整数，给出包含该像素的行号和列号。（即使在这种简单的情况下，关于应该从上到下还是从下到上编号行的问题存在一些分歧。）</p>
+<p>对于矢量图像，使用实数坐标是自然的。图像的坐标系在某种程度上是任意的；也就是说，可以使用不同的坐标系指定相同的图像。我不想在这里详细讨论坐标系，但它们将是本书的一个重点，并且在三维图形中比在二维图形中更加重要。</p>
+</div>
+<div class="tabbed-block">
+<p>A digital image, no matter what its format, is specified using a <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>. A <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> sets up a correspondence between numbers and geometric points. In two dimensions, each point is assigned a pair of numbers, which are called the coordinates of the point. The two coordinates of a point are often called its x-coordinate and y-coordinate, although the names "x" and "y" are arbitrary.</p>
+<p>A raster image is a two-dimensional grid of <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr> arranged into rows and columns. As such, it has a natural <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> in which each pixel corresponds to a pair of integers giving the number of the row and the number of the column that contain the pixel. (Even in this simple case, there is some disagreement as to whether the rows should be numbered from top-to-bottom or from bottom-to-top.)</p>
+<p>For a vector image, it is natural to use real-number coordinates. The <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> for an image is arbitrary to some degree; that is, the same image can be specified using different coordinate systems. I do not want to say a lot about coordinate systems here, but they will be a major focus of a large part of the book, and they are even more important in three-dimensional graphics than in two dimensions.</p>
+</div>
+</div>
+</div>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>像素: 数字图像由称为像素的小矩形的行和列组成。为了指定数字图像，需要为图像中的每个像素分配一种颜色。&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>灰度: 指一种颜色方案或图像，其中每种颜色都是灰色的一种色调（此处的“灰色色调(shade of gray)”包括黑色和白色）。通常使用256种灰度级别。灰度也称为“单色(monochrome)”。&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p>索引色：一种颜色方案，其中颜色是从有限的调色板中选择的。例如，如果调色板包含256种颜色，则可以通过八位整数来指定颜色，给出其在颜色列表中的位置或索引。&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:4">
+<p>帧缓冲区: 包含数字图像的颜色数据的内存区域。通常指的是包含显示在计算机屏幕上的图像的内存。&#160;<a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+<li id="fn:5">
+<p>光栅图形: 基于像素的图形，在此类图形中，通过为像素网格中的每个像素分配一种颜色来指定图像。&#160;<a class="footnote-backref" href="#fnref:5" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</li>
+<li id="fn:6">
+<p>矢量图形: 基于形状的图形，在此类图形中，图像被指定为出现在图像中的形状或对象的列表。&#160;<a class="footnote-backref" href="#fnref:6" title="Jump back to footnote 6 in the text">&#8617;</a></p>
+</li>
+<li id="fn:7">
+<p>属性: 图形对象的属性，例如颜色。图像可以通过其包含的几何形状以及它们的属性来指定。&#160;<a class="footnote-backref" href="#fnref:7" title="Jump back to footnote 7 in the text">&#8617;</a></p>
+</li>
+<li id="fn:8">
+<p>显示列表: 包含图形基元和属性的列表，可以遍历以创建图像的全部或部分。一些早期的矢量图形硬件使用了显示列表。它们也在传统的OpenGL中可用。&#160;<a class="footnote-backref" href="#fnref:8" title="Jump back to footnote 8 in the text">&#8617;</a></p>
+</li>
+<li id="fn:9">
+<p>绘画程序: 一种使用光栅式图形创建图像的计算机程序，在此类程序中，用户通过控制每个像素的颜色来创建图像。&#160;<a class="footnote-backref" href="#fnref:9" title="Jump back to footnote 9 in the text">&#8617;</a></p>
+</li>
+<li id="fn:10">
+<p>绘图程序: 一种使用矢量式图形创建图像的计算机程序，在此类程序中，用户通过指定组成图像的形状及其属性来创建图像。&#160;<a class="footnote-backref" href="#fnref:10" title="Jump back to footnote 10 in the text">&#8617;</a></p>
+</li>
+<li id="fn:11">
+<p>无损数据压缩: 一种减小数据集大小而不丢失数据集中任何信息的方案。可以从压缩数据中精确地恢复原始数据。图像格式GIF和PNG使用无损数据压缩来减
+小图像文件的大小。&#160;<a class="footnote-backref" href="#fnref:11" title="Jump back to footnote 11 in the text">&#8617;</a></p>
+</li>
+<li id="fn:12">
+<p>有损数据压缩：一种减小数据集大小的方案，其中数据集中的一些信息可能会丢失。从压缩数据中恢复的数据可能与原始数据不同。图像格式JPEG使用有损数据压缩来减小图像文件的大小。&#160;<a class="footnote-backref" href="#fnref:12" title="Jump back to footnote 12 in the text">&#8617;</a></p>
+</li>
+<li id="fn:13">
+<p>坐标系：一种将数值坐标分配给几何点的方法。在二维中，每个点对应一对数字。在三维中，每个点对应一组三个数字。&#160;<a class="footnote-backref" href="#fnref:13" title="Jump back to footnote 13 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="最后更新">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年4月23日</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="创建日期">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年4月23日</span>
+  </span>
+
+    
+    
+    
+  </aside>
+
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "content.tabs.link", "navigation.tabs", "navigation.tabs.sticky", "navigation.indexes", "navigation.top", "toc.follow", "content.tooltips"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+      
+    
+  <script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
+</html>
