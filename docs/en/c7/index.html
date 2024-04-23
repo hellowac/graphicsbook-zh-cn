@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Introduction to Computer Graphics, Chapter 7 -- 3D Graphics with WebGL</title>
+<link type="text/css" rel="stylesheet" href="../resource/graphicstext.css">
+</head>
+<body>
+<div class="page">
+<div align="right">
+<small>
+        [  <a href="s1.html">First Section</a> |
+           <a href="../c6/index.html">Previous Chapter</a> |
+           <a href="../c8/index.html">Next Chapter</a> |
+           <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+<hr>
+<div class="content">
+<h3 class="chapter_title">Chapter 7</h3>
+<h2 class="chapter_title">3D Graphics with WebGL</h2>
+<hr class="break">
+
+
+<p class="firstpar">The previous chapter covered WebGL, but only in the context of
+two-dimensional graphics.   As we move into 3D, we will have to
+work with more complex <span class="word" data-term="geometric transform" data-definition="A coordinate transformation; that is, a function that can
+be applied to each of the points in a geometric object to produce a new object.  Common
+transforms include scaling, rotation, and translation. " title="Click for a definition of geometric transform.">transformations</span>.
+For that, we will rely mainly on an open-source JavaScript library for 
+vector and matrix math.  We will also need to implement
+<span class="word" data-term="lighting" data-definition="Using light sources in a 3D scene, so that the appearance of objects in
+the scene can be computed based on the interaction of light with the objects' material properties." title="Click for a definition of lighting.">lighting</span> and <span class="word" data-term="material" data-definition="The properties of an object that determine how that object interacts
+with light in the environment.  Material properties in OpenGL include, for example, diffuse
+color, specular color, and shininess." title="Click for a definition of material.">material</span>, which we will
+do directly in <span class="word" data-term="GLSL" data-definition="OpenGL Shader Language, the programming language that is used to write
+shader programs for use with OpenGL." title="Click for a definition of GLSL.">GLSL</span>.</p>
+
+
+<p>We begin the chapter by duplicating most of the capabilities of <span class="word" data-term="OpenGL" data-definition="A family of computer graphics APIs that is implemented in many graphics
+hardware devices.  There are several versions of the API, and there are implementations,
+or &quot;bindings&quot; for several different programming languages.  Versions of OpenGL for embedded
+systems such as mobile phones are known as OpenGL ES.  WebGL is a version for use on 
+Web pages.  OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly
+associated with 3D." title="Click for a definition of OpenGL.">OpenGL</span>&nbsp;1.1
+that were covered in <a href="../c3/index.html">Chapter&nbsp;3</a> and <a href="../c4/index.html">Chapter&nbsp;4</a>.
+But we will soon move beyond that by adding features such as
+<span class="word" data-term="spotlight" data-definition=" A light that emits a cone of illumination.  A spotlight is
+similar to a point light in that it has a position in 3D space, and light radiates from
+that position.  However, the light only affects objects that are in the spotlight's
+cone of illumination." title="Click for a definition of spotlight.">spotlights</span>, <span class="word" data-term="Phong shading" data-definition="A technique for computing pixel colors on a primitive using
+a lighting equation that takes into account ambient, diffuse, and specular reflection.
+In Phong shading, the lighting equation is applied at each pixel.  Normal vectors are
+specified only at the vertices of the primitive.  The normal vector that 
+is used in the lighting equation at a pixel is obtained by interpolating the
+normal vectors for the vertices. Phong shading is named after 
+Bui Tuong Phong, who developed the theory in the 1970s." title="Click for a definition of Phong shading.">Phong shading</span>, and
+<span class="word" data-term="environment mapping" data-definition="A way of simulating mirror-like reflection from the surface
+of an object.  The environment that is to be reflected from the surface 
+is represented as a cubemap texture.  To determine what point in the texture
+is visible at a given point on the object,
+a ray from the viewpoint is reflected from the surface point, and the reflected ray
+is intersected with the texture cube.  Environment mapping is also called reflection mapping." title="Click for a definition of environment mapping.">environment mapping</span>.</p>
+
+
+<hr class="break">
+<h3>Contents of Chapter 7:</h3>
+<ul class="contents">
+<li>Section 1: <a href="s1.html">Transformations in 3D</a>
+</li>
+<li>Section 2: <a href="s2.html">Lighting and Material</a>
+</li>
+<li>Section 3: <a href="s3.html">Textures</a>
+</li>
+<li>Section 4: <a href="s4.html">Framebuffers</a>
+</li>
+<li>Section 5: <a href="s5.html">WebGL Extensions</a>
+</li>
+</ul>
+</div>
+<hr>
+<div align="right">
+<small>
+        [  <a href="s1.html">First Section</a> |
+           <a href="../c6/index.html">Previous Chapter</a> |
+           <a href="../c8/index.html">Next Chapter</a> |
+           <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+</div>
+</body>
+<script src="../resource/glossary.js"></script>
+</html>

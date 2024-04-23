@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Introduction to Computer Graphics, Chapter 3 -- OpenGL 1.1: Geometry</title>
+<link type="text/css" rel="stylesheet" href="../resource/graphicstext.css">
+</head>
+<body>
+<div class="page">
+<div align="right">
+<small>
+        [  <a href="s1.html">First Section</a> |
+           <a href="../c2/index.html">Previous Chapter</a> |
+           <a href="../c4/index.html">Next Chapter</a> |
+           <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+<hr>
+<div class="content">
+<h3 class="chapter_title">Chapter 3</h3>
+<h2 class="chapter_title">OpenGL 1.1: Geometry</h2>
+<hr class="break">
+
+
+<p class="firstpar">It is time to move on to computer graphics in three dimensions, although
+it won't be until Section&nbsp;2 of this chapter that we really get into 3D.
+You will find that many concepts from 2D graphics carry over to 3D, but the move into
+the third dimension brings with it some new features that take a while to
+get used to.</p>
+
+
+<p>Our focus will be <span class="newword" data-term="OpenGL" data-definition="A family of computer graphics APIs that is implemented in many graphics
+hardware devices.  There are several versions of the API, and there are implementations,
+or &quot;bindings&quot; for several different programming languages.  Versions of OpenGL for embedded
+systems such as mobile phones are known as OpenGL ES.  WebGL is a version for use on 
+Web pages.  OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly
+associated with 3D." title="Click for a definition of OpenGL.">OpenGL</span>, a  graphics <span class="word" data-term="API" data-definition="Application Programming Interface.  A collection of related classes, functions,
+constants, etc., for performing some task.  An API is an &quot;interface&quot; in the sense that it
+can be used without understanding how its functionality is actually implemented." title="Click for a definition of API.">API</span>
+that was introduced in 1992 and has gone through many versions and many 
+changes since then.  OpenGL is a  low-level graphics API, similar to the 2D APIs we have
+covered.  It is even more primitive in some ways, but of course it is
+complicated by the fact that it supports 3D.
+OpenGL is the basis for <span class="word" data-term="WebGL" data-definition="A 3D graphics API for use on web pages.  WebGL programs are written
+in the JavaScript programming language and display their images in HTML canvas
+elements.  WebGL is based on OpenGL ES, the version of OpenGL for embedded systems, with
+a few changes to adapt it to the JavaScript language and the Web environment." title="Click for a definition of WebGL.">WebGL</span>, the current standard for 3D applications on the
+Web that is covered in <a href="../c6/index.html">Chapter&nbsp;6</a> and <a href="../c7/index.html">Chapter&nbsp;7</a>.
+There are many competing frameworks for
+low-level 3D graphics, including Microsoft's <span class="word" data-term="Direct3D" data-definition="Microsoft's proprietary API for 3D graphics on the Windows operating system." title="Click for a definition of Direct3D.">Direct3D</span>, 
+Apple's <span class="word" data-term="Metal" data-definition="Apple's proprietary API for 3D graphics and computation on MacOS computers and iOS devices." title="Click for a definition of Metal.">Metal</span>, and <span class="word" data-term="Vulkan" data-definition="An open-source cross-platform API for 3D graphics and computation, designed as a
+more modern and efficient replacement for OpenGL." title="Click for a definition of Vulkan.">Vulkan</span>, which
+was designed by the creators of OpenGL as a more modern and efficient replacement.
+</p>
+
+
+<p>For the next two chapters, the discussion is
+limited to OpenGL&nbsp;1.1.  OpenGL 1.1 is a large API, and we will 
+only cover a part of it. The goal is to introduce 3D graphics concepts, 
+not to fully cover the API.  A significant part of what we cover here
+has been removed from the most modern versions of OpenGL, including WebGL.  However,
+more modern graphics APIs have a very steep initial learning curve,
+and they are not really the best starting place for someone who is encountering
+3D graphics for the first time.  Some additional support is needed&mdash;if not OpenGL 1.1
+then some similar framework.  Since OpenGL 1.1 is
+still supported, at least by all desktop implementations of OpenGL,
+it's a reasonable place to start learning about 3D graphics.</p>
+
+
+<p>This chapter concentrates on the geometric aspects of 3D graphics, such as defining
+and transforming objects and projecting 3D scenes into 2D images.  The images that
+we produce will look very unrealistic.  In the next chapter, we will see how to add
+some realism by simulating the effects of lighting and of the material properties of surfaces.</p>
+
+
+<hr class="break">
+<h3>Contents of Chapter 3:</h3>
+<ul class="contents">
+<li>Section 1: <a href="s1.html">Shapes and Colors in OpenGL 1.1</a>
+</li>
+<li>Section 2: <a href="s2.html">3D Coordinates and Transforms</a>
+</li>
+<li>Section 3: <a href="s3.html">Projection and Viewing</a>
+</li>
+<li>Section 4: <a href="s4.html">Polygonal Meshes and glDrawArrays</a>
+</li>
+<li>Section 5: <a href="s5.html">Some Linear Algebra</a>
+</li>
+<li>Section 6: <a href="s6.html">Using GLUT and JOGL</a>
+</li>
+</ul>
+</div>
+<hr>
+<div align="right">
+<small>
+        [  <a href="s1.html">First Section</a> |
+           <a href="../c2/index.html">Previous Chapter</a> |
+           <a href="../c4/index.html">Next Chapter</a> |
+           <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+</div>
+</body>
+<script src="../resource/glossary.js"></script>
+</html>

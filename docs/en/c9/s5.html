@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Introduction to Computer Graphics, Section 9.5 -- Textures</title>
+<link type="text/css" rel="stylesheet" href="../resource/graphicstext.css">
+</head>
+<body>
+<div class="page">
+<div align="right">
+<small>
+        [  <a href="s4.html">Previous Section</a> |
+           <a href="s6.html">Next Section</a> |
+           <a href="index.html">Chapter Index</a> | 
+	    <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+<hr>
+<table class="subsections" cellpadding="5" border="2">
+<tr>
+<td>
+<div align="center">
+<b>Subsections</b>
+<hr>
+<small><a href="#webgpu.5.1">Texture Coordinates</a>
+<br>
+<a href="#webgpu.5.2">Textures and Samplers</a>
+<br>
+<a href="#webgpu.5.3">Mipmaps</a>
+<br>
+<a href="#webgpu.5.4">Cubemap Textures</a>
+<br>
+<a href="#webgpu.5.5">Texture Formats</a>
+<br>
+</small>
+</div>
+</td>
+</tr>
+</table>
+<div class="content section">
+<h3 class="section_title">Section 9.5</h3>
+<h2 class="section_title">Textures</h2>
+<hr class="break">
+
+
+<p class="firstpar">A <span class="word" data-term="texture" data-definition="Variation in some property from point-to-point on an object.  The most common type
+is image texture.  When an image texture is applied to a surface, the surface color varies from
+point to point." title="Click for a definition of texture.">texture</span> is simply some property that varies from point to point
+on a <span class="word" data-term="geometric primitive" data-definition="Geometric objects in a graphics system, such as OpenGL, that are
+not made up of simpler objects.  Examples in OpenGL include points, lines, and triangles,
+but the set of available primitives depends on the graphics system.  (Note that as the term
+is used in OpenGL, a single primitive can be made up of many points, line segments, or triangles.)" title="Click for a definition of geometric primitive.">primitive</span>.  The most common&mdash;or at
+least the most visible&mdash;kind of texture is a variation in color from point
+to point, and the most common type of color texture is an <span class="word" data-term="image texture" data-definition="An image that is applied to a surface as a texture, so that it looks
+at if the image is &quot;painted&quot; onto the surface." title="Click for a definition of image texture.">image texture</span>.
+Other kinds of texture, such as variations in reflectivity or normal vector,
+are also possible.</p>
+
+
+<p>Image textures were covered in <a href="../c4/s3.html">Section&nbsp;4.3</a> for OpenGL
+and in <a href="../c6/s4.html">Section&nbsp;6.4</a> and <a href="../c7/s3.html">Section&nbsp;7.3</a> for WebGL.  Most of the basic ideas 
+carry over to WebGPU, even though the coding details are different.</p>
+
+
+<p>WebGPU has one-, two-, and three-dimensional image textures plus
+<span class="word" data-term="cubemap texture" data-definition="A texture made up of six images, one for each of the directions
+positive x, negative x, positive y, negative y, positive z, and negative z.  The images
+are intended to include everything that can be seen from a given point. Cubemap textures
+are used for environment mapping and skyboxes." title="Click for a definition of cubemap texture.">cubemap textures</span> (<a href="../c5/s3.html#threejs.3.4">Subsection&nbsp;5.3.4</a>).  
+I&nbsp;will concentrate on two-dimensional image textures for most of this section.</p>
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.5.1">9.5.1&nbsp;&nbsp;Texture Coordinates</h3>
+
+
+<p>When an image texture is applied to a surface, the texture color for a point
+is obtained by <span class="newword" data-term="sampling" data-definition="The operation of mapping texture coordinates to colors from a texture,
+including using mipmaps if available and applying a minification or magnification filter if
+necessary." title="Click for a definition of sampling.">sampling</span> the texture, based on <span class="word" data-term="texture coordinates" data-definition="Refers to the 2D coordinate system on a texture image, or to
+similar coordinate systems for 1D and 3D textures.  Texture coordinates typically range from 0 to 1
+both vertically and horizontally, with (0,0) at the lower left corner of the image.  The
+term also refers to coordinates that are given for a surface and that are used to specify
+how a texture image should be mapped to the surface." title="Click for a definition of texture coordinates.">texture coordinates</span>
+for that point.  Sampling is done on the GPU side of a WebGPU program, using
+a WGSL variable of type <span class="code">sampler</span>.</p>
+
+
+<p>A 2D image texture comes with a standard (u,v) coordinate system.  The coordinates
+range from 0 to 1 on the image.   What happens
+for texture coordinates outside the range 0 to 1 depends on the sampler
+that is used to sample the texture. For a 1D texture, only the u coordinate 
+is used, and for a 3D texture, the coordinate system is referred to as (u,v,w).</p>
+
+
+<p>When applying a 2D texture image to a surface, the two texture coordinates for a point 
+on the surface map that surface point to a point in the (u,v) coordinate system.  
+The sampling process uses the (u,v) coordinates to look up a color from the image.  
+The look-up process can be nontrivial.
+It is referred to as "filtering" and can involve looking at the colors of multiple 
+texels in the image and its <span class="word" data-term="mipmap" data-definition="One of a series of reduced-size copies of a texture image, of decreasing width and height.
+Starting from the original image, each mipmap is obtained by dividing the width and height of
+the previous image by two (unless it is already 1).  The final mipmap is a single pixel.  Mipmaps
+are used for more efficient mapping of the texture image to a surface, when the image has to be
+shrunk to fit the surface." title="Click for a definition of mipmap.">mipmaps</span>.
+(Remember that <span class="word" data-term="pixel" data-definition="A digital image is made up of rows and columns of small rectangles called pixels.
+To specify a digital image, a color is assigned to each pixel in the image." title="Click for a definition of pixel.">pixels</span> in a texture are often referred 
+to as <span class="word" data-term="texel" data-definition="A pixel in a texture image." title="Click for a definition of texel.">texels</span>.)</p>
+
+
+<p>By convention, we can take texture coordinates (0,0) to refer to the top-left
+corner of the image, with u increasing from right to left and v increasing
+from top to bottom.  This is really just a convention, but it corresponds
+to the way that data for images on the web is usually stored: The data for the top-left
+pixel is stored first, and the data is stored row-by-row, from the top of
+the image to the bottom.</p>
+
+
+<p>Note that the texture coordinate system in OpenGL uses r, s, and t as the coordinate names
+instead of u, v, and&nbsp;w. The convention in OpenGL is that the t-axis points upward,
+with texture coordinates (0,0) referring to the bottom-left corner of the image.
+With that in mind, see <a href="../c4/s3.html#gl1light.3.1">Subsection&nbsp;4.3.1</a> for a more in-depth discussion 
+of texture coordinates and how they are used.</p>
+
+
+<p>The sample program <span class="sourceref"><a href="../source/webgpu/first_texture.html">webgpu/first_texture.html</a></span> is our first 
+example of using textures in WebGPU. This simple program just draws a square
+with three different textures:</p>
+
+
+<p align="center">
+<img src="webgpu-textures.png" width="623" height="208" alt=""></p>
+
+
+<p class="noindent">Texture coordinates for the square range from (0,0) at the top left corner of the 
+square to (1,1) at the bottom right corner.  For the square on the left in the picture, the texture
+coordinates for a point on the square are used as the red and green components of the
+color for that point.  (There is no texture image.  This is a trivial example
+of a <span class="word" data-term="procedural texture" data-definition="A texture for which the value at a given set of texture
+coordinates is computed as a mathematical function of the coordinates, as opposed to an
+image texture where the value is obtained by sampling an image." title="Click for a definition of procedural texture.">procedural texture</span> (<a href="../c7/s3.html#webgl3d.3.3">Subsection&nbsp;7.3.3</a>).)
+The square on the right uses an image texture, where the "Mona Lisa" image comes from a file.
+The middle square also uses an image texture, but in this case the colors for the image
+come from an array of pixel colors that is part of the program.  The image is a tiny
+four-pixel image, with two rows of pixels and two columns.  The original texture coordinates
+on the square are multiplied by 5 before sampling the texture, so that we see 5 copies of
+the texture across and down the square.  (This is a very simple example of a 
+<span class="word" data-term="texture transformation" data-definition="A transformation that is applied to texture coordinates before
+they are used to sample data from a texture.  The effect is to translate, rotate, or scale the
+texture on the surface to which it is applied." title="Click for a definition of texture transformation.">texture transformation</span> (<a href="../c4/s3.html#gl1light.3.4">Subsection&nbsp;4.3.4</a>).)</p>
+
+
+<p>Although we will spend much of this section on this basic example, you can also
+look at <span class="sourceref"><a href="../source/webgpu/textured_objects.html">webgpu/textured_objects.html</a></span>, which applies textures
+to three-dimensional shapes, and <span class="sourceref"><a href="../source/webgpu/texture_from_canvas.html">webgpu/texture_from_canvas.html</a></span>,
+which takes the image for a texture from a <span class="word" data-term="HTML canvas" data-definition="A canvas element on a web page. The canvas appears as a rectangular area on the page.
+The JavaScript programming language can use a canvas element as a drawing surface.  
+HTML is a language for specifying the content of a web page.  JavaScript is the
+programming language for web pages.  The canvas element supports a 2D graphics API.
+In many browsers, it also supports the 3D graphics API, WebGL." title="Click for a definition of HTML canvas.">canvas</span>
+on the same page.</p>
+
+
+<hr class="break">
+
+
+<p>Sampling is done in the fragment shader.  The texture coordinates that are used for
+sampling could come from anywhere.  But most often, texture coordinates are input to
+the shader program as a vertex attribute.  Then, interpolated texture coordinates are 
+passed to the fragment shader, where they are used to sample the texture.</p>
+
+
+<p>In the sample program, the square is drawn as a triangle-strip with four vertices.  There are
+two vertex attributes, giving the coordinates and the texture coordinates for each vertex.
+The two attributes are stored interleaved in a single vertex buffer 
+(see <a href="../c9/s1.html#webgpu.1.6">Subsection&nbsp;9.1.6</a>).  The data comes from this array:</p>
+
+
+<pre>const vertexData = new Float32Array([
+   /* coords */     /* texcoords */
+    -0.8, -0.8,       0, 1,      // data for bottom left corner
+     0.8, -0.8,       1, 1,      // data for bottom right corner
+    -0.8,  0.8,       0, 0,      // data for top left corner
+     0.8,  0.8,       1, 0,      // data for top right corner
+]);</pre>
+
+
+<p class="noindent">Note that the texture coordinates for the top left corner are (0,0) and for the bottom right
+corner are (1,1).  You should check out how this corresponds to the colors on the first square
+in the illustration.  When used to map an image texture onto the square (with no texture 
+transformation), the square will show one full 
+copy of the image, in its usual orientation.  If the OpenGL convention for texture coordinates
+were used on the square, texture coordinates (0,0) would be assigned to the bottom left
+corner of the square, and the image would appear upside-down.  To account for this, images in
+OpenGL are often flipped vertically before loading the image data into a texture.
+See the end of <a href="../c6/s4.html#webgl.4.2">Subsection&nbsp;6.4.2</a>.  If you use geometric models that come with
+texture coordinates, they might well be texture coordinates designed for OpenGL, and you might 
+find that you need to flip your images to get them to apply correctly to the model.
+This is true, for example, in the 
+<span class="sourceref"><a href="../source/webgpu/textured_objects.html">textured objects</a></span> example.</p>
+
+
+</div>
+
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.5.2">9.5.2&nbsp;&nbsp;Textures and Samplers</h3>
+
+
+<p>Textures and samplers are created on the JavaScript side of a WebGPU program and are
+used on the GPU side, where they are used in the fragment shader.  This means
+that they are shader resources.  Like other resources, they are declared as global
+variables in the shader program.  Their values are passed to the
+shader in <span class="word" data-term="bind group (in WebGPU)" data-definition="A data structure that can hold resources
+such as buffers, textures, and samples, for input into a pipeline." title="Click for a definition of bind group (in WebGPU).">bind groups</span>,
+so a sampler or texture variable must be declared with
+<span class="code">@group</span> and <span class="code">@binding</span> annotations.
+As an example, the declaration of a variable, <span class="code">tex</span>, that represents a 
+2D image texture resource could look like this:</p>
+
+
+<pre>@group(0) @binding(0) var tex : texture_2d&lt;f32&gt;;</pre>
+
+
+<p class="noindent">The type name <span class="code">texture_2d&lt;f32&gt;</span> refers to a 2D texture with samples of type
+f32; that is, the color returned by sampling the texture will be of type vec4f.  
+A 1D texture with floating point samples would use type name <span class="code">texture_1d&lt;f32&gt;</span>,
+and there are similar names for 3D and cube textures. (There are 
+also integer textures with type names like <span class="code">texture_2d&lt;u32&gt;</span> and <span class="code">texture_1d&lt;i32&gt;</span>,
+but they are not used with samplers.  They are discussed later in this section.)</p>
+
+
+<p>Note that a texture variable is declared using <span class="code">var</span> with no address space.
+(Not like <span class="code">var&lt;uniform&gt;</span> for variables in the uniform address space.)
+The same is true for sampler variables.  Textures and samplers are considered to be in a
+special "handle" address space, but that name is not used in shader programs.</p>
+
+
+<p>Sampler variables are declared using type name <span class="code">sampler</span>.  (Unfortunately,
+this means that you can't use "sampler" as the name of a variable.)  For example:</p>
+
+
+<pre>@group(0) @binding(1) var samp : sampler;</pre>
+
+
+<p class="noindent">A sampler is a simple data structure that specifies certain aspects of the
+sampling process, such as the <span class="word" data-term="minification filter" data-definition="An operation that is used when applying a texture to an object,
+when the texture has to be shrunk to fit the object.  For an image texture, a minification filter
+is applied to compute the color of a pixel when that pixel covers several pixels in the image." title="Click for a definition of minification filter.">minification filter</span> and
+whether to use <span class="word" data-term="anisotropic filtering" data-definition="A technique for more accurate sampling of texture images, in the
+case where a pixel on the surface that is being textured corresponds to a non-rectangular region in the
+texture.  Anisotropic filtering is available as an optional extension in WebGL." title="Click for a definition of anisotropic filtering.">anisotropic filtering</span>.</p>
+
+
+<p>Values for texture and sampler variables are constructed on the JavaScript side.
+A shader program has no direct access to the internal structure of a texture or sampler.
+In fact, the only thing you can do with them in WGSL is pass them as parameters to functions.
+There are several built-in functions for working with textures (most of them too obscure
+to be covered here).  The main function for sampling textures is <span class="code">textureSample()</span>.
+Its parameters are a floating-point texture, a sampler, and texture coordinates.  For example,</p>
+
+
+<pre>let textureColor = textureSample ( tex, samp, texcoords );</pre>
+
+
+<p class="noindent">This function can be used for sampling 1D, 2D, 3D, and cube textures.
+For a 1D texture, the <span class="code">texcoords</span> parameter is an f32; for a 2D texture,
+it is a vec2f; and for a 3D or cube texture, it's a vec3f.  The return value is a vec4f
+representing an <span class="word" data-term="RGBA color" data-definition="An RGB color&mdash;specified by red, green, and blue component values&mdash;together
+with an alpha component.  The alpha component is most often take to specify the degree of transparency
+of the color, with a maximal alpha value giving a fully opaque color." title="Click for a definition of RGBA color.">RGBA color</span>.  The return value is always a vec4f, even
+when the texture does not actually store four color components.  For example, 
+a texture might store just one color component; when it is
+sampled using <span class="code">textureSample()</span>, the color value from the texture will be
+used as the red component of the color, the green and blue color components will
+be set to 0.0, and the alpha component will be&nbsp;1.0.</p>
+
+
+<p>You should now be able to understand the fragment shader source code from the
+sample program.  Most of the work is on the JavaScript
+side, so the shader code is quite simple:</p>
+
+
+<pre>@group(0) @binding(0) var samp : sampler;  // Sampler resource from JavaScript.
+@group(0) @binding(1) var tex : texture_2d&lt;f32&gt;;  // Image texture resource.
+
+@group(0) @binding(2) var&lt;uniform&gt; textureSelect: u32;
+    // Value is 1, 2, or 3 to tell the fragment shader which texture to use.
+
+@fragment
+fn fragmentMain(@location(0) texcoords : vec2f) -&gt; @location(0) vec4f {
+   if (textureSelect == 1) { // Trivial procedural texture.
+           // Use texcoords as red/green color components.
+      return vec4f( texcoords, 0, 1);
+   }
+   else if (textureSelect == 2) { // For the checkerboard texture.
+          // Apply texture transform: multiply texcoords by 5.
+      return textureSample( tex, samp, 5 * texcoords );
+   }
+   else { // For the Mona Lisa texture; no texture transform.
+      return textureSample( tex, samp, texcoords );
+   }
+}</pre>
+
+
+<p>Because of the limited options, textures and samplers are fairly simple to use in
+the shader program.  Most of the work is on the JavaScript side.</p>
+
+
+<hr class="break">
+
+
+<p>The purpose of a sampler in WebGPU is to set options 
+for the sampling process.  Samplers are created using the 
+JavaScript function <span class="code">device.createSampler()</span>.
+The following code creates a typical sampler for high-quality sampling of a 2D texture:</p>
+
+
+<pre>let sampler = device.createSampler({
+   addressModeU: "repeat",  // Default is "clamp-to-edge".
+   addressModeV: "repeat",  //    (The other possible value is "mirror-repeat".)
+   minFilter: "linear", 
+   magFilter: "linear",     // Default for filters is "nearest".
+   mipmapFilter: "linear",
+   maxAnisotropy: 16        // 1 is the default; 16 is the maximum.
+});</pre>
+
+
+<p class="noindent">The <span class="code">addressModeU</span> property specifies how to treat values of the u texture
+coordinate that are outside the range 0&nbsp;to&nbsp;1, <span class="code">addressModeV</span> does
+the same for the v coordinates, and for 3D textures there is also <span class="code">addressModeW</span>.
+(In OpenGL and WebGL, this was called "wrapping"; see <a href="../c4/s3.html#gl1light.3.3">Subsection&nbsp;4.3.3</a>.  The meanings
+are the same here.)</p>
+
+
+<p>Filtering accounts for the fact that an image usually has to be stretched or shrunk
+when it is applied to a surface.  The <span class="code">magFilter</span>, or <span class="word" data-term="magnification filter" data-definition="An operation that is used when applying a texture to an object,
+when the texture has to be stretched to fit the object.  For an image texture, a magnification filter
+is applied to compute the color of a pixel when that pixel covers just a fraction of a pixel in the image." title="Click for a definition of magnification filter.">magnification filter</span>,
+is used when stretching an image. The <span class="code">minFilter</span>, or <span class="word" data-term="minification filter" data-definition="An operation that is used when applying a texture to an object,
+when the texture has to be shrunk to fit the object.  For an image texture, a minification filter
+is applied to compute the color of a pixel when that pixel covers several pixels in the image." title="Click for a definition of minification filter.">minification filter</span>,
+is used when shrinking it.  Mipmaps are reduced-size copies of the image that can make filtering
+more efficient.  Textures don't automatically come with mipmaps; the <span class="code">mipmapFilter</span>
+is ignored if no mipmaps are available.  This is all similar to OpenGL; see
+<a href="../c4/s3.html#gl1light.3.2">Subsection&nbsp;4.3.2</a>.</p>
+
+
+<p>The <span class="code">maxAnisotropy</span> property controls <span class="word" data-term="anisotropic filtering" data-definition="A technique for more accurate sampling of texture images, in the
+case where a pixel on the surface that is being textured corresponds to a non-rectangular region in the
+texture.  Anisotropic filtering is available as an optional extension in WebGL." title="Click for a definition of anisotropic filtering.">anisotropic filtering</span>,
+which is explained in <a href="../c7/s5.html#webgl3d.5.1">Subsection&nbsp;7.5.1</a>. The default value, 1, says that anisotropic
+filtering is not used.  Higher values give better quality for textures that are viewed edge-on.
+The maximum value depends on the device, but it's OK to specify a value larger than
+the maximum; in that case, the maximum value will be used.</p>
+
+
+<hr class="break">
+
+
+<p>Textures are created on the JavaScript side using <span class="code">device.createTexture()</span>.
+But it is important to understand that this function only allocates the memory on the GPU
+that will hold the texture data.  The actual data will have to be stored later.
+This is similar to creating a GPU buffer.
+Here is how the checkerboard texture is created in the sample program:</p>
+
+
+<pre>let checkerboardTexture = device.createTexture({
+   size: [2,2],  // Two pixels wide by two pixels high.
+   format: "rgba8unorm",  // One 8-bit unsigned int for each color component.
+   usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST
+});</pre>
+
+
+<p class="noindent">This is a 2D texture, which is the default.  The <span class="code">size</span> property
+specifies the width and height of the texture, either as an array or
+as an object, <span class="code">{width:&nbsp;2, height:&nbsp;2}</span>.  The texture
+<span class="code">format</span> specified here, "rgba8unorm", is a common one for images: four
+RGBA color components for each pixel, with 8 bits for each color component.
+The "unorm" in the name means that the 8 bits represent unsigned integers in the
+range 0 to 255 which are scaled to the range 0.0 to 1.0 to give a floating-point
+color value.  (The scaling is referred to as "normalizing" the values&mdash;yet
+another meaning of the overworked term "normal.")  In the <span class="code">usage</span>
+property, <span class="code">TEXTURE_BINDING</span>, means that the texture can be
+sampled in a shader program, and <span class="code">COPY_DST</span> means that data can
+be copied into the texture from elsewhere.  It is also possible to fill a
+texture with data by attaching the texture to a pipeline as a render target;
+that requires the usage <span class="code">GPUTextureUsage.RENDER_ATTACHMENT</span>.
+The other possible usage is <span class="code">COPY_SRC</span>, which allows the
+texture to be used as a source of copied data.</p>
+
+
+<p>The <span class="code">size</span>, <span class="code">format</span>, and <span class="code">usage</span> properties
+are required.  There are a few optional properties.  The <span class="code">mipLevelCount</span> property
+specifies the number of mipmaps that you will provide for the texture.  The
+default value, 1, means that only the main image will be provided.  The <span class="code">dimension</span>
+property can be "1d", "2d", or "3d", with a default of "2d".  The <span class="code">sampleCount</span>
+property has a default value of 1 and can be set to 4 to create a multisampled texture.</p>
+
+
+<p>We have already used <span class="code">device.createTexture()</span> to create the special
+purpose textures that are used for multisampling and for the depth test.  See,
+for example, <span class="sourceref"><a href="../source/webgpu/depth_test.html">webgpu/depth_test.html</a></span>.  Those textures were used
+as render attachments, and the data for the textures were created by drawing an image.</p>
+
+
+<p>Data for image textures often comes from the JavaScript side of the program. 
+When the data comes from an <span class="classname">ArrayBuffer</span> or
+typed array, the data can be copied to the texture using the function
+<span class="code">device.queue.writeTexture()</span>.  In the sample program, the data for
+the tiny checkerboard texture comes from a <span class="classname">Uint8Array</span>
+and is copied to the texture with</p>
+
+
+<pre>device.queue.writeTexture(
+    { texture: checkerboardTexture }, // Texture to which data will be written.
+    textureData,         // A Uint8Array containing the data to be written.
+    { bytesPerRow: 8 },  // How many bytes for each row of texels.
+    [2,2]   // Size of the texture (width and height).
+);</pre>
+
+
+<p class="noindent">The first parameter to <span class="code">writeTexture()</span> is an object.
+In addition to the <span class="code">texture</span>
+property, the object can have a <span class="code">mipLevel</span> property to copy the data into one
+of the texture's mipmaps, and an <span class="code">origin</span> property to copy the
+data into a rectangular subregion within the texture.  (The <span class="code">origin</span>
+can be given as an array of integers; together with the size parameter to the
+function, it determines the rectangular region.)
+The third parameter is also an object.  The
+<span class="code">bytesPerRow</span> property is the distance, in bytes, from the start
+of one row of texels to the start of the next row of texels.  There can be
+padding between rows, which is sometimes necessary to satisfy
+alignment requirements.  There can also be an <span class="code">offset</span> property,
+giving the starting point, in bytes, of the data within the data source.</p>
+
+
+<p>All of this might seem overly complicated, but textures and images are
+complex, and the functions that work with them can have many options.</p>
+
+
+<hr class="break">
+
+
+<p>Often, the data source for a texture is an image file.  WebGPU cannot take
+the data directly from an image file; you have to fetch the file and
+extract the data into an <span class="classname">ImageBitmap</span> object.
+The fetch API, which uses <span class="word" data-term="promise (in JavaScript)" data-definition="In JavaScript programming, a promise represents a result
+that might be available immediately or at some time in the future.  A programmer can provide
+a function to be called if and when the promise is fulfilled (that is when the result becomes
+available).  A programmer can also provide a function to be called when the promise is
+rejected (for example, if some error occurs).  Promises are asynchronous since the function
+that handles success or failure will be called at some unpredictable time." title="Click for a definition of promise (in JavaScript).">promises</span>, 
+is discussed in <a href="../a1/s4.html">Section&nbsp;A.4</a>.  Here, for example, is the
+function from <span class="sourceref"><a href="../source/webgpu/textured_objects.html">textured_objects.html</a></span> 
+that is used to load textures from image files:</p>
+
+
+<pre>async function loadTexture(URL) {
+       // Standard method using the fetch API to get a texture from a ULR.
+    let response = await fetch(URL);
+    let blob = await response.blob();  // Get image data as a "blob".
+    let imageBitmap = await createImageBitmap(blob);
+    let texture = device.createTexture({
+        size: [imageBitmap.width, imageBitmap.height],
+        format: 'rgba8unorm',
+        usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST |
+                    GPUTextureUsage.RENDER_ATTACHMENT
+    });
+    device.queue.copyExternalImageToTexture(
+       { source: imageBitmap, flipY: true },
+       { texture: texture },
+       [imageBitmap.width, imageBitmap.height]
+    );
+    return texture;
+}</pre>
+
+
+<p class="noindent">The texture's <span class="code">usage</span> property is required by <span class="code">copyExternalmageToTexture()</span>.
+The <span class="code">flipY</span> property is used because the program uses OpenGL-style texture coordinates
+on the objects that it displays.  The <span class="code">source</span> property could also be a canvas,
+as is done in <span class="sourceref"><a href="../source/webgpu/texture_from_canvas.html">texture_from_canvas.html</a></span>.
+This <span class="code">loadTexture()</span> function must be called
+from an <span class="code">async</span> function using <span class="code">await</span>, and it is a good idea to
+catch the errors that might occur:</p>
+
+
+<pre>let texture;
+try {
+   texture = await loadTexture(URL);
+}
+catch (e) {
+   ...</pre>
+    
+
+<p class="noindent">I will not discuss this in any more detail.  See the sample programs for more examples.</p>
+
+
+<hr class="break">
+
+
+<p>Samplers and textures that are created on the JavaScript side must be passed to
+a shader program as bind group resources.  In the bind group, the resource for a
+sampler is the sampler itself, while the resource for a texture is a view of the
+texture.  Here for example is the bind group for the checkerboard texture in
+<span class="sourceref"><a href="../source/webgpu/first_texture.html">first_texture.html</a></span>:</p>
+
+
+<pre>checkerboardBindGroup = device.createBindGroup({
+   layout: bindGroupLayout,
+   entries: [
+      {    // The sampler. Note that the resource is the sampler itself.
+         binding: 0,
+         resource: checkerboardSampler
+      },
+      {    // The texture.  Note that the resource is a view of the texture.
+         binding: 1,
+         resource: checkerboardTexture.createView()
+      },
+      {    // The resource is the buffer containing the uniform variable.
+         binding: 2,
+         resource: {buffer: uniformBuffer, offset: 0, size: 4}
+      }
+   ]
+});</pre>
+
+
+
+</div>
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.5.3">9.5.3&nbsp;&nbsp;Mipmaps</h3>
+
+
+<p>Mipmaps are important for quality and efficiency when a texture has
+to be "minified" to fit a surface.  When working with mipmaps, mip level&nbsp;0
+is the original image, mip level&nbsp;1 is a half-size copy, mip level&nbsp;2
+is a quarter-size copy, and so on.  To be exact, if <span class="code">width</span> is
+the width of the original image, then the width of mip level&nbsp;<span class="code">i</span> is
+<span class="code">max(1,&nbsp;width&nbsp;&gt;&gt;&nbsp;i)</span>, and similarly for
+the <span class="code">height</span>.  For a full set of mipmaps, the process continues
+until all dimensions have been reduced to&nbsp;1.</p>
+
+
+<p>WebGPU has no method for automatically generating mipmaps, but it is
+not hard to write a WebGPU program to create them on the GPU.  The
+sample program <span class="sourceref"><a href="../source/webgpu/making_mipmaps.html">webgpu/making_mipmaps.html</a></span> shows how
+to do this.  It defines a function that can be used to create a texture
+with a full set of mipmaps from an <span class="classname">ImageBitmap</span>.
+The program also serves as an example of rendering to
+a texture and using texture views.</p>
+
+
+<p>When creating a texture, the number of mipmaps must be specified.
+It is easy to count the number of mipmaps needed for a full set,
+given the image bitmap that will be used for level&nbsp;0:</p>
+
+
+<pre>let mipmapCount = 1;
+let size = Math.max(imageBitmap.width,imageBitmap.height);
+while (size &gt; 1) {
+    mipmapCount++;
+    size = size &gt;&gt; 1;
+}
+let texture = device.createTexture({
+    size: [imageBitmap.width, imageBitmap.height],
+    mipLevelCount: mipmapCount, // Number of mipmaps.
+    format: 'rgba8unorm',
+    usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST |
+                GPUTextureUsage.RENDER_ATTACHMENT
+});</pre>
+
+
+<p class="noindent">The function <span class="code">copyExternalImageToTexture()</span> can be used to copy the
+bitmap to level&nbsp;0 in the texture in the usual way.  Then each of the remaining
+mipmap images can be generated in turn by making a half-size copy of the previous
+level image.  The idea is to attach the mipmap as the render target of a pipeline and
+use the previous mipmap level as a texture resource for the pipeline.  Then draw
+a square that just covers the output, with texture coordinates that map the 
+entire resource image onto the output.</p>
+
+
+<p>Recall that texture resources and render targets are actually views of
+textures.  We have been using <span class="code">texture.createView()</span>, with no
+parameter, to create texture views.  The result is a view that includes
+all the mipmaps that the texture has.  But it is possible to create a
+view that contains just a subset of available mipmaps by passing
+a parameter to <span class="code">createView()</span> that specifies the first
+mipmap and the number of mipmaps to include in the view.  To create
+a view the contains only mip level&nbsp;<span class="code">i</span>:</p>
+
+
+<pre>textureView = texture.createView({
+    baseMipLevel: i,  // First mip level included in this view.
+    mipLevelCount: 1  // Only include one mip level.
+});</pre>
+
+
+<p class="noindent">This will let us use a single mipmap from a texture as a texture
+resource or render target.  Here, for example, is the loop from the
+sample program that creates the mipmap images:</p>
+
+
+<pre>for (let mipmap = 1; mipmap &lt; mipmapCount; mipmap++) {
+    let inputView = texture.createView(  // Used as a bind group resource.
+                             { baseMipLevel: mipmap - 1, mipLevelCount: 1 });
+    let outputView = texture.createView( // Used as a render target.
+                             { baseMipLevel: mipmap, mipLevelCount: 1 });
+    let renderPassDescriptor = {
+       colorAttachments: [{
+           loadOp: "load",
+           storeOp: "store", 
+           view: outputView  // Render to mipmap.
+       }]
+    };
+    let bindGroup = webgpuDevice.createBindGroup({
+       layout: pipeline.getBindGroupLayout(0),
+       entries: [ { binding: 0, resource: sampler },
+                  { binding: 1, resource: inputView } ]
+    });
+    let passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+    passEncoder.setPipeline(pipeline);
+    passEncoder.setVertexBuffer(0,vertexBuffer); // Coords and texcoords.
+    passEncoder.setBindGroup(0,bindGroup); // Includes previous mipmap level.
+    passEncoder.draw(4); // Draw square as a triangle-strip.
+    passEncoder.end();
+}</pre>
+
+
+</div>
+
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.5.4">9.5.4&nbsp;&nbsp;Cubemap Textures</h3>
+
+
+<p>A cubemap texture consists of six images, one for each side of a cube.
+The images must be square and must all be the same size.
+A cubemap texture can be used, for example, to make a <span class="word" data-term="skybox" data-definition="A large cube that surrounds a scene and is textured with images that
+form a background for that scene, in all directions." title="Click for a definition of skybox.">skybox</span> 
+(<a href="../c5/s3.html#threejs.3.4">Subsection&nbsp;5.3.4</a>) and to do 
+<span class="word" data-term="environment mapping" data-definition="A way of simulating mirror-like reflection from the surface
+of an object.  The environment that is to be reflected from the surface 
+is represented as a cubemap texture.  To determine what point in the texture
+is visible at a given point on the object,
+a ray from the viewpoint is reflected from the surface point, and the reflected ray
+is intersected with the texture cube.  Environment mapping is also called reflection mapping." title="Click for a definition of environment mapping.">environment mapping</span> (also called reflection mapping,
+<a href="../c7/s3.html#webgl3d.3.5">Subsection&nbsp;7.3.5</a>).  The sample program
+<span class="sourceref"><a href="../source/webgpu/cubemap_texture.html">webgpu/cubemap_texture.html</a></span> shows how to 
+create a cubemap texture in WebGPU and how to use it for a
+skybox and for environment mapping.  It is functionally identical to the
+WebGL example <span class="sourceref"><a href="../source/webgl/skybox-and-env-map.html">webgl/skybox-and-env-map.html</a></span>.</p>
+
+
+<p>In addition to "2d" image textures, WebGPU has "2d-array" textures.
+A 2d-array texture is just that&mdash;an array of 2d images.  The elements 
+of the array are called "layers".  I do not
+cover array textures in this textbook, but you need to know a little about
+them since, for some purposes, a cubemap texture is treated as
+an array with six layers.  The images at indices 0 through 5 are the
++X, -X, +Y, -Y, +Z, and -Z sides of the cube, in that order.
+In particular, a cubemap texture is treated as an array when 
+creating the texture and loading the images for the six sides.  Here is 
+some (edited) code from the sample program for loading the texture:</p>
+
+
+<pre>let urls = [  // Links to the six images for the cube.
+   "cubemap-textures/park/posx.jpg", "cubemap-textures/park/negx.jpg", 
+   "cubemap-textures/park/posy.jpg", "cubemap-textures/park/negy.jpg", 
+   "cubemap-textures/park/posz.jpg", "cubemap-textures/park/negz.jpg"
+];
+let texture; 
+for (let i = 0; i &lt; 6; i++) {
+    let response = await fetch( urls[i] ); // Get image number i.
+    let blob = await response.blob(); 
+    let imageBitmap = await createImageBitmap(blob);
+    if (i == 0) { // (We need to know the image size to create the texture.)
+        texture = device.createTexture({ 
+            size: [imageBitmap.width, imageBitmap.height, 6],
+                // (The 6 at the end means that there are 6 images.)
+            dimension: "2d",  // (This is the default texture dimension.)
+            format: 'rgba8unorm',
+            usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST |
+                        GPUTextureUsage.RENDER_ATTACHMENT
+        });
+    }
+    device.queue.copyExternalImageToTexture(
+       { source: imageBitmap },
+       { texture: texture,  origin: [0, 0, i] },
+            // The i at the end puts the image into side number i of the cube.
+       [imageBitmap.width, imageBitmap.height]
+    );
+}</pre>
+
+
+<p class="noindent">For a texture with dimension "2d", the third element in the <span class="code">size</span>
+property makes the texture into an array texture.  (For a "3d" texture, the third
+element would be the size in the z direction.)  Similarly, when copying an
+image into the texture, the third element of the <span class="code">origin</span> property
+specifies the array layer into which the image is to be copied.</p>
+
+
+<p>(When I first wrote the program, using the above code, the environment mapping
+looked really bad, compared to the WebGL version.  This was most apparent on sharply
+curved surfaces such as the handle of the teapot.  Eventually, I realized that the
+difference was that the WebGL version uses mipmaps.  So, I added code to the WebGPU
+version to produce mipmaps for the cubemap texture.  I also added an option to
+turn the use of mipmaps on and off, so that you can see the difference.)</p>
+
+
+<hr class="break">
+
+
+<p>In a WGSL shader program, cubemap textures are used similarly to 2D textures.
+The data type for a cubemap texture is <span class="code">texture_cube&lt;f32&gt;</span>.
+For sampling the texture, the same <span class="code">textureSample()</span> function is
+used as for 2D textures, but the third parameter, which gives the texture
+coordinates, is a vec3f.  The sample is obtained by casting a ray from the
+origin in the direction of the vec3f, and seeing where it intersects the cube.
+For a skybox, which basically shows the view of the box from the inside,
+the texture coordinates are just the object coordinates of a point on the box.
+So, the fragment shader for drawing the skybox background is simply</p>
+
+
+<pre>@group(1) @binding(0) var samp: sampler;
+@group(1) @binding(1) var cubeTex : texture_cube&lt;f32&gt;;
+@fragment fn fmain(@location(0) objCoords : vec3f) -&gt; @location(0) vec4f {
+     return textureSample(cubeTex, samp, objCoords);
+}</pre>
+
+
+<p class="noindent">For environment mapping, the idea is to cast a ray from the viewer
+to a point on the reflective object, and use the reflection of that
+ray from the surface as the texture coordinate vector: The point where
+the reflected ray hits the skybox is the point that will be seen
+by the user on the reflective object.  Since the skybox in the sample program
+can be rotated, the direction of the ray has to be adjusted to take that
+rotation into account.  See <a href="../c7/s3.html#webgl3d.3.5">Subsection&nbsp;7.3.5</a> for a full discussion of
+the math.  Here is the fragment shader for drawing the reflected object:</p>
+
+
+<pre>@group(1) @binding(0) var samp: sampler;
+@group(1) @binding(1) var cubeTex : texture_cube&lt;f32&gt;;
+@group(1) @binding(2) var&lt;uniform&gt; normalMatrix : mat3x3f;
+@group(1) @binding(3) var&lt;uniform&gt; inverseViewTransform : mat3x3f;
+@fragment fn fmain(
+            @location(0) eyeCoords: vec3f, // Direction from viewer to surface.
+            @location(1) normal: vec3f // Untransformed normal to surface.
+       ) -&gt; @location(0) vec4f {
+     let N = normalize(normalMatrix * normal); // Normal vector to the surface.
+     let R = reflect( eyeCoords, N );  // Reflected direction (towards skybox).
+     let T = inverseViewTransform * R; 
+           // Multiplying by inverse of the view transform accounts
+           //    for the rotation of the skybox.
+     return textureSample(cubeTex, samp, T); // Use reflected ray to sample.
+}</pre>
+
+
+<hr class="break">
+
+
+<p>On the JavaScript side, again, cubemap textures are used similarly to 2D textures.
+The samplers that are used for cubemap textures are the same as those used for 2D textures.
+And a view of the cubemap texture is passed to the shader program
+as a bind group resource.  One difference is that when creating a view, you need to specify
+that you want to view the texture as a cube texture:</p>
+
+
+<pre>cubeTexture.createView({dimension: "cube"})</pre>
+
+
+<p class="noindent">By default, it would be viewed as a 2d array texture.  When creating
+mipmaps for the texture, I needed views of the texture to represent a
+single mipmap level of a single side of the cube.  For example,</p>
+
+
+<pre>let outputView = cubeTexture.createView({
+                    dimension: "2d",
+                    baseMipLevel: mipmap, mipLevelCount: 1,
+                    baseArrayLayer: side, arrayLayerCount: 1
+                  });</pre>
+                  
+
+<p class="noindent">where <span class="code">mipmap</span> is the desired mipmap level and <span class="code">side</span>
+is the array index for the desired side of the cube.  The dimension must be explicitly 
+specified as "2d".  (All this might help you understand the difference between a
+texture and a view of a texture.)</p>
+
+
+</div>
+
+
+
+<div class="subsection">
+<hr class="break">
+<h3 class="subsection_title" id="webgpu.5.5">9.5.5&nbsp;&nbsp;Texture Formats</h3>
+
+
+<p>The format of a texture specifies what kind of data is stored for each
+texel.  The format specifies the number of color channels, the type of data,
+and in some cases how the data is interpreted.  In the common 2D image format
+"rgba8unorm", there are four color channels ("r", "g", "b", and&nbsp;"a").  The data for
+a texel consists of 8 bits per color channel.  And the value for a color
+channel is an unsigned integer ("u") in the range 0 to 255, which is divided
+by 255 to give a float value in the range 0.0 to 1.0 ("norm").  The format
+"bgra8unorm" is similar, but the order of the "r", "g", and "b" values is
+reversed.  (One of these two formats, depending on platform,
+is the format for an HTML canvas; the function 
+<span class="code">navigator.gpu.getPreferredCanvasFormat()</span> returns the correct one for your
+platform.  However, using the wrong format will not stop your program from working,
+since WebGPU does some format conversions automatically when reading and writing
+textures.)</p>
+
+
+<p>WebGPU supports a large number of texture formats.  There are formats with one
+color channel ("r"), two color channels ("rg"), and four color channels ("rgba").
+The number of bits per color channel can be 8, 16, or 32.  The data type can be
+float, unsigned integer, or signed integer.  Some of the integer formats are
+normalized, but most are not.  (There are also compressed texture formats, which
+are not covered in this textbook.)</p>
+
+
+<p>For example, the formats "r8uint", "r16uint", and "r32uint" are unsigned integer
+formats with one color channel and storing one 8-, 16-, or 32-bit unsigned integer per 
+texel.  For two 16-bit signed integers per texel, the format would be "rg16sint".
+The format "rgba32float" uses four 32-bit floating-point numbers per texel.</p>
+
+
+<p>All textures can be passed into shader programs as resources in bind groups,
+but only floating-point textures can be sampled using <span class="code">textureSample()</span>.
+(This includes normalized integer formats.)  However, the standard WGSL
+function <span class="code">textureLoad()</span> can be used to read texel data
+from a texture, and it works both for integer and for floating-point textures.
+This function treats the texture like an array: Instead of using texture
+coordinates to sample the texture, you use integer texel coordinates to
+access the value at a specified texel.  For example, to read from
+the texel in row 7, column 15 of a <span class="code">texture_2d&lt;u32&gt;</span>, 
+<span class="code">tex</span>, you can use</p>
+
+
+<pre>let texelValue : vec4u = textureLoad( tex, vec2u(7,15), 0 );</pre>
+
+
+<p class="noindent">The third parameter is the mipmap level, which is required but will
+usually be zero.</p>
+
+
+<p>The return value from <span class="code">textureLoad()</span> is always a 4-component
+vector, even when the texture has only one or two color channels.  The missing
+color channels are filled in with 0 for the "g" or "b" channel, and 1 for the "a"
+channel.  (Note that the term "color" is used for integer textures, even though
+the values in the texture probably don't represent colors.  Floating-point
+textures can also store data other than colors.)</p>
+
+
+<p>It is also possible for a shader program to write texel data to a texture,
+using the function <span class="code">textureStore()</span>.  However, the texture has to
+be passed into the shader as what is called a "storage texture," and this
+only works for certain texture formats. (There are lots of rules about what
+can be done with various texture formats. The rules are summarized in a
+table of <a href="https://www.w3.org/TR/webgpu/#texture-format-caps">Texture Format Capabilities</a>
+in Section 26.1 of the WebGPU specification.)</p>
+
+
+<p>In a shader, a storage texture has a type such as
+<span class="code">texture_storage_2d&lt;r32uint,write&gt;</span>.  The first type
+parameter, <span class="code">r32uint</span>, is the texture format, and the second,
+<span class="code">write</span>, specifies the access mode. (Currently, <span class="code">write</span>
+is the only possibility.)  The texture is passed into the shader as
+a bind group resource, with resource type <span class="code">storageTexture</span>,
+rather than <span class="code">texture</span>.  Here, for example, is a bind group layout for
+a shader program that uses two <span class="code">r32uint</span> textures, one
+for reading with <span class="code">textureLoad()</span> and one for
+writing with <span class="code">textureStore()</span>:</p>
+
+
+<pre>let bindGroupLayout = device.createBindGroupLayout({
+   entries: [
+      {    // for a texture_2d&lt;u32&gt; variable in the fragment shader
+         binding: 0,
+         visibility: GPUShaderStage.FRAGMENT,
+         texture: {
+            sampleType: "uint"  // Texel values are unsigned integers.
+              // (Yes, it's called sampleType even though you can't sample it!)
+         }
+      },
+      {    // for a texture_storage_2d&lt;r32uint,write&gt; in the fragment shader
+         binding: 1,
+         visibility: GPUShaderStage.FRAGMENT,
+         storageTexture: {
+            format: "r32uint",
+            access: "write-only",  // This is the only possible value.
+            viewDimension: "2d"    // This is the default.
+         }
+      }
+   ]
+});</pre>
+
+
+<p class="noindent">Note that "storage texture" just means a texture that has been passed to
+the shader as a bind group resource of type <span class="code">textureStorage</span>.
+The same texture could be used as a regular texture or as a storage texture,
+or both at different times.</p>
+
+
+<p>The <span class="code">textureStore()</span> function takes three parameters: the
+texture, the texel coordinates of the texel whose value is to be
+set, and the value.  The value is always a 4-component vector, even
+if the texture has fewer than four color channels.  The missing
+channels should be specified as 0 for the "g" or "b" channel and 
+as 1 for the "a" channel.  For example to set the single
+integer value at row 7, column 15 in a 2D r32uint storage
+texture to 17, you could use</p>
+
+
+<pre>textureStore( tex, vec2u(7,15), vec4u(17,0,0,1) );</pre>
+
+
+<hr class="break">
+
+
+<p>The sample program <span class="sourceref"><a href="../source/webgpu/life_1.html">webgpu/life_1.html</a></span> implements
+John Conway's well-known Game of Life (see <a href="../c6/s4.html#webgl.4.5">Subsection&nbsp;6.4.5</a>).
+The game board is a 2D array of cells, where each cell can be alive or dead.
+In the program, the state of the board is stored as a 2D texture of type
+<span class="code">r32uint</span>, with 0 representing a dead cell and 1 representing
+a living cell.  The game board is displayed on a canvas, and each pixel
+in the canvas is a cell.  So, the size of the texture is the same as
+the size of the canvas.</p>
+
+
+<p>The action of the game involves computing a new "generation" of cells
+from the current generation.  The program actually uses two textures:
+a regular texture containing the current generation of the board and
+a storage texture that is used to store the next generation as it
+is computed.  The program does all its work in its <span class="code">draw()</span> function.
+That function draws a square that completely covers the canvas, so that the
+fragment shader is called once for each pixel on the canvas.
+The fragment shader uses <span class="code">textureLoad()</span> to read
+the current state of the cell that it is processing.  If the
+cell is alive, it returns white as the color of the fragment;
+if the cell is dead, it returns black.  At the same time, the
+fragment shader computes the state of the cell in the next
+generation, and it writes that state to the storage texture
+using <span class="code">textureStore()</span>.  Between draws, the roles
+of the two textures are swapped, so that what was the next
+generation becomes the current generation.</p>
+
+
+<p>Here is the fragment shader, leaving out the part that computes
+the new state of the cell.  It uses another new function,
+<span class="code">textureDimensions()</span>, which gets the size of
+a texture in each of its dimensions.  That value is
+required for the new state computation.</p>
+
+
+<pre>@group(0) @binding(0) var inputBoard: texture_2d&lt;u32&gt;;
+@group(0) @binding(1) var outputBoard: texture_storage_2d&lt;r32uint,write&gt;;
+
+@fragment
+fn fragmentMain(@builtin(position) position : vec4f) -&gt; @location(0) vec4f {
+   let boardSize = textureDimensions(inputBoard);
+   let cell = vec2u(position.xy); // Integer pixel coords of this fragment.
+   let alive = textureLoad( inputBoard, cell, 0 ).r;  // Get current state.
+                  // (Note that the state is in the r color component.)
+      .
+      . // (Compute newAlive, the state of the cell in the next generation,)
+      .
+   textureStore( outputBoard, cell, vec4u(newAlive,0,0,1) ); // Store new state.
+   let c = f32(alive);
+   return vec4f(c,c,c,1); // White if cell is now alive, black if it is dead.
+}</pre>
+
+
+<p class="noindent">The program creates two textures, <span class="code">texture1</span> and
+<span class="code">texture2</span>, and loads <span class="code">texture1</span> with the initial
+state of the board.  Here is the bind group that assigns <span class="code">texture1</span>
+to <span class="code">inputBoard</span> in the shader and <span class="code">texture2</span> to
+<span class="code">outputBoard</span>.  It uses the sample bind group layout shown above.</p>
+
+
+<pre>bindGroupA = device.createBindGroup({
+      // A bind group using texture1 for input and texture2 for output.
+   layout: bindGroupLayout,
+   entries: [
+      { 
+         binding: 0,
+         resource: texture1.createView()
+      },
+      {
+         binding: 1,
+         resource: texture2.createView()
+      }
+   ]
+});</pre>
+
+
+<p class="noindent">A second bind group, <span class="code">bindGroupB</span>, reverses the roles of the
+textures.  The program uses <span class="code">bindGroupA</span> the first time <span class="code">draw()</span>
+is called, <span class="code">bindGroupB</span> the second time, <span class="code">bindGroupA</span> the
+third time, and so on.</p>
+
+
+<hr class="break">
+
+
+<p>A second version of the Life program, <span class="sourceref"><a href="../source/webgpu/life_2.html">webgpu/life_2.html</a></span>, uses a
+different approach.  It uses two textures with format "r8unorm" to represent the current
+state and the next state of the board.  A texture with that format can be used for
+sampling in a shader program, so values can be read from the input board using
+<span class="code">textureSample()</span> instead of <span class="code">textureLoad()</span>.
+And a r8unorm texture can be an output target for a render pipeline. 
+The fragment shader can then have two outputs, one going to the
+canvas and one going to the r8unorm texture.</p>
+
+
+<p>To have a second output from the fragment shader, the pipeline descriptor
+must specify two targets:</p>
+
+
+<pre>let pipelineDescriptor = {
+        ...
+    fragment: {
+       module: shader,
+       entryPoint: "fragmentMain",
+       targets: [
+            { format: navigator.gpu.getPreferredCanvasFormat() },
+            <span class="newcode">{ format: "r8unorm"}</span>
+       ]
+    },
+       ...</pre>
+       
+
+<p class="noindent">Then the render pass descriptor uses a view of the output texture as
+the second color attachment:</p>
+
+
+<pre>let renderPassDescriptor = {
+   colorAttachments: [
+      {
+         clearValue: { r: 0, g: 0, b: 0, a: 1 }, 
+         loadOp: "clear",
+         storeOp: "store", 
+         view: context.getCurrentTexture().createView()
+      },
+      <span class="newcode">{  // The second color attachment is a r8unorm texture.
+         loadOp: "load", // (OK here since contents are entirely replaced.)
+         storeOp: "store",
+         view: outputTexture.createView()
+      }</span>
+   ]
+};</pre>
+
+
+<p class="noindent">The output type for the fragment shader is a <span class="code">struct</span>
+that contains the two output values.
+For full details, you should, of course, look at the source code for the
+two sample Life programs.</p>
+
+
+<hr class="break">
+
+
+<p>Textures are complex.  I have only covered parts of the API.  But I have
+tried to give you an overview that includes most of the information that
+you are likely to need.</p>
+
+
+</div>
+
+
+
+
+
+</div>
+<hr>
+<div align="right">
+<small>
+        [  <a href="s4.html">Previous Section</a> |
+           <a href="s6.html">Next Section</a> |
+           <a href="index.html">Chapter Index</a> | 
+	    <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+</div>
+</body>
+<script src="../resource/glossary.js"></script>
+</html>

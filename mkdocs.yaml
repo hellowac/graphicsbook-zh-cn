@@ -1,0 +1,127 @@
+site_name: 计算机图形学概论
+repo_name: graphicsbook
+repo_url: https://github.com/hellowac/graphicsbook-zh-cn
+site_description: 计算机图形学概论(graphicsbook)
+site_url: https://hellowac.github.io/graphicsbook-zh-cn/
+
+# 配置主题，在mkdocs.yml文件下
+theme:
+        name: material
+        custom_dir: overrides
+        language: zh
+        palette: # 文档颜色, https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/
+                scheme: default # 配色方案
+                primary: default # 主色
+                accent: red # 强调色
+        icon:
+                annotation: material/arrow-right-circle
+        features:
+                - content.code.copy # 代码支持拷贝
+                - content.tabs.link # 内容tabs支持  https://squidfunk.github.io/mkdocs-material/reference/content-tabs/
+                - navigation.tabs # 顶部导航
+                - navigation.tabs.sticky # 顶部导航粘连
+                - navigation.indexes # 导航index页面支持
+                # - navigation.sections # 全部展开(非折叠状态)
+                # - navigation.expand # 子目录展开
+                - navigation.top # 返回顶部按钮
+                - toc.follow # 页面目录支持
+                - content.tooltips
+
+# 插件
+plugins:
+        - glightbox
+        - search:
+                  separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+        - git-revision-date-localized: # 支持文档创建时间显示， https://github.com/timvink/mkdocs-git-revision-date-localized-plugin
+                  locale: zh
+                  enable_creation_date: true
+                  type: date
+
+# markdown解析扩展
+markdown_extensions:
+        - abbr
+        - tables
+        - admonition
+        - attr_list
+        - footnotes # 引用支持            https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown/#footnotes
+        - def_list # 键-值组合的list     https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown/#footnotes
+        - toc: # 页面目录支持         https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown/#table-of-contents
+                  permalink: true # 标题锚点支持
+                  slugify:
+                          !!python/object/apply:pymdownx.slugs.slugify # 区分大小写的显示标题
+                          kwds:
+                                  case: lower # 全小写支持
+        - md_in_html # https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown/#footnotes
+        # pymdownx 扩展，参考：https://facelessuser.github.io/pymdown-extensions/
+        - pymdownx.inlinehilite # 单行高亮, 参考: https://squidfunk.github.io/mkdocs-material/reference/code-blocks/#highlighting-specific-lines
+        - pymdownx.critic # 支持部分字段格式化，参考：https://squidfunk.github.io/mkdocs-material/reference/formatting/
+        - pymdownx.highlight # 支持代码块高亮显示
+        - pymdownx.snippets:
+                  auto_append:
+                          - includes/glossary.md
+        - pymdownx.details
+        - pymdownx.superfences: # 注释 :
+                  # preserve_tabs: true
+                  custom_fences:
+                          - name: mermaid
+                            class: mermaid
+                            format: !!python/name:pymdownx.superfences.fence_code_format
+        - pymdownx.tabbed: # 支持内容tab, https://squidfunk.github.io/mkdocs-material/reference/content-tabs/
+                  alternate_style: true
+        - pymdownx.caret # 下划线, 上标 : https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown-extensions/?h=caret#caret-mark-tilde
+          #               https://facelessuser.github.io/pymdown-extensions/extensions/caret/
+        - pymdownx.mark # 标记 :https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown-extensions/?h=caret#caret-mark-tilde
+          #      https://facelessuser.github.io/pymdown-extensions/extensions/mark/
+        - pymdownx.tilde # 删除线, 下标  参考: https://squidfunk.github.io/mkdocs-material/setup/extensions/python-markdown-extensions/?h=caret#caret-mark-tilde
+          #                   https://facelessuser.github.io/pymdown-extensions/extensions/tilde/
+        - pymdownx.arithmatex:
+                  generic: true
+
+extra:
+        alternate:
+                - name: English
+                  link: /graphicsbook-zh-cn/en/
+                  lang: en
+                - name: 中文
+                  link: /graphicsbook-zh-cn/cn/
+                  lang: cn
+
+extra_css:
+        - stylesheets/extra.css
+
+# 扩展支持， 支持数学符号
+extra_javascript:
+        - javascripts/mathjax.js
+        - https://polyfill.io/v3/polyfill.min.js?features=es6
+        - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+        - https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js
+        # - https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs
+
+#
+watch:
+        - includes
+
+# 页面导航
+nav:
+        - 首页: cn/index.md
+        - 前言: cn/preface.md
+        - 1简介:
+                  - 第一章：简介: cn/c1/index.md
+                  - 第 1 节：绘画与绘图: cn/c1/s1.md
+                  - 第 2 节：三维(3D)图形的要素: cn/c1/s2.md
+                  - 第 3 节：硬件与软件: cn/c1/s3.md
+        - 2二维图形: cn/c2/index.md
+        - 3几何: cn/c3/index.md
+        - 4灯光和材质: cn/c4/index.md
+        - 5three.js: cn/c5/index.md
+        - 6WebGL: cn/c6/index.md
+        - 7WebGL 3D: cn/c7/index.md
+        - 8高阶3D: cn/c8/index.md
+        - 9WEBGPU: cn/c9/index.md
+        - 附录:
+                  - 编程语言: cn/a1/index.md
+                  - Blender 3D建模: cn/a2/index.md
+                  - Gimp和Inkscape: cn/a3/index.md
+                  - 示例程序源代码: cn/source/index.md
+                  - 术语表: cn/glossary.md
+        - 关于: index.md

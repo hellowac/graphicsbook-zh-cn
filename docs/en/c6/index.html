@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Introduction to Computer Graphics, Chapter 6 -- Introduction to WebGL</title>
+<link type="text/css" rel="stylesheet" href="../resource/graphicstext.css">
+</head>
+<body>
+<div class="page">
+<div align="right">
+<small>
+        [  <a href="s1.html">First Section</a> |
+           <a href="../c5/index.html">Previous Chapter</a> |
+           <a href="../c7/index.html">Next Chapter</a> |
+           <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+<hr>
+<div class="content">
+<h3 class="chapter_title">Chapter 6</h3>
+<h2 class="chapter_title">Introduction to WebGL</h2>
+<hr class="break">
+
+
+<p class="firstpar">In this chapter, we turn to <span class="newword" data-term="WebGL" data-definition="A 3D graphics API for use on web pages.  WebGL programs are written
+in the JavaScript programming language and display their images in HTML canvas
+elements.  WebGL is based on OpenGL ES, the version of OpenGL for embedded systems, with
+a few changes to adapt it to the JavaScript language and the Web environment." title="Click for a definition of WebGL.">WebGL</span>, the version of <span class="word" data-term="OpenGL" data-definition="A family of computer graphics APIs that is implemented in many graphics
+hardware devices.  There are several versions of the API, and there are implementations,
+or &quot;bindings&quot; for several different programming languages.  Versions of OpenGL for embedded
+systems such as mobile phones are known as OpenGL ES.  WebGL is a version for use on 
+Web pages.  OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly
+associated with 3D." title="Click for a definition of OpenGL.">OpenGL</span>
+for the Web.  <i>Three.js</i>, which was covered in the <a href="../c5/index.html">previous chapter</a>,
+uses WebGL for 3D graphics.  Of course, it is more difficult to use WebGL directly, but doing
+so gives you full control over the graphics hardware.  And learning it will be a good introduction
+to modern graphics programming.  WebGL is very different from OpenGL&nbsp;1.1, which we 
+studied in <a href="../c3/index.html">Chapter&nbsp;3</a> and <a href="../c4/index.html">Chapter&nbsp;4</a>.  Nevertheless,
+it will turn out that much of what you learned in previous chapters will carry over to
+WebGL. </p>
+
+
+<p>It is not my intention to cover WebGL in its entirety.  There are many WebGL features
+that I will not even mention, and many of those are important for more advanced computer
+graphics.  However, I will cover the core features that are needed for 2D and 3D graphics,
+along with a few of the more advanced aspects, as a bonus.</p>
+
+
+<p>There are two versions of WebGL, both of them still in use.  WebGL 1.0 is based on 
+OpenGL ES 2.0, a version of OpenGL designed for use on embedded systems such as 
+smart phones and tablets.  OpenGL ES 1.0, the original OpenGL for embedded systems,
+was very similar to OpenGL&nbsp;1.1.  However, the 2.0 version of OpenGL&nbsp;ES introduced
+major changes.  It is actually a smaller, simpler <span class="word" data-term="API" data-definition="Application Programming Interface.  A collection of related classes, functions,
+constants, etc., for performing some task.  An API is an &quot;interface&quot; in the sense that it
+can be used without understanding how its functionality is actually implemented." title="Click for a definition of API.">API</span> that puts more responsibility
+on the programmer.  For example, functions for working with transformations, such
+as <i>glRotatef</i> and <i>glPushMatrix</i>, were eliminated from the API, making the
+programmer responsible for keeping track of transformations.  WebGL does not
+use <i>glBegin/glEnd</i> to generate geometry, and it doesn't use function such
+as <i>glColor*</i> or <i>glNormal*</i> to specify attributes of vertices. 
+WebGL 1.0 is supported in almost every web browser.  (On some devices, WebGL might
+be disabled because of hardware limitations.)</p>
+
+
+<p>WebGL 2.0, which is based on OpenGL ES 3.0, is now supported on almost all devices that
+suport WebGL&nbsp;1.0.  Most programs written for WebGL&nbsp;1.0 will
+also work under WebGL&nbsp;2.0, so almost everything that you learn about the 1.0 version
+will carry over to the newer version.  In this textbook, I will concentrate on WebGL&nbsp;1.0,
+but I will also cover some of the new features of WebGL&nbsp;2.0.
+I will try to make it clear when I am talking about features that only apply to WebGL&nbsp;2.0.</p>
+
+
+<p>There are two sides to any WebGL program.  Part of the program is written in
+<span class="word" data-term="JavaScript" data-definition="A programming language for web pages.  JavaScript code on a web
+page is executed by a web browser that displays the page, and it can interact with the contents
+of the web page and with the user.  There are JavaScript APIs for 2D and for 3D graphics" title="Click for a definition of JavaScript.">JavaScript</span>, the programming language for the web. The second part is
+written in <span class="word" data-term="GLSL" data-definition="OpenGL Shader Language, the programming language that is used to write
+shader programs for use with OpenGL." title="Click for a definition of GLSL.">GLSL</span>, a language for writing "shader" programs that run on the
+<span class="word" data-term="GPU" data-definition="Graphics Processing Unit, a computer hardware component that performs graphical
+computations that create and manipulate images.  Operations such as drawing a line on the screen 
+or rendering a 3D image are done in the GPU, which is optimized to perform such operations very
+quickly." title="Click for a definition of GPU.">GPU</span>.  WebGL&nbsp;1.0 uses GLSL ES 1.00 (the
+OpenGL Shader Language for Embedded Systems, version 1.00).  WebGL&nbsp;2.0 can use shader
+programs written in GLSL ES 1.00, but it can also use GLSL ES 3.00, which has some
+significant differences as well as new features.  I will try to always be clear about 
+which language I am discussing.</p>
+
+
+<p>For this introductory chapter about WebGL, we will stick to basic 
+2D graphics.  You will learn about the structure of WebGL programs.  You will learn
+most of the JavaScript side of the API, and you will learn how to write and use simple
+shaders.  In the <a href="../c7/index.html">next chapter</a>, we will move
+on to 3D graphics, and you will learn a great deal more about GLSL.</p>
+
+
+<hr class="break">
+<h3>Contents of Chapter 6:</h3>
+<ul class="contents">
+<li>Section 1: <a href="s1.html">The Programmable Pipeline</a>
+</li>
+<li>Section 2: <a href="s2.html">First Examples</a>
+</li>
+<li>Section 3: <a href="s3.html">GLSL</a>
+</li>
+<li>Section 4: <a href="s4.html">Image Textures</a>
+</li>
+<li>Section 5: <a href="s5.html">Implementing 2D Transforms</a>
+</li>
+</ul>
+</div>
+<hr>
+<div align="right">
+<small>
+        [  <a href="s1.html">First Section</a> |
+           <a href="../c5/index.html">Previous Chapter</a> |
+           <a href="../c7/index.html">Next Chapter</a> |
+           <a href="../index.html">Main Index</a> ]
+    </small>
+</div>
+</div>
+</body>
+<script src="../resource/glossary.js"></script>
+</html>
