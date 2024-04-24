@@ -57,8 +57,9 @@ markdown_extensions:
         - pymdownx.critic # 支持部分字段格式化，参考：https://squidfunk.github.io/mkdocs-material/reference/formatting/
         - pymdownx.highlight # 支持代码块高亮显示
         - pymdownx.snippets:
-                  auto_append:
+                  auto_append: # 术语表文件
                           - includes/glossary.md
+                          - includes/glossarycn.md
         - pymdownx.details
         - pymdownx.superfences: # 注释 :
                   # preserve_tabs: true
