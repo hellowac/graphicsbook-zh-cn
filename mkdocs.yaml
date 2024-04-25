@@ -107,11 +107,19 @@ nav:
         - 首页: cn/index.md
         - 前言: cn/preface.md
         - 1简介:
-                  - 第一章：简介: cn/c1/index.md
-                  - 第 1 节：绘画与绘图: cn/c1/s1.md
-                  - 第 2 节：三维(3D)图形的要素: cn/c1/s2.md
-                  - 第 3 节：硬件与软件: cn/c1/s3.md
-        - 2二维图形: cn/c2/index.md
+                  - cn/c1/index.md
+                  - cn/c1/s1.md
+                  - cn/c1/s2.md
+                  - cn/c1/s3.md
+        - 2二维图形:
+                  - cn/c2/index.md
+                  - cn/c2/s1.md
+                  - cn/c2/s2.md
+                  - cn/c2/s3.md
+                  - cn/c2/s4.md
+                  - cn/c2/s5.md
+                  - cn/c2/s6.md
+                  - cn/c2/s7.md
         - 3几何: cn/c3/index.md
         - 4灯光和材质: cn/c4/index.md
         - 5three.js: cn/c5/index.md
