@@ -82,6 +82,8 @@
 
 *[coordinate system]:  A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.
 
+*[coordinate systems]:  A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.
+
 *[CPU]:  The Central Processing Unit in a computer, the component that actually executes programs. The CPU reads machine language instructions from the computer's memory and carries them out.
 
 *[cross product]:  A vector product of two 3D vectors. The cross product of v and w is a vector that is perpendicular to both v and w and whose length is equal to the absolute value of the sine of the angle between v and w. If v=(x,y,z) and w=(a,b,c), then their cross product is the vector (yc-zb,za-xc,xb-ya).
