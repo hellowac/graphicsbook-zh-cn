@@ -6,6 +6,8 @@
 
 *[alignment (in WGSL)]:  Restrictions on the legal location of a value in memory, depending on the data type. For example, the address of a vec3f variable in WGSL must be a multiple of 16.
 
+*[alpha]: An extra component (that is, one of the numbers that are used to specify a color) in a color model that is not part of the actual color specification. The alpha component is extra information. It is most often used to specify the degree of transparency of a color.
+
 *[alpha blending]:  Using the alpha component of a color to blend the color with a background color, when the color is drawn over the background color. That is, the new color of a pixel is obtained by blending the drawing color with the current color, with the degree of blending depending on the alpha component of the drawing color. Alpha blending is most commonly used to simulate transparency.
 
 *[alpha color component]:  An extra component (that is, one of the numbers that are used to specify a color) in a color model that is not part of the actual color specification. The alpha component is extra information. It is most often used to specify the degree of transparency of a color.
@@ -23,6 +25,8 @@
 *[anisotropic filtering]:  A technique for more accurate sampling of texture images, in the case where a pixel on the surface that is being textured corresponds to a non-rectangular region in the texture. Anisotropic filtering is available as an optional extension in WebGL.
 
 *[antialiasing]:  A technique used to reduce the jagged or "staircase" appearance of diagonal lines, text, and other shapes that are drawn using pixels. When a pixel is only partly covered by a geometric shape, then the color of the pixel is a blend of the color of the shape and the color of the background, with the degree of blending depending on the fraction of the pixel that is covered by the geometric shape.
+
+*[Antialiasing]:  A technique used to reduce the jagged or "staircase" appearance of diagonal lines, text, and other shapes that are drawn using pixels. When a pixel is only partly covered by a geometric shape, then the color of the pixel is a blend of the color of the shape and the color of the background, with the degree of blending depending on the fraction of the pixel that is covered by the geometric shape.
 
 *[API]:  Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an "interface" in the sense that it can be used without understanding how its functionality is actually implemented.
 
