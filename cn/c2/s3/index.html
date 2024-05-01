@@ -809,6 +809,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    第3节: 变换
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -818,6 +829,97 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#231--viewing-and-modeling" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.1  Viewing and Modeling
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#232--translation" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.2  Translation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#233--rotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.3  Rotation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#234--combining-transformations" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.4  Combining Transformations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#235--scaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.5  Scaling
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#236--shear" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.6  Shear
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#237--window-to-viewport" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.7  Window-to-Viewport
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#238--matrices-and-vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.8  Matrices and Vectors
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1248,6 +1350,86 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#231--viewing-and-modeling" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.1  Viewing and Modeling
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#232--translation" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.2  Translation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#233--rotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.3  Rotation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#234--combining-transformations" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.4  Combining Transformations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#235--scaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.5  Scaling
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#236--shear" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.6  Shear
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#237--window-to-viewport" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.7  Window-to-Viewport
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#238--matrices-and-vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3.8  Matrices and Vectors
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1266,6 +1448,251 @@
 
 <h1 id="第3节-变换">第3节: 变换<a class="headerlink" href="#第3节-变换" title="Permanent link">&para;</a></h1>
 <p><strong>Transforms</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">中文</label><label for="__tabbed_1_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>In <a href="../s1/">Section 2.1</a>, we discussed <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate systems</abbr> and how it is possible to transform coordinates from one <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> to another. In this section, we'll look at that idea a little more closely, and also look at how geometric transformations can be used to place graphics objects into a <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>.</p>
+</div>
+</div>
+</div>
+<h2 id="231--viewing-and-modeling">2.3.1  Viewing and Modeling<a class="headerlink" href="#231--viewing-and-modeling" title="Permanent link">&para;</a></h2>
+<p><strong>Viewing and Modeling</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">中文</label><label for="__tabbed_2_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>In a typical application, we have a rectangle made of <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr>, with its natural <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr> coordinates, where an image will be displayed. This rectangle will be called the <strong><abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr></strong>. We also have a set of geometric objects that are defined in a possibly different <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>, generally one that uses real-number coordinates rather than integers. These objects make up the "scene" or "world" that we want to view, and the coordinates that we use to define the scene are called <strong><abbr title="The coordinate system in which a scene is defined. The image that is produced of the scene will show the contents of the world coordinate system that lie within some view volume (for 3D) or view window (for 2D). Objects are defined in their own object coordinate system. Modeling transformations are then applied to place objects into the scene; that is, they transform object coordinates to world coordinates.">world coordinates</abbr></strong>.</p>
+<p>For 2D graphics, the world lies in a plane. It's not possible to show a picture of the entire infinite plane. We need to pick some rectangular area in the plane to display in the image. Let's call that rectangular area the window, or view <strong>window</strong>. A coordinate transform is used to map the window to the <abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr>.</p>
+<p><figure markdown="span">
+    <a class="glightbox" href="../../../en/c2/coordinate-transformation-2d.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="pixel-coordinates" src="../../../en/c2/coordinate-transformation-2d.png" /></a>
+</figure></p>
+<p>In this illustration, <strong>T</strong> represents the coordinate transformation. <strong>T</strong> is a function that takes <abbr title="The coordinate system in which a scene is defined. The image that is produced of the scene will show the contents of the world coordinate system that lie within some view volume (for 3D) or view window (for 2D). Objects are defined in their own object coordinate system. Modeling transformations are then applied to place objects into the scene; that is, they transform object coordinates to world coordinates.">world coordinates</abbr> (x,y) in some window and maps them to <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr> coordinates <strong>T</strong>(x,y) in the <abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr>. (I've drawn the <abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr> and window with different sizes to emphasize that they are not the same thing, even though they show the same objects, but in fact they don't even exist in the same space, so it doesn't really make sense to compare their sizes.) In this example, as you can check,</p>
+<div class="highlight"><pre><span></span><code>T(x,y) = ( 800*(x+4)/8, 600*(3-y)/6 )
+</code></pre></div>
+<p>Look at the rectangle with corners at (-1,2) and (3,-1) in the window. When this rectangle is displayed in the <abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr>, it is displayed as the rectangle with corners <strong>T</strong>(-1,2) and <strong>T</strong>(3,-1). In this example, <strong>T</strong>(-1,2) = (300,100) and <strong>T</strong>(3,-1) = (700,400).</p>
+<p>We use coordinate transformations in this way because it allows us to choose a world <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> that is natural for describing the scene that we want to display, and it is easier to do that than to work directly with <abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr> coordinates. Along the same lines, suppose that we want to define some complex object, and suppose that there will be several copies of that object in our scene. Or maybe we are making an <abbr title="A sequence of images that, when displayed quickly one after the other, will produce the impression of continuous motion or change. The term animation also refers to the process of creating such image sequences.">animation</abbr>, and we would like the object to have different positions in different frames. We would like to choose some convenient <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> and use it to define the object once and for all. The coordinates that we use to define an object are called <abbr title="The coordinate system in which the coordinates for points in an object are originally specified, before they are transformed by any modeling or other transform that will be applied to the object.">object coordinates</abbr> for the object. When we want to place the object into a scene, we need to transform the <abbr title="The coordinate system in which the coordinates for points in an object are originally specified, before they are transformed by any modeling or other transform that will be applied to the object.">object coordinates</abbr> that we used to define the object into the world <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> that we are using for the scene. The transformation that we need is called a <abbr title="A transformation that is applied to an object to map that object into the world coordinate system or into the object coordinate system for a more complex, hierarchical object.">modeling transformation</abbr>. This picture illustrates an object defined in its own object <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> and then mapped by three different modeling transformations into the world <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>:</p>
+<p><figure markdown="span">
+    <a class="glightbox" href="../../../en/c2/modeling2d-1.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="pixel-coordinates" src="../../../en/c2/modeling2d-1.png" /></a>
+</figure></p>
+<p>Remember that in order to view the scene, there will be another transformation that maps the object from a <abbr title="As used in this book, the window, or view window, for 2D graphics is the rectangle in the xy-plane that contains the portion of the plane that will be displayed in the image. (The corresponding term in 3D graphics is &quot;view volume.&quot;)">view window</abbr> in <abbr title="The coordinate system in which a scene is defined. The image that is produced of the scene will show the contents of the world coordinate system that lie within some view volume (for 3D) or view window (for 2D). Objects are defined in their own object coordinate system. Modeling transformations are then applied to place objects into the scene; that is, they transform object coordinates to world coordinates.">world coordinates</abbr> into the <abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr>.</p>
+<p>Now, keep in mind that the choice of a <abbr title="As used in this book, the window, or view window, for 2D graphics is the rectangle in the xy-plane that contains the portion of the plane that will be displayed in the image. (The corresponding term in 3D graphics is &quot;view volume.&quot;)">view window</abbr> tells which part of the scene is shown in the image. Moving, resizing, or even rotating the window will give a different view of the scene. Suppose we make several images of the same car:</p>
+<p><figure markdown="span">
+    <a class="glightbox" href="../../../en/c2/modeling-or-viewing-2d.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="pixel-coordinates" src="../../../en/c2/modeling-or-viewing-2d.png" /></a>
+</figure></p>
+<p>What happened between making the top image in this illustration and making the image on the bottom left? In fact, there are two possibilities: Either the car was moved to the right, or the <abbr title="As used in this book, the window, or view window, for 2D graphics is the rectangle in the xy-plane that contains the portion of the plane that will be displayed in the image. (The corresponding term in 3D graphics is &quot;view volume.&quot;)">view window</abbr> that defines the scene was moved to the left. This is important, so be sure you understand it. (Try it with your cell phone <abbr title="In 3D computer graphics, an object that combines the projection and viewing transforms into an abstraction that imitates a physical camera or eye.">camera</abbr>. Aim it at some objects, take a step to the left, and notice what happens to the objects in the <abbr title="In 3D computer graphics, an object that combines the projection and viewing transforms into an abstraction that imitates a physical camera or eye.">camera</abbr>'s viewfinder: They move to the right in the picture!) Similarly, what happens between the top picture and the middle picture on the bottom? Either the car rotated counterclockwise, or the window was rotated clockwise. (Again, try it with a <abbr title="In 3D computer graphics, an object that combines the projection and viewing transforms into an abstraction that imitates a physical camera or eye.">camera</abbr>—you might want to take two actual photos so that you can compare them.) Finally, the change from the top picture to the one on the bottom right could happen because the car got smaller or because the window got larger. (On your <abbr title="In 3D computer graphics, an object that combines the projection and viewing transforms into an abstraction that imitates a physical camera or eye.">camera</abbr>, a bigger window means that you are seeing a larger field of view, and you can get that by applying a zoom to the <abbr title="In 3D computer graphics, an object that combines the projection and viewing transforms into an abstraction that imitates a physical camera or eye.">camera</abbr> or by backing up away from the objects that you are <abbr title="Setting the position and orientation of the viewer in a 3D world, which determine what will be visible when the 2D image of a 3D world is rendered.">viewing</abbr>.)</p>
+<p>There is an important general idea here. When we modify the <abbr title="As used in this book, the window, or view window, for 2D graphics is the rectangle in the xy-plane that contains the portion of the plane that will be displayed in the image. (The corresponding term in 3D graphics is &quot;view volume.&quot;)">view window</abbr>, we change the <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> that is applied to the <abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr>. But in fact, this is the same as leaving that <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> in place and moving the objects in the scene instead. Except that to get the same effect in the final image, you have to apply the opposite transformation to the objects (for example, moving the window to the left is equivalent to moving the objects to the right). So, there is no essential distinction between transforming the window and transforming the object. Mathematically, you specify a <abbr title="Geometric objects in a graphics system, such as OpenGL, that are not made up of simpler objects. Examples in OpenGL include points, lines, and triangles, but the set of available primitives depends on the graphics system. (Note that as the term is used in OpenGL, a single primitive can be made up of many points, line segments, or triangles.)">geometric primitive</abbr> by giving coordinates in some natural <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>, and the computer applies a sequence of transformations to those coordinates to produce, in the end, the coordinates that are used to actually draw the primitive in the image. You will think of some of those transformations as modeling transforms and some as coordinate transforms, but to the computer, it's all the same.</p>
+<p>Here is a live demo that can help you to understand the equivalence between modeling transformations and <abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr> transformations. The sliders control transformations that are applied to the objects in the picture. In the lower section of the demo, you see a larger view in which the <abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr> for the upper image is represented as a translucent black rectangle. Read the help text in the demo for more information.</p>
+<p><iframe src="../../../en/demos/c2/transform-equivalence-2d.html" width="700" height="750"></iframe></p>
+<p>We will return to this idea several times later in the book, but in any case, you can see that geometric transforms are a central concept in computer graphics. Let's look at some basic types of transformation in more detail. The transforms we will use in 2D graphics can be written in the form</p>
+<div class="highlight"><pre><span></span><code>x1 = a*x + b*y + e
+y1 = c*x + d*y + f
+</code></pre></div>
+<p>where (x,y) represents the coordinates of some point before the transformation is applied, and (x1,y1) are the transformed coordinates. The transform is defined by the six constants a, b, c, d, e, and f. Note that this can be written as a function <strong>T</strong>, where</p>
+<div class="highlight"><pre><span></span><code>T(x,y) = ( a*x + b*y + e, c*x + d*y + f )
+</code></pre></div>
+<p>A transformation of this form is called an <strong><abbr title="A transform that preserves parallel lines. That is, when the transform is applied to a pair of lines that are parallel, then the resulting transformed lines are also parallel. An affine transform, T, has the property that the transform of the line segment between a point (x1,y1) and a point (x2,y2) is the line between the points T(x1,y1) and T(x2,y2). Effectively, the transform of a line segment can be computed just by transforming its two endpoints. This makes affine transforms very efficient for computer graphics. Any affine transform can be represented as a composition of rotations, translations, and scalings.">affine transform</abbr></strong>. An <abbr title="A transform that preserves parallel lines. That is, when the transform is applied to a pair of lines that are parallel, then the resulting transformed lines are also parallel. An affine transform, T, has the property that the transform of the line segment between a point (x1,y1) and a point (x2,y2) is the line between the points T(x1,y1) and T(x2,y2). Effectively, the transform of a line segment can be computed just by transforming its two endpoints. This makes affine transforms very efficient for computer graphics. Any affine transform can be represented as a composition of rotations, translations, and scalings.">affine transform</abbr> has the property that, when it is applied to two parallel lines, the transformed lines will also be parallel. Also, if you follow one <abbr title="A transform that preserves parallel lines. That is, when the transform is applied to a pair of lines that are parallel, then the resulting transformed lines are also parallel. An affine transform, T, has the property that the transform of the line segment between a point (x1,y1) and a point (x2,y2) is the line between the points T(x1,y1) and T(x2,y2). Effectively, the transform of a line segment can be computed just by transforming its two endpoints. This makes affine transforms very efficient for computer graphics. Any affine transform can be represented as a composition of rotations, translations, and scalings.">affine transform</abbr> by another <abbr title="A transform that preserves parallel lines. That is, when the transform is applied to a pair of lines that are parallel, then the resulting transformed lines are also parallel. An affine transform, T, has the property that the transform of the line segment between a point (x1,y1) and a point (x2,y2) is the line between the points T(x1,y1) and T(x2,y2). Effectively, the transform of a line segment can be computed just by transforming its two endpoints. This makes affine transforms very efficient for computer graphics. Any affine transform can be represented as a composition of rotations, translations, and scalings.">affine transform</abbr>, the result is again an <abbr title="A transform that preserves parallel lines. That is, when the transform is applied to a pair of lines that are parallel, then the resulting transformed lines are also parallel. An affine transform, T, has the property that the transform of the line segment between a point (x1,y1) and a point (x2,y2) is the line between the points T(x1,y1) and T(x2,y2). Effectively, the transform of a line segment can be computed just by transforming its two endpoints. This makes affine transforms very efficient for computer graphics. Any affine transform can be represented as a composition of rotations, translations, and scalings.">affine transform</abbr>.</p>
+</div>
+</div>
+</div>
+<h2 id="232--translation">2.3.2  Translation<a class="headerlink" href="#232--translation" title="Permanent link">&para;</a></h2>
+<p><strong>Translation</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">中文</label><label for="__tabbed_3_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>A <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr> transform simply moves every point by a certain amount horizontally and a certain amount vertically. If (x,y) is the original point and (x1,y1) is the transformed point, then the formula for a <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr> is</p>
+<div class="highlight"><pre><span></span><code>x1 = x + e
+y1 = y + f
+‵‵‵
+
+where e is the number of units by which the point is moved horizontally and f is the amount by which it is moved vertically. (Thus for a translation, a = d = 1, and b = c = 0 in the general formula for an affine transform.) A 2D graphics system will typically have a function such as
+
+```text
+translate( e, f )
+</code></pre></div>
+<p>to apply a translate transformation. The <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr> would apply to everything that is drawn after the command is given. That is, for all subsequent drawing operations, e would be added to the x-coordinate and f would be added to the y-coordinate. Let's look at an example. Suppose that you draw an "F" using coordinates in which the "F" is centered at (0,0). If you say translate(4,2) before drawing the "F", then every point of the "F" will be moved horizontally by 4 units and vertically by 2 units before the coordinates are actually used, so that after the <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr>, the "F" will be centered at (4,2):</p>
+<p><figure markdown="span">
+    <a class="glightbox" href="../../../en/c2/translate-2d.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="pixel-coordinates" src="../../../en/c2/translate-2d.png" /></a>
+</figure></p>
+<p>The light gray "F" in this picture shows what would be drawn without the <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr>; the dark red "F" shows the same "F" drawn after applying a <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr> by (4,2). The top arrow shows that the upper left corner of the "F" has been moved over 4 units and up 2 units. Every point in the "F" is subjected to the same displacement. Note that in my examples, I am assuming that the y-coordinate increases from bottom to top. That is, the y-axis points up.</p>
+<p>Remember that when you give the command translate(e,f), the <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr> applies to all the drawing that you do after that, not just to the next shape that you draw. If you apply another transformation after the <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr>, the second transform will not replace the <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr>. It will be combined with the <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr>, so that subsequent drawing will be affected by the combined transformation. For example, if you combine translate(4,2) with translate(-1,5), the result is the same as a single <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr>, translate(3,7). This is an important point, and there will be a lot more to say about it later.</p>
+<p>Also remember that you don't compute coordinate transformations yourself. You just specify the original coordinates for the object (that is, the <abbr title="The coordinate system in which the coordinates for points in an object are originally specified, before they are transformed by any modeling or other transform that will be applied to the object.">object coordinates</abbr>), and you specify the transform or transforms that are to be applied. The computer takes care of applying the transformation to the coordinates. You don't even need to know the equations that are used for the transformation; you just need to understand what it does geometrically.</p>
+</div>
+</div>
+</div>
+<h2 id="233--rotation">2.3.3  Rotation<a class="headerlink" href="#233--rotation" title="Permanent link">&para;</a></h2>
+<p><strong>Rotation</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">中文</label><label for="__tabbed_4_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>A <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> transform, for our purposes here, rotates each point about the origin, (0,0). Every point is rotated through the same angle, called the angle of <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr>. For this purpose, angles can be measured either in degrees or in radians. (The 2D graphics APIs for Java and <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> that we will look at later in this chapter use radians, but <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> and <abbr title="Scalable Vector Graphics. An XML language for specifying 2D vector graphics. SVG is a scene description language. It is designed to integrate into web pages.">SVG</abbr> use degrees.) A <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> with a positive angle rotates objects in the direction from the positive x-axis towards the positive y-axis. This is counterclockwise in a <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> where the y-axis points up, as it does in my examples here, but it is clockwise in the usual <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr> coordinates, where the y-axis points down rather than up. Although it is not obvious, when <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> through an angle of r radians about the origin is applied to the point (x,y), then the resulting point (x1,y1) is given by</p>
+<p>```text
+x1 = cos(r) * x - sin(r) * y
+y1 = sin(r) * x + cos(r) * y
+‵‵‵</p>
+<p>That is, in the general formula for an <abbr title="A transform that preserves parallel lines. That is, when the transform is applied to a pair of lines that are parallel, then the resulting transformed lines are also parallel. An affine transform, T, has the property that the transform of the line segment between a point (x1,y1) and a point (x2,y2) is the line between the points T(x1,y1) and T(x2,y2). Effectively, the transform of a line segment can be computed just by transforming its two endpoints. This makes affine transforms very efficient for computer graphics. Any affine transform can be represented as a composition of rotations, translations, and scalings.">affine transform</abbr>, e = f = 0, a = d = cos(r), b = -sin(r), and c = sin(r). Here is a picture that illustrates a <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> about the origin by the angle negative 135 degrees:</p>
+<p><figure markdown="span">
+    <a class="glightbox" href="../../../en/c2/translate-2d.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="pixel-coordinates" src="../../../en/c2/translate-2d.png" /></a>
+</figure></p>
+<p>Again, the light gray "F" is the original shape, and the dark red "F" is the shape that results if you apply the <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr>. The arrow shows how the upper left corner of the original "F" has been moved.</p>
+<p>A 2D graphics <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> would typically have a command rotate(r) to apply a <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr>. The command is used before drawing the objects to which the <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> applies.</p>
+</div>
+</div>
+</div>
+<h2 id="234--combining-transformations">2.3.4  Combining Transformations<a class="headerlink" href="#234--combining-transformations" title="Permanent link">&para;</a></h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">中文</label><label for="__tabbed_5_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>We are now in a position to see what can happen when you combine two transformations. Suppose that before drawing some object, you say</p>
+<div class="highlight"><pre><span></span><code>translate(4,0)
+rotate(90)
+‵‵‵
+
+Assume that angles are measured in degrees. The translation will then apply to all subsequent drawing. But, because of the rotation command, the things that you draw after the translation are rotated objects. That is, the translation applies to objects that have already been rotated. An example is shown on the left in the illustration below, where the light gray &quot;F&quot; is the original shape, and red &quot;F&quot; shows the result of applying the two transforms to the original. The original &quot;F&quot; was first rotated through a 90 degree angle, and then moved 4 units to the right.
+
+&lt;figure markdown=&quot;span&quot;&gt;
+    ![pixel-coordinates](../../en/c2/rotate-and-translate-2d.png)
+&lt;/figure&gt;
+
+Note that transforms are applied to objects in the reverse of the order in which they are given in the code (because the first transform in the code is applied to an object that has already been affected by the second transform). And note that the order in which the transforms are applied is important. If we reverse the order in which the two transforms are applied in this example, by saying
+
+```text
+rotate(90)
+translate(4,0)
+‵‵‵
+
+then the result is as shown on the right in the above illustration. In that picture, the original &quot;F&quot; is first moved 4 units to the right and the resulting shape is then rotated through an angle of 90 degrees about the origin to give the shape that actually appears on the screen.
+
+For another example of applying several transformations, suppose that we want to rotate a shape through an angle r about a point (p,q) instead of about the point (0,0). We can do this by first moving the point (p,q) to the origin, using translate(-p,-q). Then we can do a standard rotation about the origin by calling rotate(r). Finally, we can move the origin back to the point (p,q) by applying translate(p,q). Keeping in mind that we have to write the code for the transformations in the reverse order, we need to say
+
+```text
+translate(p,q)
+rotate(r)
+translate(-p,-q)
+</code></pre></div>
+<p>before drawing the shape. (In fact, some graphics APIs let us accomplish this transform with a single command such as rotate(r,p,q). This would apply a <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> through the angle r about the point (p,q).)</p>
+</div>
+</div>
+</div>
+<h2 id="235--scaling">2.3.5  Scaling<a class="headerlink" href="#235--scaling" title="Permanent link">&para;</a></h2>
+<p><strong>Scaling</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">中文</label><label for="__tabbed_6_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>A <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> transform can be used to make objects bigger or smaller. Mathematically, a <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> transform simply multiplies each x-coordinate by a given amount and each y-coordinate by a given amount. That is, if a point (x,y) is scaled by a factor of a in the x direction and by a factor of d in the y direction, then the resulting point (x1,y1) is given by</p>
+<div class="highlight"><pre><span></span><code>x1 = a * x
+y1 = d * y
+</code></pre></div>
+<p>If you apply this transform to a shape that is centered at the origin, it will stretch the shape by a factor of a horizontally and d vertically. Here is an example, in which the original light gray "F" is scaled by a factor of 3 horizontally and 2 vertically to give the final dark red "F":</p>
+<p><figure markdown="span">
+    <a class="glightbox" href="../../../en/c2/scale-2d.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="pixel-coordinates" src="../../../en/c2/scale-2d.png" /></a>
+</figure></p>
+<p>The common case where the horizontal and vertical <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> factors are the same is called <strong>uniform <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr></strong>. Uniform <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> stretches or shrinks a shape without distorting it.</p>
+<p>When <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> is applied to a shape that is not centered at (0,0), then in addition to being stretched or shrunk, the shape will be moved away from 0 or towards 0. In fact, the true description of a <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> operation is that it pushes every point away from (0,0) or pulls every point towards (0,0). If you want to scale about a point other than (0,0), you can use a sequence of three transforms, similar to what was done in the case of <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr>.</p>
+<p>A 2D graphics <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> can provide a function scale(a,d) for applying <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> transformations. As usual, the transform applies to all x and y coordinates in subsequent drawing operations. Note that negative <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> factors are allowed and will result in reflecting the shape as well as possibly stretching or shrinking it. For example, scale(1,-1) will reflect objects vertically, through the x-axis.</p>
+<p>It is a fact that every <abbr title="A transform that preserves parallel lines. That is, when the transform is applied to a pair of lines that are parallel, then the resulting transformed lines are also parallel. An affine transform, T, has the property that the transform of the line segment between a point (x1,y1) and a point (x2,y2) is the line between the points T(x1,y1) and T(x2,y2). Effectively, the transform of a line segment can be computed just by transforming its two endpoints. This makes affine transforms very efficient for computer graphics. Any affine transform can be represented as a composition of rotations, translations, and scalings.">affine transform</abbr> can be created by combining translations, rotations about the origin, and scalings about the origin. I won't try to prove that, but here is an interactive demo that will let you experiment with translations, rotations, and scalings, and with the transformations that can be made by combining them.</p>
+<p><iframe src="../../../en/demos/c2/transforms-2d.html" width="725" height="550"></iframe></p>
+<p>I also note that a transform that is made from translations and rotations, with no <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr>, will preserve length and angles in the objects to which it is applied. It will also preserve aspect ratios of rectangles. Transforms with this property are called "<strong>Euclidean</strong>." If you also allow <strong>uniform</strong> <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr>, the resulting transformation will preserve angles and <abbr title="The ratio of the width, w, of a rectangle to the height, h, of the rectangle, expressed either as a ratio **w:h** or as a fraction** w/h**.">aspect ratio</abbr>, but not lengths.</p>
+</div>
+</div>
+</div>
+<h2 id="236--shear">2.3.6  Shear<a class="headerlink" href="#236--shear" title="Permanent link">&para;</a></h2>
+<p><strong>Shear</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">中文</label><label for="__tabbed_7_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>We will look at one more type of basic transform, a shearing transform. Although shears can in fact be built up out of rotations and scalings if necessary, it is not really obvious how to do so. A shear will "tilt" objects. A horizontal shear will tilt things towards the left (for negative shear) or right (for positive shear). A vertical shear tilts them up or down. Here is an example of horizontal shear:</p>
+<p><figure markdown="span">
+    <a class="glightbox" href="../../../en/c2/shear-2d.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="pixel-coordinates" src="../../../en/c2/shear-2d.png" /></a>
+</figure></p>
+<p>A horizontal shear does not move the x-axis. Every other horizontal line is moved to the left or to the right by an amount that is proportional to the y-value along that line. When a horizontal shear is applied to a point (x,y), the resulting point (x1,y1) is given by</p>
+<div class="highlight"><pre><span></span><code>x1 = x + b * y
+y1 = y
+</code></pre></div>
+<p>for some constant shearing factor b. Similarly, a vertical shear with shearing factor c is given by the equations</p>
+<div class="highlight"><pre><span></span><code>x1 = x
+y1 = c * x + y
+</code></pre></div>
+<p>Shear is occasionally called "skew," but skew is usually specified as an angle rather than as a shear factor.</p>
+</div>
+</div>
+</div>
+<h2 id="237--window-to-viewport">2.3.7  Window-to-Viewport<a class="headerlink" href="#237--window-to-viewport" title="Permanent link">&para;</a></h2>
+<p><strong>Window-to-Viewport</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">中文</label><label for="__tabbed_8_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>The last transformation that is applied to an object before it is displayed in an image is the window-to-<abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr> transformation, which maps the rectangular <abbr title="As used in this book, the window, or view window, for 2D graphics is the rectangle in the xy-plane that contains the portion of the plane that will be displayed in the image. (The corresponding term in 3D graphics is &quot;view volume.&quot;)">view window</abbr> in the xy-plane that contains the scene to the rectangular grid of <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr> where the image will be displayed. I'll assume here that the <abbr title="As used in this book, the window, or view window, for 2D graphics is the rectangle in the xy-plane that contains the portion of the plane that will be displayed in the image. (The corresponding term in 3D graphics is &quot;view volume.&quot;)">view window</abbr> is not rotated; that it, its sides are parallel to the x- and y-axes. In that case, the window-to-<abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr> transformation can be expressed in terms of <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr> and <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> transforms. Let's look at the typical case where the <abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr> has <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr> coordinates ranging from 0 on the left to width on the right and from 0 at the top to height at the bottom. And assume that the limits on the <abbr title="As used in this book, the window, or view window, for 2D graphics is the rectangle in the xy-plane that contains the portion of the plane that will be displayed in the image. (The corresponding term in 3D graphics is &quot;view volume.&quot;)">view window</abbr> are left, right, bottom, and top. In that case, the window-to-<abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr> transformation can be programmed as:</p>
+<div class="highlight"><pre><span></span><code>scale( width / (right-left), height / (bottom-top) );
+translate( -left, -top )
+</code></pre></div>
+<p>These should be the last transforms that are applied to a point. Since transforms are applied to points in the reverse of the order in which they are specified in the program, they should be the first transforms that are specified in the program. To see how this works, consider a point (x,y) in the <abbr title="As used in this book, the window, or view window, for 2D graphics is the rectangle in the xy-plane that contains the portion of the plane that will be displayed in the image. (The corresponding term in 3D graphics is &quot;view volume.&quot;)">view window</abbr>. (This point comes from some object in the scene. Several modeling transforms might have already been applied to the object to produce the point (x,y), and that point is now ready for its final transformation into <abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr> coordinates.) The coordinates (x,y) are first translated by (-left,-top) to give (x-left,y-top). These coordinates are then multiplied by the <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> factors shown above, giving the final coordinates</p>
+<div class="highlight"><pre><span></span><code>x1 = width / (right-left) * (x-left)
+y1 = height / (bottom-top) * (y-top)
+</code></pre></div>
+<p>Note that the point (left,top) is mapped to (0,0), while the point (right,bottom) is mapped to (width,height), which is just what we want.</p>
+<p>There is still the question of <abbr title="The ratio of the width, w, of a rectangle to the height, h, of the rectangle, expressed either as a ratio **w:h** or as a fraction** w/h**.">aspect ratio</abbr>. As noted in <a href="../s1/#213-纵横比">Subsection 2.1.3</a>, if we want to force the <abbr title="The ratio of the width, w, of a rectangle to the height, h, of the rectangle, expressed either as a ratio **w:h** or as a fraction** w/h**.">aspect ratio</abbr> of the window to match the <abbr title="The ratio of the width, w, of a rectangle to the height, h, of the rectangle, expressed either as a ratio **w:h** or as a fraction** w/h**.">aspect ratio</abbr> of the <abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr>, it might be necessary to adjust the limits on the window. Here is pseudocode for a subroutine that will do that, again assuming that the top-left corner of the <abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr> has <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr> coordinates (0,0):</p>
+<div class="highlight"><pre><span></span><code>subroutine applyWindowToViewportTransformation (
+        left, right,   // horizontal limits on view window
+        bottom, top,   // vertical limits on view window
+        width, height, // width and height of viewport
+        preserveAspect // should window be forced to match viewport aspect?
+    )
+
+if preserveAspect :
+    // Adjust the limits to match the aspect ratio of the drawing area.
+    displayAspect = abs(height / width);
+    windowAspect = abs(( top-bottom ) / ( right-left ));
+    if displayAspect &gt; windowAspect :
+        // Expand the viewport vertically.
+        excess = (top-bottom) * (displayAspect/windowAspect - 1)
+        top = top + excess/2
+        bottom = bottom - excess/2
+    else if displayAspect &lt; windowAspect :
+        // Expand the viewport horizontally.
+        excess = (right-left) * (windowAspect/displayAspect - 1)
+        right = right + excess/2
+        left = left - excess/2 
+
+    scale( width / (right-left), height / (bottom-top) )
+    translate( -left, -top )
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="238--matrices-and-vectors">2.3.8  Matrices and Vectors<a class="headerlink" href="#238--matrices-and-vectors" title="Permanent link">&para;</a></h2>
+<p><strong>Matrices and Vectors</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">中文</label><label for="__tabbed_9_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>The transforms that are used in computer graphics can be represented as matrices, and the points on which they operate are represented as vectors. Recall that a <strong><abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr></strong>, from the point of view of a computer scientist, is a two-dimensional array of numbers, while a <strong><abbr title="An element of a vector space. Elements of a vector space can be added and can be multiplied by constants. For computer graphics, a vector is just a list or array containing two, three, or four numbers. Vectors in that sense are often used to represent points in 2D, 3D, or 4D space. Properly, however, a vector represents a quantity that has a length and a direction; a vector used in this way can be visualized as an arrow.">vector</abbr></strong> is a one-dimensional array. Matrices and vectors are studied in the field of mathematics called <strong><abbr title="The field of mathematics that studies vector spaces and linear transformations between them. Linear algebra is part of the essential mathematical foundation of computer graphics.">linear algebra</abbr></strong>. Linear algebra is fundamental to computer graphics. In fact, <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> and <abbr title="An element of a vector space. Elements of a vector space can be added and can be multiplied by constants. For computer graphics, a vector is just a list or array containing two, three, or four numbers. Vectors in that sense are often used to represent points in 2D, 3D, or 4D space. Properly, however, a vector represents a quantity that has a length and a direction; a vector used in this way can be visualized as an arrow.">vector</abbr> math is built into GPUs. You won't need to know a great deal about <abbr title="The field of mathematics that studies vector spaces and linear transformations between them. Linear algebra is part of the essential mathematical foundation of computer graphics.">linear algebra</abbr> for this textbook, but a few basic ideas are essential.</p>
+<p>The vectors that we need are lists of two, three, or four numbers. They are often written as (x,y), (x,y,z), and (x,y,z,w). A <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> with N rows and M columns is called an "N-by-M <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr>." For the most part, the matrices that we need are N-by-N matrices, where N is 2, 3, or 4. That is, they have 2, 3, or 4 rows and columns, and the number of rows is equal to the number of columns.</p>
+<p>If A and B are two N-by-N matrices, then they can be multiplied to give a product <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> C = AB. If A is an N-by-N <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr>, and v is a <abbr title="An element of a vector space. Elements of a vector space can be added and can be multiplied by constants. For computer graphics, a vector is just a list or array containing two, three, or four numbers. Vectors in that sense are often used to represent points in 2D, 3D, or 4D space. Properly, however, a vector represents a quantity that has a length and a direction; a vector used in this way can be visualized as an arrow.">vector</abbr> of length N, then v can be multiplied by A to give another <abbr title="An element of a vector space. Elements of a vector space can be added and can be multiplied by constants. For computer graphics, a vector is just a list or array containing two, three, or four numbers. Vectors in that sense are often used to represent points in 2D, 3D, or 4D space. Properly, however, a vector represents a quantity that has a length and a direction; a vector used in this way can be visualized as an arrow.">vector</abbr> w = Av. The function that takes v to Av is a transformation; it transforms any given <abbr title="An element of a vector space. Elements of a vector space can be added and can be multiplied by constants. For computer graphics, a vector is just a list or array containing two, three, or four numbers. Vectors in that sense are often used to represent points in 2D, 3D, or 4D space. Properly, however, a vector represents a quantity that has a length and a direction; a vector used in this way can be visualized as an arrow.">vector</abbr> of size N into another <abbr title="An element of a vector space. Elements of a vector space can be added and can be multiplied by constants. For computer graphics, a vector is just a list or array containing two, three, or four numbers. Vectors in that sense are often used to represent points in 2D, 3D, or 4D space. Properly, however, a vector represents a quantity that has a length and a direction; a vector used in this way can be visualized as an arrow.">vector</abbr> of size N. A transformation of this form is called a <strong><abbr title="A function from one vector space to another that preserves vector addition and multiplication by constants. Linear transformations can be represented by matrices. In computer graphics, they are used to implement geometric operations such as rotation and translation.">linear transformation</abbr></strong>.</p>
+<p>Now, suppose that A and B are N-by-N matrices and v is a <abbr title="An element of a vector space. Elements of a vector space can be added and can be multiplied by constants. For computer graphics, a vector is just a list or array containing two, three, or four numbers. Vectors in that sense are often used to represent points in 2D, 3D, or 4D space. Properly, however, a vector represents a quantity that has a length and a direction; a vector used in this way can be visualized as an arrow.">vector</abbr> of length N. Then, we can form two different products: A(Bv) and (AB)v. It is a central fact that these two operations have the same effect. That is, we can multiply v by B and then multiply the result by A, or we can multiply the matrices A and B to get the <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> product AB and then multiply v by AB. The result is the same.</p>
+<p>Rotation and <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr>, as it turns out, are linear transformations. That is, the operation of rotating (x,y) through an angle d about the origin can be done by multiplying (x,y) by a 2-by-2 <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr>. Let's call that <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> Rd. Similarly, <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> by a factor a in the horizontal direction and b in the vertical direction can be given as a <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> Sa,b. If we want to apply a <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> followed by a <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> to the point v = (x,y), we can compute <strong>either</strong> Rd(Sa,b^v) or (RdSa,b)v.</p>
+<p>So what? Well, suppose that we want to apply the same two operations, scale then rotate, to thousands of points, as we typically do when transforming objects for computer graphics. The point is that we could compute the product <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> RdSa,b once and for all, and then apply the combined transform to each point with a single multiplication. This means that if a program says</p>
+<div class="highlight"><pre><span></span><code>rotate(d)
+scale(a,b)
+.
+.  // draw a complex object
+.
+</code></pre></div>
+<p>the computer doesn't have to keep track of two separate operations. It combines the operations into a single <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> and just keeps track of that. Even if you apply, say, 50 transformations to the object, the computer can just combine them all into one <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr>. By using <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> algebra, multiple transformations can be handled as efficiently as a single transformation!</p>
+<p>This is really nice, but there is a gaping problem: <strong>Translation is not a <abbr title="A function from one vector space to another that preserves vector addition and multiplication by constants. Linear transformations can be represented by matrices. In computer graphics, they are used to implement geometric operations such as rotation and translation.">linear transformation</abbr></strong>. To bring <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr> into this framework, we do something that looks a little strange at first: Instead of representing a point in 2D as a pair of numbers (x,y), we represent it as the triple of numbers (x,y,1). That is, we add a one as the third coordinate. It then turns out that we can then represent <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr>, <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr>, and <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr>—and hence any affine transformation—on 2D space as multiplication by a 3-by-3 <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr>. The matrices that we need have a bottom row containing (0,0,1). Multiplying (x,y,1) by such a <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> gives a new <abbr title="An element of a vector space. Elements of a vector space can be added and can be multiplied by constants. For computer graphics, a vector is just a list or array containing two, three, or four numbers. Vectors in that sense are often used to represent points in 2D, 3D, or 4D space. Properly, however, a vector represents a quantity that has a length and a direction; a vector used in this way can be visualized as an arrow.">vector</abbr> (x1,y1,1). We ignore the extra coordinate and consider this to be a transformation of (x,y) into (x1,y1). For the record, the 3-by-3 matrices for <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr> (Ta,b), <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> (Sa,b), and <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> (Rd) in 2D are</p>
+<p><figure markdown="span">
+    <a class="glightbox" href="../../../en/c2/transform-matrices-2d.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="pixel-coordinates" src="../../../en/c2/transform-matrices-2d.png" /></a>
+</figure></p>
+<p>You can compare multiplication by these matrices to the formulas given above for <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr>, <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr>, and <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr>. But when doing graphics programming, you won't need to do the multiplication yourself. For now, the important idea that you should take away from this discussion is that a sequence of transformations can be combined into a single transformation. The computer only needs to keep track of a single <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr>, which we can call the "current <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr>" or "current transformation." To implement transform commands such as translate(a,b) or rotate(d), the computer simply multiplies the current <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> by the <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> that represents the transform.</p>
+</div>
+</div>
+</div>
 
 
 
@@ -1288,7 +1715,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年4月25日</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年5月1日</span>
   </span>
 
     
