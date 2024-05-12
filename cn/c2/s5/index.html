@@ -24,7 +24,7 @@
     
     
       
-        <title>第5节: Java Graphics2D - 计算机图形学概论</title>
+        <title>第5节: Java 绘制2D - 计算机图形学概论</title>
       
     
     
@@ -93,7 +93,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#第5节-java-graphics2d" class="md-skip">
+        <a href="#第5节-java-绘制2d" class="md-skip">
           跳转至
         </a>
       
@@ -129,7 +129,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              第5节: Java Graphics2D
+              第5节: Java 绘制2D
             
           </span>
         </div>
@@ -855,7 +855,7 @@
           
   
   <span class="md-ellipsis">
-    第5节: Java Graphics2D
+    第5节: Java 绘制2D
   </span>
   
 
@@ -866,7 +866,7 @@
         
   
   <span class="md-ellipsis">
-    第5节: Java Graphics2D
+    第5节: Java 绘制2D
   </span>
   
 
@@ -888,45 +888,45 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#251--graphics2d" class="md-nav__link">
+  <a href="#251--绘制2d" class="md-nav__link">
     <span class="md-ellipsis">
-      2.5.1  Graphics2D
+      2.5.1  绘制2D
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#252--shapes" class="md-nav__link">
+  <a href="#252--形状" class="md-nav__link">
     <span class="md-ellipsis">
-      2.5.2  Shapes
+      2.5.2  形状
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#253--stroke-and-fill" class="md-nav__link">
+  <a href="#253--描边和填充" class="md-nav__link">
     <span class="md-ellipsis">
-      2.5.3  Stroke and Fill
+      2.5.3  描边和填充
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#254--transforms" class="md-nav__link">
+  <a href="#254--变换" class="md-nav__link">
     <span class="md-ellipsis">
-      2.5.4  Transforms
+      2.5.4  变换
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#255--bufferedimage-and-pixels" class="md-nav__link">
+  <a href="#255--bufferedimage-和-pixels" class="md-nav__link">
     <span class="md-ellipsis">
-      2.5.5  BufferedImage and Pixels
+      2.5.5  BufferedImage 和 Pixels
     </span>
   </a>
   
@@ -1330,45 +1330,45 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#251--graphics2d" class="md-nav__link">
+  <a href="#251--绘制2d" class="md-nav__link">
     <span class="md-ellipsis">
-      2.5.1  Graphics2D
+      2.5.1  绘制2D
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#252--shapes" class="md-nav__link">
+  <a href="#252--形状" class="md-nav__link">
     <span class="md-ellipsis">
-      2.5.2  Shapes
+      2.5.2  形状
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#253--stroke-and-fill" class="md-nav__link">
+  <a href="#253--描边和填充" class="md-nav__link">
     <span class="md-ellipsis">
-      2.5.3  Stroke and Fill
+      2.5.3  描边和填充
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#254--transforms" class="md-nav__link">
+  <a href="#254--变换" class="md-nav__link">
     <span class="md-ellipsis">
-      2.5.4  Transforms
+      2.5.4  变换
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#255--bufferedimage-and-pixels" class="md-nav__link">
+  <a href="#255--bufferedimage-和-pixels" class="md-nav__link">
     <span class="md-ellipsis">
-      2.5.5  BufferedImage and Pixels
+      2.5.5  BufferedImage 和 Pixels
     </span>
   </a>
   
@@ -1392,11 +1392,18 @@
   
 
 
-<h1 id="第5节-java-graphics2d">第5节: Java Graphics2D<a class="headerlink" href="#第5节-java-graphics2d" title="Permanent link">&para;</a></h1>
+<h1 id="第5节-java-绘制2d">第5节: Java 绘制2D<a class="headerlink" href="#第5节-java-绘制2d" title="Permanent link">&para;</a></h1>
 <p><strong>Java Graphics2D</strong></p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">中文</label><label for="__tabbed_1_2">英文</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>在本章的其余部分，我们将看一些二维图形的具体实现。这里有一些新的想法，但大多数情况下，您将看到我们已经介绍的一般概念如何在几个实际图形系统中使用。</p>
+<p>在本节中，我们的重点是Java编程语言。Java仍然是最受欢迎的编程语言之一。其标准桌面版本包括一个复杂的2D图形API，这是我们在这里讨论的主题。在阅读本节之前，您应该已经了解Java编程的基础知识。但即使您不了解，您也应该能够理解大部分关于图形API本身的讨论。（在<a href="../../a1/">附录A</a>中的<a href="../a1/s1.md">Section A.1</a>中可以找到Java的基本介绍。）</p>
+<p>这里讨论的图形API是Swing的一部分，Swing是用于图形用户界面编程的API，包含在Java的标准发行版中。现在许多Java程序都是使用名为JavaFX的另一种API编写的，它不是标准发行版的一部分。本教材不讨论JavaFX。实际上，JavaFX的图形API与HTML画布图形的API非常相似，这在<a href="../s6/">Section 2.6</a>中讨论过。</p>
+<p>Java的原始版本具有更小的图形API。它严格侧重于像素，并且仅使用整数坐标。该API有用于描绘和填充各种基本形状（包括线条、矩形、椭圆和多边形，尽管Java使用draw而不是stroke这个术语）的子例程。其绘图操作的含义规定在像素级别非常精确。整数坐标被定义为参考像素之间的线条。例如，一个12x8像素网格的x坐标从0到12，y坐标从0到8，如下所示。编号的是像素之间的线条，而不是像素本身。</p>
+<p>命令<em>fillRect(3,2,5,3)</em>会填充左上角位于(3,2)、宽度为5、高度为3的矩形，如上图左侧所示。命令<em>drawRect(3,2,5,3)</em>在概念上围绕该矩形的轮廓绘制一个“笔”。但是，这支笔是一个1像素的正方形，而沿轮廓移动的是笔的左上角。当笔沿矩形的右边缘移动时，该边缘右侧的像素被着色；当笔沿底边移动时，底边下方的像素被着色。结果如上图右侧所示。我在这里的重点不是为了纠结细节，而是要指出，对绘图操作的含义有精确规定可以让您在像素级别上有非常精细的控制。</p>
+<p>Java的原始图形不支持实数坐标、变换、抗锯齿或渐变等功能。在Java首次引入几年后，添加了一个支持所有这些功能的新图形API。我们将在这里看一下这个更高级的API。</p>
+</div>
 <div class="tabbed-block">
 <p>In the rest of this chapter, we look at specific implementations of two-dimensional graphics. There are a few new ideas here, but mostly you will see how the general concepts that we have covered are used in several real graphics systems.</p>
 <p>In this section, our focus is on the Java programming language. Java remains one of the most popular programming languages. Its standard desktop version includes a sophisticated 2D graphics <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>, which is our topic here. Before reading this section, you should already know the basics of Java programming. But even if you don't, you should be able to follow most of the discussion of the graphics <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> itself. (See <a href="../a1/s1.md">Section A.1</a> in <a href="../../a1/">Appendix A</a> for a very basic introduction to Java.)</p>
@@ -1410,11 +1417,27 @@
 </div>
 </div>
 </div>
-<h2 id="251--graphics2d">2.5.1  Graphics2D<a class="headerlink" href="#251--graphics2d" title="Permanent link">&para;</a></h2>
+<h2 id="251--绘制2d">2.5.1  绘制2D<a class="headerlink" href="#251--绘制2d" title="Permanent link">&para;</a></h2>
 <p><strong>Graphics2D</strong></p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">中文</label><label for="__tabbed_2_2">英文</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>Java是一种面向对象的语言。其API被定义为一个大型的类集合，原始图形API中的实际绘图操作大多包含在名为<ins class="critic">Graphics</ins>的类中。在更新的Swing API中，绘图操作是位于名为<ins class="critic">Graphics2D</ins>的类中的方法，它是<ins class="critic">Graphics</ins>的子类，因此所有原始的绘图操作仍然可用。（在Java中，一个类包含在称为“包”的类集合中。例如，<ins class="critic">Graphics</ins>和<ins class="critic">Graphics2D</ins>位于名为java.awt的包中。定义形状和变换的类位于名为java.awt.geom的包中。）</p>
+<p>图形系统需要一个绘制的位置。在Java中，绘图表面通常是<ins class="critic">JPanel</ins>类的对象，它代表屏幕上的一个矩形区域。<ins class="critic">JPanel</ins>类有一个名为<em>paintComponent()</em>的方法来绘制其内容。要创建一个绘图表面，您可以创建<ins class="critic">JPanel</ins>的子类并为其<em>paintComponent()</em>方法提供定义。所有绘图都应该在<em>paintComponent()</em>内完成；当需要更改绘图的内容时，您可以调用面板的repaint()方法来触发对<em>paintComponent()</em>的调用。<em>paintComponent()</em>方法有一个类型为<ins class="critic">Graphics</ins>的参数，但实际传递给方法的参数是<ins class="critic">Graphics2D</ins>类型的对象，它可以被类型转换为<ins class="critic">Graphics2D</ins>以获取对更高级别图形功能的访问。因此，<em>paintComponent()</em>方法的定义通常看起来像这样：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">paintComponent</span><span class="p">(</span><span class="w"> </span><span class="n">Graphics</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Graphics2D</span><span class="w"> </span><span class="n">g2</span><span class="p">;</span>
+<span class="w">    </span><span class="n">g2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Graphics2D</span><span class="p">)</span><span class="n">g</span><span class="p">;</span><span class="w">  </span><span class="c1">// 将参数转换为Graphics2D类型。</span>
+<span class="w">    </span><span class="p">.</span>
+<span class="w">    </span><span class="p">.</span><span class="w">  </span><span class="c1">// 使用g2绘图。</span>
+<span class="w">    </span><span class="p">.</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>在本节的其余部分，我将假设g2是一个类型为<ins class="critic">Graphics2D</ins>的变量，并讨论您可以使用它做的一些事情。作为第一个示例，我注意到<ins class="critic">Graphics2D</ins>支持抗锯齿，但默认情况下未启用。可以在图形上下文g2中使用以下相当令人生畏的命令启用它：</p>
+<div class="highlight"><pre><span></span><code><span class="n">g2</span><span class="p">.</span><span class="na">setRenderingHint</span><span class="p">(</span><span class="n">RenderingHints</span><span class="p">.</span><span class="na">KEY_ANTIALIASING</span><span class="p">,</span>
+<span class="w">                            </span><span class="n">RenderingHints</span><span class="p">.</span><span class="na">VALUE_ANTIALIAS_ON</span><span class="p">);</span>
+</code></pre></div>
+<p>对于在完整的Java程序中进行简单图形绘制的示例，您可以查看样本程序<a href="../../../en/source/java2d/GraphicsStarter.java">java2d/GraphicsStarter.java</a>和<a href="../../../en/source/java2d/AnimationStarter.java">java2d/AnimationStarter.java</a>。它们分别提供了使用<ins class="critic">Graphics2D</ins>绘制静态和动画图像的非常简单的框架。程序<a href="../../../en/source/java2d/EventsStarter.java">java2d/EventsStarter.java</a>是一个类似的框架，用于处理图形程序中的鼠标和键事件。如果您想探索Java图形，您可以将这些程序作为一些实验的基础。</p>
+</div>
 <div class="tabbed-block">
 <p>Java is an object-oriented language. Its <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> is defined as a large set of classes, The actual drawing operations in the original graphics <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> were mostly contained in the class named <ins class="critic">Graphics</ins>. In the newer Swing <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>, drawing operations are methods in a class named <ins class="critic">Graphics2D</ins>, which is a subclass of <ins class="critic">Graphics</ins>, so that all the original drawing operations are still available. (A class in Java is contained in a collection of classes known as a "package." <ins class="critic">Graphics</ins> and <ins class="critic">Graphics2D</ins>, for example, are in the package named java.awt. Classes that define shapes and transforms are in a package named java.awt.geom.)</p>
 <p>A graphics system needs a place to draw. In Java, the drawing surface is often an object of the class <ins class="critic">JPanel</ins>, which represents a rectangular area on the screen. The <ins class="critic">JPanel</ins> class has a method named <em>paintComponent()</em> to draw its content. To create a drawing surface, you can create a subclass of <ins class="critic">JPanel</ins> and provide a definition for its <em>paintComponent()</em> method. All drawing should be done inside <em>paintComponent()</em>; when it is necessary to change the contents of the drawing, you can call the panel's repaint() method to trigger a call to <em>paintComponent()</em>. The <em>paintComponent()</em> method has a parameter of type <ins class="critic">Graphics</ins>, but the parameter that is passed to the method is actually an object of type <ins class="critic">Graphics2D</ins>, and it can be type-cast to <ins class="critic">Graphics2D</ins> to obtain access to the more advanced graphics capabilities. So, the definition of the <em>paintComponent()</em> method usually looks something like this:</p>
@@ -1428,17 +1451,68 @@
 </code></pre></div>
 <p>In the rest of this section, I will assume that g2 is a variable of type <ins class="critic">Graphics2D</ins>, and I will discuss some of the things that you can do with it. As a first example, I note that <ins class="critic">Graphics2D</ins> supports <abbr title="A technique used to reduce the jagged or &quot;staircase&quot; appearance of diagonal lines, text, and other shapes that are drawn using pixels. When a pixel is only partly covered by a geometric shape, then the color of the pixel is a blend of the color of the shape and the color of the background, with the degree of blending depending on the fraction of the pixel that is covered by the geometric shape.">antialiasing</abbr>, but it is not turned on by default. It can be enabled in a graphics context g2 with the rather intimidating command</p>
 <div class="highlight"><pre><span></span><code><span class="n">g2</span><span class="p">.</span><span class="na">setRenderingHint</span><span class="p">(</span><span class="n">RenderingHints</span><span class="p">.</span><span class="na">KEY_ANTIALIASING</span><span class="p">,</span>
-<span class="w">                         </span><span class="n">RenderingHints</span><span class="p">.</span><span class="na">VALUE_ANTIALIAS_ON</span><span class="p">);</span>
+<span class="w">                            </span><span class="n">RenderingHints</span><span class="p">.</span><span class="na">VALUE_ANTIALIAS_ON</span><span class="p">);</span>
 </code></pre></div>
 <p>For simple examples of graphics in complete Java programs, you can look at the sample programs <a href="../../../en/source/java2d/GraphicsStarter.java">java2d/GraphicsStarter.java</a> and <a href="../../../en/source/java2d/AnimationStarter.java">java2d/AnimationStarter.java</a>. They provide very minimal frameworks for drawing static and animated images, respectively, using <ins class="critic">Graphics2D</ins>. The program <a href="../../../en/source/java2d/EventsStarter.java">java2d/EventsStarter.java</a> is a similar framework for working with mouse and key events in a graphics program. You can use these programs as the basis for some experimentation if you want to explore Java graphics.</p>
 </div>
 </div>
 </div>
-<h2 id="252--shapes">2.5.2  Shapes<a class="headerlink" href="#252--shapes" title="Permanent link">&para;</a></h2>
+<h2 id="252--形状">2.5.2  形状<a class="headerlink" href="#252--形状" title="Permanent link">&para;</a></h2>
 <p><strong>Shapes</strong></p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">中文</label><label for="__tabbed_3_2">英文</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>使用原始的<strong>Graphics</strong>类进行绘制时，使用整数坐标，单位为像素。这在标准坐标系中效果很好，但在使用实数坐标时不适用，因为在这样的坐标系中，度量单位将不等于一个像素。我们需要能够使用实数来指定形状。Java包java.awt.geom提供了支持使用实数坐标定义的形状的功能。例如，该包中的<strong>Line2D</strong>类表示以一对实数为端点的线段。</p>
+<p>现在，Java有两种实数类型：<strong>double</strong>和<strong>float</strong>。<strong>double</strong>类型可以表示比<strong>float</strong>更大范围的数字，并且具有更多的有效位数，<strong>double</strong>是更常用的类型。实际上，<strong>doubles</strong>在Java中更容易使用。然而，<strong>float</strong>值通常在图形应用中具有足够的精度，并且它们具有在内存中占用更少空间的优势。此外，计算机图形硬件通常在内部使用float值。</p>
+<p>因此，考虑到这些因素，<em>java.awt.geom</em>包实际上为每个形状提供了两个版本，一个使用<strong>float</strong>类型的坐标，另一个使用<strong>double</strong>类型的坐标。这是以一种相当奇怪的方式实现的。以Line2D为例，Line2D类本身是一个抽象类。它有两个子类，一个表示使用float坐标的线，另一个使用double坐标。最奇怪的部分是，这些子类被定义为Line2D的嵌套类：Line2D.Float和Line2D.Double。这意味着您可以声明一个类型为Line2D的变量，但要创建一个对象，您需要使用<em>Line2D.Double</em>或<em>Line2D.Float</em>：</p>
+<div class="highlight"><pre><span></span><code><span class="n">Line2D</span><span class="w"> </span><span class="n">line1</span><span class="p">,</span><span class="w"> </span><span class="n">line2</span><span class="p">;</span>
+<span class="n">line1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Line2D</span><span class="p">.</span><span class="na">Double</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">);</span><span class="w"> </span><span class="c1">// 从 (1.0,2.0) 到 (5.0,7.0) 的线段</span>
+<span class="n">line2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Line2D</span><span class="p">.</span><span class="na">Float</span><span class="p">(</span><span class="mf">2.7F</span><span class="p">,</span><span class="mf">3.1F</span><span class="p">,</span><span class="mf">1.5F</span><span class="p">,</span><span class="mf">7.1F</span><span class="p">);</span><span class="w"> </span><span class="c1">// 从 (2.7,3.1) 到 (1.5,7.1) 的线段</span>
+</code></pre></div>
+<p>注意，在Java中使用<strong>float</strong>类型的常量时，您必须将"F"作为后缀添加到值后面。这是为什么<strong>doubles</strong>在Java中更容易的一个原因。为简单起见，您可能希望坚持使用<em>Line2D.Double</em>。然而，<em>Line2D.Float</em>可能会提供稍微更好的性能。</p>
+<hr />
+<p>让我们来看看<em>java.awt.geom</em>中的一些其他类。抽象类<strong>Point2D</strong>—以及它的具体子类<strong>Point2D.Double</strong>和<strong>Point2D.Float</strong>—表示二维空间中的一个点，由两个实数坐标指定。点不是一个形状；您无法对其进行填充或描边。可以用两个实数构造一个点（"new Point2D.Double(1.2,3.7)"）。如果p是类型为Point2D的变量，您可以使用p.getX()和p.getY()来检索其坐标，并且您可以使用p.setX(x)、p.setY(y)或p.setLocation(x,y)来设置其坐标。如果pd是类型为Point2D.Double的变量，您还可以直接引用坐标，如pd.x和pd.y（对于Point2D.Float也是如此）。<em>java.awt.geom</em>中的其他类提供了类似的多种方式来操纵其属性，我不会在这里尝试列出它们所有。</p>
+<p>有各种各样的类表示几何形状，包括Line2D、Rectangle2D、RoundRectangle2D、Ellipse2D、Arc2D和Path2D。所有这些都是抽象类，每个类包含一对子类，例如Rectangle2D.Double和Rectangle2D.Float。一些形状，比如矩形，具有可以填充的内部；这样的形状也有可以描边的轮廓。一些形状，比如线段，纯粹是一维的，只能描边。</p>
+<p>除了线段，矩形可能是最简单的形状。<strong>Rectangle2D</strong>有一个角点（x，y），一个宽度和一个高度，并且可以根据这些数据构造（"new Rectangle2D.Double(x,y,w,h)"）。角点（x，y）指定了矩形中的最小x值和y值。对于通常的像素坐标系，（x，y）是左上角。然而，在最小y值在底部的坐标系中，（x，y）将是左下角。矩形的边平行于坐标轴。类型为<strong>Rectangle2D.Double</strong>的变量r具有公共实例变量r.x、r.y、r.width和r.height。如果宽度或高度小于或等于零，当矩形被填充或描边时将不会绘制任何内容。一个常见的任务是从两个角点（x1，y1）和（x2，y2）定义一个矩形。这可以通过创建一个高度和宽度均为零的矩形，然后将第二个点添加到矩形中来完成。将一个点添加到矩形会使矩形增长足够以包括该点：</p>
+<div class="highlight"><pre><span></span><code><span class="n">Rectangle2D</span><span class="p">.</span><span class="na">Double</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Rectangle2D</span><span class="p">.</span><span class="na">Double</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+<span class="n">r</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">);</span>
+</code></pre></div>
+<p>类<strong>Line2D</strong>、<strong>Ellipse2D</strong>、<strong>RoundRectangle2D</strong>和<strong>Arc2D</strong>创建其他基本形状，并且工作原理类似于<strong>Rectangle2D</strong>。您可以查看Java API文档以获取详细信息。</p>
+<p><strong>Path2D</strong>类更有趣。它表示由线段和贝塞尔曲线组成的一般路径。路径是使用类似于在<a href="../s2/#223--多边形曲线和路径">子节2.2.3</a>中讨论过的moveTo和lineTo子例程创建的。要创建路径，首先构造一个类型为<strong>Path2D.Double</strong>（或<strong>Path2D.Float</strong>）的对象：</p>
+<div class="highlight"><pre><span></span><code><span class="n">Path2D</span><span class="p">.</span><span class="na">Double</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Path2D</span><span class="p">.</span><span class="na">Double</span><span class="p">();</span>
+</code></pre></div>
+<p>当首次创建路径p时，它是空的。通过沿着要创建的路径移动一个想象的“笔”来构造路径。方法p.moveTo(x,y)将笔移动到点(x,y)而不绘制任何内容。它用于指定路径的初始点或路径的新部分的起始点。方法p.lineTo(x,y)绘制一条从当前笔位置到(x,y)的直线，将笔留在(x,y)处。方法p.close()可用于通过绘制一条线返回到其起始点来关闭路径（或路径的当前部分）。例如，以下代码创建了一个顶点分别位于(0,5)、(2,-3)和(-4,1)的三角形：</p>
+<div class="highlight"><pre><span></span><code><span class="n">Path2D</span><span class="p">.</span><span class="na">Double</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Path2D</span><span class="p">.</span><span class="na">Double</span><span class="p">();</span>
+<span class="n">p</span><span class="p">.</span><span class="na">moveTo</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span>
+<span class="n">p</span><span class="p">.</span><span class="na">lineTo</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">);</span>
+<span class="n">p</span><span class="p">.</span><span class="na">lineTo</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">p</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</code></pre></div>
+<p>您还可以向<strong>Path2D</strong>添加贝塞尔曲线段。贝塞尔曲线在<a href="../s2/#223--多边形曲线和路径">子节2.2.3</a>中已经讨论过了。您可以使用方法将三次贝塞尔曲线添加到路径<strong>Path2D</strong> p中</p>
+<div class="highlight"><pre><span></span><code><span class="n">p</span><span class="p">.</span><span class="na">curveTo</span><span class="p">(</span><span class="w"> </span><span class="n">cx1</span><span class="p">,</span><span class="w"> </span><span class="n">cy1</span><span class="p">,</span><span class="w"> </span><span class="n">cx2</span><span class="p">,</span><span class="w"> </span><span class="n">cy2</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>这将添加一个曲线段，从当前笔位置开始，到(x,y)结束，并使用(cx1,cy1)和(cx2,cy2)作为曲线的两个控制点。添加二次贝塞尔曲线段到路径的方法是quadTo。它只需要一个控制点：</p>
+<div class="highlight"><pre><span></span><code><span class="n">p</span><span class="p">.</span><span class="na">quadTo</span><span class="p">(</span><span class="w"> </span><span class="n">cx</span><span class="p">,</span><span class="w"> </span><span class="n">cy</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>当路径与自身相交时，其内部是通过查看缠绕数确定的，如<a href="../s2/#222--描边和填充">子节2.2.2</a>中所讨论的。确定点是否在内部有两种可能的规则：询问围绕该点的曲线的缠绕数是否为非零，或者询问是否为奇数。您可以使用以下方法设置<strong>Path2D</strong> p使用的缠绕规则：</p>
+<div class="highlight"><pre><span></span><code><span class="n">p</span><span class="p">.</span><span class="na">setWindingRule</span><span class="p">(</span><span class="w"> </span><span class="n">Path2D</span><span class="p">.</span><span class="na">WIND_NON_ZERO</span><span class="w"> </span><span class="p">);</span>
+<span class="n">p</span><span class="p">.</span><span class="na">setWindingRule</span><span class="p">(</span><span class="w"> </span><span class="n">Path2D</span><span class="p">.</span><span class="na">WIND_EVEN_ODD</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>默认是WIND_NON_ZERO。</p>
+<p>最后，我要注意的是可以在图形上下文中绘制图像的副本。图像可以从文件加载或由程序创建。我稍后在本节中讨论第二种可能性。图像由类型为<strong>Image</strong>的对象表示。实际上，我在这里假设对象是<strong>BufferedImage</strong>类型，它是<strong>Image</strong>的子类。如果img是这样的对象，则</p>
+<div class="highlight"><pre><span></span><code><span class="n">g2</span><span class="p">.</span><span class="na">drawImage</span><span class="p">(</span><span class="w"> </span><span class="n">img</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>将在点(x,y)处绘制图像的左上角。（第四个参数很难解释，但对于<strong>BufferedImage</strong>，应将其指定为null。）这将以其自然宽度和高度绘制图像，但可以在方法中指定不同的宽度和高度：</p>
+<div class="highlight"><pre><span></span><code><span class="n">g2</span><span class="p">.</span><span class="na">drawImage</span><span class="p">(</span><span class="w"> </span><span class="n">img</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>还有一个绘制文本字符串的方法。该方法指定了字符串和字符串的基点。（基点是字符串的左下角，忽略了像字母"g"的尾巴之类的“下沉”部分。）例如，</p>
+<div class="highlight"><pre><span></span><code><span class="n">g2</span><span class="p">.</span><span class="na">drawString</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;Hello World&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>图像和字符串与其他形状一样受到变换的影响。变换是获得旋转文本和图像的唯一方法。例如，当对一些文本和图像应用旋转时，可能会发生以下情况：</p>
+<p><figure markdown="span">
+    <a class="glightbox" href="../../../en/c2/RotatedStringAndImage.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="pixel-coordinates" src="../../../en/c2/RotatedStringAndImage.jpg" /></a>
+</figure></p>
+</div>
 <div class="tabbed-block">
 <p>Drawing with the original <strong>Graphics</strong> class is done using integer coordinates, with the measurement given in <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr>. This works well in the standard <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>, but is not appropriate when real-number coordinates are used, since the unit of measure in such a <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> will not be equal to a <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr>. We need to be able to specify shapes using real numbers. The Java package java.awt.geom provides support for shapes defined using real number coordinates. For example, the class <strong>Line2D</strong> in that package represents line segments whose endpoints are given as pairs of real numbers.</p>
 <p>Now, Java has two real number types: <strong>double</strong> and <strong>float</strong>. The <strong>double</strong> type can represent a larger range of numbers than <strong>float</strong>, with a greater number of significant digits, and <strong>double</strong> is the more commonly used type. In fact, <strong>doubles</strong> are simply easier to use in Java. However, <strong>float</strong> values generally have enough accuracy for graphics applications, and they have the advantage of taking up less space in memory. Furthermore, computer graphics hardware often uses float values internally.</p>
@@ -1493,11 +1567,59 @@
 </div>
 </div>
 </div>
-<h2 id="253--stroke-and-fill">2.5.3  Stroke and Fill<a class="headerlink" href="#253--stroke-and-fill" title="Permanent link">&para;</a></h2>
+<h2 id="253--描边和填充">2.5.3  描边和填充<a class="headerlink" href="#253--描边和填充" title="Permanent link">&para;</a></h2>
 <p><strong>Stroke and Fill</strong></p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">中文</label><label for="__tabbed_4_2">英文</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>一旦您有一个表示形状的对象，您就可以填充该形状或描边它。Graphics2D类定义了执行此操作的方法。描边形状的方法称为draw：</p>
+<div class="highlight"><pre><span></span><code><span class="n">g2</span><span class="p">.</span><span class="na">fill</span><span class="p">(</span><span class="n">shape</span><span class="p">);</span>
+<span class="n">g2</span><span class="p">.</span><span class="na">draw</span><span class="p">(</span><span class="n">shape</span><span class="p">);</span>
+</code></pre></div>
+<p>这里，g2是<strong>Graphics2D</strong>类型，shape可以是<strong>Path2D</strong>、<strong>Line2D</strong>、<strong>Rectangle2D</strong>或任何其他形状类的对象。这些通常用于新创建的对象上，当该对象表示的形状只会被绘制一次时。例如：</p>
+<div class="highlight"><pre><span></span><code><span class="n">g2</span><span class="p">.</span><span class="na">draw</span><span class="p">(</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Line2D</span><span class="p">.</span><span class="na">Double</span><span class="p">(</span><span class="w"> </span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>当然，也可以创建形状对象并多次重用它们。</p>
+<p>用于描边形状的“笔”通常由BasicStroke类型的对象表示。默认的笔的线宽等于1。这是当前坐标系中的一个单位，而不是一个像素。要获得不同宽度的线条，可以安装一个新的笔：</p>
+<div class="highlight"><pre><span></span><code><span class="n">g2</span><span class="p">.</span><span class="na">setStroke</span><span class="p">(</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BasicStroke</span><span class="p">(</span><span class="n">width</span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>构造函数中的<em>width</em>的类型是float。可以向构造函数添加参数来控制笔在其端点的形状以及两个线段相遇的位置。（见<a href="../s2/#221--基本形状">子节2.2.1</a>。）例如：</p>
+<div class="highlight"><pre><span></span><code><span class="n">g2</span><span class="p">.</span><span class="na">setStroke</span><span class="p">(</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BasicStroke</span><span class="p">(</span><span class="w"> </span><span class="mf">5.0F</span><span class="p">,</span>
+<span class="w">        </span><span class="n">BasicStroke</span><span class="p">.</span><span class="na">CAP_ROUND</span><span class="p">,</span><span class="w"> </span><span class="n">BasicStroke</span><span class="p">.</span><span class="na">JOIN_BEVEL</span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>还可以用虚线和点线制作笔，但我不会在这里讨论如何做。</p>
+<hr />
+<p>对形状进行描边或填充意味着设置某些像素的颜色。在Java中，用于对这些像素着色的规则称为“画笔”。画笔可以是纯色、渐变或图案。与Java中的大多数东西一样，画笔由对象表示。如果paint是这样的一个对象，那么</p>
+<div class="highlight"><pre><span></span><code><span class="n">g2</span><span class="p">.</span><span class="na">setPaint</span><span class="p">(</span><span class="n">paint</span><span class="p">);</span>
+</code></pre></div>
+<p>将设置paint用于图形上下文g2的后续绘图操作，直到下次更改画笔为止。（还有一种更旧的方法，g2.setColor(c)，它仅适用于颜色，并等价于调用g2.setPaint(c)。）</p>
+<p>纯色由<strong>Color</strong>类型的对象表示。颜色在内部表示为RGBA颜色。可以使用构造函数创建一个不透明颜色，其alpha分量最大：</p>
+<div class="highlight"><pre><span></span><code><span class="k">new</span><span class="w"> </span><span class="n">Color</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>其中r、g和b是介于0到255之间的整数，表示颜色的红、绿和蓝分量。要获得半透明颜色，可以添加alpha分量，也在0到255范围内：</p>
+<div class="highlight"><pre><span></span><code><span class="k">new</span><span class="w"> </span><span class="n">Color</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>还有一个函数，Color.getHSBColor(h,s,b)，它从HSB（又名HSV）颜色模型的值创建颜色。在这种情况下，色相、饱和度和亮度颜色分量必须作为float类型的值给出。还有常量来表示大约十几种常见的颜色，例如Color.WHITE、Color.RED和Color.YELLOW。例如，这是我可能如何绘制一个带有黑色轮廓和浅蓝色内部的正方形的方法：</p>
+<div class="highlight"><pre><span></span><code><span class="n">Rectangle2D</span><span class="w"> </span><span class="n">square</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Rectangle2D</span><span class="p">.</span><span class="na">Double</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">);</span>
+<span class="n">g2</span><span class="p">.</span><span class="na">setPaint</span><span class="p">(</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Color</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
+<span class="n">g2</span><span class="p">.</span><span class="na">fill</span><span class="p">(</span><span class="w"> </span><span class="n">square</span><span class="w"> </span><span class="p">);</span>
+<span class="n">g2</span><span class="p">.</span><span class="na">setStroke</span><span class="p">(</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BasicStroke</span><span class="p">(</span><span class="mf">0.1F</span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
+<span class="n">g2</span><span class="p">.</span><span class="na">setPaint</span><span class="p">(</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">BLACK</span><span class="w"> </span><span class="p">);</span>
+<span class="n">g2</span><span class="p">.</span><span class="na">draw</span><span class="p">(</span><span class="w"> </span><span class="n">square</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>除了纯色外，Java还有<strong>GradientPaint</strong>类，用于表示简单的线性渐变，以及<strong>TexturePaint</strong>类，用于表示图案填充。在三维图形中使用的图像模式称为纹理。渐变和图案在<a href="../s2/#222--描边和填充">子节2.2.2</a>中已经讨论过了。对于这些画笔，应用于像素的颜色取决于像素的坐标。</p>
+<p>要创建一个<strong>TexturePaint</strong>，您需要一个<strong>BufferedImage</strong>对象来指定它将用作图案的图像。您还必须说明图像中的坐标如何映射到显示中的绘图坐标。您可以通过指定一个矩形来实现这一点，该矩形将容纳图像的一个副本。因此，构造函数采用以下形式：</p>
+<div class="highlight"><pre><span></span><code><span class="k">new</span><span class="w"> </span><span class="n">TexturePaint</span><span class="p">(</span><span class="w"> </span><span class="n">image</span><span class="p">,</span><span class="w"> </span><span class="n">rect</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>其中image是<strong>BufferedImage</strong>，rect是<strong>Rectangle2D</strong>。在指定的矩形外部，图像在水平和垂直方向上重复。<strong>GradientPaint</strong>的构造函数采用以下形式：</p>
+<div class="highlight"><pre><span></span><code><span class="k">new</span><span class="w"> </span><span class="n">GradientPaint</span><span class="p">(</span><span class="w"> </span><span class="n">x1</span><span class="p">,</span><span class="w"> </span><span class="n">y1</span><span class="p">,</span><span class="w"> </span><span class="n">color1</span><span class="p">,</span><span class="w"> </span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="n">y2</span><span class="p">,</span><span class="w"> </span><span class="n">color2</span><span class="p">,</span><span class="w"> </span><span class="n">cyclic</span><span class="w"> </span><span class="p">)</span>
+</code></pre></div>
+<p>这里，x1、y1、x2和y2是float类型的值；color1和color2是Color类型；cyclic是布尔值。渐变颜色将沿着从点(x1,y1)到点(x2,y2)的线段变化。在第一个端点处，颜色是color1，在第二个端点处是color2。颜色沿着与该线段垂直的线段是恒定的。布尔参数cyclic指定颜色模式是否重复。例如，以下命令将在图形上下文中安装一个GradientPaint：</p>
+<div class="highlight"><pre><span></span><code><span class="n">g2</span><span class="p">.</span><span class="na">setPaint</span><span class="p">(</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">GradientPaint</span><span class="p">(</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">BLACK</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">RED</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>顺便说一句，当前画笔用于描边和填充。</p>
+<p>示例Java程序<a href="../../../en/source/java2d/PaintDemo.java">java2d/PaintDemo.java</a>显示了一个填充有<strong>GradientPaint</strong>或<strong>TexturePaint</strong>的多边形，并允许您调整其属性。图像文件<a href="../../../en/source/java2d/QueenOfHearts.png">java2d/QueenOfHearts.png</a>和<a href="../../../en/source/java2d/TinySmiley.png">java2d/TinySmiley.png</a>是该程序的一部分，在运行该程序时，它们必须与构成该程序的编译后的类文件位于同一位置。</p>
+</div>
 <div class="tabbed-block">
 <p>Once you have an object that represents a shape, you can fill the shape or stroke it. The Graphics2D class defines methods for doing this. The method for <abbr title="Drawing the outline of a shape, as if a pen is dragged along the boundary of the shape. For a shape with no interior, such as a line segment, stroking the shape simply means dragging the pen along the shape.">stroking a shape</abbr> is called draw:</p>
 <div class="highlight"><pre><span></span><code><span class="n">g2</span><span class="p">.</span><span class="na">fill</span><span class="p">(</span><span class="n">shape</span><span class="p">);</span>
@@ -1512,7 +1634,7 @@
 </code></pre></div>
 <p>The <em>width</em> in the <abbr title="In object-oriented programming, a subroutine that is used to create objects. A constructor for a class creates and initializes objects belonging to that class.">constructor</abbr> is of type float. It is possible to add parameters to the <abbr title="In object-oriented programming, a subroutine that is used to create objects. A constructor for a class creates and initializes objects belonging to that class.">constructor</abbr> to control the shape of a stroke at its endpoints and where two segments meet. (See <a href="../s2/#221--基本形状">Subsection 2.2.1</a>.) For example,</p>
 <div class="highlight"><pre><span></span><code><span class="n">g2</span><span class="p">.</span><span class="na">setStroke</span><span class="p">(</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BasicStroke</span><span class="p">(</span><span class="w"> </span><span class="mf">5.0F</span><span class="p">,</span>
-<span class="w">       </span><span class="n">BasicStroke</span><span class="p">.</span><span class="na">CAP_ROUND</span><span class="p">,</span><span class="w"> </span><span class="n">BasicStroke</span><span class="p">.</span><span class="na">JOIN_BEVEL</span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="n">BasicStroke</span><span class="p">.</span><span class="na">CAP_ROUND</span><span class="p">,</span><span class="w"> </span><span class="n">BasicStroke</span><span class="p">.</span><span class="na">JOIN_BEVEL</span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
 </code></pre></div>
 <p>It is also possible to make strokes out of dashes and dots, but I won't discuss how to do it here.</p>
 <hr />
@@ -1549,11 +1671,51 @@
 </div>
 </div>
 </div>
-<h2 id="254--transforms">2.5.4  Transforms<a class="headerlink" href="#254--transforms" title="Permanent link">&para;</a></h2>
+<h2 id="254--变换">2.5.4  变换<a class="headerlink" href="#254--变换" title="Permanent link">&para;</a></h2>
 <p><strong>Transforms</strong></p>
 <div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">中文</label><label for="__tabbed_5_2">英文</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>Java将几何变换实现为<strong>Graphics2D</strong>类中的方法。例如，如果g2是一个<strong>Graphics2D</strong>，那么调用g2.translate(1,3)将对在调用该方法之后绘制的对象应用一个(1,3)的平移变换。可用的方法对应于<a href="../s3/">Section 2.3</a>中讨论的变换函数：</p>
+<ul>
+<li><code>g2.scale(sx,sy)</code> — 按水平缩放因子sx和垂直缩放因子sy缩放。</li>
+<li><code>g2.rotate(r)</code> — 绕原点旋转r弧度角度，其中角度以弧度表示。正角度将正x轴旋转到正y轴的方向。</li>
+<li><code>g2.rotate(r,x,y)</code> — 绕点(x,y)旋转r角度。</li>
+<li><code>g2.translate(dx,dy)</code> — 水平平移dx和垂直平移dy。</li>
+<li><code>g2.shear(sx,sy)</code> — 应用水平剪切量sx和垂直剪切量sy。（通常，剪切量之一为0，产生纯水平或纯垂直的剪切。）</li>
+</ul>
+<p>在Java中，变换表示为<strong>AffineTransform</strong>类的对象。您可以使用构造函数创建一个一般的仿射变换</p>
+<div class="highlight"><pre><span></span><code><span class="n">AffineTransform</span><span class="w"> </span><span class="n">trns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AffineTransform</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">f</span><span class="p">);</span>
+</code></pre></div>
+<p>变换<em>trns</em>将点(x,y)变换为点(x1,y1)，公式如下</p>
+<div class="highlight"><pre><span></span><code><span class="n">x1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">c</span><span class="o">*</span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span>
+<span class="n">y1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">d</span><span class="o">*</span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">f</span><span class="p">;</span>
+</code></pre></div>
+<p>您可以通过调用g2.transform(trns)将变换trns应用于图形上下文g2。</p>
+<p>图形上下文g2包括当前的仿射变换，该变换是应用的所有变换的组合。诸如g2.rotate和g2.transform之类的命令修改当前变换。您可以通过调用g2.getTransform()获取当前变换的副本，该方法返回一个<strong>AffineTransform</strong>对象。您可以使用g2.setTransform(trns)设置当前变换。这将在g2中用<strong>AffineTransform</strong> trns替换当前变换。（注意，g2.setTransform(trns)与g2.transform(trns)不同；第一个命令<strong>替换</strong>g2中的当前变换，而第二个命令<strong>修改</strong>当前变换，将其与trns组合。）</p>
+<p>getTransform和setTransform方法可用于实现分层建模。如<a href="../s4/">Section 2.4</a>所讨论的那样，绘制对象之前，您应保存当前变换。绘制对象后，恢复保存的变换。在绘制对象及其子对象时应用的任何额外的建模变换将不会影响对象之外的内容。在Java中，这看起来像是：</p>
+<div class="highlight"><pre><span></span><code><span class="n">AffineTransform</span><span class="w"> </span><span class="n">savedTransform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g2</span><span class="p">.</span><span class="na">getTransform</span><span class="p">();</span>
+<span class="n">drawObject</span><span class="p">();</span>
+<span class="n">g2</span><span class="p">.</span><span class="na">setTransform</span><span class="p">(</span><span class="w"> </span><span class="n">savedTransform</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>对于分层图形，我们实际上需要一个变换堆栈。但是，如果使用子程序实现层次结构，则上述代码将是子程序的一部分，并且局部变量savedTransform的值将存储在子程序调用堆栈上。实际上，我们将使用子程序调用堆栈来实现保存变换的堆栈。</p>
+<p>除了建模变换之外，变换还用于设置窗口到视口变换，建立用于绘图的坐标系统。这通常在创建图形上下文之后立即进行，而不是在任何绘图操作之前。它可以使用<a href="../s3/#237--视窗到视口">Subsection 2.3.7</a>中的Java版本的applyWindowToViewportTransformation函数进行。请参见示例程序<a href="../../../en/source/java2d/GraphicsStarter.java">java2d/GraphicsStarter.java</a>。</p>
+<hr />
+<p>我还要提一下<strong>AffineTransform</strong>对象的另一个用途：有时，您确实需要显式地转换坐标。例如，给定对象坐标(x,y)，我可能需要知道它们在屏幕上实际会到达哪里，即像素坐标。换句话说，我想通过当前变换来转换(x,y)以获取相应的像素坐标。<strong>AffineTransform</strong>类有一个方法用于将仿射变换应用于点。它使用<strong>Point2D</strong>类型的对象。以下是一个示例：</p>
+<div class="highlight"><pre><span></span><code><span class="n">AffineTransform</span><span class="w"> </span><span class="n">trns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g2</span><span class="p">.</span><span class="na">getTransform</span><span class="p">();</span>
+<span class="n">Point2D</span><span class="p">.</span><span class="na">Double</span><span class="w"> </span><span class="n">originalPoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Point2D</span><span class="p">.</span><span class="na">Double</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">);</span>
+<span class="n">Point2D</span><span class="p">.</span><span class="na">Double</span><span class="w"> </span><span class="n">transformedPoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Point2D</span><span class="p">.</span><span class="na">Double</span><span class="p">();</span>
+<span class="n">trns</span><span class="p">.</span><span class="na">transform</span><span class="p">(</span><span class="w"> </span><span class="n">originalPoint</span><span class="p">,</span><span class="w"> </span><span class="n">transformedPoint</span><span class="w"> </span><span class="p">);</span>
+<span class="c1">// transformedPoint 现在包含与 (x,y) 对应的像素坐标</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">pixelX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">transformedPoint</span><span class="p">.</span><span class="na">x</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">pixelY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">transformedPoint</span><span class="p">.</span><span class="na">y</span><span class="p">;</span>
+</code></pre></div>
+<p>我使用这种方法的一种方式是在处理字符串时。通常，在使用变换坐标系显示字符串时，我希望转换字符串的基点，但不转换字符串本身。也就是说，我希望变换影响字符串的位置但不影响其大小或旋转。为了实现这一点，我使用上述技术获取转换后基点的像素坐标，然后在这些坐标处绘制字符串，使用原始的、未经转换的图形上下文。</p>
+<p>反向操作有时也是必要的。也就是说，给定像素坐标(px,py)，找到通过给定仿射变换转换为(px,py)的点(x,y)。例如，当实现鼠标交互时，通常会知道鼠标的像素坐标，但您希望找到您自己选择的坐标系中相应的点。为此，您需要一个<strong><abbr title="给定一个变换T，其逆变换是一个将T操作反转的变换。例如，在2D变换中，如果R是T的逆变换，则R(T(x,y)) = (x,y)。缩放0.5是缩放2的逆变换。平移(-3,5)是平移(3,-5)的逆变换。并非每个变换都有逆变换。例如，按零因子缩放没有逆变换。">逆变换</abbr></strong>。仿射变换T的逆变换是执行相反变换的另一个变换。也就是说，如果T(x,y) = (px,py)，并且如果R是逆变换，则R(px,py) = (x,y)。在Java中，可以使用以下方法获得<strong>AffineTransform</strong> trns的逆变换：</p>
+<div class="highlight"><pre><span></span><code><span class="n">AffineTransform</span><span class="w"> </span><span class="n">inverse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">trns</span><span class="p">.</span><span class="na">createInverse</span><span class="p">();</span>
+</code></pre></div>
+<p>（最后注意：来自<strong>Graphics</strong>的旧绘图方法，如drawLine，使用整数坐标。重要的是要注意，使用这些旧方法绘制的任何形状都受到与指定实数坐标的Line2D等形状相同的变换的影响。例如，使用g.drawLine(1,2,5,7)绘制线将具有与绘制具有端点(1.0,2.0)和(5.0,7.0)的Line2D相同的效果。事实上，所有绘图都受到坐标变换的影响。）</p>
+</div>
 <div class="tabbed-block">
 <p>Java implements geometric transformations as methods in the <strong>Graphics2D</strong> class. For example, if g2 is a <strong>Graphics2D</strong>, then calling g2.translate(1,3) will apply a <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr> by (1,3) to objects that are drawn after the method is called. The methods that are available correspond to the transform functions discussed in <a href="../s3/">Section 2.3</a>:</p>
 <ul>
@@ -1599,11 +1761,52 @@
 </div>
 </div>
 </div>
-<h2 id="255--bufferedimage-and-pixels">2.5.5  BufferedImage and Pixels<a class="headerlink" href="#255--bufferedimage-and-pixels" title="Permanent link">&para;</a></h2>
+<h2 id="255--bufferedimage-和-pixels">2.5.5  BufferedImage 和 Pixels<a class="headerlink" href="#255--bufferedimage-和-pixels" title="Permanent link">&para;</a></h2>
 <p><strong>BufferedImage and Pixels</strong></p>
 <div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">中文</label><label for="__tabbed_6_2">英文</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>在一些图形应用程序中，能够使用不可见于屏幕的图像是很有用的。换句话说，您需要我所称的<strong><abbr title="我对计算机内存中的一部分的术语，该部分可用作绘图表面，用于绘制屏幕上不可见的图像。应该存在一种方法将图像从离屏画布复制到屏幕上。例如，在Java中，可以将离屏画布实现为BufferedImage类型的对象。">离屏画布</abbr></strong>。您还需要一种快速将离屏画布复制到屏幕上的方法。例如，将屏幕上的图像副本存储在离屏画布中可能很有用。画布是图像的官方副本。对图像的更改是在画布上进行的，然后复制到屏幕上。这样做的一个原因是，您可以在屏幕图像上绘制额外的内容而不改变官方副本。例如，您可能会在屏幕图像中选择一个区域并绘制一个框。您可以在不损害离屏画布中的官方副本的情况下完成此操作。要从屏幕中删除框，您只需将离屏画布图像复制到屏幕上。</p>
+<p>在Java中，可以将离屏图像实现为<strong>BufferedImage</strong>类型的对象。<strong>BufferedImage</strong>表示内存中的一个区域，您可以在其中绘制，方式与您可以绘制到屏幕上的方式完全相同。也就是说，您可以获取一个名为g2的Graphics2D类型的图形上下文，用于在图像上绘制。<strong>BufferedImage</strong>是一个<strong>Image</strong>，您可以将其绘制到屏幕上或任何其他图形上下文中，就像处理任何其他<strong>Image</strong>一样，即使用要显示图像的图形上下文的drawImage方法。在典型的设置中，有如下变量：</p>
+<div class="highlight"><pre><span></span><code><span class="n">BufferedImage</span><span class="w"> </span><span class="n">OSC</span><span class="p">;</span><span class="w">  </span><span class="c1">// 离屏画布</span>
+<span class="n">Graphics2D</span><span class="w"> </span><span class="n">OSG</span><span class="p">;</span><span class="w">     </span><span class="c1">// 用于在画布上绘制的图形上下文</span>
+</code></pre></div>
+<p>可以使用以下方式创建对象：</p>
+<div class="highlight"><pre><span></span><code><span class="n">OSC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BufferedImage</span><span class="p">(</span><span class="w"> </span><span class="mi">640</span><span class="p">,</span><span class="w"> </span><span class="mi">480</span><span class="p">,</span><span class="w"> </span><span class="n">BufferedImage</span><span class="p">.</span><span class="na">TYPE_INT_RGB</span><span class="w"> </span><span class="p">);</span>
+<span class="n">OSG</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OSC</span><span class="p">.</span><span class="na">createGraphics</span><span class="p">();</span>
+</code></pre></div>
+<p><strong>BufferedImage</strong>的构造函数指定了图像的宽度和高度以及其类型。类型告诉了图像中可以表示什么颜色以及它们如何存储。在这里，类型为TYPE_INT_RGB，这意味着图像使用带有每个颜色分量的8位的常规RGB颜色。每个像素的三个颜色分量被打包到一个整数值中。</p>
+<p>在使用<strong>BufferedImage</strong>存储屏幕上图像的程序中，paintComponent方法通常具有以下形式：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">paintComponent</span><span class="p">(</span><span class="n">Graphics</span><span class="w"> </span><span class="n">g</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">g</span><span class="p">.</span><span class="na">drawImage</span><span class="p">(</span><span class="w"> </span><span class="n">OSC</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">);</span>
+<span class="w">    </span><span class="n">Graphics2D</span><span class="w"> </span><span class="n">g2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Graphics2D</span><span class="p">)</span><span class="n">g</span><span class="p">.</span><span class="na">create</span><span class="p">();</span>
+<span class="w">    </span><span class="p">.</span>
+<span class="w">    </span><span class="p">.</span><span class="w"> </span><span class="c1">// 在图像上绘制额外的内容。</span>
+<span class="w">    </span><span class="p">.</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>使用这种技术的示例程序是<a href="../../../en/source/java2d/JavaPixelManipulation.java">java2d/JavaPixelManipulation.java</a>。在该程序中，用户可以通过拖动鼠标来绘制线条、矩形和椭圆。当鼠标移动时，形状在鼠标的起始点和当前位置之间绘制。随着鼠标的移动，现有图像的部分可以被重复覆盖和暴露，而不更改现有图像。事实上，图像在一个离屏画布中，用户绘制的形状实际上是由paintComponent在画布的内容上绘制的。直到用户释放鼠标并结束拖动操作，形状才会被绘制到画布中的官方图像上。</p>
+<p>但我编写该程序的主要原因是为了说明像素操作，即使用单个像素的颜色分量进行计算。<strong>BufferedImage</strong>类有用于读取和设置单个像素颜色的方法。图像由像素的行和列组成。如果OSC是<strong>BufferedImage</strong>，则</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OSC</span><span class="p">.</span><span class="na">getRGB</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</code></pre></div>
+<p>获取表示x列y行像素颜色的整数。每个颜色分量存储在整数颜色值中的一个8位字段中。可以使用Java的位操作符从整数颜色值中提取出用于处理的单个颜色分量：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">red</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">color</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mi">255</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">green</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">color</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mi">255</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">blue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mi">255</span><span class="p">;</span>
+</code></pre></div>
+<p>类似地，给定范围为0到255的红色、绿色和蓝色分量值，我们可以将这些分量值组合成一个整数，并使用它来设置图像中像素的颜色：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">red</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">green</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">blue</span><span class="p">;</span>
+<span class="n">OSC</span><span class="p">.</span><span class="na">setRGB</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">color</span><span class="p">);</span>
+</code></pre></div>
+<p>还有用于读取和设置矩形区域中所有像素颜色的方法。</p>
+<p>像素操作用于实现示例程序的两个功能。首先，有一个“涂抹”工具。当用户使用此工具拖动时，就像涂抹湿漆一样。当用户首次单击鼠标时，从鼠标位置周围的一小块像素中复制颜色分量到数组中。随着用户移动鼠标，颜色从数组中混合到鼠标附近的像素颜色中，同时将这些颜色混合到数组中的颜色中。这是一个已经“涂抹”的小矩形：</p>
+<p><figure markdown="span">
+    ![</p>
+<p><abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr>-coordinates](../../en/c2/smudge.png)
+</figure></p>
+<p>像素操作的第二个用途是实现“滤镜”。在这个程序中，滤镜是一种通过将每个像素的颜色替换为一个3x3像素方块的颜色的加权平均值来修改图像的操作。例如，“模糊”滤镜使用所有像素的平均权重，因此像素的颜色会更改为该像素及其邻居的颜色的简单平均值。使用不同的权重对每个像素进行操作可以产生一些引人注目的效果。</p>
+<p>示例程序中的像素操作产生了纯矢量图形无法实现的效果。我鼓励您通过查看<a href="../../../en/source/java2d/JavaPixelManipulation.java">源代码</a>来了解更多信息。您还可以查看<a href="../s6/">下一节</a>中使用HTML画布图形实现相同效果的实时演示。</p>
+</div>
 <div class="tabbed-block">
 <p>In some graphics applications, it is useful to be able to work with images that are not visible on the screen. That is, you need what I call an <strong><abbr title="My term for a segment of the computer's memory that can be used as a drawing surface, for drawing images that are not visible on the screen. Some method should exist for copying the image from an off-screen canvas onto the screen. In Java, for example, an off-screen canvas can be implemented as an object of type BufferedImage.">off-screen canvas</abbr></strong>. You also need a way to quickly copy the <abbr title="My term for a segment of the computer's memory that can be used as a drawing surface, for drawing images that are not visible on the screen. Some method should exist for copying the image from an off-screen canvas onto the screen. In Java, for example, an off-screen canvas can be implemented as an object of type BufferedImage.">off-screen canvas</abbr> onto the screen. For example, it can be useful to store a copy of the on-screen image in an <abbr title="My term for a segment of the computer's memory that can be used as a drawing surface, for drawing images that are not visible on the screen. Some method should exist for copying the image from an off-screen canvas onto the screen. In Java, for example, an off-screen canvas can be implemented as an object of type BufferedImage.">off-screen canvas</abbr>. The canvas is the official copy of the image. Changes to the image are made to the canvas, then copied to the screen. One reason to do this is that you can then draw extra stuff on top of the screen image without changing the official copy. For example, you might draw a box around a selected region in the on-screen image. You can do this without damaging the official copy in the <abbr title="My term for a segment of the computer's memory that can be used as a drawing surface, for drawing images that are not visible on the screen. Some method should exist for copying the image from an off-screen canvas onto the screen. In Java, for example, an off-screen canvas can be implemented as an object of type BufferedImage.">off-screen canvas</abbr>. To remove the box from the screen, you just have to copy the <abbr title="My term for a segment of the computer's memory that can be used as a drawing surface, for drawing images that are not visible on the screen. Some method should exist for copying the image from an off-screen canvas onto the screen. In Java, for example, an off-screen canvas can be implemented as an object of type BufferedImage.">off-screen canvas</abbr> image onto the screen.</p>
 <p>In Java, an off-screen image can be implemented as an object of type <strong>BufferedImage</strong>. A <strong>BufferedImage</strong> represents a region in memory where you can draw, in exactly the same way that you can draw to the screen. That is, you can obtain a graphics context g2 of type Graphics2D that you can use for drawing on the image. A <strong>BufferedImage</strong> is an <strong>Image</strong>, and you can draw it onto the screen—or into any other graphics context—like any other <strong>Image</strong>, that is, by using the drawImage method of the graphics context where you want to display the image. In a typical setup, there are variables</p>
@@ -1669,7 +1872,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年5月6日</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年5月12日</span>
   </span>
 
     
