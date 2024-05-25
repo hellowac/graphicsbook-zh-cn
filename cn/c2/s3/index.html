@@ -305,16 +305,19 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="../../c3/index.md" class="md-tabs__link">
-        
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c3/" class="md-tabs__link">
+          
   
     
   
   3几何
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -1023,16 +1026,195 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../c3/index.md" class="md-nav__link">
+    
+    
+      
         
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c3/" class="md-nav__link ">
+              
   
   <span class="md-ellipsis">
     3几何
   </span>
   
 
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            3几何
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.1 OpenGL 1.1 中的形状和颜色
+  </span>
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.2 3D 坐标和变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.3 投影与观看
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.4 多边形网格和 glDrawArrays
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.5 部分线性代数基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.6 使用 GLUT 和 JOGL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1463,7 +1645,7 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">中文</label><label for="__tabbed_2_2">英文</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>在典型的应用中，我们有一个由像素构成的矩形，其自然像素坐标用于显示图像。这个矩形称为<strong><abbr title="用于显示2D或3D图形图像的矩形区域。视口上的坐标是像素坐标，更准确地称为设备坐标，因为它们是在显示图像的设备上的实际物理坐标。">视口</abbr>(<abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr>)</strong>。我们还有一组几何对象，这些对象在可能不同的坐标系中定义，通常是使用实数坐标而不是整数。这些对象组成了我们想要查看的“场景”或“世界”，用于定义场景的坐标称为<strong><abbr title="定义场景的坐标系统。生成的场景图像将显示位于某个视图体积（对于3D）或视图窗口（对于2D）内的世界坐标系统中的内容。对象在其自己的对象坐标系统中定义。然后应用建模变换将对象放置到场景中，即将对象坐标转换为世界坐标。">世界坐标</abbr>(<abbr title="The coordinate system in which a scene is defined. The image that is produced of the scene will show the contents of the world coordinate system that lie within some view volume (for 3D) or view window (for 2D). Objects are defined in their own object coordinate system. Modeling transformations are then applied to place objects into the scene; that is, they transform object coordinates to world coordinates.">world coordinates</abbr>)</strong>。</p>
+<p>在典型的应用中，我们有一个由像素构成的矩形，其自然像素坐标用于显示图像。这个矩形称为<strong><abbr title="2D或3D图形显示图像的矩形区域。视口上的坐标是像素坐标，更确切地称为设备坐标，因为它们是图像显示的实际物理坐标。">视口</abbr>(<abbr title="The rectangular area in which the image for 2D or 3D graphics is displayed. The coordinates on the viewport are pixel coordinates, more properly called device coordinates since they are actual physical coordinates on the device where the image is being displayed.">viewport</abbr>)</strong>。我们还有一组几何对象，这些对象在可能不同的坐标系中定义，通常是使用实数坐标而不是整数。这些对象组成了我们想要查看的“场景”或“世界”，用于定义场景的坐标称为<strong><abbr title="定义场景的坐标系统。生成的场景图像将显示位于某个视图体积（对于3D）或视图窗口（对于2D）内的世界坐标系统中的内容。对象在其自己的对象坐标系统中定义。然后应用建模变换将对象放置到场景中，即将对象坐标转换为世界坐标。">世界坐标</abbr>(<abbr title="The coordinate system in which a scene is defined. The image that is produced of the scene will show the contents of the world coordinate system that lie within some view volume (for 3D) or view window (for 2D). Objects are defined in their own object coordinate system. Modeling transformations are then applied to place objects into the scene; that is, they transform object coordinates to world coordinates.">world coordinates</abbr>)</strong>。</p>
 <p>对于二维图形，世界位于一个平面上。不可能显示整个无限平面的图像。我们需要在平面上选择一些矩形区域来显示在图像中。让我们称这个矩形区域为窗口，或称为<strong><abbr title="在本书中,2D图形的窗口或视图窗口是包含将在图像中显示的平面部分的xy平面中的矩形。(在3D图形中,对应的术语是&quot;视图体积&quot;。)">视窗</abbr>(window)</strong>。坐标变换用于将窗口映射到视口中。</p>
 <p><figure markdown="span">
     <a class="glightbox" href="../../../en/c2/coordinate-transformation-2d.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="pixel-coordinates" src="../../../en/c2/coordinate-transformation-2d.png" /></a>

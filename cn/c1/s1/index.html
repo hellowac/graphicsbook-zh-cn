@@ -305,16 +305,19 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="../../c3/index.md" class="md-tabs__link">
-        
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c3/" class="md-tabs__link">
+          
   
     
   
   3几何
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -923,16 +926,195 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../c3/index.md" class="md-nav__link">
+    
+    
+      
         
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c3/" class="md-nav__link ">
+              
   
   <span class="md-ellipsis">
     3几何
   </span>
   
 
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            3几何
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.1 OpenGL 1.1 中的形状和颜色
+  </span>
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.2 3D 坐标和变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.3 投影与观看
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.4 多边形网格和 glDrawArrays
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.5 部分线性代数基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.6 使用 GLUT 和 JOGL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1293,7 +1475,7 @@
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>虽然计算机屏幕上的图像是使用像素表示的，但指定单个像素颜色并不总是创建图像的最佳方式。另一种方法是指定图像包含的基本几何对象，例如线条、圆形、三角形和矩形等形状。这就是定义<strong><abbr title="基于形状的图形，在此类图形中，图像被指定为出现在图像中的形状或对象的列表。">矢量图形</abbr>(<abbr title="An element of a vector space. Elements of a vector space can be added and can be multiplied by constants. For computer graphics, a vector is just a list or array containing two, three, or four numbers. Vectors in that sense are often used to represent points in 2D, 3D, or 4D space. Properly, however, a vector represents a quantity that has a length and a direction; a vector used in this way can be visualized as an arrow.">vector</abbr> graphics)</strong>的理念：将图像表示为其包含的几何形状的列表。为了增加趣味性，这些形状可以具有<strong><abbr title="图形对象的属性，例如颜色。图像可以通过其包含的几何形状以及它们的属性来指定。">属性</abbr>(<abbr title="A property, such as color, of a graphical object. An image can be specified by the geometric shapes that it contains, together with their attributes.">attributes</abbr>)</strong>，例如线条的粗细或填充矩形的颜色。当然，并非每个图像都可以由简单的几何形状组成。对于美丽的日落照片（或大多数其他摄影图像），这种方法显然不适用。然而，对于许多类型的图像，例如建筑蓝图和科学插图，它效果很好。</p>
-<p>事实上，在计算机发展的早期历史中，矢量图形甚至直接用于计算机屏幕上。当第一批图形计算机显示器问世时，光栅显示器的速度太慢、价格太高，不切实际。幸运的是，可以以另一种方式使用真空管技术：电子束可以直接在屏幕上绘制一条线，只需沿着该线移动束。矢量图形显示器将存储一个应出现在屏幕上的线段<strong><abbr title="包含图形基元和属性的列表，可以遍历以创建图像的全部或部分。一些早期的矢量图形硬件使用了显示列表。它们也在传统的OpenGL中可用。">显示列表</abbr>(<abbr title="A list of graphics primitives and attributes which can be traversed to create all or part of an image. Display lists were used in some early vector-graphics hardware. They were also available in traditional OpenGL.">display list</abbr>)</strong>。由于屏幕上的点只会在被电子束照射后短暂发光，图形显示器会一遍又一遍地遍历显示列表，不断地重绘列表中的所有线条。要更改图像，只需要更改显示列表的内容。当然，如果显示列表变得太长，图像就会开始闪烁，因为一条线在下次重新绘制之前会有机会可见地淡去。</p>
+<p>事实上，在计算机发展的早期历史中，矢量图形甚至直接用于计算机屏幕上。当第一批图形计算机显示器问世时，光栅显示器的速度太慢、价格太高，不切实际。幸运的是，可以以另一种方式使用真空管技术：电子束可以直接在屏幕上绘制一条线，只需沿着该线移动束。矢量图形显示器将存储一个应出现在屏幕上的线段<strong><abbr title="一组图形基元和属性的列表，可以遍历以创建全部或部分图像。显示列表曾在一些早期的矢量图形硬件中使用。它们也在传统的 OpenGL 中可用。">显示列表</abbr>(<abbr title="A list of graphics primitives and attributes which can be traversed to create all or part of an image. Display lists were used in some early vector-graphics hardware. They were also available in traditional OpenGL.">display list</abbr>)</strong>。由于屏幕上的点只会在被电子束照射后短暂发光，图形显示器会一遍又一遍地遍历显示列表，不断地重绘列表中的所有线条。要更改图像，只需要更改显示列表的内容。当然，如果显示列表变得太长，图像就会开始闪烁，因为一条线在下次重新绘制之前会有机会可见地淡去。</p>
 <p>但这是重点：对于可以指定为相对较少数量的几何形状的图像来说，使用矢量表示来表示图像所需的信息量要比使用光栅表示小得多。考虑一个由一千条线段组成的图像。对于图像的矢量表示，您只需要存储两千个点的坐标，即线段的端点。这只需要几千字节的内存。要将图像存储在用于光栅显示的帧缓冲区中，将需要更多的内存。同样，矢量显示可以比光栅显示更快地在屏幕上绘制线条，后者将相同的图像从帧缓冲区复制到屏幕上（然而，一旦光栅显示器变得快速且价格合理，它们很快就会取代矢量显示器，因为它们能够相当好地显示所有类型的图像。）</p>
 </div>
 <div class="tabbed-block">

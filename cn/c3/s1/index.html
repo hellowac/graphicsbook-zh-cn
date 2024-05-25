@@ -1,0 +1,2016 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="计算机图形学概论(graphicsbook)">
+      
+      
+      
+        <link rel="canonical" href="https://hellowac.github.io/graphicsbook-zh-cn/cn/c3/s1/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../s2/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.18">
+    
+    
+      
+        <title>3.1 OpenGL 1.1 中的形状和颜色 - 计算机图形学概论</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.66ac8b77.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+  
+  
+  
+  
+  <style>:root{--md-annotation-icon:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 12a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10M6 13h8l-3.5 3.5 1.42 1.42L17.84 12l-5.92-5.92L10.5 7.5 14 11H6v2Z"/></svg>');}</style>
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+        html.glightbox-open { overflow: initial; height: 100%; }
+        .gslide-title { margin-top: 0px; user-select: text; }
+        .gslide-desc { color: #666; user-select: text; }
+        .gslide-image img { background: white; }
+        
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}
+            </style> <script src="../../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="default" data-md-color-accent="red">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#31-opengl-11-中的形状和颜色" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="计算机图形学概论" class="md-header__button md-logo" aria-label="计算机图形学概论" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            计算机图形学概论
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              3.1 OpenGL 1.1 中的形状和颜色
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04M18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12m-2.62 7 1.62-4.33L19.12 17h-3.24Z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/graphicsbook-zh-cn/en/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/graphicsbook-zh-cn/cn/" hreflang="cn" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hellowac/graphicsbook-zh-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    graphicsbook
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link">
+        
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../preface/" class="md-tabs__link">
+        
+  
+    
+  
+  前言
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c1/" class="md-tabs__link">
+          
+  
+    
+  
+  1简介
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c2/" class="md-tabs__link">
+          
+  
+    
+  
+  2二维图形
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+    
+  
+  3几何
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c4/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  4灯光和材质
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c5/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  5three.js
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c6/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  6WebGL
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c7/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  7WebGL 3D
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c8/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  8高阶3D
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c9/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  9WEBGPU
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../a1/" class="md-tabs__link">
+          
+  
+    
+  
+  附录
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="计算机图形学概论" class="md-nav__button md-logo" aria-label="计算机图形学概论" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    计算机图形学概论
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hellowac/graphicsbook-zh-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    graphicsbook
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    首页
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    前言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c1/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    1简介
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            1简介
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c1/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 1 节 绘画与绘图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c1/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 2 节：三维(3D)图形的要素
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c1/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 3 节：硬件与软件
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c2/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    2二维图形
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            2二维图形
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第1节: 像素、坐标和颜色
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第2节: 形状
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第3节: 变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第4节: 分层建模
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第5节: Java 绘制2D
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第6节: HTML Canvas图形
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s7/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第7节: SVG：一种场景描述语言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    3几何
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            3几何
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    3.1 OpenGL 1.1 中的形状和颜色
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    3.1 OpenGL 1.1 中的形状和颜色
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#311--opengl基元" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1.1  OpenGL基元
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#312--opengl颜色" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1.2  OpenGL颜色
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#313--glcolor-和-glvertex-与数组" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1.3  glColor 和 glVertex 与数组
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#314--深度测试" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1.4  深度测试
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.2 3D 坐标和变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.3 投影与观看
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.4 多边形网格和 glDrawArrays
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.5 部分线性代数基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.6 使用 GLUT 和 JOGL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c4/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4灯光和材质
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c5/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5three.js
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6WebGL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7WebGL 3D
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c8/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8高阶3D
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9WEBGPU
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../a1/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    附录
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            附录
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a2/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Blender 3D建模
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a3/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gimp和Inkscape
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../source/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    示例程序源代码
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    术语表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    关于
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#311--opengl基元" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1.1  OpenGL基元
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#312--opengl颜色" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1.2  OpenGL颜色
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#313--glcolor-和-glvertex-与数组" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1.3  glColor 和 glVertex 与数组
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#314--深度测试" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1.4  深度测试
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="31-opengl-11-中的形状和颜色">3.1 <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 1.1 中的形状和颜色<a class="headerlink" href="#31-opengl-11-中的形状和颜色" title="Permanent link">&para;</a></h1>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">中文</label><label for="__tabbed_1_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>本节介绍了OpenGL的一些核心特性。本节讨论的大部分内容都限于二维。目前，你只需要知道关于三维的是，它在二维的基础上增加了第三个方向。按照惯例，第三个方向被称为z。在默认坐标系统中，x和y轴位于图像平面上，而z轴的正方向指向与图像垂直的方向。</p>
+<p>在OpenGL的默认坐标系统中，图像显示了一个三维空间的区域，其中x、y和z的取值范围都在-1到1之间。要显示不同的区域，你必须应用一个变换。目前，我们只会使用位于-1和1之间的坐标。</p>
+<p>关于编程的一点说明：OpenGL可以用许多不同的编程语言实现，但API规范更多地假设了语言是C。（参见<a href="../../cn/a1/s2.md">第A.2节</a>中对C的简短介绍。）在很大程度上，C规范直接转换为其他语言。主要的区别在于C语言中数组的特殊特性。我的示例将遵循C语法，并简要说明其他语言中的不同之处。由于我遵循的是C <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>，我会引用“函数”而不是“子例程”或“方法”。<a href="../s6/">第3.6节</a>详细介绍了如何使用C和Java编写OpenGL程序。在进行实际编程之前，你需要参考该部分。本书的OpenGL 1.1实时演示是使用一个JavaScript模拟器编写的，该模拟器实现了OpenGL 1.1的一个子集。该模拟器在<a href="../s6/#36-使用-glut-和-jogl">小节3.6.3</a>中有所介绍。</p>
+</div>
+<div class="tabbed-block">
+<p>This section introduces some of the core features of <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>. Much of the discussion in this section is limited to 2D. For now, all you need to know about 3D is that it adds a third direction to the x and y directions that are used in 2D. By convention, the third direction is called z. In the default <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>, the x and y axes lie in the plane of the image, and the positive direction of the z-axis points in a direction perpendicular to the image.</p>
+<p>In the default <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> for <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>, the image shows a region of 3D space in which x, y, and z all range from minus one to one. To show a different region, you have to apply a transform. For now, we will just use coordinates that lie between -1 and 1.</p>
+<p>A note about programming: <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> can be implemented in many different programming languages, but the <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> specification more or less assumes that the language is C. (See <a href="../../cn/a1/s2.md">Section A.2</a> for a short introduction to C.) For the most part, the C specification translates directly into other languages. The main differences are due to the special characteristics of arrays in the C language. My examples will follow the C syntax, with a few notes about how things can be different in other languages. Since I'm following the C <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>, I will refer to "functions" rather than "subroutines" or "methods." <a href="../s6/">Section 3.6</a> explains in detail how to write <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> programs in C and in Java. You will need to consult that section before you can do any actual programming. The live <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 1.1 demos for this book are written using a <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> simulator that implements a subset of <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 1.1. That simulator is discussed in <a href="../s6/#363-关于-glsimjs">Subsection 3.6.3</a>.</p>
+</div>
+</div>
+</div>
+<h2 id="311--opengl基元">3.1.1  OpenGL基元<a class="headerlink" href="#311--opengl基元" title="Permanent link">&para;</a></h2>
+<p><strong><abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> Primitives</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">中文</label><label for="__tabbed_2_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>OpenGL只能绘制一些基本的形状，包括点、线和三角形。它没有内置的曲线或曲面支持；它们必须由简单的形状近似。这些基本形状被称为原始图元。在OpenGL中，原始图元由其顶点定义。顶点简单地是3D空间中的一个点，由其x、y和z坐标给出。让我们直接开始看如何绘制一个三角形。这需要几个步骤：</p>
+<div class="highlight"><pre><span></span><code><span class="n">glBegin</span><span class="p">(</span><span class="n">GL_TRIANGLES</span><span class="p">);</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="mf">-0.7</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">);</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">);</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.7</span><span class="p">);</span>
+<span class="n">glEnd</span><span class="p">();</span>
+</code></pre></div>
+<p>三角形的每个顶点都由对<em>glVertex2f</em>函数的调用指定。顶点必须在<em>glBegin</em>和<em>glEnd</em>之间指定。glBegin的参数告诉正在绘制哪种类型的原始图元。<em>GL_TRIANGLES</em>原始图元允许您绘制多个三角形：只需为要绘制的每个三角形指定三个顶点即可。请注意，即使在OpenGL 1.1中，使用glBegin/glEnd也不是指定原始图元的首选方法。然而，替代方法，即在<a href="../s4/#342-gldrawarrays和gldrawelements">第3.4.2小节</a>中介绍的方法，使用起来更复杂。您应该认为glBegin/glEnd是了解顶点及其属性的便捷方法，但不是您在现代图形API中实际操作的方式。</p>
+<p>（我应该指出，OpenGL函数实际上只是向GPU发送命令。OpenGL可以保存命令批次以一起传输，并且绘制实际上直到命令被传输才会完成。为了确保这一点发生，必须调用函数glFlush()。在某些情况下，这个函数可能会被OpenGL API自动调用，但您可能会遇到需要自己调用它的情况。）</p>
+<p>对于OpenGL，顶点有三个坐标。函数glVertex2f指定了顶点的x和y坐标，而z坐标设置为零。还有一个函数glVertex3f，它指定了所有三个坐标。名称中的“2”或“3”告诉函数传递了多少个参数。“f”在名称末尾表示参数的类型为float。事实上，还有其他的“glVertex”函数，包括以int或double类型的参数为参数的版本，名称类似glVertex2i和glVertex3d。甚至有一些版本接受四个参数，尽管暂时还不清楚为什么它们应该存在。正如我们后面将看到的，还有一些版本接受一个数字数组而不是单独的数字作为参数。整套顶点函数通常被称为“glVertex<em>”，其中“</em>”代表参数规范。（名称的增多是由于C编程语言不支持函数名的重载；也就是说，C只通过函数名而不是通过传递给函数的参数的数量和类型来区分函数。）</p>
+<p><abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 1.1有十种原始图元。其中七种仍然存在于现代OpenGL中；另外三种已经被移除。最简单的原始图元是<em>GL_POINTS</em>，它在原始图元的每个顶点处简单地渲染一个点。默认情况下，点被渲染为单个像素。点原始图元的大小可以通过调用</p>
+<div class="highlight"><pre><span></span><code><span class="n">glPointSize</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
+</code></pre></div>
+<p>来改变，其中参数size的类型为float，指定了渲染点的直径，以像素为单位。默认情况下，点是正方形的。您可以通过调用</p>
+<div class="highlight"><pre><span></span><code><span class="n">glEnable</span><span class="p">(</span><span class="n">GL_POINT_SMOOTH</span><span class="p">);</span>
+</code></pre></div>
+<p>来获取圆形的点。函数glPointSize和glEnable改变了OpenGL的“状态”。状态包括所有影响渲染的设置。我们将遇到许多改变状态的函数。函数glEnable和glDisable可以用来打开和关闭许多功能。通常的规则是，任何需要额外计算的渲染特性默认都是关闭的。如果您想要该功能，则必须通过使用适当的参数调用glEnable来打开它。</p>
+<p>有三种用于绘制线段的原始图元：GL_LINES、GL_LINE_STRIP和<em>GL_LINE_LOOP</em>。<em>GL_LINES</em>绘制不连接的线段；为要绘制的每个线段指定两个顶点。另外两个原始图元绘制连接的线段序列。唯一的区别在于<em>GL_LINE_LOOP</em>在最后一个顶点和第一个顶点之间添加了额外的线段。如果使用迄今为止我们看到的四种原始图元相同的六个顶点，则会得到以下结果：</p>
+<p><a class="glightbox" href="../../../en/c3/point-and-line-primitives.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="123" src="../../../en/c3/point-and-line-primitives.png" /></a></p>
+<p>这些点A、B、C、D、E和F按照这个顺序被指定。在这个示例中，所有点都位于同一个平面上，但请记住，通常情况下，点可以位于3D空间的任何位置。</p>
+<p>线段原始图元的宽度可以通过调用<em>glLineWidth(width)</em>来设置。线宽始终以像素为单位指定。它不受变换的缩放影响。</p>
+<p>让我们看一个例子。OpenGL没有圆形原始图元，但我们可以通过绘制一个边数很多的多边形来近似圆形。为了绘制多边形的轮廓，我们可以使用<em>GL_LINE_LOOP</em>原始图元：</p>
+<div class="highlight"><pre><span></span><code><span class="n">glBegin</span><span class="p">(</span><span class="n">GL_LINE_LOOP</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">64</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">6.2832</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">64</span><span class="p">;</span><span class="w">  </span><span class="c1">// 6.2832代表2*PI</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">);</span>
+<span class="w">    </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glVertex2f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">glEnd</span><span class="p">();</span>
+</code></pre></div>
+<p>这样就绘制了一个半径为0.5、中心在(0,0)的圆的近似轮廓。请记住，要了解如何在一个完整、运行的程序中使用像这样的示例，您将需要阅读<a href="../s6/">第3.6节</a>。此外，根据您使用的OpenGL实现，您可能需要对代码进行一些更改。</p>
+<p>下一组原始图元用于绘制三角形。其中有三种：<em>GL_TRIANGLES</em>、<em>GL_TRIANGLE_STRIP</em>和<em>GL_TRIANGLE_FAN</em>。</p>
+<p><a class="glightbox" href="../../../en/c3/triangle-primitives.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="123" src="../../../en/c3/triangle-primitives.png" /></a></p>
+<p>左侧的三个三角形组成了一个<em>GL_TRIANGLES</em>原始图元，共有九个顶点。对于该原始图元，每组三个顶点形成一个单独的三角形。对于<em>GL_TRIANGLE_STRIP</em>原始图元，前三个顶点生成一个三角形。之后，每个新顶点都会向条带添加另一个三角形，连接新顶点到前两个顶点。右侧显示了两个<em>GL_TRIANGLE_FAN</em>原始图元。同样地，对于<em>GL_TRIANGLE_FAN</em>，前三个顶点形成一个三角形，之后的每个顶点都添加另一个三角形，但在这种情况下，新的三角形是通过将新顶点连接到上一个顶点和最初指定的第一个顶点（图片中的顶点“A”）而形成的。请注意，<em>GL_TRIANGLE_FAN</em>可用于绘制填充多边形。在这张图片中，点和线不是原始图元的一部分；OpenGL只会绘制图形的填充部分，即绿色的内部。</p>
+<p>剩下的三个原始图元已经从现代OpenGL中删除，它们分别是<em>GL_QUADS</em>、<em>GL_QUAD_STRIP</em>和<em>GL_POLYGON</em>。名称“<abbr title="A quadrilateral, that is a four-sided figure in the plane. OpenGL 1.1 has the primitives GL_QUADS and GL_QUAD_STRIP for drawing quads, but it assumes without checking that the vertices that are provided are in fact planar and define quadrilaterals that are convex.">quad</abbr>”是四边形的简称，即四边形。一个四边形由四个顶点确定。为了在OpenGL中正确渲染四边形，四边形的所有顶点必须位于同一个平面上。多边形原始图元也是如此。同样地，为了正确渲染，四边形和多边形必须是凸的（参见<a href="../../c2/s2/#223--多边形曲线和路径">第2.2.3小节</a>）。由于OpenGL不检查是否满足这些条件，因此使用四边形和多边形是容易出错的。由于可以很容易地使用三角形原始图元生成相同的形状，它们实际上并不是必需的，但是这里记录一些例子：</p>
+<p><a class="glightbox" href="../../../en/c3/obsolete-primitives.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="123" src="../../../en/c3/obsolete-primitives.png" /></a></p>
+<p>这些原始图元的顶点按照顺序A、B、C、...指定。注意两个四边形原始图元的顺序不同：对于<em>GL_QUADS</em>，每个单独的四边形的顶点应按照四边形周围的逆时针顺序指定；对于<em>GL_QUAD_STRIP</em>，顶点应该从带的一侧交替到另一侧。</p>
+</div>
+<div class="tabbed-block">
+<p><abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> can draw only a few basic shapes, including points, lines, and triangles. There is no built-in support for curves or curved surfaces; they must be approximated by simpler shapes. The basic shapes are referred to as primitives. A primitive in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> is defined by its vertices. A <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> is simply a point in 3D, given by its x, y, and z coordinates. Let's jump right in and see how to draw a triangle. It takes a few steps:</p>
+<div class="highlight"><pre><span></span><code><span class="n">glBegin</span><span class="p">(</span><span class="n">GL_TRIANGLES</span><span class="p">);</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="w"> </span><span class="mf">-0.7</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="w"> </span><span class="mf">0.7</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.7</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glEnd</span><span class="p">();</span>
+</code></pre></div>
+<p>Each <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> of the triangle is specified by a call to the function <em>glVertex2f</em>. Vertices must be specified between calls to <em>glBegin</em> and <em>glEnd</em>. The parameter to glBegin tells which type of primitive is being drawn. The <em>GL_TRIANGLES</em> primitive allows you to draw more than one triangle: Just specify three vertices for each triangle that you want to draw. Note that using glBegin/glEnd is not the preferred way to specify primitives, even in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 1.1. However, the alternative, which is covered in <a href="../s4/#342-gldrawarrays和gldrawelements">Subsection 3.4.2</a>, is more complicated to use. You should consider glBegin/glEnd to be a convenient way to learn about vertices and their properties, but not the way that you will actually do things in modern graphics APIs.</p>
+<p>(I should note that <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> functions actually just send commands to the <abbr title="Graphics Processing Unit, a computer hardware component that performs graphical computations that create and manipulate images. Operations such as drawing a line on the screen or rendering a 3D image are done in the GPU, which is optimized to perform such operations very quickly.">GPU</abbr>. <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> can save up batches of commands to transmit together, and the drawing won't actually be done until the commands are transmitted. To ensure that that happens, the function glFlush() must be called. In some cases, this function might be called automatically by an <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>, but you might well run into times when you have to call it yourself.)</p>
+<p>For <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>, vertices have three coordinates. The function glVertex2f specifies the x and y coordinates of the <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr>, and the z coordinate is set to zero. There is also a function glVertex3f that specifies all three coordinates. The "2" or "3" in the name tells how many parameters are passed to the function. The "f" at the end of the name indicates that the parameters are of type float. In fact, there are other "glVertex" functions, including versions that take parameters of type int or double, with named like glVertex2i and glVertex3d. There are even versions that take four parameters, although it won't be clear for a while why they should exist. And, as we will see later, there are versions that take an array of numbers instead of individual numbers as parameters. The entire set of <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> functions is often referred to as "glVertex<em>", with the "</em>" standing in for the parameter specification. (The proliferation of names is due to the fact that the C programming language doesn't support overloading of function names; that is, C distinguishes functions only by their names and not by the number and type of parameters that are passed to the function.)</p>
+<p><abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 1.1 has ten kinds of primitive. Seven of them still exist in modern <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>; the other three have been dropped. The simplest primitive is <em>GL_POINTS</em>, which simply renders a point at each <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> of the primitive. By default, a point is rendered as a single <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr>. The size of point primitives can be changed by calling</p>
+<div class="highlight"><pre><span></span><code><span class="n">glPointSize</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
+</code></pre></div>
+<p>where the parameter, size, is of type float and specifies the diameter of the rendered point, in <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr>. By default, points are squares. You can get circular points by calling</p>
+<div class="highlight"><pre><span></span><code><span class="n">glEnable</span><span class="p">(</span><span class="n">GL_POINT_SMOOTH</span><span class="p">);</span>
+</code></pre></div>
+<p>The functions glPointSize and glEnable change the <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> "state." The state includes all the settings that affect <abbr title="The process of producing a 2D image from a 3D scene description.">rendering</abbr>. We will encounter many state-changing functions. The functions glEnable and glDisable can be used to turn many features on and off. In general, the rule is that any <abbr title="The process of producing a 2D image from a 3D scene description.">rendering</abbr> feature that requires extra computation is turned off by default. If you want that feature, you have to turn it on by calling glEnable with the appropriate parameter.</p>
+<p>There are three primitives for drawing line segments: GL_LINES, GL_LINE_STRIP, and <em>GL_LINE_LOOP</em>. <em>GL_LINES</em> draws disconnected line segments; specify two vertices for each segment that you want to draw. The other two primitives draw connected sequences of line segments. The only difference is that <em>GL_LINE_LOOP</em> adds an extra line segment from the final <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> back to the first <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr>. Here is what you get if use the same six vertices with the four primitives we have seen so far:</p>
+<p><a class="glightbox" href="../../../en/c3/point-and-line-primitives.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="123" src="../../../en/c3/point-and-line-primitives.png" /></a></p>
+<p>The points A, B, C, D, E, and F were specified in that order. In this illustration, all the points lie in the same plane, but keep in mind that in general, points can be anywhere in 3D space.</p>
+<p>The width for line primitives can be set by calling <em>glLineWidth(width)</em>. The line width is always specified in <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr>. It is not subject to <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> by transformations.</p>
+<p>Let's look at an example. <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> does not have a circle primitive, but we can approximate a circle by drawing a <abbr title="A multi-sided shape lying in a plane and specified by a list of points, called its vertices, and made up of the line segments from each point in the list to the next point in the list, plus a line segment from the last point in the list to the first point. All the points are required to lie in the same plane. Sometimes the term &quot;polygon&quot; includes the interior of the shape as well as its boundary.">polygon</abbr> with a large number of sides. To draw an outline of the <abbr title="A multi-sided shape lying in a plane and specified by a list of points, called its vertices, and made up of the line segments from each point in the list to the next point in the list, plus a line segment from the last point in the list to the first point. All the points are required to lie in the same plane. Sometimes the term &quot;polygon&quot; includes the interior of the shape as well as its boundary.">polygon</abbr>, we can use a <em>GL_LINE_LOOP</em> primitive:</p>
+<div class="highlight"><pre><span></span><code><span class="n">glBegin</span><span class="p">(</span><span class="w"> </span><span class="n">GL_LINE_LOOP</span><span class="w"> </span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">64</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">6.2832</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">64</span><span class="p">;</span><span class="w">  </span><span class="c1">// 6.2832 represents 2*PI</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">);</span>
+<span class="w">    </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glVertex2f</span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">glEnd</span><span class="p">();</span>
+</code></pre></div>
+<p>This draws an approximation for the circumference of a circle of radius 0.5 with center at (0,0). Remember that to learn how to use examples like this one in a complete, running program, you will have to read <a href="../s6/">Section 3.6</a>. Also, you might have to make some changes to the code, depending on which <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> implementation you are using.</p>
+<p>The next set of primitives is for drawing triangles. There are three of them: <em>GL_TRIANGLES</em>, <em>GL_TRIANGLE_STRIP</em>, and <em>GL_TRIANGLE_FAN</em>.</p>
+<p><a class="glightbox" href="../../../en/c3/triangle-primitives.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="123" src="../../../en/c3/triangle-primitives.png" /></a></p>
+<p>The three triangles on the left make up one <em>GL_TRIANGLES</em> primitive, with nine vertices. With that primitive, every set of three vertices makes a separate triangle. For a <em>GL_TRIANGLE_STRIP</em> primitive, the first three vertices produce a triangle. After that, every new <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> adds another triangle to the strip, connecting the new <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> to the two previous vertices. Two <em>GL_TRIANGLE_FAN</em> primitives are shown on the right. Again for a <em>GL_TRIANGLE_FAN</em>, the first three vertices make a triangle, and every <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> after that adds anther triangle, but in this case, the new triangle is made by connecting the new <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> to the previous <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> and to the very first <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> that was specified (<abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> "A" in the picture). Note that <em>Gl_TRIANGLE_FAN</em> can be used for drawing filled-in polygons. In this picture, by the way, the dots and lines are not part of the primitive; <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> would only draw the filled-in, green interiors of the figures.</p>
+<p>The three remaining primitives, which have been removed from modern <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>, are <em>GL_QUADS</em>, <em>GL_QUAD_STRIP</em>, and <em>GL_POLYGON</em>. The name "<abbr title="A quadrilateral, that is a four-sided figure in the plane. OpenGL 1.1 has the primitives GL_QUADS and GL_QUAD_STRIP for drawing quads, but it assumes without checking that the vertices that are provided are in fact planar and define quadrilaterals that are convex.">quad</abbr>" is short for quadrilateral, that is, a four-sided <abbr title="A multi-sided shape lying in a plane and specified by a list of points, called its vertices, and made up of the line segments from each point in the list to the next point in the list, plus a line segment from the last point in the list to the first point. All the points are required to lie in the same plane. Sometimes the term &quot;polygon&quot; includes the interior of the shape as well as its boundary.">polygon</abbr>. A <abbr title="A quadrilateral, that is a four-sided figure in the plane. OpenGL 1.1 has the primitives GL_QUADS and GL_QUAD_STRIP for drawing quads, but it assumes without checking that the vertices that are provided are in fact planar and define quadrilaterals that are convex.">quad</abbr> is determined by four vertices. In order for a <abbr title="A quadrilateral, that is a four-sided figure in the plane. OpenGL 1.1 has the primitives GL_QUADS and GL_QUAD_STRIP for drawing quads, but it assumes without checking that the vertices that are provided are in fact planar and define quadrilaterals that are convex.">quad</abbr> to be rendered correctly in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>, all vertices of the <abbr title="A quadrilateral, that is a four-sided figure in the plane. OpenGL 1.1 has the primitives GL_QUADS and GL_QUAD_STRIP for drawing quads, but it assumes without checking that the vertices that are provided are in fact planar and define quadrilaterals that are convex.">quad</abbr> must lie in the same plane. The same is true for <abbr title="A multi-sided shape lying in a plane and specified by a list of points, called its vertices, and made up of the line segments from each point in the list to the next point in the list, plus a line segment from the last point in the list to the first point. All the points are required to lie in the same plane. Sometimes the term &quot;polygon&quot; includes the interior of the shape as well as its boundary.">polygon</abbr> primitives. Similarly, to be rendered correctly, quads and polygons must be <abbr title="A convex geometric shape has the property that whenever two points are contained in the shape, then the line segment between those two points is entirely contained in the shape.">convex</abbr> (see <a href="../../c2/s2/#223--多边形曲线和路径">Subsection 2.2.3</a>). Since <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> doesn't check whether these conditions are satisfied, the use of quads and polygons is error-prone. Since the same shapes can easily be produced with the triangle primitives, they are not really necessary, but here for the record are some examples:</p>
+<p><a class="glightbox" href="../../../en/c3/obsolete-primitives.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="123" src="../../../en/c3/obsolete-primitives.png" /></a></p>
+<p>The vertices for these primitives are specified in the order A, B, C, .... Note how the order differs for the two <abbr title="A quadrilateral, that is a four-sided figure in the plane. OpenGL 1.1 has the primitives GL_QUADS and GL_QUAD_STRIP for drawing quads, but it assumes without checking that the vertices that are provided are in fact planar and define quadrilaterals that are convex.">quad</abbr> primitives: For <em>GL_QUADS</em>, the vertices for each individual <abbr title="A quadrilateral, that is a four-sided figure in the plane. OpenGL 1.1 has the primitives GL_QUADS and GL_QUAD_STRIP for drawing quads, but it assumes without checking that the vertices that are provided are in fact planar and define quadrilaterals that are convex.">quad</abbr> should be specified in counterclockwise order around the <abbr title="A quadrilateral, that is a four-sided figure in the plane. OpenGL 1.1 has the primitives GL_QUADS and GL_QUAD_STRIP for drawing quads, but it assumes without checking that the vertices that are provided are in fact planar and define quadrilaterals that are convex.">quad</abbr>; for <em>GL_QUAD_STRIP</em>, the vertices should alternate from one side of the strip to the other.</p>
+</div>
+</div>
+</div>
+<h2 id="312--opengl颜色">3.1.2  OpenGL颜色<a class="headerlink" href="#312--opengl颜色" title="Permanent link">&para;</a></h2>
+<p><strong><abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> Color</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">中文</label><label for="__tabbed_3_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>OpenGL有一大堆函数，可以用来为我们绘制的几何图形指定颜色。这些函数的名称形式为<em>glColor</em><em>，其中“</em>”代表一个后缀，用于指定参数的数量和类型。我现在应该警告你，对于逼真的3D图形，OpenGL有一个更复杂的颜色概念，使用了一组不同的函数。你将在<a href="../c4/index.md">下一章</a>中学习到这一点，但现在我们将专注于<em>glColor</em>*。</p>
+<p>例如，函数<em>glColor3f</em>有三个类型为<strong>float</strong>的参数。这些参数以0.0到1.0的范围内的数字给出了颜色的红色、绿色和蓝色分量。（实际上，允许超出这个范围的值，甚至是负值。当颜色值用于计算时，超出范围的值将被视为给定值。当颜色实际上出现在屏幕上时，其分量值将被夹紧到0到1的范围内。也就是说，小于零的值将被更改为零，大于一的值将被更改为一。）</p>
+<p>你可以通过使用<em>glColor4f()</em>来添加第四个分量到颜色中。第四个分量，称为alpha，不会在默认绘制模式下使用，但可以配置OpenGL将其用作颜色的透明度程度，类似于我们所看到的2D图形API中的alpha分量的使用。你需要两条命令来启用透明度：</p>
+<div class="highlight"><pre><span></span><code><span class="n">glEnable</span><span class="p">(</span><span class="n">GL_BLEND</span><span class="p">);</span>
+<span class="n">glBlendFunc</span><span class="p">(</span><span class="n">GL_SRC_ALPHA</span><span class="p">,</span><span class="w"> </span><span class="n">GL_ONE_MINUS_SRC_ALPHA</span><span class="p">);</span>
+</code></pre></div>
+<p>第一条命令启用了alpha分量的使用。它可以通过调用<em>glDisable(GL_BLEND)</em>来禁用。当<em>GL_BLEND</em>选项被禁用时，alpha会被简单地忽略。第二条命令告诉颜色的alpha分量将如何使用。这里显示的参数是最常见的；它们以通常的方式实现了透明度。我应该指出的是，虽然在2D中透明度运作良好，但在3D中正确使用透明度要困难得多。</p>
+<p>如果您想要使用范围在0到255之间的整数颜色值，您可以使用glColor3ub()或glColor4ub来设置颜色。在这些函数名称中，“ub”代表“<abbr title="表示8位非负整数值的数据类型，取值范围为0到255。">无符号字节</abbr>”。<strong><abbr title="表示8位非负整数值的数据类型，取值范围为0到255。">无符号字节</abbr></strong>是一个八位数据类型，其值在0到255范围内。下面是一些在OpenGL中设置绘图颜色的命令示例：</p>
+<div class="highlight"><pre><span></span><code><span class="n">glColor3f</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">         </span><span class="c1">// 绘制黑色。</span>
+
+<span class="n">glColor3f</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="w">         </span><span class="c1">// 绘制白色。</span>
+
+<span class="n">glColor3f</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">         </span><span class="c1">// 绘制全强度的红色。</span>
+
+<span class="n">glColor3ub</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">        </span><span class="c1">// 绘制一个与黑色略有不同的颜色。 （后缀“ub”或“f”很重要！）</span>
+
+<span class="n">glColor3ub</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">      </span><span class="c1">// 绘制全强度的红色。</span>
+
+<span class="n">glColor4f</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">);</span><span class="w">  </span><span class="c1">// 绘制半透明的红色，但只有在OpenGL被配置为支持透明度时才会生效。默认情况下，这与绘制纯红色相同。</span>
+</code></pre></div>
+<p>使用任何这些函数都会设置“当前颜色”的值，该值是OpenGL状态的一部分。当您使用<em>glVertex</em>*函数之一生成顶点时，当前颜色将与顶点坐标一起保存，作为顶点的一个属性。我们将看到，顶点除了颜色之外还可以具有其他类型的属性。关于OpenGL的一个有趣的地方是，颜色与单个顶点相关联，而不是与完整的形状相关联。通过在glBegin()和glEnd()之间调用时更改当前颜色，您可以获得具有不同颜色属性的形状，不同的顶点。当您这样做时，OpenGL将通过对顶点颜色进行插值来计算形状内部的像素颜色。（再次说明，由于OpenGL非常可配置，我必须指出，颜色插值只是默认行为。）例如，下面是一个三角形，其中三个顶点分别被赋予红色、绿色和蓝色：</p>
+<p><a class="glightbox" href="../../../en/c3/opengl-rgb-triangle.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="123" src="../../../en/c3/opengl-rgb-triangle.png" /></a></p>
+<p>这个图像经常被用作OpenGL的一种“Hello World”示例。可以用以下命令绘制三角形：</p>
+<div class="highlight"><pre><span></span><code><span class="n">glBegin</span><span class="p">(</span><span class="n">GL_TRIANGLES</span><span class="p">);</span>
+<span class="n">glColor3f</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">// 红色</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="mf">-0.8</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.8</span><span class="p">);</span>
+<span class="n">glColor3f</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">// 绿色</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.8</span><span class="p">);</span>
+<span class="n">glColor3f</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// 蓝色</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.9</span><span class="p">);</span>
+<span class="n">glEnd</span><span class="p">();</span>
+</code></pre></div>
+<p>请注意，在绘制原始图元时，不需要像这里那样为每个顶点显式设置颜色。如果您想要一个完全相同颜色的形状，您只需要在绘制形状之前（或者在glBegin()调用之后）设置当前颜色一次即可。例如，我们可以用以下命令绘制一个实心的黄色三角形：</p>
+<div class="highlight"><pre><span></span><code><span class="n">glColor3ub</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// 黄色</span>
+<span class="n">glBegin</span><span class="p">(</span><span class="n">GL_TRIANGLES</span><span class="p">);</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">);</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">);</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">);</span>
+<span class="n">glEnd</span><span class="p">();</span>
+</code></pre></div>
+<p>同时请记住，顶点的颜色在生成顶点的<em>glVertex</em>*调用之前指定。</p>
+<p>这是一个交互式演示，绘制了基本的OpenGL三角形，具有不同颜色的顶点。您可以控制顶点的颜色，以查看三角形内部的插值颜色受到的影响。这是我们的第一个OpenGL示例。实际上，这个演示使用了WebGL，因此您可以将其用作测试，以检查您的Web浏览器是否支持WebGL。</p>
+<p><iframe src="../../../en/demos/c3/first-triangle-demo.html" width="620" height="320"></iframe></p>
+<p>示例程序 <a href="../../../en/source/jogl/FirstTriangle.java">jogl/FirstTriangle.java</a> 使用Java绘制了基本的OpenGL三角形。程序 <a href="../../../en/source/glut/first-triangle.c">glut/first-triangle.c</a> 使用C语言完成了相同的任务。而<a href="../../../en/source/glsim/first-triangle.html">glsim/first-triangle.html</a> 是一个使用了我的JavaScript模拟器的版本，该模拟器仅实现了本书中涵盖的OpenGL 1.1的部分。这些程序中的任何一个都可以用来在OpenGL中进行2D绘图的实验。您也可以用它们来测试您的OpenGL编程环境。</p>
+<hr />
+<p>一个常见的操作是通过用某种背景颜色填充来清除绘图区域。可以通过绘制一个大的彩色矩形来实现，但是OpenGL有一种可能更有效的方法。该函数</p>
+<div class="highlight"><pre><span></span><code><span class="n">glClearColor</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">a</span><span class="p">);</span>
+</code></pre></div>
+<p>设置要用于清除绘图区域的颜色。（这只是设置颜色；颜色直到您实际给出清除绘图区域的命令时才会被使用。）参数是范围在0到1之间的浮点值。这个函数没有变体；您必须提供所有四个颜色分量，它们必须在0到1的范围内。默认的清除颜色是全零，即，颜色为黑色，alpha分量也等于零。执行实际清除的命令是：</p>
+<div class="highlight"><pre><span></span><code><span class="n">glClear</span><span class="p">(</span><span class="n">GL_COLOR_BUFFER_BIT</span><span class="p">);</span>
+</code></pre></div>
+<p>我一直称之为绘图区域的正确术语是<strong><abbr title="在OpenGL中，保存图像颜色数据的内存区域。它充当了绘制表面，用于渲染图像。">颜色缓冲区</abbr></strong>，其中“缓冲区”是指内存中的一个区域的通用术语。除了颜色缓冲区之外，OpenGL还使用了几个缓冲区。我们将在稍后遇到“<abbr title="存储3D图形深度测试所需信息的内存区域，即图像中每个像素点的深度值。也称为“z缓冲区”。">深度缓冲区</abbr>”。<em>glClear</em>命令可以用于一次清除多个不同的缓冲区，这可能比分开清除它们更有效，因为清除可以并行进行。<em>glClear</em>的参数告诉它要清除哪个缓冲区或哪些缓冲区。要一次清除多个缓冲区，请使用代表它们的常量与算术OR操作结合。例如，</p>
+<div class="highlight"><pre><span></span><code><span class="n">glClear</span><span class="p">(</span><span class="n">GL_COLOR_BUFFER_BIT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">GL_DEPTH_BUFFER_BIT</span><span class="p">);</span>
+</code></pre></div>
+<p>这是在3D图形中通常使用的<em>glClear</em>形式，其中深度缓冲区起着至关重要的作用。对于2D图形，深度缓冲区通常不使用，因此<em>glClear</em>的适当参数只是<em>GL_COLOR_BUFFER_BIT</em>。</p>
+</div>
+<div class="tabbed-block">
+<p><abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> has a large collection of functions that can be used to specify colors for the geometry that we draw. These functions have names of the form <em>glColor</em><em>, where the "</em>" stands for a suffix that gives the number and type of the parameters. I should warn you now that for realistic 3D graphics, <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> has a more complicated notion of color that uses a different set of functions. You will learn about that in the <a href="../c4/index.md">next chapter</a>, but for now we will stick to <em>glColor</em>*.</p>
+<p>For example, the function <em>glColor3f</em> has three parameters of type <strong>float</strong>. The parameters give the red, green, and blue components of the color as numbers in the range 0.0 to 1.0. (In fact, values outside this range are allowed, even negative values. When color values are used in computations, out-of-range values will be used as given. When a color actually appears on the screen, its component values are clamped to the range 0 to 1. That is, values less than zero are changed to zero, and values greater than one are changed to one.)</p>
+<p>You can add a fourth component to the color by using <em>glColor4f()</em>. The fourth component, known as <abbr title="An extra component (that is, one of the numbers that are used to specify a color) in a color model that is not part of the actual color specification. The alpha component is extra information. It is most often used to specify the degree of transparency of a color.">alpha</abbr>, is not used in the default drawing mode, but it is possible to configure <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> to use it as the degree of transparency of the color, similarly to the use of the <abbr title="An extra component (that is, one of the numbers that are used to specify a color) in a color model that is not part of the actual color specification. The alpha component is extra information. It is most often used to specify the degree of transparency of a color.">alpha</abbr> component in the 2D graphics APIs that we have looked at. You need two commands to turn on transparency:</p>
+<div class="highlight"><pre><span></span><code><span class="n">glEnable</span><span class="p">(</span><span class="n">GL_BLEND</span><span class="p">);</span>
+<span class="n">glBlendFunc</span><span class="p">(</span><span class="n">GL_SRC_ALPHA</span><span class="p">,</span><span class="w"> </span><span class="n">GL_ONE_MINUS_SRC_ALPHA</span><span class="p">);</span>
+</code></pre></div>
+<p>The first command enables use of the <abbr title="An extra component (that is, one of the numbers that are used to specify a color) in a color model that is not part of the actual color specification. The alpha component is extra information. It is most often used to specify the degree of transparency of a color.">alpha</abbr> component. It can be disabled by calling <em>glDisable(GL_BLEND)</em>. When the <em>GL_BLEND</em> option is disabled, <abbr title="An extra component (that is, one of the numbers that are used to specify a color) in a color model that is not part of the actual color specification. The alpha component is extra information. It is most often used to specify the degree of transparency of a color.">alpha</abbr> is simply ignored. The second command tells how the <abbr title="An extra component (that is, one of the numbers that are used to specify a color) in a color model that is not part of the actual color specification. The alpha component is extra information. It is most often used to specify the degree of transparency of a color.">alpha</abbr> component of a color will be used. The parameters shown here are the most common; they implement transparency in the usual way. I should note that while transparency works fine in 2D, it is much more difficult to use transparency correctly in 3D.</p>
+<p>If you would like to use integer color values in the range 0 to 255, you can use glColor3ub() or glColor4ub to set the color. In these function names, "ub" stands for "<abbr title="A data type representing 8-bit non-negative integer values, taking values in the range from 0 to 255.">unsigned byte</abbr>." <strong>Unsigned byte</strong> is an eight-bit data type with values in the range 0 to 255. Here are some examples of commands for setting drawing colors in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">glColor3f</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">         </span><span class="c1">// Draw in black.</span>
+
+<span class="n">glColor3f</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="w">         </span><span class="c1">// Draw in white.</span>
+
+<span class="n">glColor3f</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">         </span><span class="c1">// Draw in full-intensity red.</span>
+
+<span class="n">glColor3ub</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">        </span><span class="c1">// Draw in a color just a tiny bit different from</span>
+<span class="w">                        </span><span class="c1">// black.  (The suffix, &quot;ub&quot; or &quot;f&quot;, is important!)</span>
+
+<span class="n">glColor3ub</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">      </span><span class="c1">// Draw in full-intensity red.</span>
+
+<span class="n">glColor4f</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">);</span><span class="w">  </span><span class="c1">// Draw in transparent red, but only if OpenGL</span>
+<span class="w">                        </span><span class="c1">// has been configured to do transparency.  By</span>
+<span class="w">                        </span><span class="c1">// default this is the same as drawing in plain red.</span>
+</code></pre></div>
+<p>Using any of these functions sets the value of a "current color," which is part of the <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> state. When you generate a <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> with one of the <em>glVertex</em>* functions, the current color is saved along with the <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> coordinates, as an <abbr title="A property, such as color, of a graphical object. An image can be specified by the geometric shapes that it contains, together with their attributes.">attribute</abbr> of the <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr>. We will see that vertices can have other kinds of <abbr title="A property, such as color, of a graphical object. An image can be specified by the geometric shapes that it contains, together with their attributes.">attribute</abbr> as well as color. One interesting point about <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> is that colors are associated with individual vertices, not with complete shapes. By changing the current color between calls to glBegin() and glEnd(), you can get a shape in which different vertices have different color <abbr title="A property, such as color, of a graphical object. An image can be specified by the geometric shapes that it contains, together with their attributes.">attributes</abbr>. When you do this, <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> will compute the colors of <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr> inside the shape by interpolating the colors of the vertices. (Again, since <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> is extremely configurable, I have to note that <abbr title="Given values for some quantity at certain reference points, computing a value for that quantity at other points by some kind of averaging applied to the values at the reference points.">interpolation</abbr> of colors is just the default behavior.) For example, here is a triangle in which the three vertices are assigned the colors red, green, and blue:</p>
+<p><a class="glightbox" href="../../../en/c3/opengl-rgb-triangle.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="123" src="../../../en/c3/opengl-rgb-triangle.png" /></a></p>
+<p>This image is often used as a kind of "Hello World" example for <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>. The triangle can be drawn with the commands</p>
+<div class="highlight"><pre><span></span><code><span class="n">glBegin</span><span class="p">(</span><span class="n">GL_TRIANGLES</span><span class="p">);</span>
+<span class="n">glColor3f</span><span class="p">(</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">);</span><span class="w"> </span><span class="c1">// red</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="w"> </span><span class="mf">-0.8</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.8</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glColor3f</span><span class="p">(</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">);</span><span class="w"> </span><span class="c1">// green</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.8</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glColor3f</span><span class="p">(</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">);</span><span class="w"> </span><span class="c1">// blue</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.9</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glEnd</span><span class="p">();</span>
+</code></pre></div>
+<p>Note that when drawing a primitive, you do <strong>not</strong> need to explicitly set a color for each <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr>, as was done here. If you want a shape that is all one color, you just have to set the current color once, before drawing the shape (or just after the call to glBegin(). For example, we can draw a solid yellow triangle with</p>
+<div class="highlight"><pre><span></span><code><span class="n">glColor3ub</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// yellow</span>
+<span class="n">glBegin</span><span class="p">(</span><span class="n">GL_TRIANGLES</span><span class="p">);</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glVertex2f</span><span class="p">(</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glEnd</span><span class="p">();</span>
+</code></pre></div>
+<p>Also remember that the color for a <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> is specified before the call to <em>glVertex</em>* that generates the <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr>.</p>
+<p>Here is an interactive demo that draws the basic <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> triangle, with different colored vertices. You can control the colors of the vertices to see how the interpolated colors in the interior of the triangle are affected. This is our first <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> example. The demo actually uses <abbr title="A 3D graphics API for use on web pages. WebGL programs are written in the JavaScript programming language and display their images in HTML canvas elements. WebGL is based on OpenGL ES, the version of OpenGL for embedded systems, with a few changes to adapt it to the JavaScript language and the Web environment.">WebGL</abbr>, so you can use it as a test to check whether your web browser supports <abbr title="A 3D graphics API for use on web pages. WebGL programs are written in the JavaScript programming language and display their images in HTML canvas elements. WebGL is based on OpenGL ES, the version of OpenGL for embedded systems, with a few changes to adapt it to the JavaScript language and the Web environment.">WebGL</abbr>.</p>
+<p><iframe src="../../../en/demos/c3/first-triangle-demo.html" width="620" height="320"></iframe></p>
+<p>The sample program <a href="../../../en/source/jogl/FirstTriangle.java">jogl/FirstTriangle.java</a> draws the basic <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> triangle using Java. The program <a href="../../../en/source/glut/first-triangle.c">glut/first-triangle.c</a> does the same using the C programming language. And <a href="../../../en/source/glsim/first-triangle.html">glsim/first-triangle.html</a> is a version that uses my <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> simulator, which implements just the parts of <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 1.1 that are covered in this book. Any of those programs could be used to experiment with 2D drawing in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>. And you can use them to test your <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> programming environment.</p>
+<hr />
+<p>A common operation is to clear the drawing area by filling it with some background color. It is be possible to do that by drawing a big colored rectangle, but <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> has a potentially more efficient way to do it. The function</p>
+<div class="highlight"><pre><span></span><code><span class="n">glClearColor</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">a</span><span class="p">);</span>
+</code></pre></div>
+<p>sets up a color to be used for clearing the drawing area. (This only sets the color; the color isn't used until you actually give the command to clear the drawing area.) The parameters are floating point values in the range 0 to 1. There are no variants of this function; you must provide all four color components, and they must be in the range 0 to 1. The default clear color is all zeros, that is, black with an <abbr title="An extra component (that is, one of the numbers that are used to specify a color) in a color model that is not part of the actual color specification. The alpha component is extra information. It is most often used to specify the degree of transparency of a color.">alpha</abbr> component also equal to zero. The command to do the actual clearing is:</p>
+<div class="highlight"><pre><span></span><code><span class="n">glClear</span><span class="p">(</span><span class="w"> </span><span class="n">GL_COLOR_BUFFER_BIT</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>The correct term for what I have been calling the drawing area is the <strong><abbr title="In OpenGL, the region of memory that holds the color data for the image. It acts as the drawing surface where images are rendered.">color buffer</abbr></strong>, where "buffer" is a general term referring to a region in memory. <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> uses several buffers in addition to the <abbr title="In OpenGL, the region of memory that holds the color data for the image. It acts as the drawing surface where images are rendered.">color buffer</abbr>. We will encounter the "<abbr title="A region of memory that stores the information needed for the depth test in 3D graphics, that is, a depth value for each pixel in the image. Also called the &quot;z-buffer.&quot;">depth buffer</abbr>" in just a moment. The <em>glClear</em> command can be used to clear several different buffers at the same time, which can be more efficient than clearing them separately since the clearing can be done in parallel. The parameter to <em>glClear</em> tells it which buffer or buffers to clear. To clear several buffers at once, combine the constants that represent them with an arithmetic OR operation. For example,</p>
+<div class="highlight"><pre><span></span><code><span class="n">glClear</span><span class="p">(</span><span class="w"> </span><span class="n">GL_COLOR_BUFFER_BIT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">GL_DEPTH_BUFFER_BIT</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>This is the form of <em>glClear</em> that is generally used in 3D graphics, where the <abbr title="A region of memory that stores the information needed for the depth test in 3D graphics, that is, a depth value for each pixel in the image. Also called the &quot;z-buffer.&quot;">depth buffer</abbr> plays an essential role. For 2D graphics, the <abbr title="A region of memory that stores the information needed for the depth test in 3D graphics, that is, a depth value for each pixel in the image. Also called the &quot;z-buffer.&quot;">depth buffer</abbr> is generally not used, and the appropriate parameter for <em>glClear</em> is just <em>GL_COLOR_BUFFER_BIT</em>.</p>
+</div>
+</div>
+</div>
+<h2 id="313--glcolor-和-glvertex-与数组">3.1.3  glColor 和 glVertex 与数组<a class="headerlink" href="#313--glcolor-和-glvertex-与数组" title="Permanent link">&para;</a></h2>
+<p><strong>glColor and glVertex with Arrays</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">中文</label><label for="__tabbed_4_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>我们已经看到了<em>glColor</em><em>和</em>glVertex<em><em>的版本，它们接受不同数量和类型的参数。还有一些版本，让您将命令的所有数据放在单个数组参数中。这些版本的名称以“v”结尾。例如：</em>glColor3fv</em>、<em>glVertex2iv</em>、<em>glColor4ubv</em>和<em>glVertex3dv</em>。实际上，“v”代表“<abbr title="向量空间中的元素。向量空间的元素可以相加，并且可以乘以常数。对于计算机图形，向量只是包含两个、三个或四个数字的列表或数组。在这个意义上，向量通常用于表示2D、3D或4D空间中的点。然而，准确地说，向量表示具有长度和方向的数量；以这种方式使用的向量可以被可视化为箭头。">向量</abbr>”，基本上意味着一维数组。例如，在函数调用<em>glVertex3fv(coords)</em>中，coords将是一个包含至少三个浮点数的数组。</p>
+<p>在OpenGL中存在数组参数强制要求在不同编程语言的OpenGL实现之间存在一些差异。Java中的数组与C中的数组不同，JavaScript中的数组也与两者都不同。让我们首先看看C语言中的情况，因为那是原始OpenGL API的语言。</p>
+<p>在C语言中，数组变量是指针变量的一种变体，数组和指针可以在许多情况下互换使用。实际上，在C API中，数组参数实际上被指定为指针。例如，<em>glVertex3fv</em>的参数的类型是“指向浮点数的指针”。在对<em>glVertex3fv</em>的调用中的实际参数可以是数组变量，但也可以是指向三个浮点数序列开头的任何指针。例如，假设我们要绘制一个正方形。我们需要每个顶点的两个坐标。在C语言中，我们可以将所有8个坐标放入一个数组中，并使用<em>glVertex2fv</em>来提取我们需要的坐标：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">float</span><span class="w"> </span><span class="n">coords</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w">  </span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="p">};</span>
+
+<span class="n">glBegin</span><span class="p">(</span><span class="n">GL_TRIANGLE_FAN</span><span class="p">);</span>
+<span class="n">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="p">);</span><span class="w">      </span><span class="c1">// 使用 coords[0] 和 coords[1]。</span>
+<span class="n">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w">  </span><span class="c1">// 使用 coords[2] 和 coords[3]。</span>
+<span class="n">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span><span class="w">  </span><span class="c1">// 使用 coords[4] 和 coords[5]。</span>
+<span class="n">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span><span class="w">  </span><span class="c1">// 使用 coords[6] 和 coords[7]。</span>
+<span class="n">glEnd</span><span class="p">();</span>
+</code></pre></div>
+<p>这个例子使用了“指针算术”，其中 coords + N 表示数组的第N个元素的指针。另一种表示法是 <em>&amp;coords[N]</em>，其中“&amp;”是地址运算符，<em>&amp;coords[N]</em>表示“指向<em>coords[N]</em>的指针”。这对于只熟悉Java或JavaScript的人来说可能会感到非常陌生。在我的示例中，我将避免使用指针算术，但偶尔会使用地址运算符。</p>
+<p>至于Java，设计JOGL的人想要保留从数组中提取数据的能力。但是，在Java中无法使用指针。解决方案是在JOGL API中用一对参数替换C API中的指针参数——一个参数用于指定包含数据的数组，另一个参数用于指定数组中数据的起始索引。例如，这是正方形绘制代码如何转换为Java：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">float</span><span class="o">[]</span><span class="w"> </span><span class="n">coords</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">-</span><span class="mf">0.5F</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">0.5F</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5F</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mf">0.5F</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5F</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5F</span><span class="p">,</span><span class="w">  </span><span class="o">-</span><span class="mf">0.5F</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5F</span><span class="w"> </span><span class="p">};</span>
+
+<span class="n">gl2</span><span class="p">.</span><span class="na">glBegin</span><span class="p">(</span><span class="n">GL2</span><span class="p">.</span><span class="na">GL_TRIANGLES</span><span class="p">);</span>
+<span class="n">gl2</span><span class="p">.</span><span class="na">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// 使用 coords[0] 和 coords[1]。</span>
+<span class="n">gl2</span><span class="p">.</span><span class="na">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w">  </span><span class="c1">// 使用 coords[2] 和 coords[3]。</span>
+<span class="n">gl2</span><span class="p">.</span><span class="na">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span><span class="w">  </span><span class="c1">// 使用 coords[4] 和 coords[5]。</span>
+<span class="n">gl2</span><span class="p">.</span><span class="na">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span><span class="w">  </span><span class="c1">// 使用 coords[6] 和 coords[7]。</span>
+<span class="n">gl2</span><span class="p">.</span><span class="na">glEnd</span><span class="p">();</span>
+</code></pre></div>
+<p>参数方面真的没有太大的区别，尽管第一个glVertex2fv中的零有点让人讨厌。主要区别是前缀“gl2”和“GL2”，这是由JOGL API的面向对象特性所要求的。在这里我不会再多说JOGL的内容，但是如果您需要将我的示例转换为JOGL，您应该记住在处理数组时需要的额外参数。</p>
+<p>作为记录，这里是我在本书中将要使用的<em>glVertex*</em>和<em>glColor*</em>函数。这不是OpenGL中可用的完整集合：</p>
+<div class="highlight"><pre><span></span><code><span class="n">glVertex2f</span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">);</span><span class="w">             </span><span class="n">glVertex2fv</span><span class="p">(</span><span class="w"> </span><span class="n">xyArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glVertex2d</span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">);</span><span class="w">             </span><span class="n">glVertex2dv</span><span class="p">(</span><span class="w"> </span><span class="n">xyArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glVertex2i</span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">);</span><span class="w">             </span><span class="n">glVertex2iv</span><span class="p">(</span><span class="w"> </span><span class="n">xyArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glVertex3f</span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="p">);</span><span class="w">          </span><span class="n">glVertex3fv</span><span class="p">(</span><span class="w"> </span><span class="n">xyzArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glVertex3d</span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="p">);</span><span class="w">          </span><span class="n">glVertex3dv</span><span class="p">(</span><span class="w"> </span><span class="n">xyzArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glVertex3i</span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="p">);</span><span class="w">          </span><span class="n">glVertex3iv</span><span class="p">(</span><span class="w"> </span><span class="n">xyzArray</span><span class="w"> </span><span class="p">);</span>
+
+<span class="n">glColor3f</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="p">);</span><span class="w">           </span><span class="n">glColor3f</span><span class="p">(</span><span class="w"> </span><span class="n">rgbArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glColor3d</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="p">);</span><span class="w">           </span><span class="n">glColor3d</span><span class="p">(</span><span class="w"> </span><span class="n">rgbArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glColor3ub</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="p">);</span><span class="w">          </span><span class="n">glColor3ub</span><span class="p">(</span><span class="w"> </span><span class="n">rgbArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glColor4f</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">);</span><span class="w">         </span><span class="n">glColor4f</span><span class="p">(</span><span class="w"> </span><span class="n">rgbaArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glColor4d</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">);</span><span class="w">         </span><span class="n">glColor4d</span><span class="p">(</span><span class="w"> </span><span class="n">rgbaArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glColor4ub</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">);</span><span class="w">        </span><span class="n">glColor4ub</span><span class="p">(</span><span class="w"> </span><span class="n">rgbaArray</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>对于<em>glColor</em>*，请记住，“ub”变体需要在0到255范围内的整数，而“f”和“d”变体需要在0.0到1.0范围内的浮点数。</p>
+</div>
+<div class="tabbed-block">
+<p>We have see that there are versions of <em>glColor</em><em> and </em>glVertex<em><em> that take different numbers and types of parameters. There are also versions that let you place all the data for the command in a single array parameter. The names for such versions end with "v". For example: </em>glColor3fv</em>, <em>glVertex2iv</em>, <em>glColor4ubv</em>, and <em>glVertex3dv</em>. The "v" actually stands for "<abbr title="An element of a vector space. Elements of a vector space can be added and can be multiplied by constants. For computer graphics, a vector is just a list or array containing two, three, or four numbers. Vectors in that sense are often used to represent points in 2D, 3D, or 4D space. Properly, however, a vector represents a quantity that has a length and a direction; a vector used in this way can be visualized as an arrow.">vector</abbr>," meaning essentially a one-dimensional array of numbers. For example, in the function call <em>glVertex3fv(coords)</em>, coords would be an array containing at least three floating point numbers.</p>
+<p>The existence of array parameters in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> forces some differences between <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> implementations in different programming languages. Arrays in Java are different from arrays in C, and arrays in <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> are different from both. Let's look at the situation in C first, since that's the language of the original <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>.</p>
+<p>In C, array variables are a sort of variation on pointer variables, and arrays and pointers can be used interchangeably in many circumstances. In fact, in the C <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>, array parameters are actually specified as pointers. For example, the parameter for <em>glVertex3fv</em> is of type "pointer to float." The actual parameter in a call to <em>glVertex3fv</em> can be an array variable, but it can also be any pointer that points to the beginning of a sequence of three floats. As an example, suppose that we want to draw a square. We need two coordinates for each <abbr title="One of the points that define a geometric primitive, such as the two endpoints of a line segment or the three vertices of a triangle. (The plural is &quot;vertices.&quot;) A vertex can be specified in a coordinate system by giving its x and y coordinates in 2D graphics, or its x, y, and z coordinates in 3D graphics.">vertex</abbr> of the square. In C, we can put all 8 coordinates into one array and use <em>glVertex2fv</em> to pull out the coordinates that we need:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">float</span><span class="w"> </span><span class="n">coords</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w">  </span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="p">};</span>
+
+<span class="n">glBegin</span><span class="p">(</span><span class="n">GL_TRIANGLE_FAN</span><span class="p">);</span>
+<span class="n">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="p">);</span><span class="w">      </span><span class="c1">// Uses coords[0] and coords[1].</span>
+<span class="n">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w">  </span><span class="c1">// Uses coords[2] and coords[3].</span>
+<span class="n">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span><span class="w">  </span><span class="c1">// Uses coords[4] and coords[5].</span>
+<span class="n">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span><span class="w">  </span><span class="c1">// Uses coords[6] and coords[7].</span>
+<span class="n">glEnd</span><span class="p">();</span>
+</code></pre></div>
+<p>This example uses "pointer arithmetic," in which coords + N represents a pointer to the N-th element of the array. An alternative notation would be <em>&amp;coords[N]</em>, where "&amp;" is the address operator, and <em>&amp;coords[N]</em> means "a pointer to <em>coords[N]</em>". This will all seem very alien to people who are only familiar with Java or <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr>. In my examples, I will avoid using pointer arithmetic, but I will occasionally use address operators.</p>
+<p>As for Java, the people who designed <abbr title="A Java implementation of OpenGL. JOGL is very complicated, since it attempts to support all versions of OpenGL in one programming system. JOGL integrates seamlessly with Java's Swing and AWT graphics.">JOGL</abbr> wanted to preserve the ability to pull data out of the middle of an array. However, it's not possible to work with pointers in Java. The solution was to replace a pointer parameter in the C <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> with a pair of parameters in the <abbr title="A Java implementation of OpenGL. JOGL is very complicated, since it attempts to support all versions of OpenGL in one programming system. JOGL integrates seamlessly with Java's Swing and AWT graphics.">JOGL</abbr> <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>—one parameter to specify the array that contains the data and one to specify the starting index of the data in the array. For example, here is how the square-drawing code translates into Java:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">float</span><span class="p">[]</span><span class="w"> </span><span class="n">coords</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mf">-0.5F</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5F</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5F</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5F</span><span class="p">,</span><span class="w">  </span><span class="mf">0.5F</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5F</span><span class="p">,</span><span class="w">  </span><span class="mf">-0.5F</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5F</span><span class="w"> </span><span class="p">};</span>
+
+<span class="n">gl2</span><span class="p">.</span><span class="n">glBegin</span><span class="p">(</span><span class="n">GL2</span><span class="p">.</span><span class="n">GL_TRIANGLES</span><span class="p">);</span>
+<span class="n">gl2</span><span class="p">.</span><span class="n">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// Uses coords[0] and coords[1].</span>
+<span class="n">gl2</span><span class="p">.</span><span class="n">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w">  </span><span class="c1">// Uses coords[2] and coords[3].</span>
+<span class="n">gl2</span><span class="p">.</span><span class="n">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span><span class="w">  </span><span class="c1">// Uses coords[4] and coords[5].</span>
+<span class="n">gl2</span><span class="p">.</span><span class="n">glVertex2fv</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span><span class="w">  </span><span class="c1">// Uses coords[6] and coords[7].</span>
+<span class="n">gl2</span><span class="p">.</span><span class="n">glEnd</span><span class="p">();</span>
+</code></pre></div>
+<p>There is really not much difference in the parameters, although the zero in the first glVertex2fv is a little annoying. The main difference is the prefixes "gl2" and "GL2", which are required by the object-oriented nature of the <abbr title="A Java implementation of OpenGL. JOGL is very complicated, since it attempts to support all versions of OpenGL in one programming system. JOGL integrates seamlessly with Java's Swing and AWT graphics.">JOGL</abbr> <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>. I won't say more about <abbr title="A Java implementation of OpenGL. JOGL is very complicated, since it attempts to support all versions of OpenGL in one programming system. JOGL integrates seamlessly with Java's Swing and AWT graphics.">JOGL</abbr> here, but if you need to translate my examples into <abbr title="A Java implementation of OpenGL. JOGL is very complicated, since it attempts to support all versions of OpenGL in one programming system. JOGL integrates seamlessly with Java's Swing and AWT graphics.">JOGL</abbr>, you should keep in mind the extra parameter that is required when working with arrays.</p>
+<p>For the record, here are the <em>glVertex*</em> and <em>glColor*</em> functions that I will use in this book. This is not the complete set that is available in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">glVertex2f</span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">);</span><span class="w">             </span><span class="n">glVertex2fv</span><span class="p">(</span><span class="w"> </span><span class="n">xyArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glVertex2d</span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">);</span><span class="w">             </span><span class="n">glVertex2dv</span><span class="p">(</span><span class="w"> </span><span class="n">xyArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glVertex2i</span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">);</span><span class="w">             </span><span class="n">glVertex2iv</span><span class="p">(</span><span class="w"> </span><span class="n">xyArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glVertex3f</span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="p">);</span><span class="w">          </span><span class="n">glVertex3fv</span><span class="p">(</span><span class="w"> </span><span class="n">xyzArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glVertex3d</span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="p">);</span><span class="w">          </span><span class="n">glVertex3dv</span><span class="p">(</span><span class="w"> </span><span class="n">xyzArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glVertex3i</span><span class="p">(</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="p">);</span><span class="w">          </span><span class="n">glVertex3iv</span><span class="p">(</span><span class="w"> </span><span class="n">xyzArray</span><span class="w"> </span><span class="p">);</span>
+
+<span class="n">glColor3f</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="p">);</span><span class="w">           </span><span class="n">glColor3f</span><span class="p">(</span><span class="w"> </span><span class="n">rgbArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glColor3d</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="p">);</span><span class="w">           </span><span class="n">glColor3d</span><span class="p">(</span><span class="w"> </span><span class="n">rgbArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glColor3ub</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="p">);</span><span class="w">          </span><span class="n">glColor3ub</span><span class="p">(</span><span class="w"> </span><span class="n">rgbArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glColor4f</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">);</span><span class="w">         </span><span class="n">glColor4f</span><span class="p">(</span><span class="w"> </span><span class="n">rgbaArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glColor4d</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">);</span><span class="w">         </span><span class="n">glColor4d</span><span class="p">(</span><span class="w"> </span><span class="n">rgbaArray</span><span class="w"> </span><span class="p">);</span>
+<span class="n">glColor4ub</span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">);</span><span class="w">        </span><span class="n">glColor4ub</span><span class="p">(</span><span class="w"> </span><span class="n">rgbaArray</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>For <em>glColor</em>*, keep in mind that the "ub" variations require integers in the range 0 to 255, while the "f" and "d" variations require floating-point numbers in the range 0.0 to 1.0.</p>
+</div>
+</div>
+</div>
+<h2 id="314--深度测试">3.1.4  <abbr title="解决隐藏表面问题的一种方法，涉及跟踪图像中每个像素点当前可见对象的深度，即与观察者的距离。当在像素点处绘制新对象时，将新对象的深度与当前对象的深度进行比较，以决定哪个对象更靠近观察者。深度测试的优点是对象可以以任何顺序渲染。缺点是图像中只能表示有限范围的深度。">深度测试</abbr><a class="headerlink" href="#314--深度测试" title="Permanent link">&para;</a></h2>
+<p><strong>The Depth Test</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">中文</label><label for="__tabbed_5_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>在3D视图中一个显而易见的问题是，一个物体可以位于另一个物体的后面。当这种情况发生时，背后的物体会被前面的物体遮挡，从而对观察者隐藏。当我们创建一个3D世界的图像时，我们必须确保被其他物体遮挡的物体实际上在图像中不可见。这就是<strong><abbr title="在3D图形中决定每个像素点处哪个对象可见的问题。当一个对象在观察者视角后面时，只有前面的对象应该出现在图像中。3D图形的渲染算法必须满足这个约束条件。解决隐藏表面问题的算法包括绘图者算法和深度测试算法。">隐藏表面问题</abbr></strong>。</p>
+<p>解决方案似乎很简单：只需按从后到前的顺序绘制物体。如果一个物体在另一个物体的后面，那么当绘制前面的物体时，后面的物体将会被遮盖。这被称为<strong>画家算法</strong>。这本质上就是您在2D中所习惯做的事情。不幸的是，实现起来并不那么容易。首先，您可能会遇到相交的物体，这样每个物体的一部分就会被另一个物体遮挡。无论您以什么顺序绘制这些物体，都会有一些点显示出错误的物体。要解决这个问题，您需要沿着交叉点将物体切割成片，并将这些片段视为单独的物体。事实上，即使没有相交的物体，也可能会出现问题：可能会有三个不相交的物体，其中第一个物体遮挡了第二个的一部分，第二个物体遮挡了第三个的一部分，第三个物体又遮挡了第一个的一部分。无论以哪种顺序绘制这三个物体，画家算法都会失败。解决方案是再次将物体切割成片，但是现在不那么明显在哪里切割。</p>
+<p>尽管这些问题可以解决，但还有另一个问题。当改变视点或应用几何变换时，正确的绘制顺序可能会发生变化，这意味着每次发生这种情况时都必须重新计算正确的绘制顺序。在动画中，这意味着对于每一帧都要这样做。</p>
+<p>因此，<abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 不使用画家算法。相反，它使用一种称为<strong><abbr title="解决隐藏表面问题的一种方法，涉及跟踪图像中每个像素点当前可见对象的深度，即与观察者的距离。当在像素点处绘制新对象时，将新对象的深度与当前对象的深度进行比较，以决定哪个对象更靠近观察者。深度测试的优点是对象可以以任何顺序渲染。缺点是图像中只能表示有限范围的深度。">深度测试</abbr></strong>的技术。深度测试解决了隐藏表面问题，无论以何种顺序绘制物体，因此您可以按任意顺序绘制它们！这里的“深度”一词与观察者到物体的距离有关。深度较大的对象距离观察者更远。具有较小深度的对象将隐藏具有较大深度的对象。为了实现深度测试算法，<abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 在图像的每个像素中存储一个深度值。用于存储这些深度值的额外内存组成了我之前提到的<strong><abbr title="存储3D图形深度测试所需信息的内存区域，即图像中每个像素点的深度值。也称为“z缓冲区”。">深度缓冲区</abbr></strong>。在绘制过程中，深度缓冲区用于跟踪每个像素当前可见的内容。当第二个物体绘制在该像素时，深度缓冲区中的信息可用于决定新物体是在当前可见的物体前面还是后面。如果新物体在前面，则像素的颜色将被更改以显示新物体，并且深度缓冲区也将被更新。如果新物体在当前物体后面，则新物体的数据将被丢弃，并且颜色和深度缓冲区保持不变。</p>
+<p>默认情况下，深度测试是关闭的，这可能会导致在3D绘制时出现非常糟糕的结果。您可以通过调用以下命令来启用深度测试：</p>
+<div class="highlight"><pre><span></span><code><span class="n">glEnable</span><span class="p">(</span><span class="w"> </span><span class="n">GL_DEPTH_TEST</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>它可以通过调用 <em>glDisable(GL_DEPTH_TEST)</em> 来关闭。如果在绘制3D时忘记启用深度测试，则得到的图像可能会令人困惑，并且在物理上毫无意义。如果在清除颜色缓冲区的同时忘记清除深度缓冲区，也会产生混乱，这使用了本节中早期显示的 glClear 命令。</p>
+<p>这里有一个演示，让您可以尝试深度测试。它还让您看到当您的几何图形的一部分超出了可见的 z 值范围时会发生什么。</p>
+<p><iframe src="../../../en/demos/c3/first-cube.html" width="570" height="380"></iframe></p>
+<p>以下是有关深度测试实现的一些细节：对于每个像素，深度缓冲区存储了从观察者到当前在该像素处可见点的距离表示。这个值本质上是该点的 z <abbr title="一种将数值坐标分配给几何点的方法。在二维中，每个点对应一对数字。在三维中，每个点对应一组三个数字。">坐标</abbr>，在应用任何变换后。 （事实上，深度缓冲区通常称为“z 缓冲区”。）可能 z-坐标的范围被缩放到 0 到 1 的范围。深度缓冲区值的有限范围意味着 <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 只能在有限的距离范围内显示对象。深度值 0 对应于最小距离；深度值 1 对应于最大距离。当您清除深度缓冲区时，每个深度值都设置为 1，这可以被认为是表示图像的背景。</p>
+<p>通过应用的变换，您可以选择图像中可见的 z-值范围。在没有任何变换的情况下，默认范围是 -1 到 1。z-值超出范围的点在图像中不可见。使用过小的 z-值范围是一个常见问题，因此物体会在场景中消失，或者由于位于可见范围之外而使其前端或后端被截断。您可能会被诱惑使用一个巨大的范围，以确保您希望包含在图像中的对象包含在范围内。但是，这并不是一个好主意：深度缓冲区每个像素的位数有限，因此精度有限。它必须表示的值范围越大，区分几乎相同深度的对象就越困难。（想象一下如果您场景中的所有对象深度值介于 0.499999 和 0.500001 之间会发生什么—深度缓冲区可能将它们全部视为完全相同的深度！）</p>
+<p>深度缓冲区算法还存在另一个问题。当两个对象具有完全相同的深度值时，它可能会产生一些奇怪的结果。从逻辑上讲，甚至不清楚哪个对象应该是可见的，但深度测试的真正问题在于，它可能在某些点显示一个对象，在其他一些点显示第二个对象。这是因为数值计算并不完全准确。以下是一个实际的例子：</p>
+<p><a class="glightbox" href="../../../en/c3/depthTestError.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="123" src="../../../en/c3/depthTestError.png" /></a></p>
+<p>在这里显示的两幅图片中，先绘制了一个灰色的正方形，然后是一个白色的正方形，最后是一个黑色的正方形。这些正方形都位于同一平面上。在绘制对象之前施加了非常小的旋转，以便让计算机在绘制对象之前进行一些计算。左边的图片是在禁用深度测试的情况下绘制的，因此，例如，当绘制白色正方形的像素时，计算机不会尝试确定它是在灰色正方形的前面还是后面；它只是将像素着色为白色。右边，则启用了深度测试，您可以看到奇怪的结果。</p>
+<p>最后，顺便说一句，注意这里的讨论假设没有透明的对象。不幸的是，深度测试不能正确处理透明度，因为透明度意味着两个或多个对象可以对像素的颜色产生贡献，但深度测试假设像素的颜色是在该点最靠近观察者的对象的颜色。要在OpenGL中正确处理 3D 透明度，您几乎必须手动实现画家算法，至少对于场景中的透明对象是这样。</p>
+</div>
+<div class="tabbed-block">
+<p>An obvious point about <abbr title="Setting the position and orientation of the viewer in a 3D world, which determine what will be visible when the 2D image of a 3D world is rendered.">viewing</abbr> in 3D is that one object can be behind another object. When this happens, the back object is hidden from the viewer by the front object. When we create an image of a 3D world, we have to make sure that objects that are supposed to be hidden behind other objects are in fact not visible in the image. This is the <strong><abbr title="The problem in 3D graphics of deciding which object is visible at each pixel in an image. When one object is behind another object from the point of view of the viewer, only the front object should appear in the image. A rendering algorithm for 3D graphics must satisfy this constraint. Algorithms that solve the hidden surface problem include the painter's algorithm and the depth test algorithm.">hidden surface problem</abbr></strong>.</p>
+<p>The solution might seem simple enough: Just draw the objects in order from back to front. If one object is behind another, the back object will be covered up later when the front object is drawn. This is called the <strong><abbr title="A solution to the hidden surface algorithm that involves drawing the objects in a scene in order from back to front, that is, in decreasing order of distance from the viewer. A disadvantage is that the order is usually not well-defined unless some objects are decomposed into smaller sub-objects. Another issue is that the order of drawing has to change when objects move or when the point of view changes.">painter's algorithm</abbr></strong>. It's essentially what you are used to doing in 2D. Unfortunately, it's not so easy to implement. First of all, you can have objects that intersect, so that part of each object is hidden by the other. Whatever order you draw the objects in, there will be some points where the wrong object is visible. To fix this, you would have to cut the objects into pieces, along the intersection, and treat the pieces as separate objects. In fact, there can be problems even if there are no intersecting objects: It's possible to have three non-intersecting objects where the first object hides part of the second, the second hides part of the third, and the third hides part of the first. The <abbr title="A solution to the hidden surface algorithm that involves drawing the objects in a scene in order from back to front, that is, in decreasing order of distance from the viewer. A disadvantage is that the order is usually not well-defined unless some objects are decomposed into smaller sub-objects. Another issue is that the order of drawing has to change when objects move or when the point of view changes.">painter's algorithm</abbr> will fail regardless of the order in which the three objects are drawn. The solution again is to cut the objects into pieces, but now it's not so obvious where to cut.</p>
+<p>Even though these problems can be solved, there is another issue. The correct drawing order can change when the point of view is changed or when a geometric transformation is applied, which means that the correct drawing order has to be recomputed every time that happens. In an <abbr title="A sequence of images that, when displayed quickly one after the other, will produce the impression of continuous motion or change. The term animation also refers to the process of creating such image sequences.">animation</abbr>, that would mean for every frame.</p>
+<p>So, <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> does not use the <abbr title="A solution to the hidden surface algorithm that involves drawing the objects in a scene in order from back to front, that is, in decreasing order of distance from the viewer. A disadvantage is that the order is usually not well-defined unless some objects are decomposed into smaller sub-objects. Another issue is that the order of drawing has to change when objects move or when the point of view changes.">painter's algorithm</abbr>. Instead, it uses a technique called the <strong><abbr title="A solution to the hidden surface problem that involves keeping track of the depth, or distance from the viewer, of the object currently visible at each pixel in the image. When a new object is drawn at a pixel, the depth of the new object is compared to the depth of the current object to decide which one is closer to the viewer. The advantage of the depth test is that objects can be rendered in any order. A disadvantage is that only a limited range of depths can be represented in the image.">depth test</abbr></strong>. The <abbr title="A solution to the hidden surface problem that involves keeping track of the depth, or distance from the viewer, of the object currently visible at each pixel in the image. When a new object is drawn at a pixel, the depth of the new object is compared to the depth of the current object to decide which one is closer to the viewer. The advantage of the depth test is that objects can be rendered in any order. A disadvantage is that only a limited range of depths can be represented in the image.">depth test</abbr> solves the <abbr title="The problem in 3D graphics of deciding which object is visible at each pixel in an image. When one object is behind another object from the point of view of the viewer, only the front object should appear in the image. A rendering algorithm for 3D graphics must satisfy this constraint. Algorithms that solve the hidden surface problem include the painter's algorithm and the depth test algorithm.">hidden surface problem</abbr> no matter what order the objects are drawn in, so you can draw them in any order you want! The term "depth" here has to do with the distance from the viewer to the object. Objects at greater depth are farther from the viewer. An object with smaller depth will hide an object with greater depth. To implement the <abbr title="A solution to the hidden surface problem that involves keeping track of the depth, or distance from the viewer, of the object currently visible at each pixel in the image. When a new object is drawn at a pixel, the depth of the new object is compared to the depth of the current object to decide which one is closer to the viewer. The advantage of the depth test is that objects can be rendered in any order. A disadvantage is that only a limited range of depths can be represented in the image.">depth test</abbr> algorithm, <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> stores a depth value for each <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr> in the image. The extra memory that is used to store these depth values makes up the <strong><abbr title="A region of memory that stores the information needed for the depth test in 3D graphics, that is, a depth value for each pixel in the image. Also called the &quot;z-buffer.&quot;">depth buffer</abbr></strong> that I mentioned earlier. During the drawing process, the <abbr title="A region of memory that stores the information needed for the depth test in 3D graphics, that is, a depth value for each pixel in the image. Also called the &quot;z-buffer.&quot;">depth buffer</abbr> is used to keep track of what is currently visible at each <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr>. When a second object is drawn at that <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr>, the information in the <abbr title="A region of memory that stores the information needed for the depth test in 3D graphics, that is, a depth value for each pixel in the image. Also called the &quot;z-buffer.&quot;">depth buffer</abbr> can be used to decide whether the new object is in front of or behind the object that is currently visible there. If the new object is in front, then the color of the <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr> is changed to show the new object, and the <abbr title="A region of memory that stores the information needed for the depth test in 3D graphics, that is, a depth value for each pixel in the image. Also called the &quot;z-buffer.&quot;">depth buffer</abbr> is also updated. If the new object is behind the current object, then the data for the new object is discarded and the color and depth buffers are left unchanged.</p>
+<p>By default, the <abbr title="A solution to the hidden surface problem that involves keeping track of the depth, or distance from the viewer, of the object currently visible at each pixel in the image. When a new object is drawn at a pixel, the depth of the new object is compared to the depth of the current object to decide which one is closer to the viewer. The advantage of the depth test is that objects can be rendered in any order. A disadvantage is that only a limited range of depths can be represented in the image.">depth test</abbr> is not turned on, which can lead to very bad results when drawing in 3D. You can enable the <abbr title="A solution to the hidden surface problem that involves keeping track of the depth, or distance from the viewer, of the object currently visible at each pixel in the image. When a new object is drawn at a pixel, the depth of the new object is compared to the depth of the current object to decide which one is closer to the viewer. The advantage of the depth test is that objects can be rendered in any order. A disadvantage is that only a limited range of depths can be represented in the image.">depth test</abbr> by calling</p>
+<div class="highlight"><pre><span></span><code><span class="n">glEnable</span><span class="p">(</span><span class="w"> </span><span class="n">GL_DEPTH_TEST</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>It can be turned off by calling <em>glDisable(GL_DEPTH_TEST)</em>. If you forget to enable the <abbr title="A solution to the hidden surface problem that involves keeping track of the depth, or distance from the viewer, of the object currently visible at each pixel in the image. When a new object is drawn at a pixel, the depth of the new object is compared to the depth of the current object to decide which one is closer to the viewer. The advantage of the depth test is that objects can be rendered in any order. A disadvantage is that only a limited range of depths can be represented in the image.">depth test</abbr> when drawing in 3D, the image that you get will likely be confusing and will make no sense physically. You can also get quite a mess if you forget to clear the <abbr title="A region of memory that stores the information needed for the depth test in 3D graphics, that is, a depth value for each pixel in the image. Also called the &quot;z-buffer.&quot;">depth buffer</abbr>, using the glClear command shown earlier in this section, at the same time that you clear the <abbr title="In OpenGL, the region of memory that holds the color data for the image. It acts as the drawing surface where images are rendered.">color buffer</abbr>.</p>
+<p>Here is a demo that lets you experiment with the <abbr title="A solution to the hidden surface problem that involves keeping track of the depth, or distance from the viewer, of the object currently visible at each pixel in the image. When a new object is drawn at a pixel, the depth of the new object is compared to the depth of the current object to decide which one is closer to the viewer. The advantage of the depth test is that objects can be rendered in any order. A disadvantage is that only a limited range of depths can be represented in the image.">depth test</abbr>. It also lets you see what happens when part of your geometry extends outside the visible range of z-values.</p>
+<p><iframe src="../../../en/demos/c3/first-cube.html" width="570" height="380"></iframe></p>
+<p>Here are a few details about the implementation of the <abbr title="A solution to the hidden surface problem that involves keeping track of the depth, or distance from the viewer, of the object currently visible at each pixel in the image. When a new object is drawn at a pixel, the depth of the new object is compared to the depth of the current object to decide which one is closer to the viewer. The advantage of the depth test is that objects can be rendered in any order. A disadvantage is that only a limited range of depths can be represented in the image.">depth test</abbr>: For each <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr>, the <abbr title="A region of memory that stores the information needed for the depth test in 3D graphics, that is, a depth value for each pixel in the image. Also called the &quot;z-buffer.&quot;">depth buffer</abbr> stores a representation of the distance from the viewer to the point that is currently visible at that <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr>. This value is essentially the z-coordinate of the point, after any transformations have been applied. (In fact, the <abbr title="A region of memory that stores the information needed for the depth test in 3D graphics, that is, a depth value for each pixel in the image. Also called the &quot;z-buffer.&quot;">depth buffer</abbr> is often called the "z-buffer".) The range of possible z-coordinates is scaled to the range 0 to 1. The fact that there is only a limited range of <abbr title="A region of memory that stores the information needed for the depth test in 3D graphics, that is, a depth value for each pixel in the image. Also called the &quot;z-buffer.&quot;">depth buffer</abbr> values means that <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> can only display objects in a limited range of distances from the viewer. A depth value of 0 corresponds to the minimal distance; a depth value of 1 corresponds to the maximal distance. When you clear the <abbr title="A region of memory that stores the information needed for the depth test in 3D graphics, that is, a depth value for each pixel in the image. Also called the &quot;z-buffer.&quot;">depth buffer</abbr>, every depth value is set to 1, which can be thought of as representing the background of the image.</p>
+<p>You get to choose the range of z-values that is visible in the image, by the transformations that you apply. The default range, in the absence of any transformations, is -1 to 1. Points with z-values outside the range are not visible in the image. It is a common problem to use too small a range of z-values, so that objects are missing from the scene, or have their fronts or backs cut off, because they lie outside of the visible range. You might be tempted to use a huge range, to make sure that the objects that you want to include in the image are included within the range. However, that's not a good idea: The <abbr title="A region of memory that stores the information needed for the depth test in 3D graphics, that is, a depth value for each pixel in the image. Also called the &quot;z-buffer.&quot;">depth buffer</abbr> has a limited number of bits per <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr> and therefore a limited amount of accuracy. The larger the range of values that it must represent, the harder it is to distinguish between objects that are almost at the same depth. (Think about what would happen if all objects in your scene have depth values between 0.499999 and 0.500001—the <abbr title="A region of memory that stores the information needed for the depth test in 3D graphics, that is, a depth value for each pixel in the image. Also called the &quot;z-buffer.&quot;">depth buffer</abbr> might see them all as being at exactly the same depth!)</p>
+<p>There is another issue with the <abbr title="A region of memory that stores the information needed for the depth test in 3D graphics, that is, a depth value for each pixel in the image. Also called the &quot;z-buffer.&quot;">depth buffer</abbr> algorithm. It can give some strange results when two objects have exactly the same depth value. Logically, it's not even clear which object should be visible, but the real problem with the <abbr title="A solution to the hidden surface problem that involves keeping track of the depth, or distance from the viewer, of the object currently visible at each pixel in the image. When a new object is drawn at a pixel, the depth of the new object is compared to the depth of the current object to decide which one is closer to the viewer. The advantage of the depth test is that objects can be rendered in any order. A disadvantage is that only a limited range of depths can be represented in the image.">depth test</abbr> is that it might show one object at some points and the second object at some other points. This is possible because numerical calculations are not perfectly accurate. Here an actual example:</p>
+<p><a class="glightbox" href="../../../en/c3/depthTestError.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="123" src="../../../en/c3/depthTestError.png" /></a></p>
+<p>In the two pictures shown here, a gray square was drawn, followed by a white square, followed by a black square. The squares all lie in the same plane. A very small <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> was applied, to force the computer do some calculations before drawing the objects. The picture on the left was drawn with the <abbr title="A solution to the hidden surface problem that involves keeping track of the depth, or distance from the viewer, of the object currently visible at each pixel in the image. When a new object is drawn at a pixel, the depth of the new object is compared to the depth of the current object to decide which one is closer to the viewer. The advantage of the depth test is that objects can be rendered in any order. A disadvantage is that only a limited range of depths can be represented in the image.">depth test</abbr> disabled, so that, for example, when a <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr> of the white square was drawn, the computer didn't try to figure out whether it lies in front of or behind the gray square; it simply colored the <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr> white. On the right, the <abbr title="A solution to the hidden surface problem that involves keeping track of the depth, or distance from the viewer, of the object currently visible at each pixel in the image. When a new object is drawn at a pixel, the depth of the new object is compared to the depth of the current object to decide which one is closer to the viewer. The advantage of the depth test is that objects can be rendered in any order. A disadvantage is that only a limited range of depths can be represented in the image.">depth test</abbr> was enabled, and you can see the strange result.</p>
+<p>Finally, by the way, note that the discussion here assumes that there are no transparent objects. Unfortunately, the <abbr title="A solution to the hidden surface problem that involves keeping track of the depth, or distance from the viewer, of the object currently visible at each pixel in the image. When a new object is drawn at a pixel, the depth of the new object is compared to the depth of the current object to decide which one is closer to the viewer. The advantage of the depth test is that objects can be rendered in any order. A disadvantage is that only a limited range of depths can be represented in the image.">depth test</abbr> does not handle transparency correctly, since transparency means that two or more objects can contribute to the color of the <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr>, but the <abbr title="A solution to the hidden surface problem that involves keeping track of the depth, or distance from the viewer, of the object currently visible at each pixel in the image. When a new object is drawn at a pixel, the depth of the new object is compared to the depth of the current object to decide which one is closer to the viewer. The advantage of the depth test is that objects can be rendered in any order. A disadvantage is that only a limited range of depths can be represented in the image.">depth test</abbr> assumes that the <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixel</abbr> color is the color of the object nearest to the viewer at that point. To handle 3D transparency correctly in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>, you pretty much have to resort to implementing the <abbr title="A solution to the hidden surface algorithm that involves drawing the objects in a scene in order from back to front, that is, in decreasing order of distance from the viewer. A disadvantage is that the order is usually not well-defined unless some objects are decomposed into smaller sub-objects. Another issue is that the order of drawing has to change when objects move or when the point of view changes.">painter's algorithm</abbr> by hand, at least for the transparent objects in the scene.</p>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="最后更新">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年5月25日</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="创建日期">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年5月25日</span>
+  </span>
+
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "content.tabs.link", "navigation.tabs", "navigation.tabs.sticky", "navigation.indexes", "navigation.top", "toc.follow", "content.tooltips"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.3220b9d7.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+      
+    
+  <script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
+</html>

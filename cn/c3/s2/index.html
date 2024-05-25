@@ -1,0 +1,1953 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="计算机图形学概论(graphicsbook)">
+      
+      
+      
+        <link rel="canonical" href="https://hellowac.github.io/graphicsbook-zh-cn/cn/c3/s2/">
+      
+      
+        <link rel="prev" href="../s1/">
+      
+      
+        <link rel="next" href="../s3/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.18">
+    
+    
+      
+        <title>3.2 3D 坐标和变换 - 计算机图形学概论</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.66ac8b77.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+  
+  
+  
+  
+  <style>:root{--md-annotation-icon:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 12a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10M6 13h8l-3.5 3.5 1.42 1.42L17.84 12l-5.92-5.92L10.5 7.5 14 11H6v2Z"/></svg>');}</style>
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+        html.glightbox-open { overflow: initial; height: 100%; }
+        .gslide-title { margin-top: 0px; user-select: text; }
+        .gslide-desc { color: #666; user-select: text; }
+        .gslide-image img { background: white; }
+        
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}
+            </style> <script src="../../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="default" data-md-color-accent="red">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#32-3d-坐标和变换" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="计算机图形学概论" class="md-header__button md-logo" aria-label="计算机图形学概论" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            计算机图形学概论
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              3.2 3D 坐标和变换
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04M18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12m-2.62 7 1.62-4.33L19.12 17h-3.24Z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/graphicsbook-zh-cn/en/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/graphicsbook-zh-cn/cn/" hreflang="cn" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hellowac/graphicsbook-zh-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    graphicsbook
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link">
+        
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../preface/" class="md-tabs__link">
+        
+  
+    
+  
+  前言
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c1/" class="md-tabs__link">
+          
+  
+    
+  
+  1简介
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c2/" class="md-tabs__link">
+          
+  
+    
+  
+  2二维图形
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+    
+  
+  3几何
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c4/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  4灯光和材质
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c5/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  5three.js
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c6/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  6WebGL
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c7/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  7WebGL 3D
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c8/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  8高阶3D
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../c9/index.md" class="md-tabs__link">
+        
+  
+    
+  
+  9WEBGPU
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../a1/" class="md-tabs__link">
+          
+  
+    
+  
+  附录
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="计算机图形学概论" class="md-nav__button md-logo" aria-label="计算机图形学概论" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    计算机图形学概论
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hellowac/graphicsbook-zh-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    graphicsbook
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    首页
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    前言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c1/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    1简介
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            1简介
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c1/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 1 节 绘画与绘图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c1/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 2 节：三维(3D)图形的要素
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c1/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 3 节：硬件与软件
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c2/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    2二维图形
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            2二维图形
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第1节: 像素、坐标和颜色
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第2节: 形状
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第3节: 变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第4节: 分层建模
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第5节: Java 绘制2D
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第6节: HTML Canvas图形
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s7/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第7节: SVG：一种场景描述语言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    3几何
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            3几何
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.1 OpenGL 1.1 中的形状和颜色
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    3.2 3D 坐标和变换
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    3.2 3D 坐标和变换
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#321-3d坐标" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.2.1 3D坐标
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#322-基本-3d-变换" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.2.2 基本 3D 变换
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#323-层次建模" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.2.3 层次建模
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.3 投影与观看
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.4 多边形网格和 glDrawArrays
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.5 部分线性代数基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.6 使用 GLUT 和 JOGL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c4/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4灯光和材质
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c5/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5three.js
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6WebGL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7WebGL 3D
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c8/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8高阶3D
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9WEBGPU
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../a1/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    附录
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            附录
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a2/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Blender 3D建模
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a3/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gimp和Inkscape
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../source/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    示例程序源代码
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    术语表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    关于
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#321-3d坐标" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.2.1 3D坐标
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#322-基本-3d-变换" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.2.2 基本 3D 变换
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#323-层次建模" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.2.3 层次建模
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="32-3d-坐标和变换">3.2 3D 坐标和变换<a class="headerlink" href="#32-3d-坐标和变换" title="Permanent link">&para;</a></h1>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">中文</label><label for="__tabbed_1_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>在<a href="../../c2/">第二章</a>中，我们比较详细地讨论了二维计算机图形中的坐标系和变换。在本节和<a href="../s3/">下一节</a>中，我们将把这个讨论扩展到三维空间。在三维空间中，事情变得更加复杂，但许多基本概念仍然相同。</p>
+</div>
+<div class="tabbed-block">
+<p>In <a href="../../c2/">Chapter 2</a>, we looked fairly closely at <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate systems</abbr> and transforms in two-dimensional computer graphics. In this section and the <a href="../s3/">next</a>, we will move that discussion into 3D. Things are more complicated in three dimensions, but a lot of the basic concepts remain the same.</p>
+</div>
+</div>
+</div>
+<h2 id="321-3d坐标">3.2.1 3D坐标<a class="headerlink" href="#321-3d坐标" title="Permanent link">&para;</a></h2>
+<p><strong>3D Coordinates</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">中文</label><label for="__tabbed_2_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>坐标系是一种将数字分配给点的方式。在二维空间中，您需要一对数字来指定一个点。坐标通常被称为x和y，尽管名称是任意的。更重要的是，将一对数字分配给点本身在很大程度上是任意的。点和物体是真实存在的东西，但坐标只是我们分配给它们的数字，以便我们可以轻松地引用它们并进行数学操作。当我们讨论变换时，我们已经看到了这种力量，变换在数学上是用坐标来定义的，但它们具有真实而有用的物理含义。</p>
+<p>在三维空间中，您需要三个数字来指定一个点。（这基本上就是三维的意思。）第三个坐标通常称为z。z轴垂直于x轴和y轴。</p>
+<p>这个演示展示了一个三维坐标系。x、y和z轴的正方向显示为大箭头。x轴为绿色，y轴为蓝色，z轴为红色。您可以在轴上拖动以旋转图像。</p>
+<p><iframe src="../../../en/demos/c3/axes3D.html" width="350" height="370"></iframe></p>
+<p>这个示例是一个二维图像，但它看起来具有三维外观。（如果您旋转图像，这种幻觉会更强烈。）有几个因素共同促成了这种效果。首先，远离观察者的三维物体在二维图像中看起来更小。这是由于将三维场景“<abbr title="将3D中的坐标映射到2D中的坐标的转换。投影用于将三维场景转换为二维图像。">投影</abbr>”到二维的方式。我们将在<a href="../s3/">下一节</a>讨论投影。另一个因素是物体的“阴影”。物体被阴影着，以模拟物体与照亮它们的光的相互作用。我们将延迟讨论光照直到<a href="../c4/index.md">第四章</a>。在本节中，我们将集中讨论如何在三维中构建场景——我们所说的建模。</p>
+<p>OpenGL程序员通常使用一种坐标系思维方式，其中x轴和y轴位于屏幕的平面上，而z轴垂直于屏幕，z轴的正方向指向屏幕的外侧，朝向观察者。现在，在OpenGL中，默认的坐标系统（如果不应用任何变换）类似，但z轴的正方向指向屏幕的内侧。这并不矛盾：实际使用的坐标系统是任意的。它是通过一种变换设置的。OpenGL中的约定是使用一个坐标系统，其中正z方向指向观察者，负z方向指向远离观察者。进入默认坐标的变换会反转z轴的方向。</p>
+<p>这种轴的常规排列产生了一个<strong><abbr title="3D空间中的坐标系，其中x、y和z轴满足以下属性：如果将右手大拇指指向正z轴方向，则手指会从正x轴向正y轴弯曲。">右手坐标系</abbr></strong>。这意味着如果你用右手的拇指指向正z轴的方向，那么当你弯曲手的手指时，它们会沿着从正x轴到正y轴的方向弯曲。如果你看着你的拇指尖，弯曲将是逆时针方向的。另一种思考方式是，如果你用右手的手指从正x轴到正y轴方向弯曲，那么你的拇指将指向正z轴的方向。默认的OpenGL坐标系统（再次强调，几乎不会被使用）是一个左手坐标系。你应该花一些时间来尝试可视化右手和左手坐标系。动动你的手！</p>
+<p>所有这些都描述了从观察者的角度来看的自然坐标系统，即所谓的“眼睛”或“观察”坐标系统。然而，这些<strong><abbr title="由观察者定义的3D空间中的坐标系。在OpenGL 1.1中，眼坐标系中，观察者位于原点，朝向负z轴方向，正y轴指向上方，正x轴指向右侧。模型视图变换将对象映射到眼坐标系，投影变换将眼坐标映射到裁剪坐标。">眼坐标系</abbr></strong>不一定是世界上的自然坐标。世界上的坐标系统——即场景被组装的坐标系统——被称为<strong><abbr title="定义场景的坐标系统。生成的场景图像将显示位于某个视图体积（对于3D）或视图窗口（对于2D）内的世界坐标系统中的内容。对象在其自己的对象坐标系统中定义。然后应用建模变换将对象放置到场景中，即将对象坐标转换为世界坐标。">世界坐标</abbr></strong>。</p>
+<p>回想一下，对象通常不直接在世界坐标中指定。相反，对象在它们自己的坐标系中指定，称为对象坐标，然后应用建模变换将对象放置到世界中，或者放置到更复杂的对象中。在OpenGL中，对象坐标是在glVertex*函数中用来指定对象顶点的数字。然而，在对象出现在屏幕上之前，它们通常会经过一系列的变换，从建模变换开始。</p>
+</div>
+<div class="tabbed-block">
+<p>A <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> is a way of assigning numbers to points. In two dimensions, you need a pair of numbers to specify a point. The coordinates are often referred to as x and y, although of course, the names are arbitrary. More than that, the assignment of pairs of numbers to points is itself arbitrary to a large extent. Points and objects are real things, but coordinates are just numbers that we assign to them so that we can refer to them easily and work with them mathematically. We have seen the power of this when we discussed transforms, which are defined mathematically in terms of coordinates but which have real, useful physical meanings.</p>
+<p>In three dimensions, you need three numbers to specify a point. (That's essentially what it means to be three dimensional.) The third coordinate is often called z. The z-axis is perpendicular to both the x-axis and the y-axis.</p>
+<p>This demo illustrates a 3D <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>. The positive directions of the x, y, and z axes are shown as big arrows. The x-axis is green, the y-axis is blue, and the z-axis is red. You can drag on the axes to rotate the image.</p>
+<p><iframe src="../../../en/demos/c3/axes3D.html" width="350" height="370"></iframe></p>
+<p>This example is a 2D image, but it has a 3D look. (The illusion is much stronger if you rotate the image.) Several things contribute to the effect. For one thing, objects that are farther away from the viewer in 3D look smaller in the 2D image. This is due to the way that the 3D scene is "<abbr title="A transformation that maps coordinates in 3D to coordinates in 2D. Projection is used to convert a three-dimensional scene into a two-dimensional image.">projected</abbr>" onto 2D. We will discuss <abbr title="A transformation that maps coordinates in 3D to coordinates in 2D. Projection is used to convert a three-dimensional scene into a two-dimensional image.">projection</abbr> in the <a href="../s3/">next section</a>. Another factor is the "shading" of the objects. The objects are shaded in a way that imitates the interaction of objects with the light that illuminates them. We will put off a discussion of <abbr title="Using light sources in a 3D scene, so that the appearance of objects in the scene can be computed based on the interaction of light with the objects' material properties.">lighting</abbr> until <a href="../c4/index.md">Chapter 4</a>. In this section, we will concentrate on how to construct a scene in 3D—what we have referred to as modeling.</p>
+<p><abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> programmers usually think in terms of a <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> in which the x- and y-axes lie in the plane of the screen, and the z-axis is perpendicular to the screen with the positive direction of the z-axis pointing <strong>out of</strong> the screen towards the viewer. Now, the default <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>, the one that you are using if you apply no transformations at all, is similar but has the positive direction of the z-axis pointing <strong>into</strong> the screen. This is not a contradiction: The <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> that is actually used is arbitrary. It is set up by a transformation. The convention in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> is to work with a <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> in which the positive z-direction points toward the viewer and the negative z-direction points away from the viewer. The transformation into default coordinates reverses the direction of the z-axis.</p>
+<p>This conventional arrangement of the axes produces a <strong>right-handed <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr></strong>. This means that if you point the thumb of your right hand in the direction of the positive z-axis, then when you curl the fingers of that hand, they will curl in the direction from the positive x-axis towards the positive y-axis. If you are looking at the tip of your thumb, the curl will be in the counterclockwise direction. Another way to think about it is that if you curl the figures of your right hand from the positive x to the positive y-axis, then your thumb will point in the direction of the positive z-axis. The default <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> (which, again, is hardly ever used) is a left-handed system. You should spend some time trying to visualize right- and left-handed coordinates systems. Use your hands!</p>
+<p>All of that describes the natural <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> from the viewer's point of view, the so-called "eye" or "<abbr title="Setting the position and orientation of the viewer in a 3D world, which determine what will be visible when the 2D image of a 3D world is rendered.">viewing</abbr>" <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>. However, these <strong><abbr title="The coordinate system on 3D space defined by the viewer. In eye coordinates in OpenGL 1.1, the viewer is located at the origin, looking in the direction of the negative z-axis, with the positive y-axis pointing upwards, and the positive x-axis pointing to the right. The modelview transformation maps objects into the eye coordinate system, and the projection transform maps eye coordinates to clip coordinates.">eye coordinates</abbr></strong> are not necessarily the natural coordinates on the world. The <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> on the world—the <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> in which the scene is assembled—is referred to as <strong><abbr title="The coordinate system in which a scene is defined. The image that is produced of the scene will show the contents of the world coordinate system that lie within some view volume (for 3D) or view window (for 2D). Objects are defined in their own object coordinate system. Modeling transformations are then applied to place objects into the scene; that is, they transform object coordinates to world coordinates.">world coordinates</abbr></strong>.</p>
+<p>Recall that objects are not usually specified directly in <abbr title="The coordinate system in which a scene is defined. The image that is produced of the scene will show the contents of the world coordinate system that lie within some view volume (for 3D) or view window (for 2D). Objects are defined in their own object coordinate system. Modeling transformations are then applied to place objects into the scene; that is, they transform object coordinates to world coordinates.">world coordinates</abbr>. Instead, objects are specified in their own <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>, known as <abbr title="The coordinate system in which the coordinates for points in an object are originally specified, before they are transformed by any modeling or other transform that will be applied to the object.">object coordinates</abbr>, and then modeling transforms are applied to place the objects into the world, or into more complex objects. In <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>, <abbr title="The coordinate system in which the coordinates for points in an object are originally specified, before they are transformed by any modeling or other transform that will be applied to the object.">object coordinates</abbr> are the numbers that are used in the glVertex* function to specify the vertices of the object. However, before the objects appear on the screen, they are usually subject to a sequence of transformations, starting with a modeling transform.</p>
+</div>
+</div>
+</div>
+<h2 id="322-基本-3d-变换">3.2.2 基本 3D 变换<a class="headerlink" href="#322-基本-3d-变换" title="Permanent link">&para;</a></h2>
+<p><strong>Basic 3D Transforms</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">中文</label><label for="__tabbed_3_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>在3D中的基本变换是你已经熟悉的来自2D的基本变换的扩展：<abbr title="一种几何变换，它围绕某个点（在2D中）或轴（在3D中）旋转每个点到指定角度。">旋转</abbr>、缩放和平移。我们将看一下3D中的等效变换，并了解它们在作为建模变换时如何影响对象。我们还将讨论如何在OpenGL中使用这些变换。</p>
+<p>平移是最简单的。在2D中，平移会将一些数字添加到每个坐标上。在3D中也是如此；我们只需要三个数字，来指定沿着每个坐标轴的运动量。通过(dx, dy, dz)进行的平移将点(x, y, z)变换为点(x+dx, y+dy, z+dz)。在OpenGL中，这个平移将由以下命令指定：</p>
+<div class="highlight"><pre><span></span><code><span class="n">glTranslatef</span><span class="p">(</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="n">dz</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>或者由以下命令指定：</p>
+<div class="highlight"><pre><span></span><code><span class="n">glTranslated</span><span class="p">(</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="n">dz</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>这个平移会影响在命令之后进行的任何绘制。请注意，这个命令有两个版本。名称以"f"结尾的第一个版本，将三个<strong>float</strong>值作为参数。名称以"d"结尾的第二个版本，将<strong>double</strong>类型的参数。例如，</p>
+<div class="highlight"><pre><span></span><code><span class="n">glTranslatef</span><span class="p">(</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>会将对象沿z方向平移一个单位。</p>
+<p>缩放的工作方式类似：你需要三个缩放因子，而不是一个。缩放的OpenGL命令是<em>glScale*</em>，其中"*"可以是"f"或"d"。命令</p>
+<div class="highlight"><pre><span></span><code><span class="n">glScalef</span><span class="p">(</span><span class="w"> </span><span class="n">sx</span><span class="p">,</span><span class="w"> </span><span class="n">sy</span><span class="p">,</span><span class="w"> </span><span class="n">sz</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>将点(x, y, z)变换为(x<em>sx, y</em>sy, z*sz)。也就是说，它在x方向缩放sx倍，在y方向缩放sy倍，在z方向缩放sz倍。缩放是关于原点的；也就是说，它将点移动到原点(0,0,0)更远或更近的地方。对于均匀缩放，三个因子将是相同的。你可以使用缩放因子为负一来应用反射。例如，</p>
+<div class="highlight"><pre><span></span><code><span class="n">glScalef</span><span class="p">(</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>通过反转z坐标的符号，将对象反射通过xy平面。请注意，反射会将右手坐标系转换为左手坐标系，反之亦然。请记住，左手/右手的区别不是世界的属性，而是你选择在世界上布置坐标的方式。</p>
+<p>在3D中，旋转更加复杂。在2D中，旋转是围绕一个点旋转，通常被认为是原点。在3D中，旋转是围绕一条线旋转，这条线被称为<strong>旋转轴</strong>。想象地球围绕其轴旋转。旋转轴是通过北极和南极的线。随着地球围绕它旋转，轴保持不变，不在轴上的点围绕轴运动成圆。任何线都可以是旋转轴，但我们通常使用通过原点的轴。旋转轴的最常见选择是坐标轴，即x轴、y轴或z轴。然而，有时候使用不同的线作为轴会更加方便。</p>
+<p>有一种简单的方法可以指定一个通过原点的线：只需指定另一个在该线上的点，除了原点。这就是OpenGL中的做法：一个旋转轴由三个数字(ax,ay,az)指定，这三个数字不都为零。该轴是通过(0,0,0)和(ax,ay,az)确定的线。要在3D中指定旋转变换，你必须指定一个轴和围绕该轴的旋转角度。</p>
+<p>我们仍然必须考虑正角度和负角度之间的差异。我们不能简单地说顺时针或逆时针。如果你从北极上方向下看旋转的地球，你会看到逆时针旋转；如果你从南极上方向下看，你会看到顺时针旋转。因此，这两者之间的差异并不明确。为了定义3D中的旋转方向，我们使用<strong>右手定则</strong>，它说：用你的右手拇指指向轴的方向——从点(0,0,0)指向确定轴的点(ax,ay,az)。然后旋转的方向对于正角度是由你的手指弯曲的方向决定的。我应该强调，右手定则只有在你在右手坐标系中工作时才有效。如果你已经切换到左手坐标系，那么你需要使用左手定则来确定旋转的正方向。</p>
+<p>你可以使用下面的演示来帮助你理解三维空间中的围绕轴的旋转。使用标有“+X”，“-X”等按钮使立方体围绕坐标轴旋转，或输入任何(x,y,z)点并点击“Set”。在图像上拖动鼠标来旋转场景。</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;../../../en/demos/c3/rotation-axis.html&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;600&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;375&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+</code></pre></div>
+<p>OpenGL中的旋转函数是<em>glRotatef(r,ax,ay,az)</em>。你也可以使用glRotated。第一个参数指定旋转角度，以度为单位。其他三个参数指定旋转轴，它是从(0,0,0)到(ax,ay,az)的线。</p>
+<p>以下是在OpenGL中缩放、平移和旋转的几个示例：</p>
+<div class="highlight"><pre><span></span><code><span class="n">glScalef</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span><span class="w">        </span><span class="c1">// 以2为因子进行均匀缩放。</span>
+
+<span class="n">glScalef</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="w">      </span><span class="c1">// 只在x方向上缩小一半。</span>
+
+<span class="n">glScalef</span><span class="p">(</span><span class="mi">-1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="w">       </span><span class="c1">// 通过yz平面反射。</span>
+<span class="w">                        </span><span class="c1">// 将正x轴反射到负x轴上。</span>
+
+<span class="n">glTranslatef</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">    </span><span class="c1">// 在正x方向移动5个单位。</span>
+
+<span class="n">glTranslatef</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mf">-7.5</span><span class="p">);</span><span class="w"> </span><span class="c1">// 将每个点(x,y,z)移动到(x+3, y+5, z-7.5)。</span>
+
+<span class="n">glRotatef</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">    </span><span class="c1">// 围绕x轴旋转90度。</span>
+<span class="w">                        </span><span class="c1">// 将+y轴移动到+z轴上</span>
+<span class="w">                        </span><span class="c1">//    和+z轴移动到-y轴上。</span>
+
+<span class="n">glRotatef</span><span class="p">(</span><span class="mi">-90</span><span class="p">,</span><span class="mi">-1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// 与上一个旋转具有</span>
+
+<span class="n">相同的效果</span><span class="err">。</span>
+
+<span class="n">glRotatef</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">    </span><span class="c1">// 围绕y轴旋转90度。</span>
+<span class="w">                        </span><span class="c1">// 将+z轴移动到+x轴上</span>
+<span class="w">                        </span><span class="c1">//    和+x轴移动到-z轴上。</span>
+
+<span class="n">glRotatef</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="w">    </span><span class="c1">// 围绕z轴旋转90度。</span>
+<span class="w">                        </span><span class="c1">// 将+x轴移动到+y轴上</span>
+<span class="w">                        </span><span class="c1">//    和+y轴移动到-x轴上。</span>
+
+<span class="n">glRotatef</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">-3</span><span class="p">);</span><span class="w"> </span><span class="c1">// 围绕通过点(0,0,0)和(1.5,2,-3)的线旋转30度。</span>
+</code></pre></div>
+<p>记住，变换应用于在变换函数调用之后绘制的对象，并且变换按照它们在代码中出现的相反顺序应用于对象。</p>
+<p>当然，<abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 既可以在二维中绘制，也可以在三维中绘制。在OpenGL中进行二维绘制时，你可以在xy平面上绘制，将 z 坐标设为零。在进行二维绘制时，你可能希望应用二维版本的旋转、缩放和平移。<abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 没有二维变换函数，但你可以使用带有适当参数的三维版本：</p>
+<ul>
+<li>对于二维中的平移 (dx, dy)，使用 <em>glTranslatef(dx, dy, 0)</em>。在 z 方向上的零平移意味着变换不改变 z <abbr title="一种将数值坐标分配给几何点的方法。在二维中，每个点对应一对数字。在三维中，每个点对应一组三个数字。">坐标</abbr>，因此它将 xy 平面映射到自身。（当然，你也可以使用 <em>glTranslated</em> 代替 <em>glTranslatef</em>。）</li>
+<li>对于二维中的缩放 (sx, sy)，使用 <em>glScalef(sx, sy, 1)</em>，这样只在 x 和 y 方向上进行缩放，不改变 z <abbr title="一种将数值坐标分配给几何点的方法。在二维中，每个点对应一对数字。在三维中，每个点对应一组三个数字。">坐标</abbr>。</li>
+<li>对于围绕原点的角度为 r 的二维旋转，使用 <em>glRotatef(r, 0, 0, 1)</em>。这是围绕 z 轴的旋转，它将 xy 平面旋转到自身。在通常的OpenGL坐标系统中，z 轴指向屏幕外，右手定则表示正角度的旋转将顺时针方向在 xy 平面上进行。由于 x 轴指向右侧，y 轴指向上方，顺时针旋转将正 x 轴旋转到正 y 轴方向。这与我们之前用于旋转正方向的约定相同。</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>The basic transforms in 3D are extensions of the basic transforms that you are already familiar with from 2D: <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr>, <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr>, and <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr>. We will look at the 3D equivalents and see how they affect objects when applied as modeling transforms. We will also discuss how to use the transforms in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>.</p>
+<p>Translation is easiest. In 2D, a <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr> adds some number onto each coordinate. The same is true in 3D; we just need three numbers, to specify the amount of motion in the direction of each of the coordinate axes. A <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr> by (dx,dy,dz) transforms a point (x,y,z) to the point (x+dx, y+dy, z+dz). In <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>, this <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr> would be specified by the command</p>
+<div class="highlight"><pre><span></span><code><span class="n">glTranslatef</span><span class="p">(</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="n">dz</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>or by the command</p>
+<div class="highlight"><pre><span></span><code><span class="n">glTranslated</span><span class="p">(</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="n">dz</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>The <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr> will affect any drawing that is done after the command is given. Note that there are two versions of the command. The first, with a name ending in "f", takes three <strong>float</strong> values as parameters. The second, with a name ending in "d", takes parameters of type <strong>double</strong>. As an example,</p>
+<div class="highlight"><pre><span></span><code><span class="n">glTranslatef</span><span class="p">(</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>would translate objects by one unit in the z direction.</p>
+<p>Scaling works in a similar way: Instead of one <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> factor, you need three. The <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> command for <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> is <em>glScale*</em>, where the "*" can be either "f" or "d". The command</p>
+<div class="highlight"><pre><span></span><code><span class="n">glScalef</span><span class="p">(</span><span class="w"> </span><span class="n">sx</span><span class="p">,</span><span class="w"> </span><span class="n">sy</span><span class="p">,</span><span class="w"> </span><span class="n">sz</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>transforms a point (x,y,z) to (x<em>sx, y</em>sy, z*sz). That is, it scales by a factor of sx in the x direction, sy in the y direction, and sz in the z direction. Scaling is about the origin; that is, it moves points farther from or closer to the origin, (0,0,0). For uniform <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr>, all three factors would be the same. You can use <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> by a factor of minus one to apply a reflection. For example,</p>
+<div class="highlight"><pre><span></span><code><span class="n">glScalef</span><span class="p">(</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>reflects objects through the xy-plane by reversing the sign of the z coordinate. Note that a reflection will convert a right-handed <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr> into a left-handed <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>, and vice versa. Remember that the left/right handed distinction is not a property of the world, just of the way that one chooses to lay out coordinates on the world.</p>
+<p>Rotation in 3D is harder. In 2D, <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> is <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> about a point, which is usually taken to be the origin. In 3D, <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> is <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> about a line, which is called the <strong><abbr title="Rotation in 3D space is rotation about a line, which is called the axis of rotation. The axis of rotation remains fixed, while everything else moves in circles around the axis.">axis of rotation</abbr></strong>. Think of the Earth rotating about its axis. The <abbr title="Rotation in 3D space is rotation about a line, which is called the axis of rotation. The axis of rotation remains fixed, while everything else moves in circles around the axis.">axis of rotation</abbr> is the line that passes through the North Pole and the South Pole. The axis stays fixed as the Earth rotates around it, and points that are not on the axis move in circles about the axis. Any line can be an <abbr title="Rotation in 3D space is rotation about a line, which is called the axis of rotation. The axis of rotation remains fixed, while everything else moves in circles around the axis.">axis of rotation</abbr>, but we generally use an axis that passes through the origin. The most common choices for <abbr title="Rotation in 3D space is rotation about a line, which is called the axis of rotation. The axis of rotation remains fixed, while everything else moves in circles around the axis.">axis of rotation</abbr> are the coordinates axes, that is, the x-axis, the y-axis, or the z-axis. Sometimes, however, it's convenient to be able to use a different line as the axis.</p>
+<p>There is an easy way to specify a line that passes through the origin: Just specify one other point that is on the line, in addition to the origin. That's how things are done in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>: An <abbr title="Rotation in 3D space is rotation about a line, which is called the axis of rotation. The axis of rotation remains fixed, while everything else moves in circles around the axis.">axis of rotation</abbr> is specified by three numbers, (ax,ay,az), which are not all zero. The axis is the line through (0,0,0) and (ax,ay,az). To specify a <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> transformation in 3D, you have to specify an axis and the angle of <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> about that axis.</p>
+<p>We still have to account for the difference between positive and negative angles. We can't just say clockwise or counterclockwise. If you look down on the rotating Earth from above the North pole, you see a counterclockwise <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr>; if you look down on it from above the South pole, you see a clockwise <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr>. So, the difference between the two is not well-defined. To define the direction of <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> in 3D, we use the <strong><abbr title="A rule that is used to determine the positive direction of rotation about an axis in 3D space: If you point the thumb of your right hand in the direction of the axis, then your fingers will curl in the direction of positive angles of rotation. Note that this assumes that the axis has a direction; in OpenGL, an axis of rotation is determined by the point (0,0,0) and another point (x,y,z), and the direction of the axis is from (0,0,0) towards (x,y,z).">right-hand rule</abbr></strong>, which says: Point the thumb of your right hand in the direction of the axis — from the point (0,0,0) towards the point (ax,ay,az) that determines the axis. Then the direction of <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> for positive angles is given by the direction in which your fingers curl. I should emphasize that the <abbr title="A rule that is used to determine the positive direction of rotation about an axis in 3D space: If you point the thumb of your right hand in the direction of the axis, then your fingers will curl in the direction of positive angles of rotation. Note that this assumes that the axis has a direction; in OpenGL, an axis of rotation is determined by the point (0,0,0) and another point (x,y,z), and the direction of the axis is from (0,0,0) towards (x,y,z).">right-hand rule</abbr> only works if you are working in a right-handed <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>. If you have switched to a left-handed <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>, then you need to use a left-hand rule to determine the positive direction of <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr>.</p>
+<p>You can use the following demo to help you understand <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> about an axis in three-dimensional space. Use the buttons labeled "+X", "-X", and so on to make the cube rotate about the coordinate axes, or enter any (x,y,z) point and click "Set". Drag your mouse on the image to rotate the scene.</p>
+<p><iframe src="../../../en/demos/c3/rotation-axis.html" width="600" height="375"></iframe></p>
+<p>The <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> function in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> is <em>glRotatef(r,ax,ay,az)</em>. You can also use glRotated. The first parameter specifies the angle of <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr>, measured in degrees. The other three parameters specify the <abbr title="Rotation in 3D space is rotation about a line, which is called the axis of rotation. The axis of rotation remains fixed, while everything else moves in circles around the axis.">axis of rotation</abbr>, which is the line from (0,0,0) to (ax,ay,az).</p>
+<p>Here are a few examples of <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr>, <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr>, and <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">glScalef</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span><span class="w">        </span><span class="c1">// Uniform scaling by a factor of 2.</span>
+
+<span class="n">glScalef</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="w">      </span><span class="c1">// Shrink by half in the x-direction only.</span>
+
+<span class="n">glScalef</span><span class="p">(</span><span class="mi">-1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="w">       </span><span class="c1">// Reflect through the yz-plane.</span>
+<span class="w">                        </span><span class="c1">// Reflects the positive x-axis onto negative x.</span>
+
+<span class="n">glTranslatef</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">    </span><span class="c1">// Move 5 units in the positive x-direction.</span>
+
+<span class="n">glTranslatef</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mf">-7.5</span><span class="p">);</span><span class="w"> </span><span class="c1">// Move each point (x,y,z) to (x+3, y+5, z-7.5).</span>
+
+<span class="n">glRotatef</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">    </span><span class="c1">// Rotate 90 degrees about the x-axis.</span>
+<span class="w">                        </span><span class="c1">// Moves the +y axis onto the +z axis</span>
+<span class="w">                        </span><span class="c1">//    and the +z axis onto the -y axis.</span>
+
+<span class="n">glRotatef</span><span class="p">(</span><span class="mi">-90</span><span class="p">,</span><span class="mi">-1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">// Has the same effect as the previous rotation.</span>
+
+<span class="n">glRotatef</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">    </span><span class="c1">// Rotate 90 degrees about the y-axis.</span>
+<span class="w">                        </span><span class="c1">// Moves the +z axis onto the +x axis</span>
+<span class="w">                        </span><span class="c1">//    and the +x axis onto the -z axis.</span>
+
+<span class="n">glRotatef</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="w">    </span><span class="c1">// Rotate 90 degrees about the z-axis.</span>
+<span class="w">                        </span><span class="c1">// Moves the +x axis onto the +y axis</span>
+<span class="w">                        </span><span class="c1">//    and the +y axis onto the -x axis.</span>
+
+<span class="n">glRotatef</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">-3</span><span class="p">);</span><span class="w"> </span><span class="c1">// Rotate 30 degrees about the line through</span>
+<span class="w">                        </span><span class="c1">//    the points (0,0,0) and (1.5,2,-3).</span>
+</code></pre></div>
+<p>Remember that transforms are applied to objects that are drawn after the transformation function is called, and that transformations apply to objects in the opposite order of the order in which they appear in the code.</p>
+<p>Of course, <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> can draw in 2D as well as in 3D. For 2D drawing in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>, you can draw on the xy-plane, using zero for the z coordinate. When drawing in 2D, you will probably want to apply 2D versions of <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr>, <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr>, and <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr>. <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> does not have 2D transform functions, but you can just use the 3D versions with appropriate parameters:</p>
+<ul>
+<li>For <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr> by (dx,dy) in 2D, use <em>glTranslatef(dx, dy, 0)</em>. The zero <abbr title="A geometric transform that adds a given translation amount to each coordinate of a point. Translation is used to move objects without changing their size or orientation.">translation</abbr> in the z direction means that the transform doesn't change the z coordinate, so it maps the xy-plane to itself. (Of course, you could use <em>glTranslated</em> instead of <em>glTranslatef</em>.)</li>
+<li>For <abbr title="A geometric transform that multiplies each coordinate of a point by a number called the scaling factor. Scaling increases or decreases the size of an object, but also moves its points closer to or farther from the origin. Scaling can be uniform—the same in every direction—or non-uniform—with a different scaling factor in each coordinate direction. A negative scaling factor can be used to apply a reflection.">scaling</abbr> by (sx,sy) in 2D, use <em>glScalef(sx, sy, 1)</em>, which scales only in the x and y directions, leaving the z coordinate unchanged.</li>
+<li>For <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> through an angle r about the origin in 2D, use <em>glRotatef(r, 0, 0, 1)</em>. This is <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> about the z-axis, which rotates the xy-plane into itself. In the usual <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>, the z-axis points out of the screen, and the <abbr title="A rule that is used to determine the positive direction of rotation about an axis in 3D space: If you point the thumb of your right hand in the direction of the axis, then your fingers will curl in the direction of positive angles of rotation. Note that this assumes that the axis has a direction; in OpenGL, an axis of rotation is determined by the point (0,0,0) and another point (x,y,z), and the direction of the axis is from (0,0,0) towards (x,y,z).">right-hand rule</abbr> says that <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> by a positive angle will be in the counterclockwise direction in the xy-plane. Since the x-axis points to the right and the y-axis points upwards, a counterclockwise <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> rotates the positive x-axis in the direction of the positive y-axis. This is the same convention that we have used previously for the positive direction of <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr>.</li>
+</ul>
+</div>
+</div>
+</div>
+<h2 id="323-层次建模">3.2.3 层次建模<a class="headerlink" href="#323-层次建模" title="Permanent link">&para;</a></h2>
+<p><strong>Hierarchical Modeling</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">中文</label><label for="__tabbed_4_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>建模变换经常用于分层建模，允许将复杂对象由简单对象组合而成。参见<a href="../../c2/s4/">第 2.4 节</a>。简要回顾一下：在分层建模中，一个对象可以在其自然坐标系中定义，通常使用 (0,0,0) 作为参考点。然后，可以对该对象进行缩放、旋转和平移，以将其放置到世界坐标或更复杂的对象中。为了实现这一点，我们需要一种方法来将建模变换的效果限制在一个对象或一个对象的一部分上。这可以通过使用变换堆栈来实现。在绘制一个对象之前，将当前变换的副本推送到堆栈上。在绘制对象及其子对象之后，使用任何必要的临时变换，通过从堆栈中弹出来恢复先前的变换。</p>
+<p><abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 1.1 维护一个变换堆栈，并提供了操作该堆栈的函数。（实际上，它有几个用于不同目的的变换堆栈，这引入了一些复杂性，我们将在<a href="../s3/">下一节</a>中推迟讨论。）由于变换被表示为矩阵，所以堆栈实际上是矩阵的堆栈。在OpenGL中，操作堆栈的函数命名为 <em>glPushMatrix()</em> 和 <em>glPopMatrix()</em>。</p>
+<p>这些函数不接受参数，也不返回值。<abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 会跟踪一个当前矩阵，它是所有已应用的变换的组合。调用诸如 glScalef 的函数只是修改当前矩阵。当绘制一个对象时，使用 glVertex* 函数指定的坐标将被当前矩阵进行变换。还有另一个影响当前矩阵的函数：glLoadIdentity()。调用 glLoadIdentity 将当前矩阵设置为单位变换，表示坐标没有任何变化，这是一系列变换的常见起点。</p>
+<p>当调用 <em>glPushMatrix()</em> 函数时，当前矩阵的副本将被推送到堆栈上。请注意，这不会更改当前矩阵；它只是在堆栈上保存了一个副本。当调用 <em>glPopMatrix()</em> 时，堆栈顶部的矩阵将从堆栈中弹出，并替换当前矩阵。请注意，<em>glPushMatrix</em> 和 <em>glPopMatrix</em> 必须始终成对出现；<em>glPushMatrix</em> 保存当前矩阵的副本，相应的 <em>glPopMatrix</em> 调用恢复该副本。在调用 <em>glPushMatrix</em> 和相应的 <em>glPopMatrix</em> 之间，可以额外调用这些函数的成对调用，只要它们被正确地配对即可。通常，你会在绘制一个对象之前调用 <em>glPushMatrix</em>，并在完成该对象之后调用 glPopMatrix。在此期间，绘制子对象可能需要额外的这些函数的成对调用。</p>
+<p>举例来说，假设我们想要绘制一个立方体。使用 glBegin/glEnd 来绘制每个面并不难，但让我们使用变换来实现。我们可以从一个绘制正面的正方形的函数开始。对于大小为 1 的立方体，正面将位于屏幕前半个单位处，在 z = 0.5 平面上，并且其顶点分别为 (-0.5, -0.5, 0.5)、(0.5, -0.5, 0.5)、(0.5, 0.5, 0.5) 和 (-0.5, 0.5, 0.5)。以下是绘制正方形的函数。函数的参数是在范围 0.0 到 1.0 内的浮点数，表示正方形的 RGB 颜色：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">square</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">glColor3f</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">);</span><span class="w">  </span><span class="c1">// 设置正方形的颜色。</span>
+<span class="w">    </span><span class="n">glBegin</span><span class="p">(</span><span class="n">GL_TRIANGLE_FAN</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glVertex3f</span><span class="p">(</span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glVertex3f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glVertex3f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glVertex3f</span><span class="p">(</span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glEnd</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>要创建一个红色的立方体正面，我们只需调用 square(1,0,0)。现在，考虑右侧面，它垂直于 x 轴，在 x = 0.5 平面上。要创建一个右侧面，我们可以从一个正面开始，然后绕着 y 轴旋转 90 度。考虑将正面（红色）绕着 y 轴旋转到右侧面（绿色）位置的操作：</p>
+<p><a class="glightbox" href="../../../en/c3/rotate-cube-side.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="123" src="../../../en/c3/rotate-cube-side.png" /></a></p>
+<p>因此，我们可以使用以下代码绘制一个绿色的立方体右侧面：</p>
+<div class="highlight"><pre><span></span><code><span class="n">glPushMatrix</span><span class="p">();</span>
+<span class="n">glRotatef</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="n">square</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="n">glPopMatrix</span><span class="p">();</span>
+</code></pre></div>
+<p>调用 <em>glPushMatrix</em> 和 <em>glPopMatrix</em> 确保对正方形应用的旋转不会延续到稍后绘制的对象上。其他四个面可以用类似的方式制作，方法是围绕坐标轴旋转正面。您应该尝试在每种情况下可视化所需的旋转。我们可以将所有这些组合到一个绘制立方体的函数中。为了增加趣味性，立方体的大小是一个参数：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">cube</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// 绘制边长为 size 的立方体。</span>
+
+<span class="w">    </span><span class="n">glPushMatrix</span><span class="p">();</span><span class="w">  </span><span class="c1">// 保存当前矩阵的副本。</span>
+<span class="w">    </span><span class="n">glScalef</span><span class="p">(</span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">);</span><span class="w"> </span><span class="c1">// 将单位立方体缩放到所需大小。</span>
+
+<span class="w">    </span><span class="n">square</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">// 红色正面</span>
+
+<span class="w">    </span><span class="n">glPushMatrix</span><span class="p">();</span>
+<span class="w">    </span><span class="n">glRotatef</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">square</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">// 绿色右侧面</span>
+<span class="w">    </span><span class="n">glPopMatrix</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">glPushMatrix</span><span class="p">();</span>
+<span class="w">    </span><span class="n">glRotatef</span><span class="p">(</span><span class="mi">-90</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">square</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// 蓝色顶部面</span>
+<span class="w">    </span><span class="n">glPopMatrix</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">glPushMatrix</span><span class="p">();</span>
+<span class="w">    </span><span class="n">glRotatef</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">square</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// 青色背面</span>
+<span class="w">    </span><span class="n">glPopMatrix</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">glPushMatrix</span><span class="p">();</span>
+<span class="w">    </span><span class="n">glRotatef</span><span class="p">(</span><span class="mi">-90</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">square</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// 品红色左侧面</span>
+<span class="w">    </span><span class="n">glPopMatrix</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">glPushMatrix</span><span class="p">();</span>
+<span class="w">    </span><span class="n">glRotatef</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">square</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">// 黄色底部面</span>
+<span class="w">    </span><span class="n">glPopMatrix</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">glPopMatrix</span><span class="p">();</span><span class="w"> </span><span class="c1">// 将矩阵恢复到调用 cube() 之前的状态。</span>
+
+<span class="p">}</span>
+</code></pre></div>
+<p>示例程序 <a href="../../../en/source/glut/unlit-cube.c">glut/unlit-cube.c</a> 使用此函数绘制立方体，并允许您通过按箭头键来旋转立方体。Java 版本是 <a href="../../../en/source/jogl/UnlitCube.java">jogl/UnlitCube.java</a>，Web 版本是 <a href="../../../en/source/glsim/unlit-cube.html">glsim/unlit-cube.html</a>。下面是立方体的图像，绕 x 轴旋转了 15 度，绕 y 轴旋转了 -15 度，以显示顶部和右侧：</p>
+<p><a class="glightbox" href="../../../en/c3/unlit-cube.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="123" src="../../../en/c3/unlit-cube.png" /></a></p>
+<p>对于具有 glPushMatrix 和 glPopMatrix 的层次建模的更复杂示例，请查看<a href="../../c2/s4/#241--构建复杂对象">子节 2.4.1</a>中作为示例使用的“小车和风车”动画的 <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 等效版本。该示例的三个版本分别是：<a href="../../../en/source/glut/opengl-cart-and-windmill-2d.c">glut/opengl-cart-and-windmill-2d.c</a>、<a href="../../../en/source/jogl/CartAndWindmillJogl2D.java">jogl/CartAndWindmillJogl2D.java</a> 和 <a href="../../../en/source/glsim/opengl-cart-and-windmill.html">glsim/opengl-cart-and-windmill.html</a>。此程序是 <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 中层次 2D 图形的示例。</p>
+<hr />
+<p>请记住，像 <em>glRotated()</em> 和 <em>glPushMatrix()</em> 这样的变换和矩阵函数是老式的 <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>。在 <abbr title="A 3D graphics API for use on web pages. WebGL programs are written in the JavaScript programming language and display their images in HTML canvas elements. WebGL is based on OpenGL ES, the version of OpenGL for embedded systems, with a few changes to adapt it to the JavaScript language and the Web environment.">WebGL</abbr> 和其他现代图形 <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> 中，您将负责自行管理变换和矩阵。您很可能会使用软件库来完成这项工作，该库提供了与 <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 1.1 内置函数非常相似的函数。</p>
+</div>
+<div class="tabbed-block">
+<p>Modeling transformations are often used in <abbr title="Creating complex geometric models in a hierarchical fashion, starting with geometric primitives, combining them into components that can then be further combined into more complex components, and so on.">hierarchical modeling</abbr>, which allows complex objects to be built up out of simpler objects. See <a href="../../c2/s4/">Section 2.4</a>. To review briefly: In <abbr title="Creating complex geometric models in a hierarchical fashion, starting with geometric primitives, combining them into components that can then be further combined into more complex components, and so on.">hierarchical modeling</abbr>, an object can be defined in its own natural <abbr title="A way of assigning numerical coordinates to geometric points. In two dimensions, each point corresponds to a pair of numbers. In three dimensions, each point corresponds to a triple of numbers.">coordinate system</abbr>, usually using (0,0,0) as a reference point. The object can then be scaled, rotated, and translated to place it into <abbr title="The coordinate system in which a scene is defined. The image that is produced of the scene will show the contents of the world coordinate system that lie within some view volume (for 3D) or view window (for 2D). Objects are defined in their own object coordinate system. Modeling transformations are then applied to place objects into the scene; that is, they transform object coordinates to world coordinates.">world coordinates</abbr> or into a more complex object. To implement this, we need a way of limiting the effect of a <abbr title="A transformation that is applied to an object to map that object into the world coordinate system or into the object coordinate system for a more complex, hierarchical object.">modeling transformation</abbr> to one object or to part of an object. That can be done using a <abbr title="A data structure with the operations push() and pop(). Pushing an item onto a stack just adds that item to the stack. Popping from the stack will remove and return the item that was most recently pushed onto the stack.">stack</abbr> of transforms. Before drawing an object, push a copy of the current transform onto the <abbr title="A data structure with the operations push() and pop(). Pushing an item onto a stack just adds that item to the stack. Popping from the stack will remove and return the item that was most recently pushed onto the stack.">stack</abbr>. After drawing the object and its sub-objects, using any necessary temporary transformations, restore the previous transform by popping it from the <abbr title="A data structure with the operations push() and pop(). Pushing an item onto a stack just adds that item to the stack. Popping from the stack will remove and return the item that was most recently pushed onto the stack.">stack</abbr>.</p>
+<p><abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 1.1 maintains a <abbr title="A data structure with the operations push() and pop(). Pushing an item onto a stack just adds that item to the stack. Popping from the stack will remove and return the item that was most recently pushed onto the stack.">stack</abbr> of transforms and provides functions for manipulating that <abbr title="A data structure with the operations push() and pop(). Pushing an item onto a stack just adds that item to the stack. Popping from the stack will remove and return the item that was most recently pushed onto the stack.">stack</abbr>. (In fact it has several transform stacks, for different purposes, which introduces some complications that we will postpone to the <a href="../s3/">next section</a>.) Since transforms are represented as matrices, the <abbr title="A data structure with the operations push() and pop(). Pushing an item onto a stack just adds that item to the stack. Popping from the stack will remove and return the item that was most recently pushed onto the stack.">stack</abbr> is actually a <abbr title="A data structure with the operations push() and pop(). Pushing an item onto a stack just adds that item to the stack. Popping from the stack will remove and return the item that was most recently pushed onto the stack.">stack</abbr> of matrices. In <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>, the functions for operating on the <abbr title="A data structure with the operations push() and pop(). Pushing an item onto a stack just adds that item to the stack. Popping from the stack will remove and return the item that was most recently pushed onto the stack.">stack</abbr> are named <em>glPushMatrix()</em> and <em>glPopMatrix()</em>.</p>
+<p>These functions do not take parameters or return a value. <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> keeps track of a current <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr>, which is the composition of all transforms that have been applied. Calling a function such as glScalef simply modifies the current <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr>. When an object is drawn, using the glVertex* functions, the coordinates that were specified for the object are transformed by the current <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr>. There is another function that affects the current <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr>: glLoadIdentity(). Calling glLoadIdentity sets the current <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> to be the <abbr title="A transform that has no effect on its argument. For example, the identity transform in 2D is given by the formula I(x,y) = (x,y). The identity transform I has the property that if T is any transform, then I followed by T is the same as T, and T followed by I is the same as T.">identity transform</abbr>, which represents no change of coordinates at all and is the usual starting point for a series of transformations.</p>
+<p>When the function <em>glPushMatrix()</em> is called, a copy of the current <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> is pushed onto the <abbr title="A data structure with the operations push() and pop(). Pushing an item onto a stack just adds that item to the stack. Popping from the stack will remove and return the item that was most recently pushed onto the stack.">stack</abbr>. Note that this does not change the current <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr>; it just saves a copy on the <abbr title="A data structure with the operations push() and pop(). Pushing an item onto a stack just adds that item to the stack. Popping from the stack will remove and return the item that was most recently pushed onto the stack.">stack</abbr>. When <em>glPopMatrix()</em> is called, the <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> on the top of the <abbr title="A data structure with the operations push() and pop(). Pushing an item onto a stack just adds that item to the stack. Popping from the stack will remove and return the item that was most recently pushed onto the stack.">stack</abbr> is popped from the <abbr title="A data structure with the operations push() and pop(). Pushing an item onto a stack just adds that item to the stack. Popping from the stack will remove and return the item that was most recently pushed onto the stack.">stack</abbr>, and that <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> replaces the current <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr>. Note that <em>glPushMatrix</em> and glPopMatrix must always occur in corresponding pairs; <em>glPushMatrix</em> saves a copy of the current <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr>, and a corresponding call to glPopMatrix restores that copy. Between a call to <em>glPushMatrix</em> and the corresponding call to glPopMatrix, there can be additional calls of these functions, as long as they are properly paired. Usually, you will call <em>glPushMatrix</em> before drawing an object and glPopMatrix after finishing that object. In between, drawing sub-objects might require additional pairs of calls to those functions.</p>
+<p>As an example, suppose that we want to draw a cube. It's not hard to draw each face using glBegin/glEnd, but let's do it with transformations. We can start with a function that draws a square in the position of the <abbr title="One of the two sides of a polygon in 3D. A polygon has two sides. One is taken to be the front face, and the other is the back face. In OpenGL, the difference is determined by the order in which the vertices of the polygon are enumerated. The default is that, seen from the front, the vertices are enumerated in counterclockwise order around the polygon.">front face</abbr> of the cube. For a cube of size 1, the <abbr title="One of the two sides of a polygon in 3D. A polygon has two sides. One is taken to be the front face, and the other is the back face. In OpenGL, the difference is determined by the order in which the vertices of the polygon are enumerated. The default is that, seen from the front, the vertices are enumerated in counterclockwise order around the polygon.">front face</abbr> would sit one-half unit in front of the screen, in the plane z = 0.5, and it would have vertices at (-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (0.5, 0.5, 0.5), and (-0.5, 0.5, 0.5). Here is a function that draws the square. The function's parameters are floating point numbers in the range 0.0 to 1.0 that give the <abbr title="A color specified by three numbers giving the amount of red, green, and blue in the color.">RGB color</abbr> of the square:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">square</span><span class="p">(</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">glColor3f</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">b</span><span class="p">);</span><span class="w">  </span><span class="c1">// Set the color for the square.</span>
+<span class="w">    </span><span class="n">glBegin</span><span class="p">(</span><span class="n">GL_TRIANGLE_FAN</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glVertex3f</span><span class="p">(</span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glVertex3f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glVertex3f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glVertex3f</span><span class="p">(</span><span class="mf">-0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">);</span>
+<span class="w">    </span><span class="n">glEnd</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>To make a red <abbr title="One of the two sides of a polygon in 3D. A polygon has two sides. One is taken to be the front face, and the other is the back face. In OpenGL, the difference is determined by the order in which the vertices of the polygon are enumerated. The default is that, seen from the front, the vertices are enumerated in counterclockwise order around the polygon.">front face</abbr> for the cube, we just need to call square(1,0,0). Now, consider the right face, which is perpendicular to the x-axis, in the plane x = 0.5. To make a right face, we can start with a <abbr title="One of the two sides of a polygon in 3D. A polygon has two sides. One is taken to be the front face, and the other is the back face. In OpenGL, the difference is determined by the order in which the vertices of the polygon are enumerated. The default is that, seen from the front, the vertices are enumerated in counterclockwise order around the polygon.">front face</abbr> and rotate it 90 degrees about the y-axis. Think about rotating the <abbr title="One of the two sides of a polygon in 3D. A polygon has two sides. One is taken to be the front face, and the other is the back face. In OpenGL, the difference is determined by the order in which the vertices of the polygon are enumerated. The default is that, seen from the front, the vertices are enumerated in counterclockwise order around the polygon.">front face</abbr> (red) to the position of the right face (green) in this illustration by rotating the red square about the y-axis:</p>
+<p><a class="glightbox" href="../../../en/c3/rotate-cube-side.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="123" src="../../../en/c3/rotate-cube-side.png" /></a></p>
+<p>So, we can draw a green right face for the cube with</p>
+<div class="highlight"><pre><span></span><code><span class="n">glPushMatrix</span><span class="p">();</span>
+<span class="n">glRotatef</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="n">square</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="n">glPopMatrix</span><span class="p">();</span>
+</code></pre></div>
+<p>The calls to <em>glPushMatrix</em> and <em>glPopMatrix</em> ensure that the <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> that is applied to the square will not carry over to objects that are drawn later. The other four faces can be made in a similar way, by rotating the <abbr title="One of the two sides of a polygon in 3D. A polygon has two sides. One is taken to be the front face, and the other is the back face. In OpenGL, the difference is determined by the order in which the vertices of the polygon are enumerated. The default is that, seen from the front, the vertices are enumerated in counterclockwise order around the polygon.">front face</abbr> about the coordinate axes. You should try to visualize the <abbr title="A geometric transform that rotates each point by a specified angle about some point (in 2D) or axis (in 3D).">rotation</abbr> that you need in each case. We can combine it all into a function that draws a cube. To make it more interesting, the size of the cube is a parameter:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">cube</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// Draws a cube with side length = size.</span>
+
+<span class="w">    </span><span class="n">glPushMatrix</span><span class="p">();</span><span class="w">  </span><span class="c1">// Save a copy of the current matrix.</span>
+<span class="w">    </span><span class="n">glScalef</span><span class="p">(</span><span class="n">size</span><span class="p">,</span><span class="n">size</span><span class="p">,</span><span class="n">size</span><span class="p">);</span><span class="w"> </span><span class="c1">// Scale unit cube to desired size.</span>
+
+<span class="w">    </span><span class="n">square</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">// red front face</span>
+
+<span class="w">    </span><span class="n">glPushMatrix</span><span class="p">();</span>
+<span class="w">    </span><span class="n">glRotatef</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">square</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">// green right face</span>
+<span class="w">    </span><span class="n">glPopMatrix</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">glPushMatrix</span><span class="p">();</span>
+<span class="w">    </span><span class="n">glRotatef</span><span class="p">(</span><span class="mi">-90</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">square</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// blue top face</span>
+<span class="w">    </span><span class="n">glPopMatrix</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">glPushMatrix</span><span class="p">();</span>
+<span class="w">    </span><span class="n">glRotatef</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">square</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// cyan back face</span>
+<span class="w">    </span><span class="n">glPopMatrix</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">glPushMatrix</span><span class="p">();</span>
+<span class="w">    </span><span class="n">glRotatef</span><span class="p">(</span><span class="mi">-90</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">square</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// magenta left face</span>
+<span class="w">    </span><span class="n">glPopMatrix</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">glPushMatrix</span><span class="p">();</span>
+<span class="w">    </span><span class="n">glRotatef</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">square</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">// yellow bottom face</span>
+<span class="w">    </span><span class="n">glPopMatrix</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">glPopMatrix</span><span class="p">();</span><span class="w"> </span><span class="c1">// Restore matrix to its state before cube() was called.</span>
+
+<span class="p">}</span>
+</code></pre></div>
+<p>The sample program <a href="../../../en/source/glut/unlit-cube.c">glut/unlit-cube.c</a> uses this function to draw a cube, and lets you rotate the cube by pressing the arrow keys. A Java version is <a href="../../../en/source/jogl/UnlitCube.java">jogl/UnlitCube.java</a>, and a web version is <a href="../../../en/source/glsim/unlit-cube.html">glsim/unlit-cube.html</a>. Here is an image of the cube, rotated by 15 degrees about the x-axis and -15 degrees about the y-axis to make the top and right sides visible:</p>
+<p><a class="glightbox" href="../../../en/c3/unlit-cube.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="123" src="../../../en/c3/unlit-cube.png" /></a></p>
+<p>For a more complex example of <abbr title="Creating complex geometric models in a hierarchical fashion, starting with geometric primitives, combining them into components that can then be further combined into more complex components, and so on.">hierarchical modeling</abbr> with glPushMatrix and glPopMatrix, you can check out an <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> equivalent of the "cart and windmills" <abbr title="A sequence of images that, when displayed quickly one after the other, will produce the impression of continuous motion or change. The term animation also refers to the process of creating such image sequences.">animation</abbr> that was used as an example in <a href="../../c2/s4/#241--构建复杂对象">Subsection 2.4.1</a>. The three versions of the example are: <a href="../../../en/source/glut/opengl-cart-and-windmill-2d.c">glut/opengl-cart-and-windmill-2d.c</a>, <a href="../../../en/source/jogl/CartAndWindmillJogl2D.java">jogl/CartAndWindmillJogl2D.java</a>, and <a href="../../../en/source/glsim/opengl-cart-and-windmill.html">glsim/opengl-cart-and-windmill.html</a>. This program is an example of hierarchical 2D graphics in <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>.</p>
+<hr />
+<p>Keep in mind that transformation and <abbr title="A rectangular array of numbers. A matrix can be represented as a two-dimensional array, with numbers arranged in rows and columns. An N-by-N matrix represents a linear transformation from N-dimensional space to itself.">matrix</abbr> functions such as <em>glRotated()</em> and <em>glPushMatrix()</em> are old-fashioned <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>. In <abbr title="A 3D graphics API for use on web pages. WebGL programs are written in the JavaScript programming language and display their images in HTML canvas elements. WebGL is based on OpenGL ES, the version of OpenGL for embedded systems, with a few changes to adapt it to the JavaScript language and the Web environment.">WebGL</abbr> and other modern graphics APIs, you will be responsible for managing transforms and matrices on your own. You are quite likely to do that using a software library that provides functions very similar to those that are built into <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 1.1.</p>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="最后更新">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年5月25日</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="创建日期">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年5月25日</span>
+  </span>
+
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "content.tabs.link", "navigation.tabs", "navigation.tabs.sticky", "navigation.indexes", "navigation.top", "toc.follow", "content.tooltips"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.3220b9d7.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+      
+    
+  <script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
+</html>
