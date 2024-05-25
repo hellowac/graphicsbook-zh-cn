@@ -120,7 +120,14 @@ nav:
                   - cn/c2/s5.md
                   - cn/c2/s6.md
                   - cn/c2/s7.md
-        - 3几何: cn/c3/index.md
+        - 3几何:
+                  - cn/c3/index.md
+                  - cn/c3/s1.md
+                  - cn/c3/s2.md
+                  - cn/c3/s3.md
+                  - cn/c3/s4.md
+                  - cn/c3/s5.md
+                  - cn/c3/s6.md
         - 4灯光和材质: cn/c4/index.md
         - 5three.js: cn/c5/index.md
         - 6WebGL: cn/c6/index.md
