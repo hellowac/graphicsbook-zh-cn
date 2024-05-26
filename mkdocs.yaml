@@ -106,12 +106,12 @@ watch:
 nav:
         - 首页: cn/index.md
         - 前言: cn/preface.md
-        - 1简介:
+        - 1.简介:
                   - cn/c1/index.md
                   - cn/c1/s1.md
                   - cn/c1/s2.md
                   - cn/c1/s3.md
-        - 2二维图形:
+        - 2.二维图形:
                   - cn/c2/index.md
                   - cn/c2/s1.md
                   - cn/c2/s2.md
@@ -120,7 +120,7 @@ nav:
                   - cn/c2/s5.md
                   - cn/c2/s6.md
                   - cn/c2/s7.md
-        - 3几何:
+        - 3.几何:
                   - cn/c3/index.md
                   - cn/c3/s1.md
                   - cn/c3/s2.md
@@ -128,12 +128,44 @@ nav:
                   - cn/c3/s4.md
                   - cn/c3/s5.md
                   - cn/c3/s6.md
-        - 4灯光和材质: cn/c4/index.md
-        - 5three.js: cn/c5/index.md
-        - 6WebGL: cn/c6/index.md
-        - 7WebGL 3D: cn/c7/index.md
-        - 8高阶3D: cn/c8/index.md
-        - 9WEBGPU: cn/c9/index.md
+        - 4.灯光和材质:
+                  - cn/c4/index.md
+                  - cn/c4/s1.md
+                  - cn/c4/s2.md
+                  - cn/c4/s3.md
+                  - cn/c4/s4.md
+        - 5.three.js:
+                  - cn/c5/index.md
+                  - cn/c5/s1.md
+                  - cn/c5/s2.md
+                  - cn/c5/s3.md
+        - 6.WebGL:
+                  - cn/c6/index.md
+                  - cn/c6/s1.md
+                  - cn/c6/s2.md
+                  - cn/c6/s3.md
+                  - cn/c6/s4.md
+                  - cn/c6/s5.md
+        - 7.WebGL 3D:
+                  - cn/c7/index.md
+                  - cn/c7/s1.md
+                  - cn/c7/s2.md
+                  - cn/c7/s3.md
+                  - cn/c7/s4.md
+                  - cn/c7/s5.md
+        - 8.高阶3D:
+                  - cn/c8/index.md
+                  - cn/c8/s1.md
+                  - cn/c8/s2.md
+        - 9.WEBGPU:
+                  - cn/c9/index.md
+                  - cn/c9/s1.md
+                  - cn/c9/s2.md
+                  - cn/c9/s3.md
+                  - cn/c9/s4.md
+                  - cn/c9/s5.md
+                  - cn/c9/s6.md
+                  - cn/c9/s7.md
         - 附录:
                   - 编程语言: cn/a1/index.md
                   - Blender 3D建模: cn/a2/index.md
