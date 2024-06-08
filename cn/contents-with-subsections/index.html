@@ -2539,7 +2539,7 @@
 <li>4.1  <a href="../c4/s1/">照明简介</a><ul>
 <li>4.1.1  光与材料</li>
 <li>4.1.2  光属性</li>
-<li>4.1.3  <abbr title="在曲面上的一个点处，法向量是垂直于该点处曲面的向量。曲线的法向量类似定义。法向量对于光照计算非常重要。">法向量</abbr></li>
+<li>4.1.3  <abbr title="表面上某点的法向量是与该点表面垂直的向量。曲线的法向量定义类似。法向量对照明计算很重要。">法向量</abbr></li>
 <li>4.1.4  <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 1.1 光照方程</li>
 </ul>
 </li>
@@ -2550,14 +2550,14 @@
 <li>4.2.4  全局光照属性</li>
 </ul>
 </li>
-<li>4.3  <a href="../c4/s3/">图像纹理</a><ul>
-<li>4.3.1  纹理坐标</li>
+<li>4.3  <a href="../c4/s3/"><abbr title="应用于表面的图像，看起来就像是“画”在表面上。">图像纹理</abbr></a><ul>
+<li>4.3.1  <abbr title="指应用于纹理图像的二维坐标系统，或用于1D和3D纹理的类似坐标系统。纹理坐标通常在垂直和水平方向上都从0到1变化，其中(0,0)位于图像的左下角。该术语还指赋予表面的坐标，用于指定如何将纹理图像映射到表面上。">纹理坐标</abbr></li>
 <li>4.3.2  MipMap 和过滤</li>
 <li>4.3.3  纹理目标和纹理参数</li>
-<li>4.3.4  纹理变换</li>
+<li>4.3.4  <abbr title="在用于从纹理中采样数据之前应用于纹理坐标的变换。效果是平移、旋转或缩放应用到其上表面的纹理。">纹理变换</abbr></li>
 <li>4.3.5  从内存加载纹理</li>
 <li>4.3.6  来自颜色缓冲区的纹理</li>
-<li>4.3.7  <abbr title="可以潜在地存储在图形卡上的数据结构，其中可以包含纹理图像、一组mipmap以及配置数据（例如当前设置的缩小和放大滤波器设置）。使用纹理对象可以在不必重新加载数据到图形卡的情况下快速切换纹理。">纹理对象</abbr></li>
+<li>4.3.7  <abbr title="可能存储在显卡上的数据结构，可以保存纹理图像、一组mipmaps以及配置数据，例如当前的缩放和放大过滤器设置。使用纹理对象可以快速切换纹理，而无需重新将数据加载到显卡中。">纹理对象</abbr></li>
 <li>4.3.8  在 C 中加载纹理</li>
 <li>4.3.9  通过 <abbr title="OpenGL的Java实现。JOGL非常复杂，因为它试图在一个编程系统中支持所有版本的OpenGL。JOGL与Java的Swing和AWT图形无缝集成。">JOGL</abbr> 使用纹理</li>
 </ul>
@@ -2583,7 +2583,7 @@
 <li>5.2  <a href="../c5/s2/">构建对象</a><ul>
 <li>5.2.1  多边形网格和 IFS</li>
 <li>5.2.2  曲线和曲面</li>
-<li>5.2.3  <abbr title="在物体的点之间变化的某种属性。最常见的类型是图像纹理。当图像纹理应用于表面时，表面的颜色会从一个点到另一个点变化。">纹理</abbr></li>
+<li>5.2.3  <abbr title="物体上某一点到另一点在某些属性上的变化。最常见的类型是图像纹理。当图像纹理应用于表面时，表面颜色会因点而异。">纹理</abbr></li>
 <li>5.2.4  变换</li>
 <li>5.2.5  加载模型</li>
 </ul>
@@ -2629,7 +2629,7 @@
 <li>6.3.7  限制</li>
 </ul>
 </li>
-<li>6.4  <a href="../c6/s4/">图像纹理</a><ul>
+<li>6.4  <a href="../c6/s4/"><abbr title="应用于表面的图像，看起来就像是“画”在表面上。">图像纹理</abbr></a><ul>
 <li>6.4.1  纹理单元和纹理对象</li>
 <li>6.4.2  处理图像</li>
 <li>6.4.3  更多制作纹理的方法</li>
@@ -2665,7 +2665,7 @@
 <li>7.2.8  磁盘世界2</li>
 </ul>
 </li>
-<li>7.3 <a href="../c7/s3/"><abbr title="在物体的点之间变化的某种属性。最常见的类型是图像纹理。当图像纹理应用于表面时，表面的颜色会从一个点到另一个点变化。">纹理</abbr></a><ul>
+<li>7.3 <a href="../c7/s3/"><abbr title="物体上某一点到另一点在某些属性上的变化。最常见的类型是图像纹理。当图像纹理应用于表面时，表面颜色会因点而异。">纹理</abbr></a><ul>
 <li>7.3.1  使用 <abbr title="An open-source JavaScript library for vector and matrix math in two and three dimensions.">glMatrix</abbr> 进行纹理变换</li>
 <li>7.3.2  生成的纹理坐标</li>
 <li>7.3.3  程序纹理</li>
@@ -2740,8 +2740,8 @@
 <li>9.4.5  再次磁盘世界</li>
 </ul>
 </li>
-<li>9.5  <a href="../c9/s5/"><abbr title="在物体的点之间变化的某种属性。最常见的类型是图像纹理。当图像纹理应用于表面时，表面的颜色会从一个点到另一个点变化。">纹理</abbr></a><ul>
-<li>9.5.1  纹理坐标</li>
+<li>9.5  <a href="../c9/s5/"><abbr title="物体上某一点到另一点在某些属性上的变化。最常见的类型是图像纹理。当图像纹理应用于表面时，表面颜色会因点而异。">纹理</abbr></a><ul>
+<li>9.5.1  <abbr title="指应用于纹理图像的二维坐标系统，或用于1D和3D纹理的类似坐标系统。纹理坐标通常在垂直和水平方向上都从0到1变化，其中(0,0)位于图像的左下角。该术语还指赋予表面的坐标，用于指定如何将纹理图像映射到表面上。">纹理坐标</abbr></li>
 <li>9.5.2  纹理和采样器</li>
 <li>9.5.3  Mipmap</li>
 <li>9.5.4  立方体贴图纹理</li>
