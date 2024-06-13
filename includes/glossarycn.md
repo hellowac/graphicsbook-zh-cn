@@ -357,3 +357,43 @@
 *[环境映射]: 一种模拟物体表面类似镜面反射的方法。要从表面上反射的环境被表示为立方体贴图。为了确定纹理中哪个点在物体上的给定点可见，从视点反射到表面点的射线，并且与纹理立方体相交的反射射线。环境映射也称为反射映射。
 
 *[折射]: 光线从一种透明或半透明介质进入另一种介质时的弯曲。
+
+*[固定功能管线]: 一个具有固定处理阶段集的图形处理管线，程序员无法修改。图像数据通过一系列处理阶段传递，最终产品是图像。这个序列被称为“管线”。在固定功能管线中，程序员可以启用和禁用阶段，并设置控制处理的选项，但无法增加功能。
+
+*[可编程管线]: 一个图形处理管线，其中一些处理阶段可以或必须由程序实现。图像数据通过一系列处理阶段传递，最终产品是图像。这个序列被称为“管线”。可编程管线在现代GPU中使用，为程序员提供更多的灵活性和控制。可编程管线的程序称为着色器，并使用GLSL等着色器编程语言编写。
+
+*[着色器]: 在渲染管线的某个阶段执行的程序。OpenGL着色器使用GLSL编程语言编写。对于WebGL，仅支持顶点着色器和片段着色器。WebGPU还有计算着色器，用于计算管线。
+
+*[顶点着色器]: 一个着色器程序，将为原语中的每个顶点执行一次。顶点着色器必须计算裁剪坐标系中的顶点坐标。它还可以计算其他属性，如颜色。
+
+*[片段着色器]: 一个着色器程序，将为原语中的每个像素执行一次。片段着色器必须为像素计算颜色，或者丢弃它。片段着色器也称为像素着色器。
+
+*[属性变量]: 表示可编程图形管线中顶点着色器的输入的变量。属性变量在原语中的每个顶点上可以有不同的值。
+
+*[统一变量]: 表示可编程图形管线中着色器程序的输入的变量。统一变量在每个顶点和每个像素上都有相同的值。
+
+*[变化变量]: 在WebGL或OpenGL ES 2.0图形管线中用于在顶点着色器和片段着色器之间通信值的变量。变化变量在顶点着色器中被赋值。原语中像素的片段着色器中变量的值是通过插值原语顶点的值来获得的。（在支持其他着色器阶段的较新版本的GLSL中，“变化变量”一词被更通用的“输入变量”和“输出变量”所取代，这些变量用于着色器的输入或输出。）
+
+*[顶点数组对象]: 在WebGL 2.0中，顶点数组对象（VAO）是通常位于显卡上的一块内存区域，它保存了一系列属性设置，如启用状态和顶点属性指针的值。然后，所有设置都可以通过绑定VAO来选择。
+
+*[实例化绘制]: 用单个函数调用来渲染多个版本的原语的能力。每个副本可以有自己的某些属性值，如颜色或变换。
+
+*[Swizzling]: 在GLSL和WGSL中，一种表示法，如v.yzx，其中v是向量，v.yzx表示由v的y、z和x分量组成的三分量向量。技术上，任何使用点表示法的向量都被认为是swizzler。
+
+*[列主序]: 二维矩阵元素的列主序排列；即，从第一列的元素开始，然后是第二列的元素，依此类推。OpenGL和GLSL中的矩阵使用列主序。
+
+*[存储限定符]: 在GLSL中，变量声明的以下修饰符之一：uniform（统一）、attribute（属性）、varying（变化）或const（常量）。
+
+*[精度限定符]: 在GLSL中，数值变量声明的以下修饰符之一：lowp（低精度）、mediump（中等精度）或highp（高精度）。精度修饰符指定变量的最小位数或值的范围。
+
+*[不变量]: 在GLSL中，一个修饰符，确保当相同的表达式用于在两个不同的着色器中计算变量的值时，两个着色器中的值将是相同的。这对于多次通过算法很重要，在这种算法中，多个着色器程序连续应用于渲染一个图像。
+
+*[多次通过算法]: 一种渲染算法，它多次绘制场景，以某种方式组合结果以计算最终图像。一个简单的例子是红蓝立体图像，其中场景的左眼和右眼图像分别渲染并组合。
+
+*[texture units]: A hardware component in a GPU that does texture lookup. (Can also refer to an abstraction for such a component, whether or not it is actually implemented in hardware.) That is, it maps texture coordinates to colors from an image texture. This is the operation called "sampling," and texture units are associated with sampler variables in GLSL shader programs.
+
+*[TMU]: Texture Mapping Unit, another name for texture unit (perhaps with a stronger implication of actual hardware support). Also called a TPU (Texture Processing Unit).
+
+*[Sampling]: The operation of mapping texture coordinates to colors from a texture, including using mipmaps if available and applying a minification or magnification filter if necessary.
+
+*[sampler variables]: In GLSL, a variable in a shader program that can be used to do lookup in an image texture. The value of a sampler variable specifies the texture unit that will be used to do the lookup. In WebGL, sampler variables are of type "sampler2D" or "samplerCube."
