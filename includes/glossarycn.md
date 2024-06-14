@@ -390,10 +390,12 @@
 
 *[多次通过算法]: 一种渲染算法，它多次绘制场景，以某种方式组合结果以计算最终图像。一个简单的例子是红蓝立体图像，其中场景的左眼和右眼图像分别渲染并组合。
 
-*[texture units]: A hardware component in a GPU that does texture lookup. (Can also refer to an abstraction for such a component, whether or not it is actually implemented in hardware.) That is, it maps texture coordinates to colors from an image texture. This is the operation called "sampling," and texture units are associated with sampler variables in GLSL shader programs.
+*[纹理单元]：GPU中的一个硬件组件，用于进行纹理查找。（也可以指代这样一个组件的抽象，无论它是否实际在硬件中实现。）也就是说，它将纹理坐标映射到图像纹理的颜色上。这个操作被称为“采样”，纹理单元与GLSL着色器程序中的采样器变量相关联。
 
-*[TMU]: Texture Mapping Unit, another name for texture unit (perhaps with a stronger implication of actual hardware support). Also called a TPU (Texture Processing Unit).
+*[TMU]：纹理映射单元，纹理单元的另一个名称（可能更强调实际的硬件支持）。也称为TPU（纹理处理单元）。
 
-*[Sampling]: The operation of mapping texture coordinates to colors from a texture, including using mipmaps if available and applying a minification or magnification filter if necessary.
+*[采样]：将纹理坐标映射到纹理的颜色上的操作，包括如果可用则使用mipmap，并且在必要时应用缩放或放大滤波器。
 
-*[sampler variables]: In GLSL, a variable in a shader program that can be used to do lookup in an image texture. The value of a sampler variable specifies the texture unit that will be used to do the lookup. In WebGL, sampler variables are of type "sampler2D" or "samplerCube."
+*[采样器变量]：在GLSL中，着色器程序中的一个变量，可以用来在图像纹理中进行查找。采样器变量的值指定了将用于进行查找的纹理单元。在WebGL中，采样器变量的类型为“sampler2D”或“samplerCube”。
+
+*[WebGPU]：一种新的JavaScript图形API，类似于WebGL，但设计上允许Web程序访问现代GPU功能，如计算着色器。
