@@ -2666,7 +2666,7 @@
 </ul>
 </li>
 <li>7.3 <a href="../c7/s3/"><abbr title="物体上某一点到另一点在某些属性上的变化。最常见的类型是图像纹理。当图像纹理应用于表面时，表面颜色会因点而异。">纹理</abbr></a><ul>
-<li>7.3.1  使用 <abbr title="An open-source JavaScript library for vector and matrix math in two and three dimensions.">glMatrix</abbr> 进行纹理变换</li>
+<li>7.3.1  使用 <abbr title="一个用于二维和三维向量和矩阵数学的开源JavaScript库。">glMatrix</abbr> 进行纹理变换</li>
 <li>7.3.2  生成的纹理坐标</li>
 <li>7.3.3  程序纹理</li>
 <li>7.3.4  凹凸贴图</li>
@@ -2703,9 +2703,9 @@
 </ul>
 </li>
 </ul>
-<h2 id="第-9-章--webgpu-简介"><strong>第 9 章：</strong>  <a href="../c9/"><abbr title="A new JavaScript graphics API, similar to WebGL, but designed to let web programs access modern GPU capabilities such as compute shaders.">WebGPU</abbr> 简介</a><a class="headerlink" href="#第-9-章--webgpu-简介" title="Permanent link">&para;</a></h2>
+<h2 id="第-9-章--webgpu-简介"><strong>第 9 章：</strong>  <a href="../c9/"><abbr title="一种新的JavaScript图形API，类似于WebGL，但设计上允许Web程序访问现代GPU功能，如计算着色器。">WebGPU</abbr> 简介</a><a class="headerlink" href="#第-9-章--webgpu-简介" title="Permanent link">&para;</a></h2>
 <ul>
-<li>9.1  <a href="../c9/s1/"><abbr title="A new JavaScript graphics API, similar to WebGL, but designed to let web programs access modern GPU capabilities such as compute shaders.">WebGPU</abbr> 基础知识</a><ul>
+<li>9.1  <a href="../c9/s1/"><abbr title="一种新的JavaScript图形API，类似于WebGL，但设计上允许Web程序访问现代GPU功能，如计算着色器。">WebGPU</abbr> 基础知识</a><ul>
 <li>9.1.1  适配器、设备和画布</li>
 <li>9.1.2  着色器模块</li>
 <li>9.1.3  渲染管线</li>
@@ -2732,7 +2732,7 @@
 <li>9.3.6  函数定义</li>
 </ul>
 </li>
-<li>9.4  <a href="../c9/s4/">使用 <abbr title="A new JavaScript graphics API, similar to WebGL, but designed to let web programs access modern GPU capabilities such as compute shaders.">WebGPU</abbr> 的 3D 图形</a><ul>
+<li>9.4  <a href="../c9/s4/">使用 <abbr title="一种新的JavaScript图形API，类似于WebGL，但设计上允许Web程序访问现代GPU功能，如计算着色器。">WebGPU</abbr> 的 3D 图形</a><ul>
 <li>9.4.1  <abbr title="解决隐藏表面问题的一种方法，涉及跟踪图像中每个像素点当前可见对象的深度，即与观察者的距离。当在像素点处绘制新对象时，将新对象的深度与当前对象的深度进行比较，以决定哪个对象更靠近观察者。深度测试的优点是对象可以以任何顺序渲染。缺点是图像中只能表示有限范围的深度。">深度测试</abbr></li>
 <li>9.4.2  <abbr title="一种将数值坐标分配给几何点的方法。在二维中，每个点对应一对数字。在三维中，每个点对应一组三个数字。">坐标系</abbr></li>
 <li>9.4.3  进入 3D</li>
@@ -2836,11 +2836,6 @@
 </ul>
 <h2 id="附录-d-示例程序的源代码"><strong>附录 D：</strong> <a href="./source/index.md">示例程序的源代码</a><a class="headerlink" href="#附录-d-示例程序的源代码" title="Permanent link">&para;</a></h2>
 <h2 id="附录-e-术语表"><strong>附录 E：</strong> <a href="../glossary/">术语表</a><a class="headerlink" href="#附录-e-术语表" title="Permanent link">&para;</a></h2>
-<p>*[纹理单元]：GPU中的一个硬件组件，用于进行纹理查找。（也可以指代这样一个组件的抽象，无论它是否实际在硬件中实现。）也就是说，它将纹理坐标映射到图像纹理的颜色上。这个操作被称为“采样”，纹理单元与GLSL着色器程序中的采样器变量相关联。</p>
-<p>*[<abbr title="Texture Mapping Unit, another name for texture unit (perhaps with a stronger implication of actual hardware support). Also called a TPU (Texture Processing Unit).">TMU</abbr>]：纹理映射单元，纹理单元的另一个名称（可能更强调实际的硬件支持）。也称为TPU（纹理处理单元）。</p>
-<p>*[采样]：将纹理坐标映射到纹理的颜色上的操作，包括如果可用则使用mipmap，并且在必要时应用缩放或放大滤波器。</p>
-<p>*[采样器变量]：在GLSL中，着色器程序中的一个变量，可以用来在图像纹理中进行查找。采样器变量的值指定了将用于进行查找的纹理单元。在WebGL中，采样器变量的类型为“sampler2D”或“samplerCube”。</p>
-<p>*[<abbr title="A new JavaScript graphics API, similar to WebGL, but designed to let web programs access modern GPU capabilities such as compute shaders.">WebGPU</abbr>]：一种新的JavaScript图形API，类似于WebGL，但设计上允许Web程序访问现代GPU功能，如计算着色器。</p>
 
 
 
