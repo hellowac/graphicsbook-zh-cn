@@ -2673,31 +2673,31 @@
 <li>7.3.5  <abbr title="一种模拟物体表面类似镜面反射的方法。要从表面上反射的环境被表示为立方体贴图。为了确定纹理中哪个点在物体上的给定点可见，从视点反射到表面点的射线，并且与纹理立方体相交的反射射线。环境映射也称为反射映射。">环境映射</abbr></li>
 </ul>
 </li>
-<li>7.4 <a href="../c7/s4/"><abbr title="包含数字图像的颜色数据的内存区域。通常指的是包含显示在计算机屏幕上的图像的内存。">帧缓冲区</abbr></a><ul>
+<li>7.4 <a href="../c7/s4/"><abbr title="在WebGL中，一个组织渲染图像缓冲区的数据结构，可能包括颜色缓冲区、深度缓冲区和模板缓冲区。WebGL图形上下文有一个用于屏幕渲染的默认帧缓冲区，并且可以为离屏渲染创建额外的帧缓冲区。">帧缓冲区</abbr></a><ul>
 <li>7.4.1  帧缓冲区操作</li>
-<li>7.4.2  渲染到纹理</li>
-<li>7.4.3  渲染缓冲区</li>
+<li>7.4.2  <abbr title="一种技术，将渲染操作的输出直接写入纹理。在WebGL中，通过将纹理附加为帧缓冲区的缓冲区之一，可以实现渲染到纹理。">渲染到纹理</abbr></li>
+<li>7.4.3  <abbr title="在WebGL中，一种缓冲区（即内存区域），可以附加到帧缓冲区用作颜色缓冲区、深度缓冲区或模板缓冲区。">渲染缓冲区</abbr></li>
 <li>7.4.4  动态立方体贴图纹理</li>
 </ul>
 </li>
 <li>7.5 <a href="../c7/s5/"><abbr title="A 3D graphics API for use on web pages. WebGL programs are written in the JavaScript programming language and display their images in HTML canvas elements. WebGL is based on OpenGL ES, the version of OpenGL for embedded systems, with a few changes to adapt it to the JavaScript language and the Web environment.">WebGL</abbr> 扩展</a><ul>
-<li>7.5.1  各向异性过滤</li>
+<li>7.5.1  <abbr title="一种更准确地采样纹理图像的技术，在正在纹理化的表面上的一个像素对应于纹理中的非矩形区域的情况下使用。在WebGL中，各向异性过滤作为可选扩展提供。">各向异性过滤</abbr></li>
 <li>7.5.2  浮点颜色</li>
 <li>7.5.3  <abbr title="A 3D graphics API for use on web pages. WebGL programs are written in the JavaScript programming language and display their images in HTML canvas elements. WebGL is based on OpenGL ES, the version of OpenGL for embedded systems, with a few changes to adapt it to the JavaScript language and the Web environment.">WebGL</abbr> 1.0 中的实例化绘图</li>
-<li>7.5.4  延迟着色</li>
+<li>7.5.4  <abbr title="一种多遍渲染技术，其中第一个遍历处理几何体并保存相关数据，例如变换后的坐标、法线向量和材质属性。这些数据可以存储在纹理中，在这种情况下被称为“几何缓冲区”或“G缓冲区”。然后，可以在额外的遍历中使用预计算的几何缓冲区中的信息来计算光照和其他效果，而不是为每个遍历重新计算。">延迟着色</abbr></li>
 <li>7.5.5  <abbr title="A 3D graphics API for use on web pages. WebGL programs are written in the JavaScript programming language and display their images in HTML canvas elements. WebGL is based on OpenGL ES, the version of OpenGL for embedded systems, with a few changes to adapt it to the JavaScript language and the Web environment.">WebGL</abbr> 2.0 中的多个绘制缓冲区</li>
 </ul>
 </li>
 </ul>
 <h2 id="第-8-章--超越基本-3d-图形"><strong>第 8 章：</strong>  <a href="../c8/">超越基本 3D 图形</a><a class="headerlink" href="#第-8-章--超越基本-3d-图形" title="Permanent link">&para;</a></h2>
 <ul>
-<li>8.1  <a href="../c8/s1/">光线追踪</a><ul>
-<li>8.1.1  光线投射</li>
+<li>8.1  <a href="../c8/s1/"><abbr title="一种递归渲染算法，使用光线投射。从视点通过图像中的点投射射线进入场景，以确定该点所看到的景象。为了确定在该点所看到的颜色，会从该点投射更多的射线，包括反射射线（如果物体具有镜面反射）、折射射线（如果物体是半透明的）以及向光源的阴影射线（以确定物体是否被该光源照亮）。为反射或折射射线找到颜色可以使用递归应用光线追踪算法。">光线追踪</abbr></a><ul>
+<li>8.1.1  <abbr title="从给定点开始，沿着给定方向追踪射线（即无限线的一半），以找到射线与场景中物体的交点的过程。通常，只有离射线起始点最近的交点才是感兴趣的。">光线投射</abbr></li>
 <li>8.1.2  递归光线追踪</li>
 <li>8.1.3  光线追踪的局限性</li>
 </ul>
 </li>
-<li>8.2  <a href="../c8/s2/">路径追踪</a><ul>
+<li>8.2  <a href="../c8/s2/"><abbr title="一种基于计算所有可能的光到达观察者位置的路径的渲染算法。从每个方向来看，这实际上是不可能完成的，因此该算法追踪路径的一个随机样本，并平均结果。随着样本数量的增加，平均值会收敛到一个非常高质量的图像。">路径追踪</abbr></a><ul>
 <li>8.2.1  <abbr title="Bidirectional Scattering Distribution Function. A generalization of the idea of &quot;material&quot; in 3D graphics. A BSDF gives the probability that a light ray that arrives at point of space from one direction will leave that point heading in a another direction. The probability is a function of the two directions, the point, and the wavelength of the light. One kind of scattering is reflection of light from a surface. For that case, the term BRDF (Bidirectional Reflectance Distribution Function) is used.">BSDF</abbr></li>
 <li>8.2.2  路径追踪算法</li>
 </ul>
