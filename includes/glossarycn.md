@@ -449,3 +449,17 @@
 *[双向散射分布函数(BSDF)]: 在3D图形中“材质”概念的一种概括。双向散射分布函数给出了从某个方向到达空间某点的光线射线将以另一个方向离开该点的概率。这个概率是两个方向、点和光的波长的函数。其中一种散射是光从表面的反射。在这种情况下，使用双向反射分布函数(BRDF)这个术语。
 
 *[次表面散射]: 一种光照效果，光线进入一个稍微半透明的物体，在其内部反射一次或多次，然后从物体的不同点退出。次表面散射有助于诸如玉石、牛奶和皮肤等材料的外观表现。
+
+*[WebGPU]: A new JavaScript graphics API, similar to WebGL, but designed to let web programs access modern GPU capabilities such as compute shaders.
+
+*[WGSL]: The WebGPU Shader Language, the programming language in which shaders for use in WebGPU are written.
+
+*[vertex buffers]: In WebGPU, a vertex buffer is a GPU data structure that holds values to be used as input the vertex shader.
+
+*[bind groups]: A data structure that can hold resources such as buffers, textures, and samples, for input into a pipeline.
+
+*[index buffer]: In WebGPU, an index buffer is a GPU buffer that holds vertex indices for use with the drawIndexed(). A vertex index gives the position of a vertex in the list of vertices of a primitive.
+
+*[storage buffers]: In WebGPU, a general purpose buffer on the GPU, which can be used in compute shaders as well as in vertex and fragment shaders.
+
+*[alignment]: Restrictions on the legal location of a value in memory, depending on the data type. For example, the address of a vec3f variable in WGSL must be a multiple of 16.
