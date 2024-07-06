@@ -1,0 +1,3123 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="计算机图形学概论(graphicsbook)">
+      
+      
+      
+        <link rel="canonical" href="https://hellowac.github.io/graphicsbook-zh-cn/cn/a1/s4/">
+      
+      
+        <link rel="prev" href="../s3/">
+      
+      
+        <link rel="next" href="../../a2/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.28">
+    
+    
+      
+        <title>A.4 JavaScript Promise 和异步函数 - 计算机图形学概论</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+  
+  
+  
+  
+  <style>:root{--md-annotation-icon:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 12a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10M6 13h8l-3.5 3.5 1.42 1.42L17.84 12l-5.92-5.92L10.5 7.5 14 11H6v2Z"/></svg>');}</style>
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="default" data-md-color-accent="red">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#a4-javascript-promise-和异步函数" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="计算机图形学概论" class="md-header__button md-logo" aria-label="计算机图形学概论" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            计算机图形学概论
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              A.4 JavaScript Promise 和异步函数
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04M18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12m-2.62 7 1.62-4.33L19.12 17h-3.24Z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/graphicsbook-zh-cn/en/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/graphicsbook-zh-cn/cn/" hreflang="cn" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hellowac/graphicsbook-zh-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    graphicsbook
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link">
+        
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../preface/" class="md-tabs__link">
+        
+  
+    
+  
+  前言
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c1/" class="md-tabs__link">
+          
+  
+    
+  
+  1.简介
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c2/" class="md-tabs__link">
+          
+  
+    
+  
+  2.二维图形
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c3/" class="md-tabs__link">
+          
+  
+    
+  
+  3.几何
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c4/" class="md-tabs__link">
+          
+  
+    
+  
+  4.灯光和材质
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c5/" class="md-tabs__link">
+          
+  
+    
+  
+  5.three.js
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c6/" class="md-tabs__link">
+          
+  
+    
+  
+  6.WebGL
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c7/" class="md-tabs__link">
+          
+  
+    
+  
+  7.WebGL 3D
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c8/" class="md-tabs__link">
+          
+  
+    
+  
+  8.高阶3D
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c9/" class="md-tabs__link">
+          
+  
+    
+  
+  9.WEBGPU
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+    
+  
+  附录A
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../a2/" class="md-tabs__link">
+          
+  
+    
+  
+  附录B
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../a3/" class="md-tabs__link">
+          
+  
+    
+  
+  附录C
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../source/" class="md-tabs__link">
+          
+  
+    
+  
+  附录D
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../glossary/" class="md-tabs__link">
+          
+  
+    
+  
+  术语表
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="计算机图形学概论" class="md-nav__button md-logo" aria-label="计算机图形学概论" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    计算机图形学概论
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hellowac/graphicsbook-zh-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    graphicsbook
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    首页
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    前言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c1/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    1.简介
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            1.简介
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c1/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 1 节 绘画与绘图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c1/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 2 节：三维(3D)图形的要素
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c1/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 3 节：硬件与软件
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c2/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    2.二维图形
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            2.二维图形
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第1节: 像素、坐标和颜色
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第2节: 形状
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第3节: 变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第4节: 分层建模
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第5节: Java 绘制2D
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第6节: HTML Canvas图形
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s7/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第7节: SVG：一种场景描述语言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c3/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    3.几何
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            3.几何
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.1 OpenGL 1.1 中的形状和颜色
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.2 3D 坐标和变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.3 投影与观看
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.4 多边形网格和 glDrawArrays
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.5 部分线性代数基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.6 使用 GLUT 和 JOGL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c4/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    4.灯光和材质
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            4.灯光和材质
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c4/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.1 照明简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c4/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.2 OpenGL 1.1 中的光和材质
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c4/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.3 图像纹理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c4/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.4 灯光、相机、动作
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c5/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    5.three.js
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            5.three.js
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c5/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.1 Three.js 基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c5/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.2 构建对象
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c5/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.3 其他功能
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c6/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    6.WebGL
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            6.WebGL
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.1 可编程流水线
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.2 第一个例子
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.3 GLSL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.4 图像纹理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.5 实现 2D 变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c7/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    7.WebGL 3D
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            7.WebGL 3D
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.1 3D变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.2 照明和材质
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.3 纹理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.4 帧缓冲区
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.5 WebGL 扩展
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c8/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    8.高阶3D
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            8.高阶3D
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c8/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.1 光线追踪
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c8/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.2 路径追踪
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c9/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    9.WEBGPU
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_11" id="__nav_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            9.WEBGPU
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.1 WebGPU 基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.2 实例和索引
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.3 WGSL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.4 WebGPU 中的 3D 图形
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.5 纹理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.6 计算着色器
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s7/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.7 细节
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    附录A
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            附录A
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    A.1 Java 编程语言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    A.2 C 编程语言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    A.3 JavaScript 编程语言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    A.4 JavaScript Promise 和异步函数
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    A.4 JavaScript Promise 和异步函数
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a41-异步函数和等待" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.4.1 异步函数和等待
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a42-直接使用-promise" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.4.2 直接使用 Promise
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../a2/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    附录B
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            附录B
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a2/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    B.1 节 Blender 基础知识
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a2/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    B.2 节 Blender 建模
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a2/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    B.3 节 Blender 动画
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a2/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    B.4 节 有关光和材料的更多信息
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../a3/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    附录C
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_14" id="__nav_14_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            附录C
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a3/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    C.1 节 Gimp：2D 绘画程序
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../source/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    附录D
+  </span>
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            附录D
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    术语表
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            术语表
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    术语表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    关于
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a41-异步函数和等待" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.4.1 异步函数和等待
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a42-直接使用-promise" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.4.2 直接使用 Promise
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="a4-javascript-promise-和异步函数">A.4  <a href="./a1/s4.md"><abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> Promise 和异步函数</a><a class="headerlink" href="#a4-javascript-promise-和异步函数" title="Permanent link">&para;</a></h1>
+<p><strong>Section A.4  <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> Promises and Async Functions</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">中文</label><label for="__tabbed_1_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>本节介绍了 <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 中的两个新特性：<strong><abbr title="在 JavaScript 编程中，一个承诺代表一个可能立即可用或将来某个时候可用的结果。程序员可以提供一个函数，如果承诺实现（即结果可用时）或承诺被拒绝（例如，如果发生某些错误）时被调用。承诺是异步的，因为处理成功或失败的函数将在某个不可预测的时间被调用。">promises</abbr></strong>（承诺）和 <strong><abbr title="在 JavaScript 中，异步函数是可以使用 &quot;await&quot; 语句等待承诺结果的函数。当执行 await 语句时，异步函数的执行将暂停，直到承诺被实现或被拒绝，同时让其他 JavaScript 代码有机会在此期间运行。">async functions</abbr></strong>（异步函数）。这些特性在 <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> 中越来越常见。特别是，它们在 <abbr title="一种新的 JavaScript 图形 API，类似于 WebGL，但设计用于让网络程序访问现代 GPU 功能，如计算着色器。">WebGPU</abbr> 中使用，<abbr title="一种新的 JavaScript 图形 API，类似于 WebGL，但设计用于让网络程序访问现代 GPU 功能，如计算着色器。">WebGPU</abbr> 在 <a href="../../c9/">第9章</a> 中有介绍。然而，请注意，它们在这本教科书的其他部分并没有使用。</p>
+<p><abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 承诺代表了一个可能在某个时候可用的结果。如果并且当结果变得可用时，承诺被履行；它被称为“解决”。当这种情况发生时，可以返回结果，尽管在某些情况下，结果仅仅是知道承诺等待的事情已经发生了。如果发生了某些事情，意味着承诺无法实现，那么承诺被称为“拒绝”。程序员可以提供在承诺解决或拒绝时调用的函数。</p>
+<p>承诺是回调函数的替代品。回调函数是由程序员提供的函数，由系统在稍后发生某事时调用。例如，在标准 <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 函数中：</p>
+<div class="highlight"><pre><span></span><code><span class="nx">setTimeout</span><span class="p">(</span><span class="w"> </span><span class="nx">callbackFunction</span><span class="p">,</span><span class="w"> </span><span class="nx">timeToWait</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>在 setTimeout() 函数执行后，系统将在 timeToWait 毫秒后调用 callbackFunction。重要的是，setTimeout() 立即返回；它只是设置回调函数在未来被调用。同样的事情适用于承诺：程序不会等待承诺解决或拒绝；它只是简单地安排稍后发生一些事情，当其中一件事情发生时。</p>
+<p>典型的程序员更有可能使用由某些 <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> 创建的承诺，而不是直接创建它们。并且他们更有可能在 async 函数中使用 await 操作符使用这些承诺，而不是直接使用它们，所以我们将首先介绍这种情况。</p>
+</div>
+<div class="tabbed-block">
+<p>This section introduces two new features in <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr>: <strong><abbr title="在 JavaScript 编程中，一个承诺代表一个可能立即可用或将来某个时候可用的结果。程序员可以提供一个函数，如果承诺实现（即结果可用时）或承诺被拒绝（例如，如果发生某些错误）时被调用。承诺是异步的，因为处理成功或失败的函数将在某个不可预测的时间被调用。">promises</abbr></strong> and <strong><abbr title="在 JavaScript 中，异步函数是可以使用 &quot;await&quot; 语句等待承诺结果的函数。当执行 await 语句时，异步函数的执行将暂停，直到承诺被实现或被拒绝，同时让其他 JavaScript 代码有机会在此期间运行。">async functions</abbr></strong>. These features are becoming increasingly common in <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> APIs. In particular, they are used in <abbr title="一种新的 JavaScript 图形 API，类似于 WebGL，但设计用于让网络程序访问现代 GPU 功能，如计算着色器。">WebGPU</abbr>, which is covered in <a href="../../c9/">Chapter 9</a>. However, note that they are not used in any other part of this textbook.</p>
+<p>A <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> promise represents a result that might be available at some time. If and when the result becomes available, the promise is fulfilled; it is said to "resolve." When that happens, the result can be returned, although in some cases the result is simply the knowledge that whatever the promise was waiting for has occurred. If something happens that means the promise cannot be fulfilled, then the promise is said to "reject." A programmer can provide functions to be called when the promise resolves or rejects.</p>
+<p>Promises are a replacement for callback functions. A callback function is a function that is provided by a programmer to be called later, by the system, when something happens. For example in the standard <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> function</p>
+<div class="highlight"><pre><span></span><code><span class="nx">setTimeout</span><span class="p">(</span><span class="w"> </span><span class="nx">callbackFunction</span><span class="p">,</span><span class="w"> </span><span class="nx">timeToWait</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>The <em>callbackFunction</em> will be called by the system timeToWait milliseconds after the <em>setTimeout()</em> function is executed. An important point is that <em>setTimeout()</em> returns immediately; it simply sets up the callback function to be called in the future. The same thing applies to <abbr title="在 JavaScript 编程中，一个承诺代表一个可能立即可用或将来某个时候可用的结果。程序员可以提供一个函数，如果承诺实现（即结果可用时）或承诺被拒绝（例如，如果发生某些错误）时被调用。承诺是异步的，因为处理成功或失败的函数将在某个不可预测的时间被调用。">promises</abbr>: A program does not wait for a promise to resolve or reject; it simply arranges for something to happen later, when one of those things occurs.</p>
+<p>Typical programmers are more likely to use <abbr title="在 JavaScript 编程中，一个承诺代表一个可能立即可用或将来某个时候可用的结果。程序员可以提供一个函数，如果承诺实现（即结果可用时）或承诺被拒绝（例如，如果发生某些错误）时被调用。承诺是异步的，因为处理成功或失败的函数将在某个不可预测的时间被调用。">promises</abbr> created by some <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> than to create them directly. And they are more likely to use those <abbr title="在 JavaScript 编程中，一个承诺代表一个可能立即可用或将来某个时候可用的结果。程序员可以提供一个函数，如果承诺实现（即结果可用时）或承诺被拒绝（例如，如果发生某些错误）时被调用。承诺是异步的，因为处理成功或失败的函数将在某个不可预测的时间被调用。">promises</abbr> with the await operator in <abbr title="在 JavaScript 中，异步函数是可以使用 &quot;await&quot; 语句等待承诺结果的函数。当执行 await 语句时，异步函数的执行将暂停，直到承诺被实现或被拒绝，同时让其他 JavaScript 代码有机会在此期间运行。">async functions</abbr> than to use them directly, so we will cover that case first.</p>
+</div>
+</div>
+</div>
+<h2 id="a41-异步函数和等待">A.4.1  异步函数和等待<a class="headerlink" href="#a41-异步函数和等待" title="Permanent link">&para;</a></h2>
+<p><strong>A.4.1  Async Functions and await</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">中文</label><label for="__tabbed_2_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>等待运算符（await operator）用于检索已解决的承诺的结果。如果承诺被拒绝，则等待运算符将抛出异常。等待表达式的语法非常简单：</p>
+<div class="highlight"><pre><span></span><code><span class="k">await</span><span class="w"> </span><span class="nx">promise</span>
+</code></pre></div>
+<p>这里的 <strong>promise</strong> 是一个承诺。当承诺解决时，其结果成为表达式的值。以下是一个来自 <abbr title="一种新的 JavaScript 图形 API，类似于 WebGL，但设计用于让网络程序访问现代 GPU 功能，如计算着色器。">WebGPU</abbr> <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> 的示例（见 <a href="../../c9/s1/#911-适配器设备和画布">9.1.1 小节</a>）：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">adapter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">navigator</span><span class="p">.</span><span class="nx">gpu</span><span class="p">.</span><span class="nx">requestAdapter</span><span class="p">();</span>
+</code></pre></div>
+<p><code>navigator.gpu.requestAdapter()</code> 的返回值是一个承诺。当该承诺解决时，承诺的结果成为等待表达式的值，并且该值被赋给 adapter。</p>
+<p>重要的是要理解，await 实际上并不会停下来等待结果，也就是说，它不会在等待时使 <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 程序停止。相反，包含 await 表达式的函数会一直挂起，直到结果可用，而程序的其他部分可以继续运行。</p>
+<p>等待运算符只能在标记为 async 的异步函数内部使用：</p>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">name</span><span class="p">(</span><span class="w"> </span><span class="nx">parameters</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 这里可以使用 await</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>当调用一个异步函数时，它会立即执行到函数定义中首次出现 await 的位置。在这一点上，执行被挂起，直到承诺解决或拒绝。如果解决了，执行就会恢复，并继续执行到下一个 await，依此类推。如果在任何时候承诺被拒绝而不是解决，就会抛出一个异常，可以像通常一样捕获和处理。直到所有 await 表达式中的承诺都解决，或者异常导致函数退出，函数才会返回。注意，调用异步函数的那个函数也必然被挂起，即使那个函数不是异步的。</p>
+<p>总的来说，等待表达式很像普通表达式，异步函数也很像普通函数。它们的编写和使用方式相同。这可以使承诺比回调函数更容易使用，这是它们的一大优势。然而，异步函数可以被挂起的事实引入了潜在问题的新来源：你必须记住，在异步函数中间，可能发生其他不相关的事情。</p>
+<p>让我们来看看一个具体的例子。fetch <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> 是一个从互联网检索文件的 <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>。（但如果没有额外的工作，它只能从与使用它的网页相同的来源获取文件。）如果 url 是某个文件的 <abbr title="Uniform Resource Locator. An address of some resource on the World Wide Web. For example, &quot;&lt;http://math.hws.edu/grahicsbook&gt;&quot;.">URL</abbr>，那么 fetch(url) 函数返回一个承诺，当文件被定位时解决，当文件找不到时拒绝。表达式 await fetch(url) 等待文件被定位并返回结果。奇怪的是，文件已经被定位，但不一定已经下载。如果 response 是 await fetch(url) 返回的对象，那么函数 response.text() 返回另一个承诺，当文件内容可用时解决。await response.text() 的值将为文件内容。一个检索文本文件并将其内容放置在网页元素中的函数可以这样编写：</p>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">loadTextFile</span><span class="p">(</span><span class="w"> </span><span class="nx">textFileURL</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="nx">textFileURL</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">();</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;textdisplay&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">text</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>这将工作，但可能会抛出异常，例如如果不允许访问文件，或者没有这样的文件存在。我们可能想要捕获那个异常。此外，获取文件可能需要一些时间，而在函数等待时程序中可能会发生其他事情。特别是，用户可能会生成更多事件，甚至可能是一个事件，导致再次调用 loadTextFile()，但使用不同的 <abbr title="Uniform Resource Locator. An address of some resource on the World Wide Web. For example, &quot;&lt;http://math.hws.edu/grahicsbook&gt;&quot;.">URL</abbr>！现在，正在下载两个文件。哪一个将显示在网页上？哪一个<strong>应该</strong>显示在网页上？这就是我们在并行编程时可能遇到的同样类型的混乱。（公平地说，使用回调函数时我们也可能会陷入类似的混乱，而那里可能会更难解开这个混乱。）</p>
+<p>假设文件下载是由用户点击某个按钮触发的。解决双重下载混乱的一种解决方案是在下载进行时禁用该按钮，以防止启动另一个下载。因此，我们程序的改进版本可能会更像这样：</p>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">loadTextFile</span><span class="p">(</span><span class="w"> </span><span class="nx">textFileURL</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;downloadButton&quot;</span><span class="p">).</span><span class="nx">disabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;textdisplay&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Loading...&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="nx">textFileURL</span><span class="p">);</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">();</span>
+<span class="w">        </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;textdisplay&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">text</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;textdisplay&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span>
+<span class="w">            </span><span class="s2">&quot;Can&#39;t fetch &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">textFileURL</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;.  Error: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">e</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;downloadButton&quot;</span><span class="p">).</span><span class="nx">disabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>好处在于，异步函数看起来本质上和常规 <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 函数相同。潜在的陷阱是，使用异步函数的程序的控制流程可能与常规控制流程大不相同：常规函数从头到尾运行，没有中断。</p>
+</div>
+<div class="tabbed-block">
+<p>The await operator is used to retrieve the result of a promise, when the promise has resolved. If, instead, the promise rejects, then the await operator will throw an exception. The syntax of an await expression is simply</p>
+<div class="highlight"><pre><span></span><code><span class="k">await</span><span class="w">  </span><span class="nx">promise</span>
+</code></pre></div>
+<p>where <strong>promise</strong> is a promise. When the promise resolves, its result becomes the value of the expression. Here is an example from the <abbr title="一种新的 JavaScript 图形 API，类似于 WebGL，但设计用于让网络程序访问现代 GPU 功能，如计算着色器。">WebGPU</abbr> <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> (see <a href="../../c9/s1/#911-适配器设备和画布">Subsection 9.1.1</a>):</p>
+<div class="highlight"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">adapter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">navigator</span><span class="p">.</span><span class="nx">gpu</span><span class="p">.</span><span class="nx">requestAdapter</span><span class="p">();</span>
+</code></pre></div>
+<p>The return value of <code>navigator.gpu.requestAdapter()</code> is a promise. When that promise resolves, the result of the promise becomes the value of the await expression, and that value is assigned to adapter.</p>
+<p>An important thing to understand is that await does not actually stop and wait for the result—that is, it does not bring the <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> program to a halt while waiting. Instead, the function that contains the await expression is suspended until the result is available, while other parts of the program can continue to run.</p>
+<p>The await operator can only be used inside an <abbr title="In JavaScript, an async function is one that can use an &quot;await&quot; statement to wait for the result of a promise. When an await statement is executed, the execution of the async function is suspended until the promise has either been fulfilled or rejected, giving other JavaScript code a chance to run in the meantime.">async function</abbr>, that is, one whose definition is marked as async:</p>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">name</span><span class="p">(</span><span class="w"> </span><span class="nx">parameters</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// await can be used here</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>When an <abbr title="In JavaScript, an async function is one that can use an &quot;await&quot; statement to wait for the result of a promise. When an await statement is executed, the execution of the async function is suspended until the promise has either been fulfilled or rejected, giving other JavaScript code a chance to run in the meantime.">async function</abbr> is called, it is immediately executed up to the first occurrence of await in the function definition. At that point, the execution is suspended until the promise resolves or rejects. If it resolves, the execution resumes and continues until the next await, and so on. If at any point a promise rejects instead of resolving, an exception is thrown that can be caught and handled in the usual way. The function does not return until all of the <abbr title="在 JavaScript 编程中，一个承诺代表一个可能立即可用或将来某个时候可用的结果。程序员可以提供一个函数，如果承诺实现（即结果可用时）或承诺被拒绝（例如，如果发生某些错误）时被调用。承诺是异步的，因为处理成功或失败的函数将在某个不可预测的时间被调用。">promises</abbr> in await expressions have resolved or until an exception causes the function to exit. Note that, necessarily, the function that called the <abbr title="In JavaScript, an async function is one that can use an &quot;await&quot; statement to wait for the result of a promise. When an await statement is executed, the execution of the async function is suspended until the promise has either been fulfilled or rejected, giving other JavaScript code a chance to run in the meantime.">async function</abbr> is also suspended, even if that function is not async.</p>
+<p>What this all amounts to is that await expressions are much like ordinary expressions and <abbr title="在 JavaScript 中，异步函数是可以使用 &quot;await&quot; 语句等待承诺结果的函数。当执行 await 语句时，异步函数的执行将暂停，直到承诺被实现或被拒绝，同时让其他 JavaScript 代码有机会在此期间运行。">async functions</abbr> are much like ordinary functions. They are written and used in the same way. This can make <abbr title="在 JavaScript 编程中，一个承诺代表一个可能立即可用或将来某个时候可用的结果。程序员可以提供一个函数，如果承诺实现（即结果可用时）或承诺被拒绝（例如，如果发生某些错误）时被调用。承诺是异步的，因为处理成功或失败的函数将在某个不可预测的时间被调用。">promises</abbr> easier to use than callback functions, and this usage is one of their big advantages. However, the fact that <abbr title="在 JavaScript 中，异步函数是可以使用 &quot;await&quot; 语句等待承诺结果的函数。当执行 await 语句时，异步函数的执行将暂停，直到承诺被实现或被拒绝，同时让其他 JavaScript 代码有机会在此期间运行。">async functions</abbr> can be suspended introduces a new source of potential problems: You have to remember that other, unrelated things can happen in the middle of an <abbr title="In JavaScript, an async function is one that can use an &quot;await&quot; statement to wait for the result of a promise. When an await statement is executed, the execution of the async function is suspended until the promise has either been fulfilled or rejected, giving other JavaScript code a chance to run in the meantime.">async function</abbr>.</p>
+<p>Let's look at a specific example. The fetch <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> is an <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> for retrieving files from the Internet. (But without extra work, it can only fetch files from the same source as the web page on which it is used.) If url is the <abbr title="Uniform Resource Locator. An address of some resource on the World Wide Web. For example, &quot;&lt;http://math.hws.edu/grahicsbook&gt;&quot;.">URL</abbr> for some file, the function fetch(url) returns a promise that resolves when the file has been located or rejects when the file cannot be found. The expression await fetch(url) waits for the file to be located and returns the result. Curiously, the file has been located but not necessarily downloaded. If response is the object returned by await fetch(url), then the function response.text() returns another promise that resolves when the contents of the file are available. The value of await response.text() will be the file contents. A function to retrieve a text file and place its content in an element on the web page could be written like this:</p>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">loadTextFile</span><span class="p">(</span><span class="w"> </span><span class="nx">textFileURL</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="nx">textFileURL</span><span class="p">);</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">();</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;textdisplay&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">text</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This will work, but might throw an exception, for example if access to the file is not allowed or if no such file exists. We might want to catch that exception. Furthermore, it can take some time to get the file, and other things can happen in the program while the function is waiting. In particular, the user might generate more events, maybe even an event that causes loadTextFile() to be called again, with a different <abbr title="Uniform Resource Locator. An address of some resource on the World Wide Web. For example, &quot;&lt;http://math.hws.edu/grahicsbook&gt;&quot;.">URL</abbr>! Now, there are two files being downloaded. Which one will appear on the web page? Which one <strong>should</strong> appear on the web page? This is the same sort of mess we can get into when doing parallel programming. (To be fair, we can get into a similar sort of mess when using callback functions, and there it can be even harder to untangle the mess.)</p>
+<p>Let's say that a file download is triggered when the user clicks a certain button. One solution to the double-download mess would be to disable that button while a download is in progress, to prevent another download from being started. So, an improved version of our program might go something more like this:</p>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">loadTextFile</span><span class="p">(</span><span class="w"> </span><span class="nx">textFileURL</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;downloadButton&quot;</span><span class="p">).</span><span class="nx">disabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;textdisplay&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Loading...&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="nx">textFileURL</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">();</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;textdisplay&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">text</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;textdisplay&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span>
+<span class="w">        </span><span class="s2">&quot;Can&#39;t fetch &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">textFileURL</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;.  Error: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">e</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;downloadButton&quot;</span><span class="p">).</span><span class="nx">disabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The nice thing is that an <abbr title="In JavaScript, an async function is one that can use an &quot;await&quot; statement to wait for the result of a promise. When an await statement is executed, the execution of the async function is suspended until the promise has either been fulfilled or rejected, giving other JavaScript code a chance to run in the meantime.">async function</abbr> looks essentially the same as a regular <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> function. The potential trap is that the flow of control in a program that uses <abbr title="在 JavaScript 中，异步函数是可以使用 &quot;await&quot; 语句等待承诺结果的函数。当执行 await 语句时，异步函数的执行将暂停，直到承诺被实现或被拒绝，同时让其他 JavaScript 代码有机会在此期间运行。">async functions</abbr> can be very different from the regular flow of control: Regular functions run from beginning to end with no interruption.</p>
+</div>
+</div>
+</div>
+<h2 id="a42-直接使用-promise">A.4.2  直接使用 Promise<a class="headerlink" href="#a42-直接使用-promise" title="Permanent link">&para;</a></h2>
+<p><strong>A.4.2  Using Promises Directly</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">中文</label><label for="__tabbed_3_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>等待运算符使承诺相当容易使用，但并不总是合适的。<abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 中的承诺是一个属于名为 <strong><em>Promise</em></strong> 的类的对象。该类中的方法可以在承诺解决或拒绝时作出响应。如果 somePromise 是一个承诺，onResolve 是一个函数，那么</p>
+<div class="highlight"><pre><span></span><code><span class="nx">somePromise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="w"> </span><span class="nx">onResolve</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>如果承诺解决，则计划调用 onResolve。传递给 onResolve 的参数将是承诺的结果。注意，我们基本上回到了使用回调函数的状态：somePromise.then() 立即返回，如果 at all，onResolve 将在某个不确定的未来时间被调用。then() 的参数往往是一个匿名函数。例如，假设 textPromise 是一个最终产生字符串的承诺，</p>
+<div class="highlight"><pre><span></span><code><span class="nx">textPromise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">str</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Hey, I just got &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">str</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div>
+<p>现在，技术上，onResolve 回调函数的返回值在 promise.then(onResolve) 中必须是另一个承诺。如果不是，系统将以立即解决为同一值的承诺包装返回值。由 onResolve 返回的承诺成为对 <em>promise.then()</em> 调用的返回值。这意味着你可以在 <em>promise.then()</em> 的返回值上链式另一个 then()。例如，让我们使用 then() 重写我们的 loadTextFile() 示例。基本版本是：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">loadTextFileWithThen</span><span class="p">(</span><span class="w"> </span><span class="nx">textFileURL</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">fetch</span><span class="p">(</span><span class="nx">textFileURL</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">()</span><span class="w"> </span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;textdisplay&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>在这里，fetch(textFileURL) 返回一个承诺，我们可以将 then() 附加到该承诺上。当匿名函数 response =&gt; response.text() 被调用时，其参数 response 的值是 fetch(textFileURL) 解决时产生的结果。返回值 response.text() 是一个承诺，该承诺成为第一个 then() 的返回值。第二个 then() 附加到该承诺上。当第二个 then() 中的回调函数被调用时，它的参数是由 <em>result.text()</em> 承诺产生的结果。</p>
+<p>注意，loadTextFileWithThen() 不是异步函数。它不使用 await。当它被调用时，它立即返回，不等待文本到达。</p>
+<p>现在，你可能会想知道如果承诺被拒绝会发生什么。拒绝会导致异常，但该异常在某个不确定的未来时间被抛出，当承诺被拒绝时。实际上，then() 接受一个可选的第二个参数，这是一个回调函数，如果承诺被拒绝则被调用。然而，你更有可能使用 <strong><em>Promise</em></strong> 类的另一个方法来响应拒绝：</p>
+<div class="highlight"><pre><span></span><code><span class="nx">somePromise</span><span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="w"> </span><span class="nx">onReject</span><span class="w"> </span><span class="p">)</span>
+</code></pre></div>
+<p>参数 onReject 是一个函数，如果承诺被拒绝（或者，当 catch() 附加到 then() 调用链时，链中的任何一个承诺被拒绝）将被调用。传递给 onReject 的参数将是由拒绝的承诺生成的错误消息。（<em>catch()</em> 也会捕获由承诺生成的其他类型的异常。）并且 <strong><em>Promise</em></strong> 类中有一个 finally() 方法，它计划在 then/catch 链的末尾调用回调函数。<em>finally()</em> 中的回调函数参数不接受任何参数。因此，我们可能会像下面这样改进我们的文本加载示例：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">loadTextFileWithThen</span><span class="p">(</span><span class="nx">textFileURL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;downloadButton&quot;</span><span class="p">).</span><span class="nx">disabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="nx">fetch</span><span class="p">(</span><span class="nx">textFileURL</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">()</span><span class="w"> </span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;textdisplay&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;textdisplay&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                    </span><span class="s2">&quot;Can&#39;t fetch &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">textFileURL</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;.  Error: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="k">finally</span><span class="p">(</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;downloadButton&quot;</span><span class="p">).</span><span class="nx">disabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<hr />
+<p>通常，你应该尽可能使用异步函数和 await。你只应偶尔使用 then() 和 catch()。虽然你可能会发现自己使用基于承诺的 <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>，但你可能永远不需要创建自己的承诺对象——这不是本教科书所涵盖的主题。</p>
+</div>
+<div class="tabbed-block">
+<p>The await operator makes <abbr title="在 JavaScript 编程中，一个承诺代表一个可能立即可用或将来某个时候可用的结果。程序员可以提供一个函数，如果承诺实现（即结果可用时）或承诺被拒绝（例如，如果发生某些错误）时被调用。承诺是异步的，因为处理成功或失败的函数将在某个不可预测的时间被调用。">promises</abbr> fairly easy to use, but it is not always appropriate. A <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> promise is an object belonging to a class named <strong><em>Promise</em></strong>. There are methods in that class that make it possible to respond when a promise resolves or rejects. If somePromise is a promise, and onResolve is a function, then</p>
+<div class="highlight"><pre><span></span><code><span class="nx">somePromise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="w"> </span><span class="nx">onResolve</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>schedules onResolve to be called if and when the promise resolves. The parameter that is passed to onResolve will be the result of the promise. Note that we are essentially back to using callback functions: somePromise.then() returns immediately, and onResolve will be called, if at all, at some indeterminate future time. The parameter to then() is often an anonymous function. For example, assuming textPromise is a promise that eventually produces a string,</p>
+<div class="highlight"><pre><span></span><code><span class="nx">textPromise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">str</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Hey, I just got &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">str</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div>
+<p>Now, technically, the return value of the onResolve callback in promise.then(onResolve) must be another promise. If not, the system will wrap the return value in a promise that immediately resolves to the same value. The promise that is returned by onResolve becomes the return value of the call to <em>promise.then()</em>. This means that you can chain another then() onto the return value from <em>promise.then()</em>. For example, let's rewrite our loadTextFile() example using then(). The basic version is:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">loadTextFileWithThen</span><span class="p">(</span><span class="w"> </span><span class="nx">textFileURL</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="nx">fetch</span><span class="p">(</span><span class="nx">textFileURL</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">()</span><span class="w"> </span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;textdisplay&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Here, fetch(textFileURL) returns a promise, and we can attach then() to that promise. When the anonymous function, response =&gt; response.text(), is called, the value of its parameter, response, is the result produced when fetch(textFileURL) resolves. The return value response.text() is a promise, and that promise becomes the return value from the first then(). The second then() is attached to that promise. When the callback function in the second then() is called, its parameter is the result produced by the <em>result.text()</em> promise.</p>
+<p>Note that loadTextFileWithThen()is not an <abbr title="In JavaScript, an async function is one that can use an &quot;await&quot; statement to wait for the result of a promise. When an await statement is executed, the execution of the async function is suspended until the promise has either been fulfilled or rejected, giving other JavaScript code a chance to run in the meantime.">async function</abbr>. It does not use await. When it is called, it returns immediately, without waiting for the text to arrive.</p>
+<p>Now, you might wonder what happens if the promise rejects. The rejection causes an exception, but that exception is thrown at some indeterminate future time, when the promise rejects. Now, in fact, then() takes an optional second parameter that is a callback function, to be called if the promise rejects. However, you are more likely to respond to the rejection by using another method from the <strong><em>Promise</em></strong> class:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">somePromise</span><span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="w"> </span><span class="nx">onReject</span><span class="w"> </span><span class="p">)</span>
+</code></pre></div>
+<p>The parameter, onReject, is a function that will be called if and when the promise rejects (or, when <em>catch()</em> is attached to a chain of calls to then(), when any of the <abbr title="在 JavaScript 编程中，一个承诺代表一个可能立即可用或将来某个时候可用的结果。程序员可以提供一个函数，如果承诺实现（即结果可用时）或承诺被拒绝（例如，如果发生某些错误）时被调用。承诺是异步的，因为处理成功或失败的函数将在某个不可预测的时间被调用。">promises</abbr> in the chain rejects). The parameter to onReject will be the error message produced by the promise that rejects. (A <em>catch()</em> will also catch other kinds of exceptions that are generated by the promise.) And there is a finally() method in the <strong><em>Promise</em></strong> class that schedules a callback function to be called at the end of a then/catch chain. The callback function parameter in <em>finally()</em> takes no parameters. So, we might improve our text-loading example as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">loadTextFileWithThen</span><span class="p">(</span><span class="nx">textFileURL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;downloadButton&quot;</span><span class="p">).</span><span class="nx">disabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="nx">fetch</span><span class="p">(</span><span class="nx">textFileURL</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">()</span><span class="w"> </span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;textdisplay&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;textdisplay&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                    </span><span class="s2">&quot;Can&#39;t fetch &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">textFileURL</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;.  Error: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">e</span><span class="w"> </span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="k">finally</span><span class="p">(</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;downloadButton&quot;</span><span class="p">).</span><span class="nx">disabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<hr />
+<p>Generally, you should try to use <abbr title="在 JavaScript 中，异步函数是可以使用 &quot;await&quot; 语句等待承诺结果的函数。当执行 await 语句时，异步函数的执行将暂停，直到承诺被实现或被拒绝，同时让其他 JavaScript 代码有机会在此期间运行。">async functions</abbr> and await when possible. You should only occasionally have to use then() and catch(). And while you might find yourself using promise-based APIs, you will probably never need to create your own promise objects—a topic that is not covered in this textbook.</p>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="最后更新">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年7月6日</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="创建日期">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年7月6日</span>
+  </span>
+
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "content.tabs.link", "navigation.tabs", "navigation.tabs.sticky", "navigation.indexes", "navigation.top", "toc.follow", "content.tooltips"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>

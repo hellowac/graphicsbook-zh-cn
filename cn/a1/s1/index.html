@@ -1,0 +1,3293 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="计算机图形学概论(graphicsbook)">
+      
+      
+      
+        <link rel="canonical" href="https://hellowac.github.io/graphicsbook-zh-cn/cn/a1/s1/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../s2/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.28">
+    
+    
+      
+        <title>A.1 Java 编程语言 - 计算机图形学概论</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+  
+  
+  
+  
+  <style>:root{--md-annotation-icon:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 12a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10M6 13h8l-3.5 3.5 1.42 1.42L17.84 12l-5.92-5.92L10.5 7.5 14 11H6v2Z"/></svg>');}</style>
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="default" data-md-color-accent="red">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#a1-java-编程语言" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="计算机图形学概论" class="md-header__button md-logo" aria-label="计算机图形学概论" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            计算机图形学概论
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              A.1 Java 编程语言
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04M18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12m-2.62 7 1.62-4.33L19.12 17h-3.24Z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/graphicsbook-zh-cn/en/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/graphicsbook-zh-cn/cn/" hreflang="cn" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hellowac/graphicsbook-zh-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    graphicsbook
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link">
+        
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../preface/" class="md-tabs__link">
+        
+  
+    
+  
+  前言
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c1/" class="md-tabs__link">
+          
+  
+    
+  
+  1.简介
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c2/" class="md-tabs__link">
+          
+  
+    
+  
+  2.二维图形
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c3/" class="md-tabs__link">
+          
+  
+    
+  
+  3.几何
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c4/" class="md-tabs__link">
+          
+  
+    
+  
+  4.灯光和材质
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c5/" class="md-tabs__link">
+          
+  
+    
+  
+  5.three.js
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c6/" class="md-tabs__link">
+          
+  
+    
+  
+  6.WebGL
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c7/" class="md-tabs__link">
+          
+  
+    
+  
+  7.WebGL 3D
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c8/" class="md-tabs__link">
+          
+  
+    
+  
+  8.高阶3D
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c9/" class="md-tabs__link">
+          
+  
+    
+  
+  9.WEBGPU
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+    
+  
+  附录A
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../a2/" class="md-tabs__link">
+          
+  
+    
+  
+  附录B
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../a3/" class="md-tabs__link">
+          
+  
+    
+  
+  附录C
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../source/" class="md-tabs__link">
+          
+  
+    
+  
+  附录D
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../glossary/" class="md-tabs__link">
+          
+  
+    
+  
+  术语表
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="计算机图形学概论" class="md-nav__button md-logo" aria-label="计算机图形学概论" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    计算机图形学概论
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hellowac/graphicsbook-zh-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    graphicsbook
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    首页
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    前言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c1/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    1.简介
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            1.简介
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c1/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 1 节 绘画与绘图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c1/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 2 节：三维(3D)图形的要素
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c1/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 3 节：硬件与软件
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c2/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    2.二维图形
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            2.二维图形
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第1节: 像素、坐标和颜色
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第2节: 形状
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第3节: 变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第4节: 分层建模
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第5节: Java 绘制2D
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第6节: HTML Canvas图形
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s7/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第7节: SVG：一种场景描述语言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c3/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    3.几何
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            3.几何
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.1 OpenGL 1.1 中的形状和颜色
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.2 3D 坐标和变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.3 投影与观看
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.4 多边形网格和 glDrawArrays
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.5 部分线性代数基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.6 使用 GLUT 和 JOGL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c4/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    4.灯光和材质
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            4.灯光和材质
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c4/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.1 照明简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c4/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.2 OpenGL 1.1 中的光和材质
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c4/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.3 图像纹理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c4/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.4 灯光、相机、动作
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c5/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    5.three.js
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            5.three.js
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c5/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.1 Three.js 基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c5/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.2 构建对象
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c5/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.3 其他功能
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c6/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    6.WebGL
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            6.WebGL
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.1 可编程流水线
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.2 第一个例子
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.3 GLSL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.4 图像纹理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.5 实现 2D 变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c7/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    7.WebGL 3D
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            7.WebGL 3D
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.1 3D变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.2 照明和材质
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.3 纹理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.4 帧缓冲区
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.5 WebGL 扩展
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c8/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    8.高阶3D
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            8.高阶3D
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c8/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.1 光线追踪
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c8/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.2 路径追踪
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c9/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    9.WEBGPU
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_11" id="__nav_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            9.WEBGPU
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.1 WebGPU 基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.2 实例和索引
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.3 WGSL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.4 WebGPU 中的 3D 图形
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.5 纹理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.6 计算着色器
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s7/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.7 细节
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    附录A
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            附录A
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    A.1 Java 编程语言
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    A.1 Java 编程语言
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a11-基本语言结构" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.1.1 基本语言结构
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a12-对象和数据结构" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.1.2 对象和数据结构
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a13-窗口和事件" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.1.3 窗口和事件
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    A.2 C 编程语言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    A.3 JavaScript 编程语言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    A.4 JavaScript Promise 和异步函数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../a2/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    附录B
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            附录B
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a2/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    B.1 节 Blender 基础知识
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a2/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    B.2 节 Blender 建模
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a2/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    B.3 节 Blender 动画
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a2/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    B.4 节 有关光和材料的更多信息
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../a3/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    附录C
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_14" id="__nav_14_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            附录C
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a3/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    C.1 节 Gimp：2D 绘画程序
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../source/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    附录D
+  </span>
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            附录D
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    术语表
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            术语表
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    术语表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    关于
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a11-基本语言结构" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.1.1 基本语言结构
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a12-对象和数据结构" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.1.2 对象和数据结构
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a13-窗口和事件" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.1.3 窗口和事件
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="a1-java-编程语言">A.1  <a href="./a1/s1.md">Java 编程语言</a><a class="headerlink" href="#a1-java-编程语言" title="Permanent link">&para;</a></h1>
+<p><strong>A.1  The Java Programming Language</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">中文</label><label for="__tabbed_1_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Java 在许多大学和高中的计算机科学课程中作为第一门编程语言进行教授。它是一种庞大且复杂的语言，具有使其适合大型复杂编程项目的功能。这些特性可能使它看起来有点冗长和过于严格，但它们也使得编程环境能够为编写和调试程序提供极好的支持。如果你打算编写 Java 代码，你应该考虑使用一个功能齐全的编程环境，比如 <strong><abbr title="一个用于编写 Java（和其他编程语言）程序的集成开发环境。Eclipse 是一个可以从 http://eclipse.org 下载的免费程序。">Eclipse</abbr></strong>（<a href="https://eclipse.org/"><abbr title="一个用于编写 Java（和其他编程语言）程序的集成开发环境。Eclipse 是一个可以从 http://eclipse.org 下载的免费程序。">Eclipse</abbr> 官网</a>）。<a href="../../c3/s6/#362-使用jogl">3.6.2 小节</a> 讲解了如何为使用 <abbr title="OpenGL的Java实现。JOGL非常复杂，因为它试图在一个编程系统中支持所有版本的OpenGL。JOGL与Java的Swing和AWT图形无缝集成。">JOGL</abbr>（Java <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> for <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>）编程设置 <abbr title="一个用于编写 Java（和其他编程语言）程序的集成开发环境。Eclipse 是一个可以从 http://eclipse.org 下载的免费程序。">Eclipse</abbr>。</p>
+<p>这本书附带了几个用于编写图形 Java 程序的“启动”程序，例如 <a href="../../../en/source/java2d/EventsStarter.java">java2d/EventsStarter.java</a> 用于 Java Graphics2D，<a href="../../../en/source/jogl/JoglStarter.java">jogl/JoglStarter.java</a> 用于 <abbr title="OpenGL的Java实现。JOGL非常复杂，因为它试图在一个编程系统中支持所有版本的OpenGL。JOGL与Java的Swing和AWT图形无缝集成。">JOGL</abbr>。尽管本节没有提供足够的信息让你从头开始编写 Java 程序，但它可能有足够的信息让你在启动程序中“填补空白”并修改随书附带的其他示例程序。如果你想更详细地学习 Java，你可以考虑我的免费在线 Java 教科书，<a href="http://math.hws.edu/javanotes">JavaNotes</a>。</p>
+<p>Java 有几个 2D 图形 <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>：AWT、Swing 和 JavaFX。Swing 建立在 AWT 之上，而 JavaFX 是一个全新的 <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>。JavaFX 在这本教科书中没有使用，但你将在这里看到对 Swing 和 AWT 的引用。</p>
+</div>
+<div class="tabbed-block">
+<p>Java is taught as a first programming language in many college and high school computer science programs. It is a large and complex language, with features that make it suitable for large and complex programming projects. Those features can make it seem a little verbose and overly strict, but they also make it possible for programming environments to provide excellent support for writing and debugging programs. If you are going to write Java code, you should consider using a full-featured programming environment such as <strong><abbr title="一个用于编写 Java（和其他编程语言）程序的集成开发环境。Eclipse 是一个可以从 http://eclipse.org 下载的免费程序。">Eclipse</abbr></strong> (<a href="https://eclipse.org/">https://eclipse.org/</a>). <a href="../../c3/s6/#362-使用jogl">Subsection 3.6.2</a> explains how to set up <abbr title="一个用于编写 Java（和其他编程语言）程序的集成开发环境。Eclipse 是一个可以从 http://eclipse.org 下载的免费程序。">Eclipse</abbr> for programming with <abbr title="OpenGL的Java实现。JOGL非常复杂，因为它试图在一个编程系统中支持所有版本的OpenGL。JOGL与Java的Swing和AWT图形无缝集成。">JOGL</abbr>, the Java <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> for <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>.</p>
+<p>This book comes with several "starter" programs for writing graphical Java programs, such as <a href="../../../en/source/java2d/EventsStarter.java">java2d/EventsStarter.java</a> for Java Graphics2D and <a href="../../../en/source/jogl/JoglStarter.java">jogl/JoglStarter.java</a> for <abbr title="OpenGL的Java实现。JOGL非常复杂，因为它试图在一个编程系统中支持所有版本的OpenGL。JOGL与Java的Swing和AWT图形无缝集成。">JOGL</abbr>. Although this section doesn't tell you enough to let you write Java programs from scratch, it might have enough information to let you "fill in the blanks" in the starter programs and modify other sample programs that come with the book. If you want to learn Java in more detail, you can consider my free on-line Java textbook, <a href="http://math.hws.edu/javanotes">http://math.hws.edu/javanotes</a>.</p>
+<p>Java has had several 2D graphics APIs: AWT, Swing, and JavaFX. Swing is built on top of the AWT, while JavaFX is a completely new <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>. JavaFX is not used in this textbook, but you will see references here both to Swing and to the AWT.</p>
+</div>
+</div>
+</div>
+<h2 id="a11-基本语言结构">A.1.1  基本语言结构<a class="headerlink" href="#a11-基本语言结构" title="Permanent link">&para;</a></h2>
+<p><strong>A.1.1  Basic Language Structure</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">中文</label><label for="__tabbed_2_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Java 是一种面向对象的语言。一个 Java 程序由类组成，类中可以包含变量定义和方法定义（"方法"是面向对象术语中的函数或子程序）。一个类定义在自己的文件中，文件名必须与类名匹配：如果类名为 "MyClass"，那么文件名必须是 <em>MyClass.java</em>。类也可以作为嵌套类出现在其他类中；当然，嵌套类没有自己的文件。定义类的基本语法是：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyClass</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 变量、方法和嵌套类定义。</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>这个语法有一些变化。例如，要定义一个类作为现有类的子类，你需要说明新类“扩展”了现有类：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyClass</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">ExistingClass</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Java 中的一个类只能扩展一个类。然而，在扩展一个类的同时或代替扩展类，一个新类也可以实现一个或多个“<abbr title="应用程序编程接口。用于执行某项任务的相关类、函数、常量等的集合。API是一个“接口”，可以在不了解其功能实际实现方式的情况下使用它。">接口</abbr>”。Java 中的接口指定了一些必须在实现该接口的每个类中定义的方法。有了所有这些选项，类定义可能看起来像这样：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyGUI</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JPanel</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">KeyListener</span><span class="p">,</span><span class="w"> </span><span class="n">MouseListener</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>实际上，一个像这样的类可能在 <abbr title="(Graphical User Interface.) A user interface for a program where the user interacts with the program using components such as windows, menus, buttons, and text-input boxes.">GUI</abbr> 程序中使用。</p>
+<p>一个类可以包含一个 main() 方法，并且组成程序的类中必须有一个包含此类方法的类。main() 方法是程序执行开始的地方。它有一个参数，类型为 <strong><em>String[]</em></strong>，代表命令行参数的数组。Java 中静态和非静态变量及方法之间有一个令人困惑的区别，我们在这里可以大多忽略。main() 方法是静态的。通常，在图形程序中，main 是 <strong>唯一</strong> 的静态内容，所以这个区别对我们来说不是很重要。在 <abbr title="(Graphical User Interface.) A user interface for a program where the user interacts with the program using components such as windows, menus, buttons, and text-input boxes.">GUI</abbr> 程序中，main 方法通常只是创建一个窗口并将其显示在屏幕上；之后，窗口会自我管理。</p>
+<p>类中的非静态方法定义实际上为从该类创建的每个对象定义了一个方法。在方法定义中，特殊变量 this 可以用来引用方法所属的对象。你可能熟悉 <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 中的同一个特殊变量。然而，与 <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 不同的是，this 在 Java 中的使用是可选的，所以同一个对象中的变量可以被称为 x 或 this.x，并且方法可以在同一类中作为 <em>doSomething()</em> 或 <em>this.doSomething()</em> 调用。</p>
+<p>变量、方法和嵌套类可以被标记为 private、public 或 protected。私有的东西只能在它们定义的类中使用。公共的东西可以从任何地方访问。受保护的东西可以在同一个类及其子类中访问。</p>
+<p>本书中的程序使用一个定义窗口的主类，图形显示将在此窗口中看到。该类还包含 main() 程序。（这不是特别好的风格，但它适用于小型程序。）在某些情况下，程序依赖于我编写的其他类；这些类的文件应该与定义主类的文件在同一文件夹中。然后，可以在命令行中使用以下命令编译程序：</p>
+<div class="highlight"><pre><span></span><code>javac<span class="w">  </span>*.java
+</code></pre></div>
+<p>要运行主类为 MyClass 的程序，请使用：</p>
+<div class="highlight"><pre><span></span><code>java<span class="w">  </span>MyClass
+</code></pre></div>
+<p>然而，使用 <abbr title="OpenGL的Java实现。JOGL非常复杂，因为它试图在一个编程系统中支持所有版本的OpenGL。JOGL与Java的Swing和AWT图形无缝集成。">JOGL</abbr> 的程序需要在这些命令中添加一些额外的选项。你需要知道的内容在 <a href="../../c3/s6/#362-使用jogl">3.6.2 小节</a> 中有解释。（<abbr title="一个用于编写 Java（和其他编程语言）程序的集成开发环境。Eclipse 是一个可以从 http://eclipse.org 下载的免费程序。">Eclipse</abbr> IDE 有自己的简单命令来运行程序。）</p>
+<p>有许多标准类可供程序使用。一些标准类，如 <strong><em>Math</em></strong> 和 <strong><em>System</em></strong>，对任何程序都是自动可用的。其他类在使用前必须“导入”到源代码文件中。一个类可以是包的一部分，包是类的集合。例如，<strong><em>Graphics2D</em></strong> 类定义在 java.awt 包中。这个类可以通过在文件开头添加以下行导入到源代码文件中：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">java.awt.Graphics2D</span><span class="p">;</span>
+</code></pre></div>
+<p>在类定义之前。或者，可以使用：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">java.awt.*</span><span class="p">;</span>
+</code></pre></div>
+<p>导入 java.awt 包中的所有类。</p>
+<p>可以将你自己的类放入包中，但这在编译和使用时会添加一些复杂性。本书中的示例程序没有定义在命名的包中。官方上，它们被说成是在“默认包”中。Java 的最新版本还有“模块”，这是包的集合。再次，使用模块会使事情复杂化，它们没有在这本教科书中使用。</p>
+<hr />
+<p>Java 是一种强类型语言。每个变量都有类型，并且只能保存该类型的值。每个变量都必须声明，声明指定了变量的类型。声明中可以包含初始值。例如：</p>
+<div class="highlight"><pre><span></span><code><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w">  </span><span class="c1">// 声明 name 为一个必须包含 String 类型值的变量。</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">17</span><span class="p">;</span><span class="w">   </span><span class="c1">// x 是一个必须包含 int 类型的值的变量，初始值为 17。</span>
+<span class="n">Graphics2D</span><span class="w"> </span><span class="n">g</span><span class="p">;</span><span class="w"> </span><span class="c1">// g 是一个变量，其值是 Graphics2D 类型的对象。</span>
+</code></pre></div>
+<p>Java 有八种“原始”类型，它们的值不是对象：<strong><em>int</em></strong>、<strong><em>long</em></strong>、<strong><em>short</em></strong>、<strong><em>byte</em></strong>、<strong><em>double</em></strong>、<strong><em>float</em></strong>、<strong><em>char</em></strong> 和 <strong><em>boolean</em></strong>。前四种是具有不同位数的整数类型。实数类型是 <strong><em>double</em></strong> 和 <strong><em>float</em></strong>。例如，3.7 是 <strong><em>double</em></strong> 类型的常量。要得到一个 <strong><em>float</em></strong> 类型的常量，你需要加上 'F'：3.7F（这在 <abbr title="OpenGL的Java实现。JOGL非常复杂，因为它试图在一个编程系统中支持所有版本的OpenGL。JOGL与Java的Swing和AWT图形无缝集成。">JOGL</abbr> 编程中会出现，有些方法需要类型为 <strong><em>float</em></strong> 的参数）。常量 <strong><em>char</em></strong> 值用单引号括起来；例如，'A' 和 '%'。双引号用于字符串，它们在 Java 中不是原始值。</p>
+<p>除了这八种原始类型，任何类都定义了一个类型。如果一个变量的类型是一个类，那么这个变量可能的值就是属于那个类的对象。接口也定义了一个类型，其可能的值是实现了该接口的对象。与原始值不同，对象包含变量和方法。例如，<strong><em>Point</em></strong> 是一个类。一个 <strong><em>Point</em></strong> 类型的对象包含 <strong><em>int</em></strong> 类型的变量 x 和 y。一个 <strong><em>String</em></strong> 是一个对象，它包含几个用于处理字符串的方法，包括一个名为 length() 的方法，它返回字符串的长度，另一个名为 charAt(i) 的方法，它返回字符串中的第 i 个字符。对象中的变量和方法总是使用 "." 点操作符访问：如果 pt 是一个 <strong><em>Point</em></strong> 类型的变量，引用一个 <strong><em>Point</em></strong> 类型的对象，那么 pt.x 和 pt.y 就是该对象中实例变量的名称。如果 str 是一个 <strong><em>String</em></strong> 类型的变量，那么 str.length() 和 str.charAt(i) 就是 str 引用的 <strong><em>String</em></strong> 对象中的方法。</p>
+<p>方法定义指定了方法返回值的类型以及每个参数的类型。它通常被标记为 <em>public</em> 或 <em>private</em>。这里有一个例子：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">countChars</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">ch</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">str</span><span class="p">.</span><span class="na">length</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">str</span><span class="p">.</span><span class="na">charAt</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ch</span><span class="p">)</span>
+<span class="w">            </span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">count</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>这里，countChars 是方法的名称。它接受两个类型为 <strong><em>String</em></strong> 和 <strong><em>char</em></strong> 的参数，并返回一个类型为 int 的值。对于不返回值的方法，返回类型（在上面的例子中是 <strong><em>int</em></strong>）指定为 void。</p>
+<p>Java 中的方法可以在它定义的类中使用，即使定义点在它使用点之后也可以（这与 C 相反，C 中函数在使用前必须声明，但与 <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 类似）。全局变量也是如此，它们在任何方法外部声明。所有编程代码，如赋值语句和控制结构，都必须在方法定义内。</p>
+<hr />
+<p>Java 拥有与 C 和 <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 相同的基本控制结构：<em>if</em> 语句、<em>while</em> 和 <em>do..while</em> 循环、for 循环以及 switch 语句在三种语言中的形式本质上是相同的。赋值语句也是相同的。</p>
+<p>同样，这三种语言拥有几乎相同的运算符集合，包括基本的算术运算符（<code>+</code>, <code>−</code>, <code>*</code> 和 <code>/</code>）、增量（<code>++</code>）和减量（<code>--</code>）运算符、逻辑运算符（<code>||</code>, <code>&amp;&amp;</code>, 和 <code>!</code>）、三元运算符（<code>?:</code>）以及位运算符（如 <code>&amp;</code> 和 <code>|</code>）。Java 算术的一个特性，正如 C 语言中的一样，是当除法运算符 <code>/</code> 应用于整数操作数时，会产生一个整数结果。因此，18/5 的结果是 3，而 1/10 的结果是 0。</p>
+<p><code>+</code> 运算符可以用来连接字符串，这样 "Hello" + "World" 的值就是 "HelloWorld"。如果 <code>+</code> 的操作数中只有一个是字符串，那么另一个操作数会自动转换为字符串。</p>
+<p>Java 的标准函数定义在类中。例如，数学函数包括 <code>Math.sin(x)</code>、<code>Math.cos(x)</code>、<code>Math.sqrt(x)</code> 和 <code>Math.pow(x,y)</code> 用于求 x 的 y 次幂。<code>Math.random()</code> 返回一个介于 0.0 到 1.0 范围内的随机数，包括 0.0 但不包括 1.0。方法 <code>System.out.println(str)</code> 向命令行输出一个字符串。在图形程序中，<code>System.out.println</code> 主要用于调试。要输出多个项目，使用字符串连接：</p>
+<div class="highlight"><pre><span></span><code><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;The values are x = &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; and y = &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+</code></pre></div>
+<p>还有一个格式化输出方法 <code>System.out.printf</code>，它类似于 C 语言的 printf 函数。</p>
+</div>
+<div class="tabbed-block">
+<p>Java is object-oriented. A Java program is made up of classes, which can contain variable definitions and method definitions. ("Method" is the object-oriented term for function or subroutine.) A class is defined in its own file, whose name must match the name of the class: If the class is named "MyClass", then the name of the file must be <em>MyClass.java</em>. Classes can also occur as nested classes within other classes; a nested class, of course, doesn't get its own file. The basic syntax for defining a class is</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyClass</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">.</span>
+<span class="w">    </span><span class="p">.</span><span class="w">  </span><span class="c1">// Variable, method, and nested class definitions.</span>
+<span class="w">    </span><span class="p">.</span><span class="w">   </span>
+<span class="p">}</span>
+</code></pre></div>
+<p>There are variations on this syntax. For example, to define a class as a subclass of an existing class, you need to say that the new class "extends" an the existing class:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyClass</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">ExistingClass</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span>
+</code></pre></div>
+<p>A class in Java can only extend one class. However, in addition to or instead of extending a class, a new class can also implement one or more "interfaces." An interface in Java specifies some methods that must be defined in every class that implements the interface. With all of these options, a class definition might look something like this:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyGUI</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JPanel</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">KeyListener</span><span class="p">,</span><span class="w"> </span><span class="n">MouseListener</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span>
+</code></pre></div>
+<p>In fact, a class exactly like this one might be used in a <abbr title="(Graphical User Interface.) A user interface for a program where the user interacts with the program using components such as windows, menus, buttons, and text-input boxes.">GUI</abbr> program.</p>
+<p>A class can contain a main() method, and one of the classes that make up a program must contain such a method. The main() method is where program execution begins. It has one parameter, of type <strong><em>String[]</em></strong>, representing an array of command-line arguments. There is a confusing distinction in Java between static and non-static variables and methods, which we can mostly ignore here. The main() method is static. Often, in a graphical program, main is the <strong>only</strong> thing that is static, so the distinction will not be very important for us. In a <abbr title="(Graphical User Interface.) A user interface for a program where the user interacts with the program using components such as windows, menus, buttons, and text-input boxes.">GUI</abbr> program, the main method usually just creates a window and makes it visible on the screen; after that, the window takes care of itself.</p>
+<p>A non-static method definition in a class actually defines a method for each object that is created from that class. Inside the method definition, the special variable this can be used to refer to the object of which the method is a part. You might be familiar with the same special variable in <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr>. However, unlike in <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr>, the use of this is optional in Java, so that a variable that is part of the same object might be referred to either as x or this.x, and a method could be called from within the same class as <em>doSomething()</em> or <em>this.doSomething()</em>.</p>
+<p>Variables, methods and nested classes can be marked as private, public, or protected. Private things can only be used in the class where they are defined. Public things can be accessed from anywhere. Protected things can be accessed in the same class and in subclasses of that class.</p>
+<p>The programs in this book use a main class that defines the window where the graphical display will be seen. That class also contains the main() routine. (This is not particularly good style, but it works well for small programs.) In some cases, the program depends on other classes that I have written; the files for those classes should be in the same folder as the file that defines the main class. The programs can then be compiled on the command line, working in that folder, with the command</p>
+<div class="highlight"><pre><span></span><code>javac<span class="w">  </span>*.java
+</code></pre></div>
+<p>To run the program whose main class is MyClass, use</p>
+<div class="highlight"><pre><span></span><code>java<span class="w">  </span>MyClass
+</code></pre></div>
+<p>However, programs that use <abbr title="OpenGL的Java实现。JOGL非常复杂，因为它试图在一个编程系统中支持所有版本的OpenGL。JOGL与Java的Swing和AWT图形无缝集成。">JOGL</abbr> require some extra options in these commands. What you need to know is explained in <a href="../../c3/s6/#362-使用jogl">Subsection 3.6.2</a>. (The <abbr title="一个用于编写 Java（和其他编程语言）程序的集成开发环境。Eclipse 是一个可以从 http://eclipse.org 下载的免费程序。">Eclipse</abbr> IDE has its own simple commands for running a program.)</p>
+<p>There are many standard classes that are available for use in programs. A few of the standard classes, such as <strong><em>Math</em></strong> and <strong><em>System</em></strong>, are automatically available to any program. Others have to be "imported" into a source code file before they can be used in that file. A class can be part of a package, which is a collection of classes. For example, class <strong><em>Graphics2D</em></strong> is defined in the package java.awt. This class can be imported into a source code file by adding the line</p>
+<p>import java.awt.Graphics2D;
+to the beginning of the file, before the definition of the class. Alternatively, all of the classes in package java.awt can be imported with</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">java.awt.*</span><span class="p">;</span>
+</code></pre></div>
+<p>It is possible to put your own classes into packages, but that adds some complications when compiling and using them. My sample programs in this book are not defined in named packages. Officially, they are said to be in the "default package." Recent versions of Java also have "modules," which are collections of packages. Again, using modules complicates things, and they are not used in this textbook.</p>
+<hr />
+<p>Java is a strongly typed language. Every variable has a type, and it can only hold values of that type. Every variable must be declared, and the declaration specifies the type of the variable. The declaration can include an initial value. For example,</p>
+<div class="highlight"><pre><span></span><code><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w">  </span><span class="c1">// Declares name as a variable whose value must be a String.</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">17</span><span class="p">;</span><span class="w">   </span><span class="c1">// x is a variable whose value must an int, with initial value 17.</span>
+<span class="n">Graphics2D</span><span class="w"> </span><span class="n">g</span><span class="p">;</span><span class="w"> </span><span class="c1">// g is a variable whose value is an object of type Graphics2D.</span>
+</code></pre></div>
+<p>Java has eight "primitive" types, whose values are not objects: <strong><em>int</em></strong>, <strong><em>long</em></strong>, <strong><em>short</em></strong>, <strong><em>byte</em></strong>, <strong><em>double</em></strong>, <strong><em>float</em></strong>, <strong><em>char</em></strong>, and <strong><em>boolean</em></strong>. The first four are integer types with different numbers of bits. The real number types are <strong><em>double</em></strong> and <strong><em>float</em></strong>. A constant such as 3.7 is of type <strong><em>double</em></strong>. To get a constant of type <strong><em>float</em></strong>, you need to add an 'F': 3.7F. (This comes up when programming in <abbr title="OpenGL的Java实现。JOGL非常复杂，因为它试图在一个编程系统中支持所有版本的OpenGL。JOGL与Java的Swing和AWT图形无缝集成。">JOGL</abbr>, where some methods require parameters of type <strong><em>float</em></strong>.) Constant <strong><em>char</em></strong> values are enclosed in single quotes; for example, 'A' and '%'. Double quotes are used for strings, which are not primitive values in Java.</p>
+<p>In addition to the eight primitive types, any class defines a type. If the type of a variable is a class, then the possible values of the variable are objects belonging to that class. An interface also defines a type, whose possible values are objects that implement the interface. An object, unlike a primitive value, contains variables and methods. For example, <strong><em>Point</em></strong> is a class. An object of type <strong><em>Point</em></strong> contains <strong><em>int</em></strong> variables x and y. A <strong><em>String</em></strong> is an object, and it contains several methods for working with the string, including one named length() that returns its length and another named charAt(i) that returns the i-th character in the string. Variables and methods in an object are always accessed using the "." period operator: If pt is a variable of type <strong><em>Point</em></strong>, referring to an object of t<em>ype </em><strong>Point</strong><em>, then pt.x and pt.y are names for the instance variables in that object. If str is a variable of type </em><strong>String</strong><em>, then str.length() and str.charAt(i) are methods in the </em><strong>String</strong>* object to which str refers.</p>
+<p>A method definition specifies the type of value that is returned by the method and a type for each of its parameters. It is usually marked as being <em>public</em> or <em>private</em>. Here is an example:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">countChars</span><span class="p">(</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">ch</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">str</span><span class="p">.</span><span class="na">length</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">str</span><span class="p">.</span><span class="na">charAt</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ch</span><span class="w"> </span><span class="p">)</span>
+<span class="w">            </span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">count</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Here, countChars is the name of the method. It takes two parameters of type <strong><em>String</em></strong> and <strong><em>char</em></strong>, and it returns a value of type int. For a method that does not return a value, the return type (<strong><em>int</em></strong> in the above example) is specified as void.</p>
+<p>A method in Java can be used throughout the class where it is defined, even if the definition comes after the point where it is used. (This is in contrast to C, where functions must be declared before they are used, but similar to <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr>.) The same is true for global variables, which are declared outside any method. All programming code, such as assignment statements and control structures, must be inside method definitions.</p>
+<hr />
+<p>Java has the same set of basic control structures as C and <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr>: <em>if</em> statements, <em>while</em> and <em>do..while</em> loops, for loops, and switch statements all take essentially the same form in the three languages. Assignment statements are also the same.</p>
+<p>Similarly, the three languages have pretty much the same set of operators, including the basic arithmetic operators (<code>+</code>, <code>−</code>, <code>*</code> and <code>/</code>), the increment (<code>++</code>) and decrement (<code>--</code>) operators, the logical operators (<code>||</code>, <code>&amp;&amp;</code>, and <code>!</code>), the ternary operator (<code>?:</code>), and the bitwise operators (such as <code>&amp;</code> and <code>|</code>). A peculiarity of Java arithmetic, as in C, is that the division operator, <code>/</code>, when applied to integer operands produces an integer result. So, 18/5 is 3 and 1/10 is 0.</p>
+<p>The + operator can be used to concatenate strings, so that "Hello" + "World" has the value "HelloWorld". If just one of the operands of + is a string, then the other operand is automatically converted into a string.</p>
+<p>Java's standard functions are defined in classes. For example, the mathematical functions include <code>Math.sin(x)</code>, <code>Math.cos(x)</code>, <code>Math.sqrt(x)</code>, and <code>Math.pow(x,y)</code> for raising x to the power y. <code>Math.random()</code> returns a random number in the range 0.0 to 1.0, including 0.0 but not including 1.0. The method <code>System.out.println(str)</code> outputs a string to the command line. In graphical programs, <code>System.out.println</code> is useful mainly for debugging. To output more than one item, use string concatenation:</p>
+<div class="highlight"><pre><span></span><code><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;The values are x = &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; and y = &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+</code></pre></div>
+<p>There is also a formatted output method, <code>System.out.printf</code>, which is similar to C's printf function.</p>
+</div>
+</div>
+</div>
+<h2 id="a12-对象和数据结构">A.1.2  对象和数据结构<a class="headerlink" href="#a12-对象和数据结构" title="Permanent link">&para;</a></h2>
+<p><strong>A.1.2  Objects and Data Structures</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">中文</label><label for="__tabbed_3_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Java 除了原始类型外，还有“对象类型”，代表那些是对象的值。对象类型的变量不持有对象；它只能持有指向对象的指针。（有时人们说 Java 不使用指针，但更准确的说法是它迫使你使用它们。）类名或接口名是一个对象类型。对象是通过使用 <strong>new</strong> 运算符从类中创建的。例如：</p>
+<div class="highlight"><pre><span></span><code><span class="n">Point</span><span class="w"> </span><span class="n">pt</span><span class="p">;</span><span class="w">  </span><span class="c1">// 声明一个类型为 Point 的变量。</span>
+<span class="n">pt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Point</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">);</span><span class="w">  </span><span class="c1">// 创建一个类型为 Point 的对象。</span>
+</code></pre></div>
+<p>这里，类是 <strong><em>Point</em></strong>，它也是一个可以用来创建变量的类型。类型为 <strong><em>Point</em></strong> 的变量可以引用属于类 <strong><em>Point</em></strong> 的对象或该类任何子类的对象。赋值语句中的表达式 <em>new Point(100,200)</em> 调用了 <strong><em>Point</em></strong> 类中的一种特殊程序，称为 <strong><em>构造函数</em></strong>。构造函数的目的是初始化一个对象。在这种情况下，构造函数的参数 100 和 200 成为新对象中 <em>pt.x</em> 和 <em>pt.y</em> 变量的值。上述代码的结果是 pt 的值是一个指向新创建对象的指针。我们说 pt “引用”那个对象。</p>
+<p>而不是引用一个对象，pt 可以有特殊值 <em>null</em>。当一个变量的值是 null 时，该变量不引用任何对象。如果 pt 的值是 null，那么变量 pt.x 和 pt.y 就不存在，试图使用它们将是一个错误。这个错误被称为 <strong><em>NullPointerException</em></strong>。</p>
+<p><strong><em>字符串</em></strong>，顺便说一下，是特殊的对象。它们不是用 new 运算符创建的。相反，字符串是作为字面量值创建的，用双引号括起来。例如：</p>
+<div class="highlight"><pre><span></span><code><span class="n">String</span><span class="w"> </span><span class="n">greeting</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Hello World!&quot;</span><span class="p">;</span>
+</code></pre></div>
+<p>数组也是特殊的对象。Java 中的任何类型定义了一个数组类型。数组类型是一个对象类型。例如，从类型 <strong><em>int</em></strong>，我们得到数组类型 <code>int[]</code>。从 <strong><em>String</em></strong> 和 <strong><em>Point</em></strong>，我们得到类型 <code>String[]</code> 和 <code>Point[]</code>。类型 <code>int[]</code> 的变量值是一个整型数组（或者值可以是 <em>null</em>）。类型 <code>Point[]</code> 的变量值是一个 <strong><em>Point</em></strong> 数组。数组可以用 <em>new</em> 运算符的版本创建：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">intList</span><span class="p">;</span><span class="w">  </span><span class="c1">// 声明一个可以引用任何整型数组的变量。</span>
+<span class="n">intList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[</span><span class="mi">100</span><span class="o">]</span><span class="p">;</span><span class="w">  </span><span class="c1">// 创建一个可以容纳 100 个整数的数组。</span>
+</code></pre></div>
+<p>数组有一个在创建时设置的固定长度，并且不能改变。如果 intList 引用一个数组，那么该数组的长度由只读变量 intList.length 给出。数组的元素是 <code>intList[0]</code>、<code>intList[1]</code> 等等。如果尝试使用 <code>intList[i]</code> 而 i 在 0 到 intList.length − 1 的范围之外，将产生一个类型为 <strong><em>ArrayIndexOutOfBoundsException</em></strong> 的错误。</p>
+<p>数组元素的初始值是“二进制零”；也就是说，数值类型的是 0，<strong><em>boolean</em></strong> 的是 <em>false</em>，对象的是 <em>null</em>。</p>
+<p>可以使用以下语法在创建时创建并初始化数组，以持有任意值：</p>
+<div class="highlight"><pre><span></span><code><span class="n">intList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="mi">19</span><span class="p">};</span>
+</code></pre></div>
+<p>这个版本的 new 运算符创建了一个长度为九个的 <strong><em>int</em></strong> 数组，并最初持有九个指定的值。如果数组的初始化是作为变量声明的一部分完成的，那么只需要值的列表，用 { 和 } 括起来：</p>
+<div class="highlight"><pre><span></span><code><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">commands</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;New&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Open&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Close&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Save&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Save As&quot;</span><span class="w"> </span><span class="p">};</span>
+</code></pre></div>
+<hr />
+<p>Java 提供了几种标准类，这些类定义了常见的数据结构，包括链表、栈、队列、树和哈希表，它们由 <em>java.util</em> 包中的类定义。这些类定义了“泛型”或“参数化”类型，可以适用于多种元素类型。例如，类型 <code>LinkedList&lt;String&gt;</code> 的对象是一个包含 <strong><em>String</em></strong> 类型项的列表。遗憾的是，这些类不能与原始类型一起使用；没有“<strong><em>int</em></strong> 的链表”。（然而，你可以有 <code>LinkedList&lt;Integer&gt;</code>，其中类型为 <strong><em>Integer</em></strong> 的对象是原始 <strong><em>int</em></strong> 值的“包装器”。）</p>
+<p>也许最常用的泛型数据结构是 <strong><em>ArrayList</em></strong>。像数组一样，一个 <strong><em>ArrayList</em></strong> 包含一系列编号的项目。然而，一个 <strong><em>ArrayList</em></strong> 可以增长和收缩。例如，创建一个可以容纳 Point 类型对象的 <strong>ArrayLi</strong>st：</p>
+<div class="highlight"><pre><span></span><code><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pointList</span><span class="p">;</span>
+<span class="n">pointList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span><span class="p">();</span>
+</code></pre></div>
+<p>这创建了一个最初为空的列表。方法 <em>pointList.add(pt)</em> 可以用来将一个 <strong><em>Point</em></strong> 添加到列表的末尾，将其长度增加一。<em>pointList.size()</em> 的值是当前列表中的项数。方法 <em>pointList.get(i)</em> 返回列表的第 i 个元素，<em>pointList.set(i,pt)</em> 用 pt 替换第 i 个元素。同样，pointList.remove(i) 删除第 i 个元素，将列表的长度减少一。对于所有这些方法，如果 i 不在从 0 到 <em>pointList.size()</em> −1 的范围内，就会发生错误。</p>
+<p>也可以直接构建链接数据结构，记住类型由类给出的变量的值要么是 null，要么是指向对象的指针。例如，可以使用简单的类定义的对象创建一个整数值的链表：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">ListNode</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">item</span><span class="p">;</span><span class="w">       </span><span class="c1">// 列表中的一个整数</span>
+<span class="w">    </span><span class="n">ListNode</span><span class="w"> </span><span class="n">next</span><span class="p">;</span><span class="w">  </span><span class="c1">// 指向列表中下一个节点的指针，或者对于列表末尾是 null。</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>对于本课程来说，一个更有用的数据结构是场景图，就像在 <a href="../../c2/s4/#242-场景图">2.4.2 小节</a> 中讨论的，并在示例程序 <a href="../../../en/source/java2d/SceneGraphAPI2D.java">java2d/SceneGraphAPI2D.java</a> 中实现的。在那个 <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> 中，场景图中的一个节点由属于类 <strong><em>SceneGraphNode</em></strong> 或其子类的对象表示。例如，一个 <strong><em>CompoundObject</em></strong> 表示由子对象组成的图形对象。它需要存储指向其所有子对象的指针。它们可以方便地存储在 <strong><em>ArrayList</em></strong> 中。然后绘制一个 <strong><em>CompoundObject</em></strong> 只意味着绘制其子对象。类可以定义如下：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">CompoundObject</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">SceneGraphNode</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">SceneGraphNode</span><span class="o">&gt;</span><span class="w"> </span><span class="n">subobjects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">SceneGraphNode</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">    </span><span class="n">CompoundObject</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">SceneGraphNode</span><span class="w"> </span><span class="n">node</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">subobjects</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">doDraw</span><span class="p">(</span><span class="n">Graphics2D</span><span class="w"> </span><span class="n">g</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">SceneGraphNode</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">subobjects</span><span class="p">)</span>
+<span class="w">            </span><span class="n">node</span><span class="p">.</span><span class="na">draw</span><span class="p">(</span><span class="n">g</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>（这个类中的 for 循环是 Java 特有的。它自动遍历列表中的所有对象。）</p>
+</div>
+<div class="tabbed-block">
+<p>In addition to the primitive types, Java has "object types" that represent values that are objects. A variable of object type doesn't hold an object; it can only hold a pointer to an object. (Sometimes it's said that Java doen't use pointers, but it's more correct to say that it forces you to use them.) The name of a class or of an interface is an object type. Objects are created from classes using the <strong>new</strong> operator. For example,</p>
+<div class="highlight"><pre><span></span><code><span class="n">Point</span><span class="w"> </span><span class="n">pt</span><span class="p">;</span><span class="w">  </span><span class="c1">// Declare a variable of type Point.</span>
+<span class="n">pt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Point</span><span class="p">(</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="p">);</span><span class="w">  </span><span class="c1">// Create an object of type Point.</span>
+</code></pre></div>
+<p>Here, the class is <strong><em>Point</em></strong>, which also acts as a type that can be used to create variables. A variable of type <strong><em>Point</em></strong> can refer to an object belonging to the class <strong><em>Point</em></strong> or to any subclass of that class. The expression <em>new Point(100,200)</em> in the assignment statement calls a special kind of routine in the <strong><em>Point</em></strong> class that is known as a <strong><em><abbr title="In object-oriented programming, a subroutine that is used to create objects. A constructor for a class creates and initializes objects belonging to that class.">constructor</abbr></em></strong>. The purpose of a <abbr title="In object-oriented programming, a subroutine that is used to create objects. A constructor for a class creates and initializes objects belonging to that class.">constructor</abbr> is to initialize an object. In this case, the parameters to the <abbr title="In object-oriented programming, a subroutine that is used to create objects. A constructor for a class creates and initializes objects belonging to that class.">constructor</abbr>, 100 and 200, become the values of the variables <em>pt.x</em> and <em>pt.y</em> in the new object. The effect of the above code is that the value of pt is a pointer to the newly created object. We say that pt "refers" to that object.</p>
+<p>Instead of referring to an object, pt could have the special value <em>null</em>. When the value of a variable is null, the variable does not refer to any object. If the value of pt is null, then the variables pt.x and pt.y don't exist, and an attempt to use them is an error. The error is called a <strong><em>NullPointerException</em></strong>.</p>
+<p><strong><em>Strings</em></strong>, by the way, are special objects. They are not created with the new operator. Instead, a string is created as a literal value, enclosed in double quotes. For example</p>
+<div class="highlight"><pre><span></span><code><span class="n">String</span><span class="w"> </span><span class="n">greeting</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Hello World!&quot;</span><span class="p">;</span>
+</code></pre></div>
+<p>Arrays are also special objects. Any type in Java defines an array type. An array type is an object type. From the type <strong><em>int</em></strong>, for example, we get the array type <code>int[]</code>. From <strong><em>String</em></strong> and <strong><em>Point</em></strong>, we get the types <code>String[]</code> and <code>Point[]</code>. The value of a variable of type <code>int[]</code> is an array of ints (or the value can be <em>null</em>). The value of a variable of type <code>Point[]</code> is an array of <strong><em>Points</em></strong>. Arrays can be created with a version of the <em>new</em> operator:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">intList</span><span class="p">;</span><span class="w">  </span><span class="c1">// Declare a variable that can refer to any array of ints.</span>
+<span class="n">intList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[</span><span class="mi">100</span><span class="o">]</span><span class="p">;</span><span class="w">  </span><span class="c1">// Create an array that can hold 100 ints.</span>
+</code></pre></div>
+<p>An array has a fixed length that is set at the time it is created and cannot be changed. If intList refers to an array, then the length of that array is given by the read-only variable intList.length. The elements of the array are <code>intList[0]</code>, <code>intList[1]</code>, and so on. An attempt to use <code>intList[i]</code> where i is outside the range from 0 to intList.length − 1 generates an error of type <strong><em>ArrayIndexOutOfBoundsException</em></strong>.</p>
+<p>The initial value for array elements is "binary zero"; that is, 0 for numeric values, <em>false</em> for <strong><em>boolean</em></strong>, and <em>null</em> for objects.</p>
+<p>An array can be created and initialized to hold arbitrary values at the time it is created using the syntax</p>
+<div class="highlight"><pre><span></span><code><span class="n">intList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="mi">19</span><span class="p">};</span>
+</code></pre></div>
+<p>This version of the new operator creates an array of <strong><em>ints</em></strong> of length nine that initially holds the nine specified values. If the initialization of an array is done as part of a variable declaration, then only the list of values, enclosed between { and }, is required:</p>
+<div class="highlight"><pre><span></span><code><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">commands</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;New&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Open&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Close&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Save&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Save As&quot;</span><span class="w"> </span><span class="p">};</span>
+</code></pre></div>
+<hr />
+<p>Java comes with several standard classes that define common data structures, including linked lists, stacks, queues, trees, and hash tables, which are defined by classes in the package <em>java.util</em>. The classes define "generic" or "parameterized" types that will work for a variety of element types. For example, an object of type <code>LinkedList&lt;String&gt;</code> is a list of items of type <strong><em>String</em></strong>. Unfortunately, it is not possible to use these classes with the primitive types;. There is no "linked list of <strong><em>int</em></strong>". (However, you can have <code>LinkedList&lt;Integer&gt;</code>, where an object of type <strong><em>Integer</em></strong> is a "wrapper" for a primitive <strong><em>int</em></strong> value.)</p>
+<p>Perhaps the most commonly used of the generic data structures is the <strong><em>ArrayList</em></strong>. Like an array, an <strong><em>ArrayList</em></strong> contains a numbered sequence of items. However, an <strong><em>ArrayList</em></strong> can grow and shrink. For example, to create<em> an </em><em>ArrayLi</em>st** that can hold objects of type Point:</p>
+<div class="highlight"><pre><span></span><code><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span><span class="w">  </span><span class="n">pointList</span><span class="p">;</span>
+<span class="n">pointList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span><span class="p">();</span>
+</code></pre></div>
+<p>This creates an initially empty list. The method <em>pointList.add(pt)</em> can be used to add a <strong><em>Point</em></strong> to the end of the list, increasing its length by one. The value of <em>pointList.size()</em> is the number of items currently in the list. The method <em>pointList.get(i)</em> returns the i-th element of the list, and <em>pointList.set(i,pt)</em> replaces the i-th element with pt. Similarly, pointList.remove(i) removes the i-th element, decreasing the length of the list by one. For all of these methods, an error occurs if i is not in the range from 0 to <em>pointList.size()</em> −1.</p>
+<p>It is also possible to build linked data structures directly, remembering that the value of a variable whose type is given by a class is either null or is a pointer to an object. For example, a linked list of integer values can be created using objects defined by the simple class</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">ListNode</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">item</span><span class="p">;</span><span class="w">       </span><span class="c1">// One of the integers in the list</span>
+<span class="w">    </span><span class="n">ListNode</span><span class="w"> </span><span class="n">next</span><span class="p">;</span><span class="w">  </span><span class="c1">// Pointer to next node in list, or null for end-of-list.</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>A more useful data structure for this course is a <abbr title="A data structure that represents the objects in a scene, together with attributes of the objects and the modeling transformations that are applied to the objects. An image of the scene is created by traversing the scene graph data structure. A scene graph might exist only conceptually, or it might be an actual data structure in a program.">scene graph</abbr>, like the ones discussed in <a href="../../c2/s4/#242--场景图">Subsection 2.4.2</a> and implemented in the sample program <a href="../../../en/source/java2d/SceneGraphAPI2D.java">java2d/SceneGraphAPI2D.java</a>. In that <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>, a node in a <abbr title="A data structure that represents the objects in a scene, together with attributes of the objects and the modeling transformations that are applied to the objects. An image of the scene is created by traversing the scene graph data structure. A scene graph might exist only conceptually, or it might be an actual data structure in a program.">scene graph</abbr> is represented by an object belonging to the class <strong><em>SceneGraphNode</em></strong> or to a subclass of that class. For example, a <strong><em>CompoundObject</em></strong> represents a graphical object made up of subobjects. It needs to store pointers to all of its subobjects. They can conveniently be stored in an <strong><em>ArrayList</em></strong>. Then drawing a <strong><em>CompoundObject</em></strong> just means drawing its subobjects. The class can be defined as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">CompoundObject</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">SceneGraphNode</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">SceneGraphNode</span><span class="o">&gt;</span><span class="w"> </span><span class="n">subobjects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">SceneGraphNode</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">    </span><span class="n">CompoundObject</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">SceneGraphNode</span><span class="w"> </span><span class="n">node</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">subobjects</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">doDraw</span><span class="p">(</span><span class="n">Graphics2D</span><span class="w"> </span><span class="n">g</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">SceneGraphNode</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">subobjects</span><span class="p">)</span>
+<span class="w">        </span><span class="n">node</span><span class="p">.</span><span class="na">draw</span><span class="p">(</span><span class="n">g</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>(The for loop in this class is one that is specific to Java. It iterates automatically through all of the objects in the list.)</p>
+</div>
+</div>
+</div>
+<h2 id="a13-窗口和事件">A.1.3  窗口和事件<a class="headerlink" href="#a13-窗口和事件" title="Permanent link">&para;</a></h2>
+<p><strong>A.1.3  Windows and Events</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">中文</label><label for="__tabbed_4_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Java 附带了一套标准类，用于处理窗口和事件。我会提到其中最常见的一些。我将尽量告诉您足够的信息，以便您能够理解并使用本书中的示例程序。从头开始编写程序将需要更深入的知识。我讨论的所有类都是 Swing <abbr title="(Graphical User Interface.) A user interface for a program where the user interacts with the program using components such as windows, menus, buttons, and text-input boxes.">GUI</abbr> <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr> 的一部分，包含在 java.awt、javax.swing 和 java.awt.event 包中。我的许多程序都以以下导入指令开始，以使它们包含的类可用：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">java.awt.*</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.awt.event.*</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">javax.swing.*</span><span class="p">;</span>
+</code></pre></div>
+<p>窗口可以由 <strong><em>JFrame</em></strong> 类的对象表示。JFrame 可以包含一个菜单栏和一个称为其“内容面板”的较大内容区域。内容面板通常属于 <strong><em>JPanel</em></strong> 的子类。<strong><em>JPanel</em></strong> 可以用两种方式使用：作为绘图表面或作为其他组件（如按钮、文本输入框和嵌套面板）的容器。</p>
+<p>当面板用作绘图表面时，它由包含一个 paintComponent() 方法的子类定义。当面板第一次出现在屏幕上并且需要重新绘制时，会调用 paintComponent 方法。它的任务是完全重新绘制面板。它有一个类型为 Graphics 的参数，这是用于绘图的图形上下文。它的形式是</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">paintComponent</span><span class="p">(</span><span class="n">Graphics</span><span class="w"> </span><span class="n">g</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span>
+</code></pre></div>
+<p><em>paintComponent</em> 方法在 <a href="../../c2/s5/">2.5 节</a> 中进一步讨论。通常，所有绘图都应该在这个方法中完成，并且 <em>paintComponent</em> 只应该由系统调用。当需要重新绘制时，可以通过调用面板的 repaint() 方法来触发 <em>paintComponent</em>。（在 <a href="../../c3/">第 3 章</a> 和 <a href="../../c4/">第 4 章</a> 中的 <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 编程中，我使用了一个 <strong><em>GLJPanel</em></strong>，它是 <strong><em>JPanel</em></strong> 的子类。在那种情况下，绘图是在 display() 方法中完成的，而不是在 <em>paintComponent</em> 中，但你仍然可以调用 repaint() 来触发重绘。见 <a href="../../c3/s6/#362-使用jogl">3.6.2 小节</a>。）</p>
+<p>当面板用作其他组件的容器时，这些组件通常会在构造函数中创建并添加到面板中，构造函数是一个特殊的例程，当对象通过 new 运算符创建时，它被调用以初始化对象。构造函数可以通过它与包含它的类具有相同的名称，并且没有返回类型这一事实来识别。</p>
+<p>面板中组件的大小和位置通常由一个“布局管理器”设置，它是一个实现在容器中布局组件的某些策略的对象。例如，<strong><em>BorderLayout</em></strong> 是一个布局管理器，它将一个大型组件放在面板的中心，并在面板的北、南、东和西边缘上为多达四个额外的组件留出空间。而 GridLayout 按行和列布局组件，所有组件具有相同的大小。除了嵌套面板，可能的组件类型还包括典型的界面组件，如 <strong><em>JButton</em></strong>、<strong><em>JCheckBox</em></strong> 和 <strong><em>JRadioButton</em></strong>。您将在示例程序中看到所有这些内容的示例。</p>
+<hr />
+<p>一个 <abbr title="(Graphical User Interface.) A user interface for a program where the user interacts with the program using components such as windows, menus, buttons, and text-input boxes.">GUI</abbr> 程序必须能够响应 <strong>事件</strong>，包括用户操作鼠标或键盘时生成的低级事件，以及用户从菜单中选择项目或点击按钮时生成的高级事件。为了响应事件，程序定义了事件处理方法，这些方法将在事件发生时被调用。在 Java 中，包含事件处理方法的对象被称为“监听”这些事件。例如，基本的鼠标事件处理器由一个名为 <strong><em>MouseListener</em></strong> 的接口指定。实现此接口的对象可以响应鼠标事件。它必须定义如 mousePressed() 等方法，当用户按下鼠标上的按钮时将调用此方法。<strong><em>MouseListener</em></strong> 总共定义了五个方法。实现该接口的类将采用以下形式：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">MouseHandler</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">MouseListener</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">mousePressed</span><span class="p">(</span><span class="n">MouseEvent</span><span class="w"> </span><span class="n">evt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 当用户按下鼠标按钮时作出响应</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">mouseClicked</span><span class="p">(</span><span class="n">MouseEvent</span><span class="w"> </span><span class="n">evt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">mouseReleased</span><span class="p">(</span><span class="n">MouseEvent</span><span class="w"> </span><span class="n">evt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">mouseEntered</span><span class="p">(</span><span class="n">MouseEvent</span><span class="w"> </span><span class="n">evt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">mouseExited</span><span class="p">(</span><span class="n">MouseEvent</span><span class="w"> </span><span class="n">evt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>这些方法中的 <strong><em>MouseEvent</em></strong> 参数是一个对象，它将包含有关事件的信息。例如，在事件处理方法中可以调用 <em>evt.getX()</em> 和 <em>evt.getY()</em> 来找到鼠标的 x 和 y <abbr title="一种将数值坐标分配给几何点的方法。在二维中，每个点对应一对数字。在三维中，每个点对应一组三个数字。">坐标</abbr>。</p>
+<p>事件通常与某些组件关联，称为事件的“目标”。例如，鼠标按下事件与用户按下鼠标按钮时包含鼠标的组件关联。按钮点击事件与被点击的按钮关联。要接收组件的事件，程序必须向该组件注册一个事件监听对象。例如，如果你想响应名为 panel 的 <strong><em>JPanel</em></strong> 上的鼠标点击，你需要创建一个 <strong><em>MouseListener</em></strong> 对象并将其注册到面板：</p>
+<div class="highlight"><pre><span></span><code><span class="n">MouseHandler</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MouseHandler</span><span class="p">();</span><span class="w"> </span><span class="c1">// 创建监听器</span>
+<span class="n">panel</span><span class="p">.</span><span class="na">addMouseListener</span><span class="p">(</span><span class="n">handler</span><span class="p">);</span><span class="w">  </span><span class="c1">// 将其注册到面板</span>
+</code></pre></div>
+<p>在许多情况下，我会创建一个类，通常是一个嵌套类，来定义我需要的事件监听器。然而，任何类都可以实现接口，有时我让我的主类实现监听器接口：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyPanel</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JPanel</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">MouseListener</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>在这样一个类中，面板和监听器是同一个对象，特殊的变量 this 引用该对象。因此，要注册面板以监听它自己的鼠标事件，我会说：</p>
+<div class="highlight"><pre><span></span><code><span class="k">this</span><span class="p">.</span><span class="na">addMouseListener</span><span class="p">(</span><span class="w"> </span><span class="k">this</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>这句话可以简化为 <em>addMouseListener(this)</em>。</p>
+<p>其他事件类型与鼠标事件类型类似。你需要一个实现该类型事件监听器接口的对象，并且你需要将该对象注册为将成为事件目标的组件的监听器。</p>
+<p><strong><em>MouseMotionListener</em></strong> 接口定义了处理用户移动或拖动鼠标时生成的事件的方法。为了效率，它与 <strong><em>MouseListener</em></strong> 接口分开。响应鼠标拖动操作通常需要一个同时充当鼠标监听器和鼠标运动监听器的对象。</p>
+<p><strong><em>KeyListener</em></strong> 接口用于处理键盘事件。当用户按下键盘上的键以及释放键时，会生成一个事件。当用户在键盘上输入字符时，也会生成另一种类型的事件。例如，输入大写字母 'A' 将生成多个键按下和键释放事件以及一个字符输入事件。</p>
+<p><strong><em>ActionListener</em></strong> 接口用于响应各种用户操作。例如，当用户点击按钮、从菜单中选择命令或更改复选框的设置时，会生成一个 <strong><em>ActionEvent</em></strong>。它还用于一种事件不是来自用户的情况：<strong><em>Timer</em></strong> 是一个可以定期间隔生成一系列 <strong><em>ActionEvents</em></strong> 的对象。<strong><em>ActionListener</em></strong> 可以响应这些事件来实现动画。请参阅示例程序 <a href="../../../en/source/java2d/AnimationStarter.java">java2d/AnimationStarter.java</a> 看看如何实现。</p>
+<p>最后，我将指出 <abbr title="OpenGL的Java实现。JOGL非常复杂，因为它试图在一个编程系统中支持所有版本的OpenGL。JOGL与Java的Swing和AWT图形无缝集成。">JOGL</abbr> 使用类型为 <strong><em>GLEventListener</em></strong> 的事件监听器来使用 <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>。其使用方法在 <a href="../../c3/s6/#362-使用jogl">3.6.2 小节</a> 中解释。</p>
+</div>
+<div class="tabbed-block">
+<p>Java comes with a set of standard classes for working with windows and events. I will mention some of the most common. I will try to tell you enough to understand and work with the sample programs in this book. Writing programs from scratch will require more in-depth knowledge. All of the classes that I discuss are part of the Swing <abbr title="(Graphical User Interface.) A user interface for a program where the user interacts with the program using components such as windows, menus, buttons, and text-input boxes.">GUI</abbr> <abbr title="Application Programming Interface. A collection of related classes, functions, constants, etc., for performing some task. An API is an &quot;interface&quot; in the sense that it can be used without understanding how its functionality is actually implemented.">API</abbr>, and are contained in the packages java.awt, javax.swing, and java.awt.event. Many of my programs begin with the following import directives to make the classes that they contain available:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">java.awt.*</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.awt.event.*</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">javax.swing.*</span><span class="p">;</span>
+</code></pre></div>
+<p>A window can be represented by an object of class <strong><em>JFrame</em></strong>. A JFrame can hold a menu bar and a large content area known as its "content pane." The content pane often belongs to a subclass of <strong><em>JPanel</em></strong>. A <strong><em>JPanel</em></strong> can be used in two ways: as a drawing surface or as a container for other components such as buttons, text input boxes, and nested panels.</p>
+<p>When a panel is to be used as a drawing surface, it is defined by a subclass that includes a paintComponent() method. The paintComponent method is called when the panel first appears on the screen and when it needs to be redrawn. Its task is to completely redraw the panel. It has a parameter of type Graphics, which is the graphics context that is used to do the drawing. It takes the form</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">paintComponent</span><span class="p">(</span><span class="n">Graphics</span><span class="w"> </span><span class="n">g</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span>
+</code></pre></div>
+<p>The <em>paintComponent</em> method is discussed further in <a href="../../c2/s5/">Section 2.5</a>. In general, all drawing should be done in this method, and <em>paintComponent</em> should only be called by the system. When redrawing is necessary, a call to <em>paintComponent</em> can be triggered by calling the panel's repaint() method. (For <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> programming in <a href="../../c3/">Chapter 3</a> and <a href="../../c4/">Chapter 4</a>, I use a <strong><em>GLJPanel</em></strong>, which is a subclass of <strong><em>JPanel</em></strong>. In that case, the drawing is done in a display() method, instead of in <em>paintComponent</em>, but you can still call repaint() to trigger a redraw. See <a href="../../c3/s6/#362-使用jogl">Subsection 3.6.2</a>.)</p>
+<p>When a panel is to be used as a container for other components, those components will usually be created and added to the panel in a <abbr title="In object-oriented programming, a subroutine that is used to create objects. A constructor for a class creates and initializes objects belonging to that class.">constructor</abbr>, a special routine that is called to initialize an object when the object is created by the new operator. A <abbr title="In object-oriented programming, a subroutine that is used to create objects. A constructor for a class creates and initializes objects belonging to that class.">constructor</abbr> routine can be recognized by the fact that it has the same name as the class that contains it, and it has no return type.</p>
+<p>The sizes and positions of the components in a panel will generally be set by a "layout manager," which is an object that implements some policy for laying out the components in a container. For example, a <strong><em>BorderLayout</em></strong> is a layout manager that puts one large component in the center of the panel, with space for up to four additional components on the north, south, east, and west edges of the panel. And a GridLayout lays out components in rows and columns, with all components having the same size. In addition to nested panels, possible component types include typical interface components such as <strong><em>JButton</em></strong>, <strong><em>JCheckBox</em></strong>, and <strong><em>JRadioButton</em></strong>. You will see examples of all of these things in the sample programs.</p>
+<hr />
+<p>A <abbr title="(Graphical User Interface.) A user interface for a program where the user interacts with the program using components such as windows, menus, buttons, and text-input boxes.">GUI</abbr> program must be able to respond to <strong>events</strong>, including low-level events such as those generated when the user manipulates a mouse or keyboard, and high level events such as those generated when the user selects an item from a menu or clicks on a button. To respond to events, a program defines event-handling methods, which will be called when the event occurs. In Java, an object that includes event-handling methods is said to "listen" for those events. For example, the basic mouse-event handlers are specified by an interface named <strong><em>MouseListener</em></strong>. An object that implements this interface can respond to mouse events. It must define methods such as mousePressed(), which will be called when the user presses a button on the mouse. <strong><em>MouseListener</em></strong> defines five methods in all. A class that implements the interface would take the form</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">MouseHandler</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">MouseListerner</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">mousePressed</span><span class="p">(</span><span class="n">MouseEvent</span><span class="w"> </span><span class="n">evt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">.</span>
+<span class="w">        </span><span class="p">.</span><span class="w">  </span><span class="c1">// respond when the user presses a mouse button</span>
+<span class="w">        </span><span class="p">.</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">mouseClicked</span><span class="p">(</span><span class="n">MouseEvent</span><span class="w"> </span><span class="n">evt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">mouseReleased</span><span class="p">(</span><span class="n">MouseEvent</span><span class="w"> </span><span class="n">evt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">mouseEntered</span><span class="p">(</span><span class="n">MouseEvent</span><span class="w"> </span><span class="n">evt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">mouseExited</span><span class="p">(</span><span class="n">MouseEvent</span><span class="w"> </span><span class="n">evt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The <strong><em>MouseEvent</em></strong> parameter in each of these methods is an object that will contain information about the event. For example, <em>evt.getX()</em> and <em>evt.getY()</em> can be called in the event-handler method to find the x and y coordinates of the mouse.</p>
+<p>An event is usually associated with some component, called the "target" of the event. For example, a mouse press event is associated with the component that contained the mouse when the user pressed the mouse button. A button click event is associated with the button that was clicked. To receive events from a component, a program must register an event-listening object with that component. For example, if you want to respond to mouse clicks on a <strong><em>JPanel</em></strong> named panel, you need to create a <strong><em>MouseListener</em></strong> object and register it with the panel:</p>
+<div class="highlight"><pre><span></span><code><span class="n">MouseHandler</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MouseHandler</span><span class="p">();</span><span class="w"> </span><span class="c1">// create the listener</span>
+<span class="n">panel</span><span class="p">.</span><span class="na">addMouseListener</span><span class="p">(</span><span class="n">handler</span><span class="p">);</span><span class="w">  </span><span class="c1">// register it with the panel</span>
+</code></pre></div>
+<p>In many cases, I create a class, often a nested class, to define an event listener that I need. However, any class, can implement an interface, and sometimes I let my main class implement the listener interface:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyPanel</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">JPanel</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">MouseListener</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span>
+</code></pre></div>
+<p>Inside such a class, the panel and the listener are the same object, and the special variable this refers to that object. So, to register the panel to listen for mouse events on itself, I would say</p>
+<div class="highlight"><pre><span></span><code><span class="k">this</span><span class="p">.</span><span class="na">addMouseListener</span><span class="p">(</span><span class="w"> </span><span class="k">this</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>This statement can be shortened to simply <em>addMouseListener(this)</em>.</p>
+<p>Other event types work similarly to mouse event types. You need an object that implements a listener interface for events of that type, and you need to register that object as a listener with the component that will be the target of the events.</p>
+<p>The <strong><em>MouseMotionListener</em></strong> interface defines methods that handle events that are generated when the user moves or drags the mouse. It is separate from the <strong><em>MouseListener</em></strong> interface for the sake of efficiency. Responding to a mouse-drag action usually requires an object that acts both as a mouse listener and a mouse motion listener.</p>
+<p>The <strong><em>KeyListener</em></strong> interface is used for handling keyboard events. An event is generated when the user presses a key and when the user releases a key on the keyboard. Another kind of event is generated when the user types a character. Typing a character such as upper case 'A' would generate several key-pressed and key-released events as well as a character-typed event.</p>
+<p>The <strong><em>ActionListener</em></strong> interface is used to respond to a variety of user actions. An <strong><em>ActionEvent</em></strong> is generated, for example, when the user clicks a button, selects a command from a menu, or changes the setting of a checkbox. It is also used in one context where the event doesn't come from the user: A <strong><em>Timer</em></strong> is an object that can generate a sequence of <strong><em>ActionEvents</em></strong> at regularly spaced intervals. An <strong><em>ActionListener</em></strong> can respond to those events to implement an <abbr title="A sequence of images that, when displayed quickly one after the other, will produce the impression of continuous motion or change. The term animation also refers to the process of creating such image sequences.">animation</abbr>. See the sample program <a href="../../../en/source/java2d/AnimationStarter.java">java2d/AnimationStarter.java</a> to see how its done.</p>
+<p>Finally, I will note that <abbr title="OpenGL的Java实现。JOGL非常复杂，因为它试图在一个编程系统中支持所有版本的OpenGL。JOGL与Java的Swing和AWT图形无缝集成。">JOGL</abbr> uses an event listener of type <strong><em>GLEventListener</em></strong> for working with <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr>. Its use is explained in <a href="../../c3/s6/#362-使用jogl">Subsection 3.6.2</a>.</p>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="最后更新">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年7月6日</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="创建日期">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年7月6日</span>
+  </span>
+
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "content.tabs.link", "navigation.tabs", "navigation.tabs.sticky", "navigation.indexes", "navigation.top", "toc.follow", "content.tooltips"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>

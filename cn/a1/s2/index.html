@@ -1,0 +1,3309 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="计算机图形学概论(graphicsbook)">
+      
+      
+      
+        <link rel="canonical" href="https://hellowac.github.io/graphicsbook-zh-cn/cn/a1/s2/">
+      
+      
+        <link rel="prev" href="../s1/">
+      
+      
+        <link rel="next" href="../s3/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.28">
+    
+    
+      
+        <title>A.2 C 编程语言 - 计算机图形学概论</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+  
+  
+  
+  
+  <style>:root{--md-annotation-icon:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 12a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10M6 13h8l-3.5 3.5 1.42 1.42L17.84 12l-5.92-5.92L10.5 7.5 14 11H6v2Z"/></svg>');}</style>
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="default" data-md-color-accent="red">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#a2-c-编程语言" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="计算机图形学概论" class="md-header__button md-logo" aria-label="计算机图形学概论" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            计算机图形学概论
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              A.2 C 编程语言
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04M18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12m-2.62 7 1.62-4.33L19.12 17h-3.24Z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/graphicsbook-zh-cn/en/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/graphicsbook-zh-cn/cn/" hreflang="cn" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hellowac/graphicsbook-zh-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    graphicsbook
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link">
+        
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../preface/" class="md-tabs__link">
+        
+  
+    
+  
+  前言
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c1/" class="md-tabs__link">
+          
+  
+    
+  
+  1.简介
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c2/" class="md-tabs__link">
+          
+  
+    
+  
+  2.二维图形
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c3/" class="md-tabs__link">
+          
+  
+    
+  
+  3.几何
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c4/" class="md-tabs__link">
+          
+  
+    
+  
+  4.灯光和材质
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c5/" class="md-tabs__link">
+          
+  
+    
+  
+  5.three.js
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c6/" class="md-tabs__link">
+          
+  
+    
+  
+  6.WebGL
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c7/" class="md-tabs__link">
+          
+  
+    
+  
+  7.WebGL 3D
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c8/" class="md-tabs__link">
+          
+  
+    
+  
+  8.高阶3D
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../c9/" class="md-tabs__link">
+          
+  
+    
+  
+  9.WEBGPU
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+    
+  
+  附录A
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../a2/" class="md-tabs__link">
+          
+  
+    
+  
+  附录B
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../a3/" class="md-tabs__link">
+          
+  
+    
+  
+  附录C
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../source/" class="md-tabs__link">
+          
+  
+    
+  
+  附录D
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../glossary/" class="md-tabs__link">
+          
+  
+    
+  
+  术语表
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  关于
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="计算机图形学概论" class="md-nav__button md-logo" aria-label="计算机图形学概论" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    计算机图形学概论
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hellowac/graphicsbook-zh-cn" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    graphicsbook
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    首页
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    前言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c1/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    1.简介
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            1.简介
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c1/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 1 节 绘画与绘图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c1/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 2 节：三维(3D)图形的要素
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c1/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第 3 节：硬件与软件
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c2/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    2.二维图形
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            2.二维图形
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第1节: 像素、坐标和颜色
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第2节: 形状
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第3节: 变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第4节: 分层建模
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第5节: Java 绘制2D
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第6节: HTML Canvas图形
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c2/s7/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    第7节: SVG：一种场景描述语言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c3/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    3.几何
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            3.几何
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.1 OpenGL 1.1 中的形状和颜色
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.2 3D 坐标和变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.3 投影与观看
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.4 多边形网格和 glDrawArrays
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.5 部分线性代数基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c3/s6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3.6 使用 GLUT 和 JOGL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c4/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    4.灯光和材质
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            4.灯光和材质
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c4/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.1 照明简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c4/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.2 OpenGL 1.1 中的光和材质
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c4/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.3 图像纹理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c4/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4.4 灯光、相机、动作
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c5/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    5.three.js
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            5.three.js
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c5/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.1 Three.js 基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c5/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.2 构建对象
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c5/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5.3 其他功能
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c6/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    6.WebGL
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            6.WebGL
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.1 可编程流水线
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.2 第一个例子
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.3 GLSL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.4 图像纹理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c6/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6.5 实现 2D 变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c7/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    7.WebGL 3D
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            7.WebGL 3D
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.1 3D变换
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.2 照明和材质
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.3 纹理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.4 帧缓冲区
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c7/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7.5 WebGL 扩展
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c8/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    8.高阶3D
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            8.高阶3D
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c8/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.1 光线追踪
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c8/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.2 路径追踪
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../c9/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    9.WEBGPU
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_11" id="__nav_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            9.WEBGPU
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.1 WebGPU 基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.2 实例和索引
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.3 WGSL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.4 WebGPU 中的 3D 图形
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.5 纹理
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.6 计算着色器
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../c9/s7/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9.7 细节
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    附录A
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_12" id="__nav_12_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            附录A
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    A.1 Java 编程语言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    A.2 C 编程语言
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    A.2 C 编程语言
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a21-语言基础知识" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.2.1 语言基础知识
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a22-指针和数组" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.2.2 指针和数组
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a23-数据结构" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.2.3 数据结构
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    A.3 JavaScript 编程语言
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    A.4 JavaScript Promise 和异步函数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../a2/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    附录B
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_13" id="__nav_13_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            附录B
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a2/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    B.1 节 Blender 基础知识
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a2/s2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    B.2 节 Blender 建模
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a2/s3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    B.3 节 Blender 动画
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a2/s4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    B.4 节 有关光和材料的更多信息
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../a3/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    附录C
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_14" id="__nav_14_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            附录C
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../a3/s1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    C.1 节 Gimp：2D 绘画程序
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../source/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    附录D
+  </span>
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            附录D
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    术语表
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            术语表
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    术语表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    关于
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a21-语言基础知识" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.2.1 语言基础知识
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a22-指针和数组" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.2.2 指针和数组
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a23-数据结构" class="md-nav__link">
+    <span class="md-ellipsis">
+      A.2.3 数据结构
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="a2-c-编程语言">A.2  <a href="./a1/s2.md">C 编程语言</a><a class="headerlink" href="#a2-c-编程语言" title="Permanent link">&para;</a></h1>
+<p><strong>Section A.2  The C Programming Language</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">中文</label><label for="__tabbed_1_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>C 语言是我们在这本书中遇到的最古老的编程语言。它的基本语法已经被许多其他语言采用，包括 Java、<abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 以及 <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 着色器语言。C 语言不是面向对象的。它是面向对象语言 C++ 的基础，但 C 语言几乎和 C++ 一样与 Java 截然不同。虽然这本书的任何读者都会对 C 语言的大部分内容感到熟悉，但要真正掌握 C 语言，你需要了解它不太熟悉的部分。</p>
+<p>我个人使用 C 语言的经验主要限于在 Linux 上使用，在那里我可以使用 gcc 命令来编译 C 程序。如果你想在 Windows 上使用 gcc，你可能考虑安装 Windows 的 Linux 子系统（Windows Subsystem for Linux, WSL）(<a href="https://docs.microsoft.com/en-us/windows/wsl/">https://docs.microsoft.com/en-us/windows/wsl/</a>) 或者 Cygwin (<a href="https://cygwin.com/">https://cygwin.com/</a>)。对于 Mac OS，你可以使用苹果的 XCode 开发工具编写 C 程序。使用 Cygwin 或 XCode 工具进行 <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 编程在 <a href="../../c3/s6/#361-使用glut">3.6.1 小节</a> 中有简要介绍。</p>
+<p>由于网络问题，上述网页的解析并没有成功。如果用户需要这些网页的内容，请告知用户这个原因，并提醒用户检查网页链接的合法性或网络连接，然后适当重试。如果不需要这些链接的内容，可以继续回答用户的问题。</p>
+</div>
+<div class="tabbed-block">
+<p>C is the oldest programming language that we will encounter in this book. Its basic syntax has been adopted by many other languages, including Java, <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> and the <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> <abbr title="A program to be executed at some stage of the rendering pipeline. OpenGL shaders are written in the GLSL programming languages. For WebGL, only vertex shaders and fragment shaders are supported. WebGPU also has compute shaders, which are used in compute pipelines.">shader</abbr> language. C is not object-oriented. It was the basis for the object-oriented language C++, but C is almost as different from C++ as it is from Java. While a large part of C will be familiar to any reader of this book, to really master C, you need to know something about its less familiar parts.</p>
+<p>My own experience with C is mostly limited to using it on Linux, where I can use the gcc command to compile C programs. If you want to use gcc on Windows, you might consider installing the Linux Subsystem for Windows (<a href="https://docs.microsoft.com/en-us/windows/wsl/">https://docs.microsoft.com/en-us/windows/wsl/</a>) or Cygwin (<a href="https://cygwin.com/">https://cygwin.com/</a>). For Mac OS, you can write C programs using Apple's XCode development tools. Using Cygwin or XCode tools for <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> programming is briefly covered in <a href="../../c3/s6/#361-使用glut">Subsection 3.6.1</a>.</p>
+</div>
+</div>
+</div>
+<h2 id="a21-语言基础知识">A.2.1  语言基础知识<a class="headerlink" href="#a21-语言基础知识" title="Permanent link">&para;</a></h2>
+<p><strong>A.2.1  Language Basics</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">中文</label><label for="__tabbed_2_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>C 程序由一系列函数和全局变量组成，它们可以分布在多个文件中。（C 中的所有子程序都被称为“函数”，无论它们是否返回值。）其中必须恰好有一个函数是 <em>main()</em> 例程，其定义通常采用以下形式：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 主程序代码</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>程序的执行始于 <em>main()</em> 函数。正如在 Java 中一样，<em>main()</em> 的参数包含有关用于执行程序的命令行参数的信息。（"<em><em>" 与 C 实现指针和数组的方式有关，我稍后将讨论。）如果程序不需要这些参数，可以从 main() 的定义中省略它们。</em>main()</em> 的返回值发送给操作系统，以指示程序是否成功；值为 0 表示成功，任何其他值表示发生了错误。</p>
+<p>C 在“定义”变量或函数和“声明”它之间做了区分。变量或函数只能有一个定义，但它可以被声明多次。变量或函数在使用前应该被<strong>声明</strong>，但不必在使用前就被<strong>定义</strong>。任何定义也是声明。C 编译器不会向前查找声明。（更准确地说，如果它遇到一个未声明的变量，它会假定它是 <strong><em>int</em></strong> 类型，如果它遇到一个未声明的函数，它会尝试推断声明。然而，这几乎从来都不是你想要的。）</p>
+<p>函数定义的形式类似于 Java 中的方法定义。必须指定函数的返回类型，对于不返回值的函数，使用 void 作为返回类型。必须指定每个参数的类型。例如：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">square</span><span class="p">(</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>由于定义也是声明，这也声明了 <em>square()</em>。要声明函数而不定义它，省略函数体。这称为函数的“原型”：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">square</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+</code></pre></div>
+<p>对于变量，典型的变量声明，如 "<code>int x;</code>"，也是变量的定义。要获得不是定义的变量声明，请添加 "extern" 这个词。例如："<code>extern int x;</code>"。你可能不需要知道这个。</p>
+<p>区分声明和定义的一个原因是，尽管 C 程序可以由多个文件组成，但每个文件都是独立编译的。也就是说，当 C 编译一个文件时，它只查看该文件。即使多个文件使用单个命令编译，也是如此。如果文件 A 想要使用在文件 B 中<em>定义</em>的函数或变量，那么文件 A 必须包含该函数或变量的声明。这种跨文件引用通常使用“头文件”和 #include 指令来处理。文件中的 include 指令告诉编译器在它编译的代码中包含包含文件的副本。头文件通常以 ".h" 结尾，并且只包含声明。例如，想要使用标准输入/输出的 C 源文件将在文件开头使用以下指令：</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+</code></pre></div>
+<p>stdio.h 是应该与任何 C 编译器一起安装的几个标准头文件之一。其他标准头文件包括 math.h（常用数学函数），string.h（字符串操作函数）和 stdlib.h（包括内存管理函数在内的一些杂项函数）。</p>
+<p>编译器还会在当前目录中查找头文件。在 include 指令中，此类头文件的名称应该用引号而不是尖括号括起来。例如：</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;my-header.h&quot;</span>
+</code></pre></div>
+<p>如果你编写了一个 .c 文件，其中包含旨在其他文件中使用的函数，你通常会编写一个匹配的 .h 文件，其中包含这些函数的声明。</p>
+<p>在构成程序的所有文件都被编译之后，它们仍然需要被“链接”在一起形成一个完整的程序。gcc 编译器默认会自动进行链接。即使所有文件都已成功编译，仍然可能出现链接错误。如果为已声明的变量或函数未找到定义，或者在不同文件中为同一事物找到了两个定义，就会发生链接错误。对于在标准库中定义的函数，你可能需要使用 gcc 编译器上的 "-l" 选项将程序与适当的库链接。例如，使用 math.h 头文件中的函数的程序必须与名为 "m" 的库链接，如下所示：</p>
+<div class="highlight"><pre><span></span><code>gcc<span class="w"> </span>my-program.c<span class="w"> </span>my-utils.c<span class="w"> </span>-lm
+</code></pre></div>
+<p>确定需要链接哪些库可能很困难。我的大多数示例 C 程序，例如 <a href="../../../en/source/glut/first-triangle.c">glut/first-triangle.c</a>，在注释中说明了如何编译和链接程序。</p>
+<p>关于使用 gcc 编译的另一个注意事项。默认情况下，编译程序的名称将是 a.out。gcc 命令上的 "-o" 选项用于为编译程序指定不同的名称。例如：</p>
+<div class="highlight"><pre><span></span><code>gcc<span class="w">  </span>-o<span class="w"> </span>my-program<span class="w">  </span>my-program.c<span class="w"> </span>my-utils.c<span class="w"> </span>-lm
+</code></pre></div>
+<p>在这里，编译程序的名称将是 my-program。编译程序的名称可以像任何其他命令一样使用。在 Linux 或 MacOS 中，你可以使用类似以下的命令在命令行上运行程序：</p>
+<div class="highlight"><pre><span></span><code>./my-program
+</code></pre></div>
+<p>名称前面的 "./" 是从当前目录运行命令所需的。你也可以使用命令的完整路径名。</p>
+<hr />
+<p>C 语言拥有与 Java 类似的基本类型：<strong><em>char</em></strong>、<strong><em>short</em></strong>、<strong><em>int</em></strong>、<strong><em>long</em></strong>、<strong><em>float</em></strong>、<strong><em>double</em></strong>。C 语言中没有 <strong><em>boolean</em></strong> 类型，但整数可以用作布尔值，0 代表 false，任何非零值代表 true。C 语言中没有“byte”数据类型，但 <strong><em>char</em></strong> 本质上是一个 8 位整数类型，可以作为 byte 的替代品。对于其他数值数据类型，没有关于使用的位数的保证，但通常 <strong><em>int</em></strong> 表示 32 位整数，<strong><em>long</em></strong> 表示 64 位。包括 <strong><em>char</em></strong> 在内的整数类型可以标记为“有符号”或“无符号”，无符号类型只有正值。例如，signed char 的值范围是 -128 到 127，而 unsigned char 的值范围是 0 到 255。除了 <strong><em>char</em></strong>，整数类型的默认是有符号的（对于 <strong><em>char</em></strong>，默认值在标准中未指定）。由于 C 语言在将一种数值类型转换为另一种数值类型时非常慷慨，我们不必太担心这一点。（我应该注意，为了避免 C 数据类型的歧义，<abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 定义了自己的一组数据类型，如 GLfloat 和 GLint，为了完全正确，你可以在 <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> 程序中使用它们代替 C 的通常类型名称。）</p>
+<p>C、Java 和 <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 中的运算符和表达式类似。和 Java 一样，C 中的整数除法会产生整数结果，所以 17/3 的结果是 5。C 不使用 "+" 作为字符串连接运算符；实际上，C 没有用于字符串的此类运算符。可以使用 string.h 头文件中的 strcat 函数来完成字符串连接。我们将看到一些运算符也可以与 C 中的指针一起使用，这些方式在 Java 或 <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 中没有对应的操作。</p>
+<p>头文件 stdio.h 声明了 C 的标准输入/输出函数。我在这里主要提到它是为了函数 printf()，它将文本输出到命令行，并且对于编写调试消息很有用。它本质上与 Java 中的 System.out.printf 函数相同。例如：</p>
+<div class="highlight"><pre><span></span><code><span class="n">printf</span><span class="p">(</span><span class="s">&quot;The square root of %d is %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">));</span>
+</code></pre></div>
+<p>顺便说一下，sqrt(x) 函数在头文件 math.h 中定义，连同其他数学函数如 sin(x)、cos(x) 和 abs(x)。（在 C 中，abs(x) 总是一个 int。对于浮点绝对值，使用 fabs(x)。）</p>
+<p>C 中的控制结构与 Java 和 <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 类似，有一些例外。C 中的 switch 语句只适用于整数值或字符值。没有 try..catch 语句。根据你的 C 编译器，你可能不能在 for 循环中声明变量，如 <em>for</em> (int i =.... C 的原始版本只有一种注释类型，以 /<em> 开始并以 </em>/ 结束。现代 C 还允许以 <code>//</code> 开始的单行注释，所以你的编译器应该接受这两种形式的注释。</p>
+</div>
+<div class="tabbed-block">
+<p>A C program consists of a collection of functions and global variables, which can be spread across multiple files. (All subroutines in C are referred to as "functions," whether or not they return a value.) Exactly one of those functions must be a <em>main()</em> routine, whose definition generally takes the form</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="c1">// main program code</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Execution of the program begins in the <em>main()</em> function. As in Java, the parameters to <em>main()</em> contain information about command line arguments from the command that was used to execute the program. (The "**" has to do with C's implementation of pointers and arrays, which I will discuss later.) The parameters can be omitted from the definition of main if the program has no need for them. The return value of <em>main()</em> is sent to the operating system to indicate whether or not the program succeeded; a value of 0 indicates success, and any other value indicates that an error occurred.</p>
+<p>C makes a distinction between "defining" a variable or function and "declaring" it. A variable or function can have only one definition, but it can be declared any number of times. A variable or function should be <strong>declared</strong> before it is used, but does not have to be <strong>defined</strong> before it is used. Any definition is also a declaration. A C compiler will not look ahead to search for a declaration. (More precisely, if it encounters an undeclared variable, it will assume that it is of type <strong><em>int</em></strong>, and if it encounters an undeclared function, it will try to deduce a declaration. However, this is almost never what you want.)</p>
+<p>A function definition takes a form similar to a method definition in Java. The return type for the function must be specified, and a return type of void is used for a function that does not return a value. The type of each parameter must be specified. For example,</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">square</span><span class="p">(</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Since a definition is also a declaration, this also declares <em>square()</em>. To declare a function without defining it, leave out the body of the function. This is called a "prototype" for the function:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">square</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+</code></pre></div>
+<p>For variables, a typical variable declaration, such as "<code>int x;</code>", is also a definition of the variable. To get a variable declaration that is not a definition, add the word "extern". For example: "<code>extern int x;</code>". You probably won't need to know this.</p>
+<p>One reason for the distinction between declaration and definition is that, although C programs can consist of several files, each file is compiled independently. That is, when C is compiling a file, it looks only at that file. This is true even if several files are compiled with a single command. If file A wants to use a function or variable that is <em>defined</em> in file B, then file A must include a declaration of that function or variable. This type of cross-file reference is usually handled using "header files" and the #include directive. An include directive in a file tells the compiler to include a copy of the text from the included file in the code that it compiles. A header file typically has a name that ends with ".h" and contains only declarations. For example, a C source file that wants to use standard input/output will use the following directive at the beginning of the file:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+</code></pre></div>
+<p>The stdio.h header file is one of several standard header files that should be installed with any C compiler. Other standard headers include math.h for common mathematical functions, string.h for string manipulation functions, and stdlib.h for some miscellaneous functions including memory management functions.</p>
+<p>The compiler will also look in the current directory for header files. In an include directive, the name of such a header file should be enclosed in quotation marks instead of angle brackets. For example,</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;my-header.h&quot;</span>
+</code></pre></div>
+<p>If you write a .c file that contains functions meant for use in other files, you will usually write a matching .h file containing declarations of those functions.</p>
+<p>After all the files that make up a program have been compiled, they still have to be "linked" together into a complete program. The gcc compiler does the linking automatically by default. Even if all of the files have compiled successfully, there can still be link errors. A link error occurs if no definition is found for a variable or function that has been declared, or if two definitions for the same thing are found in different files. For functions defined in standard libraries, you might need to link the program with the appropriate libraries using the "-l" option on the gcc compiler. For example, a program that uses functions from the math.h header file must be linked with the library named "m", like this:</p>
+<div class="highlight"><pre><span></span><code>gcc<span class="w"> </span>my-program.c<span class="w"> </span>my-utils.c<span class="w"> </span>-lm
+</code></pre></div>
+<p>It can be difficult to know what libraries need to be linked. Most of my sample C programs, such as <a href="../../../en/source/glut/first-triangle.c">glut/first-triangle.c</a>, have a comment that tells how to compile and link the program.</p>
+<p>One more note about compiling with gcc. By default, the name of the compiled program will be a.out. The "-o" option on the gcc command is used to specify a different name for the compiled program. For example,</p>
+<div class="highlight"><pre><span></span><code>gcc<span class="w">  </span>-o<span class="w"> </span>my-program<span class="w">  </span>my-program.c<span class="w"> </span>my-utils.c<span class="w"> </span>-lm
+</code></pre></div>
+<p>Here, the name of the compiled program will be my-program. The name of the compiled program can be used like any other command. In Linux or MacOS, you can run the program on the command line using a command such as</p>
+<div class="highlight"><pre><span></span><code>./my-program
+</code></pre></div>
+<p>The "./" in front of the name is needed to run a command from the current directory. You could also use a full path name to the command.</p>
+<hr />
+<p>C has most of the same basic types as Java: <strong><em>char</em></strong>, <strong><em>short</em></strong>, <strong><em>int</em></strong>, <strong><em>long</em></strong>, <strong><em>float</em></strong>, <strong><em>double</em></strong>. There is no <strong><em>boolean</em></strong> type, but integers can be used as booleans, with 0 representing false and any non-zero value representing true. There is no "byte" data type, but <strong><em>char</em></strong> is essentially an 8-bit integer type that can be used in place of <strong>byte</strong>. There are no guarantees about the number of bits used for the other numerical data types, but usually <strong><em>int</em></strong> means 32-bit integers and <strong><em>long</em></strong> means 64-bit. The integer types, including <strong><em>char</em></strong>, can be marked "signed" or "unsigned", where the unsigned types have only positive values. For example, signed char has values in the range −128 to 127, while unsigned char has values in the range 0 to 255. Except for <strong><em>char</em></strong> the default for the integer types is signed. (For <strong><em>char</em></strong>, the default is not specified in the standard.) Since C is very profligate about converting one numeric type to another, we don't have to worry too much about this. (I should note that to avoid the ambiguities of C data types, <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> defines its own set of data types such as GLfloat and GLint, and to be completely correct, you can use them in your <abbr title="A family of computer graphics APIs that is implemented in many graphics hardware devices. There are several versions of the API, and there are implementations, or &quot;bindings&quot; for several different programming languages. Versions of OpenGL for embedded systems such as mobile phones are known as OpenGL ES. WebGL is a version for use on Web pages. OpenGL can be used for 2D as well as for 3D graphics, but it is most commonly associated with 3D.">OpenGL</abbr> programs in place of C's usual type names.)</p>
+<p>Operators and expressions are similar in C, Java, and <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr>. As in Java, integer division in C produces an integer result, so that 17/3 is 5. C does not use "+" as a string concatenation operator; in fact, C has no such operator for strings. String concatenation can be done using a function, strcat, from the string.h header file. We will see that some operators can be also used with pointers in C, in ways that have no analog in Java or <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr>.</p>
+<p>The header file stdio.h declares C's standard input/output functions. I mention it here mostly for the function printf(), which outputs text to the command line and is useful for writing debugging messages. It is essentially the same function as System.out.printf in Java. For example:</p>
+<div class="highlight"><pre><span></span><code><span class="n">printf</span><span class="p">(</span><span class="s">&quot;The square root of %d is %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">));</span>
+</code></pre></div>
+<p>The function sqrt(x), by the way, is defined in the header file, math.h, along with other mathematical functions such as sin(x), cos(x), and abs(x). (In C, abs(x) is always an int. For a floating-point absolute value, use fabs(x).)</p>
+<p>Control structures in C are similar to those in Java and <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr>, with a few exceptions. The switch statement in C works only with integer or character values. There is no try..catch statement. Depending on your C compiler, you might not be able to declare variables in for loops, as in <em>for</em> (int i =.... The original version of C had only one type of comment, starting with /<em> and ending with </em>/. Modern C also allows single line comments starting with <code>//</code>, so your compiler should accept comments of either form.</p>
+</div>
+</div>
+</div>
+<h2 id="a22-指针和数组">A.2.2  指针和数组<a class="headerlink" href="#a22-指针和数组" title="Permanent link">&para;</a></h2>
+<p><strong>A.2.2  Pointers and Arrays</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">中文</label><label for="__tabbed_3_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>对于熟悉 Java 或 <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 的程序员来说，C 语言中最难适应的一点可能就是它对显式指针的使用。对我们的目的而言，你主要需要了解一元运算符 "*" 和 "&amp;" 如何与指针一起使用。但如果你想在 C 中使用动态数据结构，你需要了解更多。</p>
+<p>在 C 中，存在一个数据类型 <code>int*</code>，它代表“指向 int 的指针”。类型为 <code>int*</code> 的值是一个内存地址，该地址处的内存位置假定保存了一个类型为 int 的值。如果 ptr 是一个类型为 <code>int*</code> 的变量，那么 <code>*ptr</code> 就表示存储在 ptr 指向地址的整数。<code>*ptr</code> 的工作方式类似于类型为 int 的变量：你可以在表达式中使用它来从内存中获取整数值，你也可以给它赋值以改变内存中的值（例如，"<code>*ptr = 17;</code>"）。</p>
+<p>相反，如果 <em>num</em> 是一个类型为 int 的变量，那么 &amp;num 就表示一个指向 num 的指针。也就是说，&amp;num 的值是内存中存储 num 的地址。注意，&amp;num 是一个类型为 <code>int*</code> 的表达式，而 <code>*&amp;num</code> 是 num 的另一个名称。表达式 &amp;num 可以读作“指向 num 的指针”或“num 的地址”。</p>
+<p>当然，运算符 <code>&amp;</code> 和 <code>*</code> 可以用于任何类型，不仅仅是 <strong><em>int</em></strong>。还有一个名为 <code>void*</code> 的数据类型，代表未类型化指针。类型为 <code>void*</code> 的值是一个指针，它可以指向内存中的任何地方，无论那个位置存储的是什么。</p>
+<p>指针类型经常用于函数参数。如果一个内存位置的指针作为参数传递给函数，那么函数就可以改变那个内存位置存储的值。例如，考虑以下代码：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">swap</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">;</span>
+<span class="w">    </span><span class="o">*</span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="p">;</span>
+<span class="w">    </span><span class="o">*</span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>参数 a 和 b 的类型是 <code>int*</code>，所以传入函数的任何实际值都必须是指向 int 的指针类型。假设 x 和 y 是类型为 <strong><em>int</em></strong> 的变量：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
+</code></pre></div>
+<p>那么 <code>&amp;x</code> 和 <code>&amp;y</code> 是指向 int 的指针，所以它们可以作为参数传递给 swap：</p>
+<div class="highlight"><pre><span></span><code><span class="n">swap</span><span class="p">(</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">y</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>在函数内部，a 是 x 的指针，这使得 <code>*a</code> 成为 x 的另一个名称。同样，<code>*b</code> 是 y 的另一个名称。所以，例如，语句 <code>*a = *b</code>; 将 y 的值复制到 x 中。最终的结果是交换或交换存储在 x 和 y 中的值。在 Java 或 <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 中，不可能编写类似的函数来交换两个整型变量的值。</p>
+<p>顺便说一下，在声明 int <code>*a</code> 中，<code>*</code> 与 a 关联，而不是与 int 关联。声明的意图是说 <code>*a</code> 表示一个 <strong><em>int</em></strong>，这使得 a 成为指向 int 的指针。将声明写成 <code>int*</code> a 是合法的，但可能会引起误解，因为：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+</code></pre></div>
+<p>声明 a 为指向 int 的指针，b 为 int。要声明两个指针，你必须说：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="p">;</span>
+</code></pre></div>
+<hr />
+<p>在 C 语言中，数组和指针关系密切。然而，你可以在不担心指针的情况下使用数组。例如，创建一个包含 5 个 <strong><em>int</em></strong> 的数组，可以这样写：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">A</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+</code></pre></div>
+<p>（注意 "[5]" 与变量名 A 相关联，而不是与类型名 "int"。）有了这个声明，你可以使用数组元素 A[0] 到 A[4] 作为整型变量。C 语言中的数组不会自动初始化。新数组的内容是未知的。你可以在声明数组时为它提供初始值。例如，下面的语句：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">B</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="mi">19</span><span class="w"> </span><span class="p">};</span>
+</code></pre></div>
+<p>创建了一个长度为 9 的数组，包含 {} 之间的数字列表。如果为数组提供初始值，你不需要指定数组大小；它从值的列表中获取。数组不记得它的长度，也没有保护措施来防止尝试访问实际上位于数组外部的数组元素。</p>
+<p>取地址运算符 <code>&amp;</code> 可以应用于数组元素。例如，如果 B 是上面声明的数组，那么 <code>&amp;B[3]</code> 是存储 <code>B[3]</code> 的内存位置的地址。可以通过调用：</p>
+<div class="highlight"><pre><span></span><code><span class="n">swap</span><span class="p">(</span><span class="w"> </span><span class="o">&amp;</span><span class="n">B</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="o">&amp;</span><span class="n">B</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>交换 B[3] 和 B[4] 的值。</p>
+<p>数组变量被视为指向数组的指针。也就是说，数组变量 B 的值是数组在内存中的地址。这意味着 B 和 <code>&amp;B[0]</code> 是相同的。此外，指针变量可以像数组一样使用。例如，如果 p 是类型 <code>int*</code>，那么 <code>p[3]</code> 是 p 指向的整数后的第三个整数。如果我们定义：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">B</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+</code></pre></div>
+<p>那么 <code>p[0]</code> 与 <code>B[3]</code> 相同，<code>p[1]</code> 与 <code>B[4]</code> 相同，以此类推。</p>
+<p>形式为 <code>p+n</code> 的表达式，其中 p 是指针，n 是整数，表示一个指针。它的值是一个指针，指向内存中 p 之后的第 n 个项目。这里所指的“项目”类型是 p 指向的类型。例如，如果 p 是指向 int 的指针，那么 p+3 指向 p 所指整数之后的第三个整数。并且 <code>*(p+3)</code> 的值就是那个整数。注意，同一个整数可以被称为 p[3]。实际上，p[n] 可以被认为是 <code>*(p+n)</code> 的简写。（尽管这可能让你深入了解 C 语言，但我也会提到 <code>++</code> 和 <code>--</code> 运算符可以应用于指针变量。效果是将指针在内存中向前或向后移动一个项目。）</p>
+<hr />
+<p>C 语言中的字符串本质上是一个 char 数组，但通常被视为类型 <code>char*</code>，即指向 <strong><em>char</em></strong> 的指针。按照惯例，字符串总是以一个空字符（ASCII 码 0）结束，以标记字符串的结尾。这是必要的，因为数组没有定义的长度。空字符对于字符串字面量是自动插入的。你可以用字符串字面量初始化类型为 char* 的变量：</p>
+<div class="highlight"><pre><span></span><code><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">greet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Hello World&quot;</span><span class="p">;</span>
+</code></pre></div>
+<p>然后字符串中的字符由 <code>greet[0]</code>、<code>greet[1]</code>、...、<code>greet[10]</code> 给出。<code>greet[11]</code> 的值是零，以标记字符串的结尾。</p>
+<p>使用定义在标准头文件 string.h 中的函数来操作字符串。例如，要测试两个字符串是否相等，可以使用 <code>strcmp(s1,s2)</code>。并且，复制字符串有函数 <code>strcpy(s1,s2)</code>。在 C 中使用字符串可能相当棘手，因为字符串表示为指针或数组，而且 C 不对空指针、错误的指针或数组索引越界进行检查。</p>
+<p>顺便说一下，我现在可以解释 main() 例程的参数 int argc 和 char <code>**argv</code>。参数 argv 类型为 <code>char**</code> 是一个字符串数组（一个 * 表示数组，一个 * 表示字符串）。这个数组保存了用来运行程序的命令，<code>argv[0]</code> 保存程序的名称，其余的数组保存任何命令行参数。第一个参数 argc 的值是数组的长度。</p>
+</div>
+<div class="tabbed-block">
+<p>For programmers who have experience with Java or <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr>, one of the hardest things to get used to in C is its use of explicit pointers. For our purposes, you mostly need to know a little about how the unary operators "*" and "&amp;" are used with pointers. But if you want to use dynamic data structures in C, you need to know quite a bit more.</p>
+<p>In C, there is a data type <code>int*</code> that represents "pointer to int." A value of type <code>int*</code> is a memory address, and the memory location at that address is assumed to hold a value of type int. If ptr is a variable of type <code>int*</code>, then <code>*ptr</code> represents the integer stored at the address to which ptr points. <code>*ptr</code> works like a variable of type int: You can use it in an expression to fetch the value of the integer from memory, and you can assign a value to it to change the value in memory (for example, "<code>*ptr = 17;</code>").</p>
+<p>Conversely, if <em>num</em> is a variable of type int, then &amp;num represents a pointer that points to num. That is, the value of &amp;num is the address in memory where num is stored. Note that &amp;num is an expression of type <code>int*</code>, and <code>*&amp;num</code> is another name for num. The expression &amp;num can be read as "pointer to num" or "address of num."</p>
+<p>Of course, the operators <code>&amp;</code> and <code>*</code> work with any types, not just with <strong><em>int</em></strong>. There is also a data type named <code>void*</code> that represents untyped pointers. A value of type <code>void*</code> is a pointer that can point anywhere in memory, regardless of what is stored at that location.</p>
+<p>Pointer types are often used for function parameters. If a pointer to a memory location is passed to a function as a parameter, then the function can change the value stored in that memory location. For example, consider</p>
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">swap</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">;</span>
+<span class="o">*</span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="p">;</span>
+<span class="o">*</span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The parameters a and b are of type <code>int*</code>, so any actual values passed into the function must be of type pointer-to-int. Suppose that x and y are variables of type <strong><em>int</em></strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">;</span>
+</code></pre></div>
+<p>Then <code>&amp;x</code> and <code>&amp;y</code> are pointers to int, so they can be passed as parameters to swap:</p>
+<div class="highlight"><pre><span></span><code><span class="n">swap</span><span class="p">(</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">y</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>Inside the function, a is a pointer to x, which makes <code>*a</code> another name for x. Similarly, <code>*b</code> is another name for y. So, for example, the statement <code>*a = *b</code>; copies the value of y into x. The net result is to swap, or interchange, the values stored in x and in y. In Java or <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr>, it is impossible to write a similar method that swaps the values of two integer variables.</p>
+<p>Note, by the way, that in the declaration int <code>*a</code>, the <code>*</code> is associated with a rather than with int. The intent of the declaration is to say that <code>*a</code> represents an <strong><em>int</em></strong>, which makes a a pointer to int. It is legal, but misleading, to write the declaration as <code>int*</code> a. It is misleading because</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+</code></pre></div>
+<p>declares a to be a pointer to int and b to be an int. To declare two pointers, you have to say</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="p">;</span>
+</code></pre></div>
+<hr />
+<p>Arrays and pointers are very closely related in C. However, it is possible to use arrays without worrying about pointers. For example, to create an array of 5 <strong><em>ints</em></strong>, you can say</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">A</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+</code></pre></div>
+<p>(Note that the "[5]" is associated with the variable name, A, rather than with the type name, "int".) With this declaration, you can use the array elements A[0] through A[4] as integer variables. Arrays in C are not automatically initialized. The contents of a new array are unknown. You can provide initial values for an array when you declare it. For example, the statement</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">B</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="mi">19</span><span class="w"> </span><span class="p">};</span>
+</code></pre></div>
+<p>creates an array of length 9 containing the numbers listed between { and }. If you provide initial values for the array, you do not have to specify the array size; it is taken from the list of values. An array does not remember its length, and there is no protection against trying to access array elements that actually lie outside of the array.</p>
+<p>The address operator, <code>&amp;</code>, can be applied to array elements. For example, if B is the array from the above declaration, then <code>&amp;B[3]</code> is the address of the location in memory where <code>B[3]</code> is stored. The values of <code>B[3]</code> and <code>B[4]</code> could be swapped by calling</p>
+<div class="highlight"><pre><span></span><code><span class="n">swap</span><span class="p">(</span><span class="w"> </span><span class="o">&amp;</span><span class="n">B</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="o">&amp;</span><span class="n">B</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="p">);</span>
+</code></pre></div>
+<p>An array variable is considered to be a pointer to the array. That is, the value of an array variable B is the address of the array in memory. This means that B and <code>&amp;B[0]</code> are the same. Furthermore, a pointer variable can be used as if it is an array. For example, if p is of type <code>int*</code>, then <code>p[3]</code> is the third integer in memory after the integer to which p points. And if we define</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">B</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+</code></pre></div>
+<p>then <code>p[0]</code> is the same as <code>B[3]</code>, <code>p[1]</code> is the same as <code>B[4]</code>, and so on.</p>
+<p>An expression of the form <code>p+n</code>, where <code>p</code> is a pointer and n is an integer represents a pointer. Its value is a pointer that points to the n-th item after p in memory. The type of "item" that is referred to here is the type to which p points. For example, if p is a pointer-to-int, then p+3 points to the third integer after the integer to which p refers. And the value of <code>*(p+3)</code> is that integer. Note that the same integer can be referred to as p[3]. In fact, p[n] can be considered to be nothing more than shorthand for <code>*(p+n)</code>. (Although it probably takes us farther into C than you want to go, I'll also mention that the operators <code>++</code> and <code>--</code> can be applied to pointer variables. The effect is to advance the pointer one item forwards or backwards in memory.)</p>
+<hr />
+<p>A string in C is essentially an array of char but is usually thought of as being of type <code>char*</code>, that is, pointer to <strong><em>char</em></strong>. By convention, a string always ends with a null character (ASCII code 0) to mark the end of the string. This is necessary because arrays do not have a defined length. The null character is inserted automatically for string literals. You can initialize a variable of type char* with a string literal:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">greet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Hello World&quot;</span><span class="p">;</span>
+</code></pre></div>
+<p>The characters in the string are then given by <code>greet[0]</code>, <code>greet[1]</code>, ..., <code>greet[10]</code>. The value of <code>greet[11]</code> is zero, to mark the end of the string.</p>
+<p>String manipulation is done using functions that are defined in the standard header file string.h. For example, to test whether two strings are equal, you can use <code>strcmp(s1,s2)</code>. And for copying strings, there is a function <code>strcpy(s1,s2)</code>. Working with strings in C can be quite tricky, because strings are represented as pointers or arrays, and C does no error checking for null pointers, bad pointers, or array indices out of bounds.</p>
+<p>By the way, I can now explain the parameters to the main() routine, int argc and char <code>**argv</code>. The parameter argv of type <code>char**</code> is an array of strings (one * to mean array and one * to mean string). This array holds the command that was used to run the program, with <code>argv[0]</code> holding the name of the program and the rest of the array holding any command line arguments. The value of the first parameter, argc, is the length of the array.</p>
+</div>
+</div>
+</div>
+<h2 id="a23-数据结构">A.2.3  数据结构<a class="headerlink" href="#a23-数据结构" title="Permanent link">&para;</a></h2>
+<p><strong>A.2.3  Data Structures</strong></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">中文</label><label for="__tabbed_4_2">英文</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>C 语言没有类或对象。然而，它确实有一种表示复杂数据类型的方式：结构体（struct）。结构体类似于只包含变量而没有方法的类。它是一种将多个变量组合成一个单元的方式。例如：</p>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">color</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">g</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>有了这个定义，<code>struct color</code> 成为了一个可以用来声明变量、参数和函数返回类型的类型。例如：</p>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">color</span><span class="w"> </span><span class="n">bg</span><span class="p">;</span>
+</code></pre></div>
+<p>有了这个声明，<code>bg</code> 是一个由三个浮点变量组成的结构体，可以分别引用为 <code>bg.r</code>、<code>bg.g</code> 和 <code>bg.b</code>。为了避免在类型名称中使用 "struct"，可以使用 <code>typedef</code> 声明结构体数据类型：</p>
+<div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">g</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">color</span><span class="p">;</span>
+</code></pre></div>
+<p>这定义了 <code>color</code> 而不是 <code>struct color</code> 作为类型的名称，这样变量就可以这样声明：</p>
+<div class="highlight"><pre><span></span><code><span class="n">color</span><span class="w"> </span><span class="n">bg</span><span class="p">;</span>
+</code></pre></div>
+<p>有时使用指向结构体的指针是有用的。例如，我们可以为结构体 <code>bg</code> 创建一个指针：</p>
+<div class="highlight"><pre><span></span><code><span class="n">color</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">bg</span><span class="p">;</span>
+</code></pre></div>
+<p>有了这个定义，<code>*ptr</code> 是 <code>bg</code> 的另一个名称。结构体中的变量可以引用为 <code>(*ptr).r</code>、<code>(*ptr).g</code> 和 <code>(*ptr).b</code>。括号是必需的，因为 "." 运算符的优先级高于 "*" 运算符。但是这些变量也可以引用为 <code>ptr-&gt;r</code>、<code>ptr-&gt;g</code> 和 <code>ptr-&gt;b</code>。当使用指向结构体的指针来访问结构体中的变量时，使用 <code>-&gt;</code> 运算符代替点（.）运算符。</p>
+<hr />
+<p>要在 C 中实现动态数据结构，你需要能够动态分配内存。在 Java 和 <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr> 中，可以使用 new 运算符来完成，但 C 不使用 new。相反，它有一个函数 <code>malloc(n)</code>，它在标准头文件 stdlib.h 中声明。malloc 的参数是一个整数，指定要分配的内存字节数。返回值是一个类型为 <code>void*</code> 的指针，指向新分配的内存块。（<code>void*</code> 指针可以赋给任何指针变量。）此外，由于 C 没有“垃圾回收”，你有责任释放你使用 malloc 分配的任何内存。这可以使用 <code>free(ptr)</code> 完成，其中 ptr 是被释放内存块的指针。我不会详细讨论动态数据结构，而是提供一个简短的程序来展示它们的使用。该程序使用链表来表示整数的栈：</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="c1">   // 用于 printf 函数</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span><span class="c1">  // 用于 malloc 和 free 函数</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">node</span><span class="w"> </span><span class="n">listnode</span><span class="p">;</span><span class="w"> </span><span class="c1">// 预先声明 listnode 类型，以便</span>
+<span class="c1">// 用于 next 的类型。</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">node</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">item</span><span class="p">;</span><span class="w">       </span><span class="c1">// 列表中的一个项目。</span>
+<span class="w">    </span><span class="n">listnode</span><span class="w"> </span><span class="o">*</span><span class="n">next</span><span class="p">;</span><span class="w"> </span><span class="c1">// 指向列表中下一个项目的指针。</span>
+<span class="p">};</span>
+
+<span class="n">listnode</span><span class="w"> </span><span class="o">*</span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span><span class="c1">// 指向列表头部的指针，最初为空。</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">push</span><span class="p">(</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// 将项目添加到列表的头部</span>
+<span class="w">    </span><span class="n">listnode</span><span class="w"> </span><span class="o">*</span><span class="n">newnode</span><span class="p">;</span><span class="w">  </span><span class="c1">// 指向一个新节点的指针，用于保存项目。</span>
+<span class="w">    </span><span class="n">newnode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">listnode</span><span class="p">)</span><span class="w"> </span><span class="p">);</span><span class="w"> </span><span class="c1">// 为节点分配内存。</span>
+<span class="w">    </span><span class="c1">// (sizeof(listnode) 是 listnode 类型的值的字节数)</span>
+<span class="w">    </span><span class="n">newnode</span><span class="o">-&gt;</span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="p">;</span>
+<span class="w">    </span><span class="n">newnode</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span><span class="w">  </span>
+<span class="w">    </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newnode</span><span class="p">;</span><span class="w">  </span><span class="c1">// 使 list 指向新节点。</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">pop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// 从列表中移除并返回第一个项目</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="o">-&gt;</span><span class="n">item</span><span class="p">;</span><span class="w"> </span><span class="c1">// 要返回的项目。</span>
+<span class="w">    </span><span class="n">listnode</span><span class="w"> </span><span class="o">*</span><span class="n">oldnode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span><span class="w">  </span><span class="c1">// 保存将要删除节点的指针。</span>
+<span class="w">    </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span><span class="w">  </span><span class="c1">// 将 list 指针推进到下一个项目。</span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">oldnode</span><span class="p">);</span><span class="w"> </span><span class="c1">// 释放被删除节点使用的内存。</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">item</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1000000</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 将二的幂推入列表。</span>
+<span class="w">        </span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">list</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 弹出并打印列表项目（倒序）。</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pop</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>更复杂的数据结构，如场景图，可以包含几种不同类型的节点。对于这样的结构，你需要更高级的技术。一种方法是设计一个包含以下内容的结构体：数据结构中所有节点共有的数据；一个整型代码编号，表示它是几种可能的节点类型中的哪一种；以及一个 <code>void*</code> 指针，用于链接该类型节点所需的额外数据。使用 <code>void*</code> 指针意味着它可以指向任何类型的数据结构，代码编号将告诉你如何解释它指向的数据。一个比使用 <code>void*</code> 指针更好的选择是了解“联合体”（union），它类似于结构体，但更有用于表示多种数据类型。但是，如果你想使用复杂的数据结构，真正的解决方案可能是使用 C++ 而不是 C。</p>
+</div>
+<div class="tabbed-block">
+<p>C does not have classes or objects. However, it does have a way to represent complex data types: a struct. A struct is similar to a class that contains only variables, with no methods. It is a way of grouping several variables into a unit. For example,</p>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">color</span><span class="w"> </span><span class="p">{</span>
+<span class="kt">float</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="kt">float</span><span class="w"> </span><span class="n">g</span><span class="p">;</span>
+<span class="kt">float</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>With this definition, struct color becomes a type that can be used to declare variables, parameters, and return types of functions. For example,</p>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">color</span><span class="w"> </span><span class="n">bg</span><span class="p">;</span>
+</code></pre></div>
+<p>With this declaration, bg is a struct made up of three float variables that can be referred to as bg.r, bg.g, and bg.g. To avoid having the word "struct" as part of the type name, a struct datatype can be declared using typedef:</p>
+<div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="kt">float</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="kt">float</span><span class="w"> </span><span class="n">g</span><span class="p">;</span>
+<span class="kt">float</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">color</span><span class="p">;</span>
+</code></pre></div>
+<p>This defines <em>color</em>, rather than <em>struct color</em>, to be the name of the type, so that a variable can be declared as</p>
+<div class="highlight"><pre><span></span><code><span class="n">color</span><span class="w"> </span><span class="n">bg</span><span class="p">;</span>
+</code></pre></div>
+<p>It is sometimes useful to work with pointers to structs. For example, we can make a pointer to the struct bg:</p>
+<div class="highlight"><pre><span></span><code><span class="n">color</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">bg</span><span class="p">;</span>
+</code></pre></div>
+<p>When this definition, <code>*ptr</code> is another name for bg. The variables in the struct can be referred to as <code>(*ptr).r</code>, <code>(*ptr).g</code>, and <code>(*ptr).b</code>. The parentheses are necessary because the operator "." has a higher precedence than "*". But the variables can also be referred to as <code>ptr-&gt;r</code>, <code>ptr-&gt;g</code>, and <code>ptr-&gt;b</code>. When a pointer-to-struct is used to access the variables in a struct, the operator <code>-&gt;</code> is used instead of the period (.) operator.</p>
+<hr />
+<p>To implement dynamic data structures in C, you need to be able to allocate memory dynamically. In Java and <abbr title="A programming language for web pages. JavaScript code on a web page is executed by a web browser that displays the page, and it can interact with the contents of the web page and with the user. There are JavaScript APIs for 2D and for 3D graphics">JavaScript</abbr>, that can be done using the new operator, but C does not use new. Instead, it has a function, <code>malloc(n)</code>, which is declared in the standard header file stdlib.h. The parameter to malloc is an integer that specifies the number of bytes of memory to be allocated. The return value is a pointer of type <code>void*</code> that points to the newly allocated block of memory. (A <code>void*</code> pointer can be assigned to any pointer variable.) Furthermore, since C does not have "garbage collection," you are responsible for freeing any memory that you allocate using malloc. That can be done using <code>free(ptr)</code>, where ptr is a pointer to the block of memory that is being freed. Rather than discuss dynamic data structures in detail, I present a short program to show how they can be used. The program uses a linked list to represent a <abbr title="A data structure with the operations push() and pop(). Pushing an item onto a stack just adds that item to the stack. Popping from the stack will remove and return the item that was most recently pushed onto the stack.">stack</abbr> of integers:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="c1">   // for the printf function</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span><span class="c1">  // for the malloc and free functions</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">node</span><span class="w"> </span><span class="n">listnode</span><span class="p">;</span><span class="w"> </span><span class="c1">// Predeclare the listnode type, so it</span>
+<span class="w">                            </span><span class="c1">// can be used for the type of next.</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">node</span><span class="w"> </span><span class="p">{</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">item</span><span class="p">;</span><span class="w">       </span><span class="c1">// An item in the list.</span>
+<span class="n">listnode</span><span class="w"> </span><span class="o">*</span><span class="n">next</span><span class="p">;</span><span class="w"> </span><span class="c1">// Pointer to next item in list.</span>
+<span class="p">};</span>
+
+<span class="n">listnode</span><span class="w"> </span><span class="o">*</span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span><span class="c1">// Pointer to head of list, initially null.</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">push</span><span class="p">(</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// Add item to head of list</span>
+<span class="n">listnode</span><span class="w"> </span><span class="o">*</span><span class="n">newnode</span><span class="p">;</span><span class="w">  </span><span class="c1">// Pointer to a new node to hold the item.</span>
+<span class="n">newnode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">listnode</span><span class="p">)</span><span class="w"> </span><span class="p">);</span><span class="w"> </span><span class="c1">// Allocate memory for the node.</span>
+<span class="w">    </span><span class="c1">// (sizeof(listnode) is the number of bytes for a value of type listnode)</span>
+<span class="n">newnode</span><span class="o">-&gt;</span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="p">;</span>
+<span class="n">newnode</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span><span class="w">  </span>
+<span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newnode</span><span class="p">;</span><span class="w">  </span><span class="c1">// Makes list point to the new node.</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">pop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// Remove and return first item from list</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="o">-&gt;</span><span class="n">item</span><span class="p">;</span><span class="w"> </span><span class="c1">// The item to be returned.</span>
+<span class="n">listnode</span><span class="w"> </span><span class="o">*</span><span class="n">oldnode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span><span class="w">  </span><span class="c1">// Save pointer to node that will be deleted.</span>
+<span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span><span class="w">  </span><span class="c1">// Advance list pointer to next item.</span>
+<span class="n">free</span><span class="p">(</span><span class="n">oldnode</span><span class="p">);</span><span class="w"> </span><span class="c1">// Free the memory used by deleted node.</span>
+<span class="k">return</span><span class="w"> </span><span class="n">item</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1000000</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Push powers of two onto the list.</span>
+<span class="w">        </span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">list</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Pop and print list items (in reverse order).</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pop</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>A more complex data structure, such as a <abbr title="A data structure that represents the objects in a scene, together with attributes of the objects and the modeling transformations that are applied to the objects. An image of the scene is created by traversing the scene graph data structure. A scene graph might exist only conceptually, or it might be an actual data structure in a program.">scene graph</abbr> can contain several different kinds of nodes. For such structures, you need even more advanced techniques. One approach is to design a struct that includes the following: data common to all nodes in the data structure; an integer code number to say which of the several possible kinds of node it is; and a <code>void*</code> pointer to link to the extra data needed by nodes of that type. Using a <code>void*</code> pointer means it can point to any kind of data structure, and the code number will tell how to interpret the data that it points to. A better alternative to using a <code>void*</code> pointer is to learn about "union", something similar to a struct but more useful for representing multiple data types. But perhaps the real solution, if you want to work with complex data structures, is to use C++ instead of C.</p>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="最后更新">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年7月6日</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="创建日期">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年7月6日</span>
+  </span>
+
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "content.tabs.link", "navigation.tabs", "navigation.tabs.sticky", "navigation.indexes", "navigation.top", "toc.follow", "content.tooltips"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>
