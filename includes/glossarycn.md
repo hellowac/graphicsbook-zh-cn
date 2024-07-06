@@ -450,16 +450,32 @@
 
 *[次表面散射]: 一种光照效果，光线进入一个稍微半透明的物体，在其内部反射一次或多次，然后从物体的不同点退出。次表面散射有助于诸如玉石、牛奶和皮肤等材料的外观表现。
 
-*[WebGPU]: A new JavaScript graphics API, similar to WebGL, but designed to let web programs access modern GPU capabilities such as compute shaders.
+*[WebGPU]: 一种新的 JavaScript 图形 API，类似于 WebGL，但设计用于让网络程序访问现代 GPU 功能，如计算着色器。
 
-*[WGSL]: The WebGPU Shader Language, the programming language in which shaders for use in WebGPU are written.
+*[WGSL]: WebGPU 着色器语言，是编写 WebGPU 使用的着色器的编程语言。
 
-*[vertex buffers]: In WebGPU, a vertex buffer is a GPU data structure that holds values to be used as input the vertex shader.
+*[顶点缓冲区]: 在 WebGPU 中，顶点缓冲区是一种 GPU 数据结构，用于保存作为顶点着色器输入的值。
 
-*[bind groups]: A data structure that can hold resources such as buffers, textures, and samples, for input into a pipeline.
+*[绑定组]: 一种数据结构，可以保存缓冲区、纹理和样本等资源，作为输入进入管线。
 
-*[index buffer]: In WebGPU, an index buffer is a GPU buffer that holds vertex indices for use with the drawIndexed(). A vertex index gives the position of a vertex in the list of vertices of a primitive.
+*[索引缓冲区]: 在 WebGPU 中，索引缓冲区是一种 GPU 缓冲区，用于保存与 drawIndexed() 一起使用的顶点索引。顶点索引给出了原语顶点列表中顶点的位置。
 
-*[storage buffers]: In WebGPU, a general purpose buffer on the GPU, which can be used in compute shaders as well as in vertex and fragment shaders.
+*[存储缓冲区]: 在 WebGPU 中，一种通用目的的 GPU 缓冲区，可以在计算着色器以及顶点和片段着色器中使用。
 
-*[alignment]: Restrictions on the legal location of a value in memory, depending on the data type. For example, the address of a vec3f variable in WGSL must be a multiple of 16.
+*[对齐]: 根据数据类型，内存中值的合法位置的限制。例如，在 WGSL 中，vec3f 变量的地址必须是 16 的倍数。
+
+*[WGSL]: WebGPU 着色器语言，是编写 WebGPU 使用的着色器的编程语言。
+
+*[归一化设备坐标]: 一种表示 n 维向量为 (n+1) 维向量的方法，其中两个 (n+1) 向量如果它们相差一个标量倍数，则表示相同的 n 维向量。例如，在 3D 中，如果 w 不为零，那么齐次坐标 (x,y,z,w) 与齐次坐标 (x/w,y/w,z/w,1) 等价，因为它们相差 w 的标量乘法。这两组坐标都表示 3D 向量 (x/w,y/w,z/w)。
+
+*[采样]: 将纹理坐标映射到纹理中的颜色的操作，包括如果可用则使用 mipmap，并在必要时应用缩小或放大滤波器。
+
+*[计算着色器]: GPU 管线中的一个阶段，它只进行纯粹的计算工作，而不是直接参与图形渲染。
+
+*[Eclipse]: 一个用于编写 Java（和其他编程语言）程序的集成开发环境。Eclipse 是一个可以从 http://eclipse.org 下载的免费程序。
+
+*[ES6]: 几乎所有现代网络浏览器实现的 JavaScript 版本。更正式地称为 ECMAScript 6 或 ECMAScript 2015。ES6 引入了大量的新特性。
+
+*[promises]: 在 JavaScript 编程中，一个承诺代表一个可能立即可用或将来某个时候可用的结果。程序员可以提供一个函数，如果承诺实现（即结果可用时）或承诺被拒绝（例如，如果发生某些错误）时被调用。承诺是异步的，因为处理成功或失败的函数将在某个不可预测的时间被调用。
+
+*[async functions]: 在 JavaScript 中，异步函数是可以使用 "await" 语句等待承诺结果的函数。当执行 await 语句时，异步函数的执行将暂停，直到承诺被实现或被拒绝，同时让其他 JavaScript 代码有机会在此期间运行。

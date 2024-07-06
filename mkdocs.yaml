@@ -166,10 +166,23 @@ nav:
                   - cn/c9/s5.md
                   - cn/c9/s6.md
                   - cn/c9/s7.md
-        - 附录:
-                  - 编程语言: cn/a1/index.md
-                  - Blender 3D建模: cn/a2/index.md
-                  - Gimp和Inkscape: cn/a3/index.md
-                  - 示例程序源代码: cn/source/index.md
-                  - 术语表: cn/glossary.md
+        - 附录A:
+                  - cn/a1/index.md
+                  - cn/a1/s1.md
+                  - cn/a1/s2.md
+                  - cn/a1/s3.md
+                  - cn/a1/s4.md
+        - 附录B:
+                  - cn/a2/index.md
+                  - cn/a2/s1.md
+                  - cn/a2/s2.md
+                  - cn/a2/s3.md
+                  - cn/a2/s4.md
+        - 附录C:
+                  - cn/a3/index.md
+                  - cn/a3/s1.md
+        - 附录D: 
+                - cn/source/index.md
+        - 术语表: 
+                - cn/glossary.md
         - 关于: index.md
