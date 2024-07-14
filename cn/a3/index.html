@@ -2743,8 +2743,26 @@
 <p><strong>Gimp and Inkscape for 2D Graphics</strong></p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">中文</label><label for="__tabbed_1_2">英文</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block"></div>
-<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<p>Gimp 和 Inkscape 是两个创建和操作二维图像的免费开源程序。Gimp 是一个绘画程序，主要关注于设置图像中各个像素的颜色。Inkscape 是一个绘图程序，它将图像表示为包含二维场景中对象信息的数据结构。绘画与绘图的区别在<a href="../c1/s1/">第 1.1 节</a>中进行了讨论。</p>
+<p>尽管这本书的主要焦点是三维图形编程，但获得一些二维图像处理程序的经验可能会很有用。这些程序展示了一些重要的概念，例如颜色操作、透明度、形状创建和编辑、<abbr title="由参数多项式方程定义的两个点之间的平滑曲线。一个三次贝塞尔曲线段由其两个端点P1和P2以及两个控制点C1和C2定义。曲线在P1处的切线（方向和速度）由从P1到C1的线给出。曲线在P2处的切向量由从C2到P2的线给出。一个二次贝塞尔曲线由其两个端点和一个单一的控制点C定义。每个端点处的切线是该端点与C之间的线。">贝塞尔曲线</abbr>，以及（在绘图程序中）将图形对象分组到分层结构中。这些程序甚至在三维图形中也很有用，用于处理纹理图像。这个附录提供了 Gimp 和 Inkscape 的非常简短的介绍，但可能足以让你开始尝试这些程序，并激励你从其他来源学习更多关于它们的信息。</p>
+<p>当我教授计算机图形学时，我经常包括一些关于 Gimp 和 Inkscape 的实验室课程。这个附录中的材料就是从这些实验室课程中改编而来的。虽然 Gimp 和 Inkscape 并不完全等同于商业程序 Photoshop 和 Illustrator，但它们是免费的，可以用于严肃的图形项目，而且它们拥有的功能远超过几个实验室所能覆盖的。</p>
+<p>附录 C 的内容：</p>
+<ul>
+<li>第 1 节：<a href="s1/">Gimp：一个二维绘画程序</a></li>
+<li>第 2 节：<a href="s2/">Inkscape：一个二维绘图程序</a></li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>Gimp and Inkscape are free and open-source programs for creating and manipulating two-dimensional images. Gimp is a <abbr title="A computer program for creating images using raster-style graphics, where the user creates the image by controlling the colors of each pixel.">painting program</abbr>; that is, it is primarily concerned with setting the colors of individual <abbr title="A digital image is made up of rows and columns of small rectangles called pixels. To specify a digital image, a color is assigned to each pixel in the image.">pixels</abbr> in an image. Inkscape is a <abbr title="A computer program for creating images using vector-style graphics, where the user creates the image by specifying shapes that make up the image and their attributes.">drawing program</abbr>; that is, it represents an image as a data structure that contains information about the objects in a 2D scene. The difference between painting and drawing is discussed in <a href="../c1/s1/">Section 1.1</a>.</p>
+<p>Even though the main focus of this book is on programming for three-dimensional graphics, it can be useful to get some experience with 2D image manipulation programs. Such programs illustrate some important concepts, such as color manipulation, transparency, shape creation and editing, Bezier curves, and (in drawing programs) grouping graphical objects into hierarchical structures. And the programs are often useful even in 3D graphics, for working with <abbr title="Variation in some property from point-to-point on an object. The most common type is image texture. When an image texture is applied to a surface, the surface color varies from point to point.">texture</abbr> images. This appendix offers just a very brief introduction to Gimp and Inkscape, but maybe enough to let you start experimenting with the programs and to inspire you to learn more about them from other sources.</p>
+<p>When I taught computer graphics, I often included a few labs on Gimp and Inkscape. The <abbr title="The properties of an object that determine how that object interacts with light in the environment. Material properties in OpenGL include, for example, diffuse color, specular color, and shininess.">material</abbr> in this appendix was adapted from those labs. While Gimp and Inkscape are not quite the equivalent of the commercial programs Photoshop and Illustrator, they are free, they can be used in serious graphics projects, and they have far more features than can be covered in a couple of labs.</p>
+<p>Contents of Appendix C:</p>
+<ul>
+<li>Section 1: <a href="s1/">Gimp: A 2D Painting Program</a></li>
+<li>Section 2: <a href="s2/">Inkscape: A 2D Drawing Program</a></li>
+</ul>
+</div>
 </div>
 </div>
 
@@ -2769,7 +2787,7 @@
     <span class="md-icon" title="最后更新">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年7月6日</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">2024年7月14日</span>
   </span>
 
     
