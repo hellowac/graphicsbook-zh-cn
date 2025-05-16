@@ -1,19 +1,19 @@
 :hide-toc:
 
-第 3 节：硬件与软件
+第 3 节 硬件与软件
 ======================
 
 **Hardware and Software**
 
 .. tab:: 中文
 
-    我们将以OpenGL作为3D图形编程的主要基础。最初的 **OpenGL** 版本于1992年由一家名为Silicon Graphics的公司发布，该公司以其图形工作站而闻名——这是设计用于密集图形应用的强大且昂贵的计算机。（今天，您的智能手机具有更多的图形计算能力。）OpenGL受到大多数现代计算设备的图形硬件支持，包括台式计算机、笔记本电脑和许多移动设备。作为 **WebGL** 的形式，它是Web上大多数3D图形的使用方式。本节将为您介绍一些关于OpenGL历史和支持它的图形硬件的背景知识。
+    我们将以OpenGL作为3D图形编程的主要基础。最初的 :term:`OpenGL` 版本于1992年由一家名为Silicon Graphics的公司发布，该公司以其图形工作站而闻名——这是设计用于密集图形应用的强大且昂贵的计算机。（今天，您的智能手机具有更多的图形计算能力。）OpenGL受到大多数现代计算设备的图形硬件支持，包括台式计算机、笔记本电脑和许多移动设备。作为 :term:`WebGL` 的形式，它是Web上大多数3D图形的使用方式。本节将为您介绍一些关于OpenGL历史和支持它的图形硬件的背景知识。
 
-    在最初的台式计算机中，屏幕内容是由 **中央处理器(CPU)** 直接管理的。例如，要在屏幕上绘制一条线段，CPU将运行一个循环来设置沿线的每个像素的颜色。不用说，图形可能会占用CPU大量的时间。与我们今天期望的相比，图形性能非常慢。那么，有什么变化呢？当然，计算机总体上更快了，但最大的变化是在现代计算机中，图形处理是由一种称为 **图形处理器(GPU)** 的专用组件完成的。 GPU包括用于执行图形计算的处理器； 实际上，它可以包含大量的这种处理器，这些处理器并行工作以大大加速图形操作。 它还包括专用内存，用于存储诸如图像和坐标列表之类的东西。 GPU处理器对存储在GPU内存中的数据具有非常快的访问速度——比它们访问存储在计算机主内存中的数据要快得多。
+    在最初的台式计算机中，屏幕内容是由 **中央处理器** (:term:`CPU`) 直接管理的。例如，要在屏幕上绘制一条线段，CPU将运行一个循环来设置沿线的每个像素的颜色。不用说，图形可能会占用CPU大量的时间。与我们今天期望的相比，图形性能非常慢。那么，有什么变化呢？当然，计算机总体上更快了，但最大的变化是在现代计算机中，图形处理是由一种称为 **图形处理器** (:term:`GPU`) 的专用组件完成的。 GPU包括用于执行图形计算的处理器； 实际上，它可以包含大量的这种处理器，这些处理器并行工作以大大加速图形操作。 它还包括专用内存，用于存储诸如图像和坐标列表之类的东西。 GPU处理器对存储在GPU内存中的数据具有非常快的访问速度——比它们访问存储在计算机主内存中的数据要快得多。
 
-    要绘制一条线或执行其他图形操作，CPU只需将命令以及任何必要的数据发送到GPU，GPU负责实际执行这些命令。 CPU将大部分图形工作交给了GPU，后者被优化为非常快地执行这项工作。 GPU理解的命令集组成了GPU的 **接口(API)** 。 OpenGL是图形API的一个例子，大多数GPU支持OpenGL，意味着它们可以理解OpenGL命令，或者至少OpenGL命令可以被有效地转换为GPU可以理解的命令。
+    要绘制一条线或执行其他图形操作，CPU只需将命令以及任何必要的数据发送到GPU，GPU负责实际执行这些命令。 CPU将大部分图形工作交给了GPU，后者被优化为非常快地执行这项工作。 GPU理解的命令集组成了GPU的 **接口** (:term:`API`) 。 OpenGL是图形API的一个例子，大多数GPU支持OpenGL，意味着它们可以理解OpenGL命令，或者至少OpenGL命令可以被有效地转换为GPU可以理解的命令。
 
-    OpenGL并不是唯一的图形API。 实际上，它正在被更现代的替代方案所取代，包括 **伏尔甘(Vulkan)** ，这是由负责OpenGL的同一组织开发的开放API。 还有一些由苹果和微软使用的专有API： **metal(Metal)** 和 **direct3D(Direct3D)** 。 至于Web，一个名为 **WebGPU** 的新API已经开发了一段时间，并且已经在一些Web浏览器中实现了。 这些较新的API是复杂且底层的。 它们更多地设计用于速度和效率，而不是易用性。 本教材不涵盖Metal、Direct3D和Vulkan，但在 :ref:`第9章 <c9>` 中介绍了WebGPU。 在大部分的内容中，我们将使用OpenGL，因为它提供了一个更容易入门的3D图形介绍，以及WebGL，因为它仍然是Web浏览器中3D图形的主要API。
+    OpenGL并不是唯一的图形API。 实际上，它正在被更现代的替代方案所取代，包括 **伏尔甘** (:term:`Vulkan`)，这是由负责OpenGL的同一组织开发的开放API。 还有一些由苹果和微软使用的专有API： :term:`Metal` 和 :term:`direct3D` 。 至于Web，一个名为 :term:`WebGPU` 的新API已经开发了一段时间，并且已经在一些Web浏览器中实现了。 这些较新的API是复杂且底层的。 它们更多地设计用于速度和效率，而不是易用性。 本教材不涵盖Metal、Direct3D和Vulkan，但在 :ref:`第9章 <c9>` 中介绍了WebGPU。 在大部分的内容中，我们将使用OpenGL，因为它提供了一个更容易入门的3D图形介绍，以及WebGL，因为它仍然是Web浏览器中3D图形的主要API。
 
 .. tab:: 英文
 
@@ -23,7 +23,7 @@
 
     To draw a line or perform some other graphical operation, the CPU simply has to send commands, along with any necessary data, to the GPU, which is responsible for actually carrying out those commands. The CPU offloads most of the graphical work to the GPU, which is optimized to carry out that work very quickly. The set of commands that the GPU understands make up the API of the GPU. OpenGL is an example of a graphics API, and most GPUs support OpenGL in the sense that they can understand OpenGL commands, or at least that OpenGL commands can efficiently be translated into commands that the GPU can understand.
 
-    OpenGL is not the only graphics API. In fact, it is in the process of being replaced by more modern alternatives, including Vulkan an open API from the same group that is responsible for OpenGL. There are also proprietary APIs used by Apple and Microsoft: Metal and Direct3D. As for the Web, a new API called WebGPU has been under development for some time and is already implemented in some Web browsers. These newer APIs are complex and low-level. They are designed more for speed and efficiency rather than ease-of-use. Metal, Direct3D, and Vulkan are not covered in this textbook, but WebGPU is introduced in [Chapter 9](../../c9/). For most of the book, we will use OpenGL, because it provides an easier introduction to 3D graphics, and WebGL, because it is still the major API for 3D graphics in Web browsers.
+    OpenGL is not the only graphics API. In fact, it is in the process of being replaced by more modern alternatives, including Vulkan an open API from the same group that is responsible for OpenGL. There are also proprietary APIs used by Apple and Microsoft: Metal and Direct3D. As for the Web, a new API called WebGPU has been under development for some time and is already implemented in some Web browsers. These newer APIs are complex and low-level. They are designed more for speed and efficiency rather than ease-of-use. Metal, Direct3D, and Vulkan are not covered in this textbook, but WebGPU is introduced in :ref:`Chapter 9 <c9>` . For most of the book, we will use OpenGL, because it provides an easier introduction to 3D graphics, and WebGL, because it is still the major API for 3D graphics in Web browsers.
 
 ----
 
@@ -37,9 +37,9 @@
 
     因此，OpenGL发展的驱动因素之一是希望限制CPU和GPU之间需要的通信量。一种方法是将信息存储在GPU的内存中。如果某些数据将被多次使用，则可以一次将其传输到GPU并存储在那里的内存中，从而立即使GPU可以访问。另一种方法是尝试减少必须传输到GPU以绘制给定图像的OpenGL命令的数量。
 
-    OpenGL绘制诸如三角形之类的 **基元** 。指定一个基元意味着为每个顶点指定 **坐标** 和 **属性** 。在最初的OpenGL 1.0中，使用单独的命令来指定每个顶点的坐标，并且每当属性的值发生变化时都需要一个命令。要绘制一个三角形将需要三个或更多个命令。由成千上万个三角形组成的复杂对象的绘制将需要许多成千上万个命令。即使在OpenGL 1.1中，也可以使用单个命令而不是数千个来绘制这样的对象。对象的所有数据将加载到数组中，然后可以一次性将其发送到GPU。不幸的是，如果要多次绘制对象，则每次绘制对象时都必须重新传输数据。这在OpenGL 1.5中通过 **顶点缓冲对象(VBO(Vertex Buffer Objects))** 得到了修复。 VBO 是GPU中的一块内存块，可以存储一组顶点的坐标或属性值。这样，就可以在不必每次使用时都从CPU重新传输数据的情况下重用数据。
+    OpenGL绘制诸如三角形之类的 **基元** (:term:`primitives`)。指定一个基元意味着为每个 ``顶点`` (:term:`vertices`) 指定 **坐标** (:term:`coordinates`) 和 **属性** (:term:`attributes`)。在最初的OpenGL 1.0中，使用单独的命令来指定每个顶点的坐标，并且每当属性的值发生变化时都需要一个命令。要绘制一个三角形将需要三个或更多个命令。由成千上万个三角形组成的复杂对象的绘制将需要许多成千上万个命令。即使在OpenGL 1.1中，也可以使用单个命令而不是数千个来绘制这样的对象。对象的所有数据将加载到数组中，然后可以一次性将其发送到GPU。不幸的是，如果要多次绘制对象，则每次绘制对象时都必须重新传输数据。这在OpenGL 1.5中通过 **顶点缓冲对象(VBO)** (:term:`Vertex Buffer Objects`) 得到了修复。 VBO 是GPU中的一块内存块，可以存储一组顶点的坐标或属性值。这样，就可以在不必每次使用时都从CPU重新传输数据的情况下重用数据。
 
-    同样，在OpenGL 1.1中引入了 **纹理对象(texture objects)** ，以便在GPU上存储多个图像以供纹理使用。这意味着将多次重复使用的纹理图像加载到GPU中一次，以便GPU可以轻松地在图像之间切换而无需重新加载它们。
+    同样，在OpenGL 1.1中引入了 **纹理对象** (:term:`texture objects`) ，以便在GPU上存储多个图像以供纹理使用。这意味着将多次重复使用的纹理图像加载到GPU中一次，以便GPU可以轻松地在图像之间切换而无需重新加载它们。
 
 .. tab:: 英文
 
@@ -61,11 +61,11 @@
 
     随着新的功能被添加到OpenGL中，API的规模也在增长。但增长速度仍然被用于进行图形处理的新的、更复杂的技术所超越。其中一些新技术被添加到了OpenGL中，但问题在于，无论你添加了多少功能，总会有对新功能的需求，以及对所有新功能使事情变得过于复杂的抱怨！OpenGL是一个庞大的机器，不断地增加新组件，但仍然不能让每个人都满意。真正的解决方案是使机器 **可编程化(programmable)** 。随着OpenGL 2.0的出现，编写程序以作为GPU图形计算的一部分执行成为可能。这些程序在GPU上以GPU速度运行。想要使用新图形技术的程序员可以编写一个程序来实现该功能，然后将其交给GPU执行。OpenGL API不必更改。API唯一需要支持的是将程序发送到GPU以进行执行的能力。
 
-    这些程序被称为 **着色器(shaders)** （尽管这个术语实际上并不描述它们大多数做什么）。首先被引入的着色器是 **顶点着色器(vertex shaders)** 和 **片段着色器(fragment shaders)** 。当绘制一个 **基元** 时，必须在每个基元的顶点上进行一些工作，例如对顶点坐标应用 **几何变换** 或使用属性和全局光照环境来计算该顶点的颜色。顶点着色器是一个可以接管执行此类“每个顶点”计算的程序。同样，对于基元内的每个像素，必须执行一些工作。片段着色器可以接管执行这种“每个像素”的计算。（片段着色器也称为 **像素着色器(pixel shaders)** 。）
+    这些程序被称为 **着色器** (:term:`shaders`) （尽管这个术语实际上并不描述它们大多数做什么）。首先被引入的着色器是 **顶点着色器** (:term:`vertex shaders`) 和 **片段着色器** (:term:`fragment shaders`) 。当绘制一个 **基元** (:term:`primitive`) 时，必须在每个基元的顶点上进行一些工作，例如对顶点坐标应用 **几何变换** (:term:`geometric transform`) 或使用属性和全局光照环境来计算该顶点的颜色。顶点着色器是一个可以接管执行此类“每个顶点”计算的程序。同样，对于基元内的每个像素，必须执行一些工作。片段着色器可以接管执行这种“每个像素”的计算。（片段着色器也称为 **像素着色器(pixel shaders)** 。）
 
     可编程图形硬件的概念非常成功——成功到在OpenGL 3.0中，常规的每个顶点和每个片段的处理被弃用（意味着不鼓励使用）。并且在OpenGL 3.1中，它已从OpenGL标准中删除，尽管仍作为可选扩展存在。实际上，在桌面版本的OpenGL中仍支持所有原始功能，并且可能会在未来继续提供。然而，在嵌入式系统方面，使用OpenGL ES 2.0及更高版本时，着色器的使用是强制性的，并且已完全删除了OpenGL 1.1 API的大部分内容。用于Web浏览器的OpenGL版本WebGL是基于OpenGL ES的，它也需要使用着色器来完成任何事情。尽管如此，我们将从版本1.1开始学习OpenGL。该版本的大多数概念和许多细节仍然相关，并且为初学者提供了更容易的入门点。
 
-    OpenGL着色器是用 **OpenGL着色语言(GLSL)** (OpenGL Shading Language) 编写的。与 OpenGL 本身一样，GLSL也经历了几个版本。我们将在课程后期花一些时间学习GLSL ES，这是与 WebGL 和 OpenGL ES 一起使用的版本。GLSL使用类似于C编程语言的语法。
+    OpenGL着色器是用 **OpenGL着色语言(GLSL)** (:term:`OpenGL Shading Language`) 编写的。与 OpenGL 本身一样，GLSL也经历了几个版本。我们将在课程后期花一些时间学习GLSL ES，这是与 WebGL 和 OpenGL ES 一起使用的版本。GLSL使用类似于C编程语言的语法。
 
 .. tab:: 英文
 

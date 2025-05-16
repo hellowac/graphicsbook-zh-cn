@@ -31,11 +31,13 @@
 您可以下载此网站以在您自己的计算机上使用。还提供该教科书的 PDF 版本。下载链接可以在本页底部找到。
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: 简短目录
 
    preface.rst
    c1/index.rst
+
+   glossary.rst
 
 .. 
    - 第 1 章：[简介](./c1/index.md)
