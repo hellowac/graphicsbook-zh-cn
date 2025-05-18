@@ -1,0 +1,219 @@
+
+# B.4 节  [有关光和材料的更多信息](./a2/s4.md)
+
+**Section B.4  More on Light and Material**
+
+.. tab:: 中文
+
+    Blender 对光照和材质有着广泛的支持，我们在 [B.1.4 小节](s1.md#b14--光源材质和纹理) 中只是浅尝辄止。在本节中，我们将更深入一些，但当然这仍然只是一个介绍。特别是，我们将看到 Shader Editor（着色器编辑器），它提供了对材质设计的完全控制。
+
+.. tab:: 英文
+
+    Blender has extensive support for light and materials, and we only scratched the surface in [Subsection B.1.4](s1.md#b14--光源材质和纹理). In this section, we will go into a little more depth, but of course this is still only an introduction. In particular, we will look at the Shader Editor, which offers complete control over the design of materials.
+
+## B.4.1  光线
+
+**B.4.1  Lighting**
+
+.. tab:: 中文
+
+    你可以通过添加“添加”菜单下的“灯光”子菜单中的对象类型来为场景添加照明。请注意，只有在将 3D 视图设置为使用渲染视图风格时，正确的照明效果才会显示出来。
+
+    当在 3D 视图中选择一个灯光对象时，你可以在默认屏幕右下角的属性编辑器的“灯光属性”选项卡中查看和编辑其属性。你可以实际上改变灯光的基本类型：点光源、太阳光源、聚光灯或区域光源。每个灯光都有一个“颜色”属性，它决定了光的颜色，还有一个“功率”或“强度”属性，它决定了光的亮度。默认情况下，灯光会投射阴影，但如果需要在场景中添加光而不添加阴影，你可以在灯光属性中取消选中一个复选框。（你可以通过在对象的材质属性的“设置”部分中将“阴影模式”属性设置为“无”，使一个对象根本不投射任何阴影。）
+
+    一个区域光源具有形状和大小。较大的区域光源产生更柔和（非硬边）的阴影。但是，点光源或聚光灯也有大小，你可以通过增加其大小来使其产生柔和阴影。（太阳光源永远无法产生柔和阴影。）对于聚光灯，你可以在“聚光灯形状”部分下的灯光属性中设置光锥的角度。
+
+    此外，你可以为对象的材质添加发射颜色。例如，有一个默认材质中的“发射”输入，用于设置发射颜色。与 OpenGL 不同，具有非黑色发射颜色的对象不仅看起来更亮；它实际上会发出影响场景中其他对象的光。
+
+    但是 Blender 中的照明还受到场景背景的影响。你可以在属性编辑器的“世界属性”选项卡中设置背景。默认背景是一种深灰色颜色，这为场景添加了类似环境光的效果。但这种情况下的实现是，背景实际上被考虑为发出给定颜色的光。请注意，默认情况下背景在渲染图像中是可见的，但你可以通过在渲染属性的“胶片”部分下打开“透明”选项，获得只包含场景中实际对象的渲染图像。
+
+    背景颜色不一定是恒定的；它可以由纹理给出。通常，你会想要使用一个能够很好地包裹在球体周围的图像纹理，例如我在这本教科书的几个示例中使用的 [地球图像](../../en/source/webgl/textures/Earth-1024x512.jpg)。你将需要一个相当大的图像，以获得详细背景。要将这样的图像用作背景，请转到世界属性，并设置“颜色”为环境纹理。（点击颜色输入左侧的黄色圆点，并从弹出菜单的“纹理”部分中选择“环境纹理”。）然后点击“打开”按钮选择图像。
+
+    有了合适的背景图像，你可以完全使用背景来为场景照明，场景中不需要任何灯光对象或发射对象。以下是一个仅由背景图像照明的渲染场景示例：
+
+    ![123](../../en/a2/blender-cycles-hdr.png)
+
+    这个场景的背景图像是来自 [polyhaven.com](https://polyhaven.com/) 的一张 4096x2048 像素的图像，这是一个完全免费的 HDR 图像源，还有 3D 模型和逼真的纹理。（.hdr 图像具有比通常的 .png 或 .jpeg 更详细的颜色信息。根据你拥有的软件，你可能无法在计算机上打开图像文件，但 Blender 可以使用它。）场景的光线主要来自背景图像中的明亮窗户。
+
+    场景显示了一个带有棋盘格图案的平台，上面有几个物体站在上面或悬浮在其上方。左下角的对象是一个高度反射的球体（球体的材质属性中的“金属”属性设置为 1.0，“粗糙度”属性设置为 0.0）。它反射背景，但球体没有使用环境贴图，就像我们在 [5.3.5 小节](../c5/s3.md#535-反射和折射) 中为 three.js 所做的那样；背景是场景的一部分，Blender 照明可以正确处理反射，即使是背景的反射。
+
+    [Blender-hdri-background-example.zip](../../../en/source/Blender-hdri-background-example.zip) 文件，可以在本教科书的网页下载源文件夹中找到，是一个压缩归档文件，包含生成此图像的 Blender 项目。（该归档中的项目使用了一个更大的 hdr 背景图像文件的 jpg 版本。这会得到一个质量较差的渲染图像，但它使文件大小更合理。）
+
+
+.. tab:: 英文
+
+    You can add lighting a scene by adding objects of type light, from the "Light" submenu of the "Add" menu. Note that correct lighting effects are only shown in the 3D View if you set it to use the rendered view style.
+
+    When a light object is selected in the 3D View, you can view and edit its properties in the Light Properties tab of the Properties Editor, in the lower right corner of the default screen. You can actually change the basic type of light: Point, Sun, Spot, or Area. Every light has a "Color" property, which determines the color of the light, and a "Power" or "Strength" property, which determines how bright it is. By default, lights cast shadows, but there is a checkbox in the Light Properties that you can turn off if you want to add light to a scene without adding shadows. (You can make an object that doesn't cast any shadows at all, by setting the "Shadow Mode" property of its material to "None" in the "Settings" section of the object's Material Properites.)
+
+    An Area light has a shape and size. Larger area lights produce softer (not hard-edged) shadows. But a Point or Spot light also has a size, and you can make it produce soft shadows by increasing its size. (A Sun can never make soft shadows.) For a Spot light, you can set the angle for the cone of light, under the "Spot Shape" section of the Light Properties.
+
+    Furthermore, you can add emission color to the material of an object. For example, there is an "Emission" input in the default material to set the emission color. Unlike in OpenGL, an object that has a non-black emission color does not just look brighter; it actually emits light that affects other lights in the scene.
+
+    But lighting in Blender is also affected by the background of the scene. You can set the background in the World Properties tab of the Properties Editor. The default background is a dark gray color, which adds something like a bit of ambient light to a scene. But the implementation in this case is that the background is actually considered to emit light of the given color. Note that the background is visible by default in rendered images, but you can get a rendering that includes only actual objects in the scene by turning on the "Transparent" option under the "Film" section of the Render Properties.
+
+    The background color does not have to be constant; it can be given by a texture. Usually, you want to use an image texture that wraps nicely around a sphere like the [Earth image](../../en/source/webgl/textures/Earth-1024x512.jpg) that I have used in several examples in this textbook. You will want a fairly large image for a nicely detailed background. To use such an image as a background, go to the World Properties, and set the "Color" to be an Environment Texture. (Click the yellow dot to the left of the color input, and select "Environment Texture" from the "Texture" section of the popup menu.) Then click the "Open" button to select the image.
+
+    With an appropriate background image, it is possible to light a scene entirely with the background, with no Light objects or emissive objects in the scene. Here is an example of a rendered scene lit only by a background image:
+
+    ![123](../../en/a2/blender-cycles-hdr.png)
+
+    The background image for this scene is a 4096-by-2048 pixel image from [polyhaven.com](https://polyhaven.com/), a source for fully free HDR images, as well as 3D models and realistic textures. (An .hdr image has more detailed color information than the usual .png or .jpeg. Depending on the software you have, you might not be able to open the image file on your computer, but Blender can use it.) The light for the scene comes mostly from the bright windows in the background image.
+
+    The scene shows a checkerboard-patterned platform with several objects standing on it or floating over it. The object on the bottom left is a highly reflective sphere ("Metalic" proprety set to 1.0 and "Roughness" property set to 0.0 in the Material Properties for the sphere). It reflects the background, but the sphere does not use an environment map, like we did for three.js in [Subsection 5.3.5](../c5/s3.md#535-反射和折射); the background is part of the scene, and Blender lighting can handle reflections correctly, even of the background.
+
+    The file [Blender-hdri-background-example.zip](../../../en/source/Blender-hdri-background-example.zip), which can be found in the source folder of the web site download of this textbook, is a compressed archive file that contains the Blender project that produced this image. (The project in the archive uses a jpg version of the much larger hdr background image file. This gives a poorer rendered image, but it makes the file size more reasonable.)
+
+
+
+## B.4.2  Eevee 与 Cycles 
+
+**B.4.2  Eevee versus Cycles**
+
+.. tab:: 中文
+
+    上述图像是由 Cycles 渲染器渲染的，它是 Blender 中可用的两种逼真渲染器之一。（你可以在属性编辑器的渲染属性选项卡中选择渲染器。）Blender 的默认渲染器 Eevee 可以产生类似的，但并不完全相同的图像。并且使用默认设置时，Eevee 图像将缺少某些基本特征：镜头不会折射光线，场景中的对象也不会显示其他对象的反射。
+
+    Cycles 使用一种称为路径追踪的物理上正确的全局照明算法（见 [第 8.2 节](../c8/s2.md)）。Eevee 是一个更快的渲染器，需要使用一些技巧来模拟在 Cycles 中自动发生的某些效果。因为其中一些技巧可以显著增加渲染时间，所以它们默认情况下没有启用。它们可以在属性编辑器的渲染属性选项卡中启用。此外，对于某些类型的材质，你需要在使用这些材质的对象的材质属性中更改一些设置。请注意，如果你使用的是 Cycles，这些属性甚至都不可用。以下是你需要进行的更改，以涵盖本教科书中使用的例子：
+
+    ![123](../../en/a2/blender-eevee-settings.png)
+
+    然而，请注意，有些东西在一个渲染器中可以工作，在另一个中却不能。
+
+
+.. tab:: 英文
+
+    The above image was rendered by the Cycles renderer, one of two realistic renderers available in Blender. (You can select the renderer in the Render Properties tab of the Properties Editor.) Blender's default renderer, Eevee, can produce similar, but not identical, images. And with the default settings, the Eevee image will lack certain essential features: the lens won't refract light, and objects in the scene won't show reflections of other objects.
+
+    Cycles uses a physically correct global illumination algorithm called path tracing (see [Section 8.2](../c8/s2.md)). Eevee is a faster renderer that needs to use some tricks to simulate some effects that happen automatically in Cycles. Because some of those tricks can significantly increase the rendering time, they are not enabled by default. They can be enabled in the Render Properties tab of the Propeties editor. Also, for certain kinds of material, you need to change some settings in the Materials Properties for the objects that use those materials. Note that none of these properties are even available if you are using Cycles. Here are the changes you need to make to cover the examples used in this textbook:
+
+    ![123](../../en/a2/blender-eevee-settings.png)
+
+    Note, however, that there are some things that will work in one of the renderers but not in the other.
+
+## B.4.3  着色器编辑器
+
+**B.4.3  The Shader Editor**
+
+.. tab:: 中文
+
+    到目前为止，我们在配置材质时只研究了在材质属性中使用“Principled Shader”。实际上，所有材质配置都可以在属性编辑器中完成。然而，随着材质变得越来越复杂，使用一个可以让您可视化配置各个方面之间关系的编辑器会更加容易。为此，Blender 拥有 Shader Editor（有时称为“Node Editor”，因为它让您可视化地操作代表定义材质的计算步骤的节点）。您可以使用区域角落的弹出菜单将 Blender 窗口的任何区域更改为 Shader Editor。如果您点击窗口最顶部的“Shader”按钮，窗口将变为 Shader 屏幕，该屏幕底部有 Shader Editor，顶部有 3D 视图。Shader Editor 应该显示当前在 3D 视图中选择的对象的材质节点。（但请注意，Shader Editor 左上角有一个选择菜单，必须设置为“Object”，才能实现这一点。菜单在那里是因为 Shader Editor 可以用来编辑除了材质之外的其他东西。）如果所选对象尚未分配材质，将在 Shader Editor 顶部的标题中出现一个“New”按钮。
+
+    Shader Editor 将材质可视化为矩形节点网络。节点在左侧有输入，在右侧有输出。一个节点的输出可以连接到另一个节点的输入（或连接到几个节点的输入）。网络表示用于创建材质的计算，连接表示计算中的数据流。输入和输出按颜色编码以显示它们所代表的数据类型：灰色代表数字，黄色代表颜色，绿色代表着色器，蓝色代表向量。通常，输出只能连接到同色的输入，但也有一些例外。例如，如果将颜色输出连接到数值输入，则颜色值的灰度等效值将用作数值输入。
+
+    必须有一个“Material Output”节点，它代表将应用于对象的最终材质。“Material Output”的“Surface”输入代表对象表面的外观。“Surface”输入必须连接到计算表面材质的节点的输出。还有一个“Volume”输入，我将不会讨论，以及一个“Displacement”输入，我们将在下面简要看一下。
+
+    Shader Editor 中有一个“Add”菜单，可以用来添加新节点。您也可以在 Shader Editor 上方使用鼠标时按 Shift-A，以调用添加菜单。您可以通过从一个节点的输出拖动到另一个节点的输入来设置两个节点之间的连接。您可以通过点击连接的输出并拖动远离输出来删除连接。或者，您可以拖动到不同的输入以更改数据的目的地。
+
+    这是一个相当简单的材质的节点网络示例。这种“Diffuse”和“Glossy”的组合是经常在 Principled Shader 存在之前用于制作基本材质的，它仍然可能不那么令人生畏。
+
+    ![123](../../en/a2/blender-glossy-and-diffuse.png)
+
+    要制作这种材质，我从一个新的材质开始，并删除了默认添加到新材质的 Principled Shader，因为我想使用一个不同的着色器来计算“Material Output”节点的“Surface”输入。着色器节点可以在添加菜单的“Shader”子菜单中找到。我可以直接使用“Diffuse BSDF”着色器节点，它会产生完全漫反射的颜色。或者我可以直接使用“Glossy BSDF”，它会产生闪亮的类似金属的材质。但我想要两种颜色类型的混合，所以我添加了一个“Mix Shader”，它可以组合来自两个其他着色器的输出。然后我添加了一个“Diffuse BSDF”和一个“Glossy BSDF”，并将它们的输出连接到 Mix Shader 的两个输入。Mix Shader 的“Fac”或“Factor”输入确定每种着色器输入在混合中的比例。我将其设置为 0.75，这意味着 Mix Shader 输出的 25% 来自 Diffuse BSDF，75% 来自 Glossy BSDF。我还为 Diffuse 和 Glossy 着色器设置了颜色（通过点击它们的颜色样本旁边的“Color”）。
+
+    为了展示材质的外观，我在插图中添加了一个使用它的圆环的图片 - 这不是实际 Shader Editor 中会显示的内容。
+
+    ----
+
+    像混合着色器（Mix shader）的“Fac”输入这样的数值输入可以手工设置，或者它的值可以来自另一个节点。如果你将输入连接到另一个节点的输出，你可以得到一个在表面上逐点变化的值。以下是使用纹理的示例，其中两种颜色混合的程度来自纹理，使得颜色在物体上逐点变化。
+
+    ![123](../../en/a2/blender-color-mix-nodes.png)
+
+    我本可以使用另一个混合着色器来完成这个示例，但我决定使用默认的Principled Shader，并将它的基础颜色（Base Color）输入连接到颜色混合节点的输出。执行颜色混合的节点类型是“MixRGB”，可以在添加菜单（Add menu）的“颜色”（Color）子菜单中找到。混合的颜色在这里被设置为常数值，但“Fac”输入来自波纹纹理节点（Wave Texture node）（在添加菜单的“纹理”（Texture）子菜单中找到）。对于波纹纹理的设置，这会产生类似大理石的色泽图案。我尝试将波纹纹理的输出直接连接到“Fac”输入，但我想要材料中红色的带更窄。为了实现这一点，我在波纹纹理节点和混合节点之间插入了一个“数学”（Math）节点——来自添加菜单的“转换器”（Converter）子菜单。数学节点有一个选择菜单，用于指定它对其两个输入执行哪种数学运算。我选择了“Power”，所以数学节点计算波纹纹理的输出提高到5.000的幂。（我应该使用波纹纹理的“Fac”输出而不是“Color”输出，但Fac输出只是Color输出的灰度级别，这与你将颜色输出连接到数值输入时得到的相同。所以这两个输出实际上在这个示例中是等效的。）
+
+    ---
+
+    在下一个示例中，材料的基础颜色来自图像纹理。在以下插图中显示的示例渲染中，纹理被应用到平滑着色的icosphere上。纹理由“图像纹理”（Image Texture）节点表示，来自添加菜单的“纹理”子菜单。我们在[B.1.4 小节](./s1.md#b14--光源材质和纹理)中已经看到如何将纹理应用到对象上。这里的问题是纹理默认映射到icosphere上是不正确的，所以我需要添加另一个节点来改变映射。图像纹理节点的“向量”（Vector）输入设置了映射的纹理坐标。我添加了一个“纹理坐标”（Texture Coordinates）节点，来自添加菜单的“输入”（Input）子菜单，并将纹理坐标节点的“生成”（Generated）输出连接到图像纹理节点的向量输入。我还得将图像纹理节点中的中心选择菜单从默认的“平面”（Flat）更改为“球体”（Sphere）。这在这个案例中给出了正确的映射。
+
+    ![123](../../en/a2/blender-image-texture-node.png)
+
+    事实证明，如果不需要额外的节点，纹理在UVSphere上工作得很好。默认的纹理映射使用对象的UV纹理坐标。UVSphere带有纹理坐标，可以将纹理映射到球体上一次，这正是这里我想要的。你可以通过添加纹理坐标节点，并将该节点的UV输出连接到图像纹理节点的向量输入来获得完全相同的结果。然而，对于Icosphere，默认的UV坐标是不正确的。
+
+    纹理坐标节点的“生成”输出意味着输出值由应用材质的对象的坐标给出。（生成的纹理坐标在[7.3.2 小节](../c7/s3.md#732-生成纹理坐标)中讨论。）图像纹理节点中的中心选择菜单，在这个示例中设置为球体，确定应用于3D向量输入的额外函数，将其映射到图像的2D坐标空间。默认的“平面”意味着向量输入的第三个分量被简单地丢弃。
+
+    顺便说一下，你可能想要对纹理坐标应用纹理变换，以更好地适应纹理到对象。（见[4.3.4 小节](../c4/s3.md#434-纹理变换)。）为此，你可以在纹理坐标节点和纹理图像节点之间插入计算。你可以使用来自添加菜单的“转换器”子菜单中的“向量数学”（Vector Math）节点，向纹理坐标添加偏移或通过缩放因子进行乘法。如果你想同时做这两件事，可以使用两个向量数学节点。还有一个“映射”（Mapping）节点在“向量”子菜单中，可以应用组合的缩放、旋转和平移。
+
+
+    ----
+
+    接下来，我们看一个使用材质输出节点的“位移”输入的例子。我们在[B.2.5 小节](./s2.md#b25--网格修改器)中看到，在Blender中可以使用位移约束进行位移贴图。结果是，你也可以在Shader Editor中使用连接到材质输出节点位移输入的位移节点进行位移贴图。位移节点的“高度”输入提供了位移量，这通常来自纹理节点。
+
+    在[7.3.4 小节](../c7/s3.md#734-凹凸贴图)中，我们研究了凹凸贴图，它通过调整法向量，使得表面看起来像是在逐点变化。凹凸贴图基本上是位移贴图的廉价版本。当你在材质中使用位移时，Eevee渲染器实际上会进行凹凸贴图。Cycles渲染器可以进行凹凸贴图或位移贴图，但它默认会进行凹凸贴图。要让Cycles根据材质进行实际的位移贴图，你必须进入材质属性的“设置”部分，并将“位移”输入从“仅限凹凸”更改为“仅限位移”。但请注意，只有在渲染视图中，你才能看到实际的位移！
+
+    我的示例渲染使用了icosphere上的位移贴图。你可以看到实际的几何体已经被修改了：
+
+    ![123](../../en/a2/blender-displacement-node.png)
+
+    为了使位移贴图工作，表面必须是精细细分的。对于示例中的icosphere，我在创建时使用了4次细分，然后我又添加了一个细分表面修饰器，细分了三个级别，使它更精细。
+
+    ---
+
+    像玻璃这样折射光线的透明材质可以在Blender中轻松建模。本节开头的图像中的镜头完全是在Principled Shader中制作的，只需将“透射率”值设置为1.0，将“粗糙度”值设置为0.0。（我还设置了着色器中的折射率(IOR)为0.5，这在物理上并不现实。但我喜欢它的样子。）请记住，要在使用Eevee渲染器时看到效果，你需要按照本节前面说明调整渲染和材质属性。
+
+    请注意，即使镜头传递了100%的光线，它也不是完全看不见的，因为它会弯曲穿过它的光线。简单的透明度，没有光线弯曲，可以使用alpha混合来完成，其中颜色的alpha分量决定了不透明度的程度。Principled Shader有一个“Alpha”输入，代表材质颜色的alpha值。将其值设置为零将使对象完全看不见。将其设置为0.0到1.0之间的值会使对象半透明。（同样，如果你想在Eevee中看到效果，你需要按照上面的说明更改材质设置中的“混合模式”。）
+
+    你还可以使用Shader Editor中的透明着色器来控制透明度。出于某种原因，我决定制作一种材质，其中alpha分量在逐点变化，透明度来自波纹纹理。在示例渲染中，该材质被用在一个圆柱体上。我在圆柱体里面放了一个橙子，这样你可以看到透明度（可以说是）。你甚至可以看到不透明部分在橙子上的阴影。以下是我使用的节点设置：
+
+    ![123](../../en/a2/blender-partial-transparent-nodes.png)
+
+
+.. tab:: 英文
+
+    So far, for configuring materials, we have only looked at using a "Principled Shader" in the Materials Properties. And in fact, it's possible to do all material configuration in the Propreties Editor. However, as materials become more complex, it's much easier to use an editor that lets you visualize the relationships among the various aspects of the configuration. For that, Blender has the Shader Editor (sometimes called the "Node Editor" because it lets you visually manipulate nodes that represent steps in the computation that defines the material). You can change any area of a Blender window into a Shader Editor, using the popup menu in a corner of the area. If you click the "Shader" button at the very top of the window, the window changes to the Shader screen, which has a Shader Editor at the bottom and a 3D View at the top. The Shader Editor should show the material nodes for whatever object is currently selected in the 3D View. (But note that there is a selection menu in the top left corner of the Shader Editor that must be set to "Object" for this to be true. The menu is there because the Shader Editor can be used to edit other things besides materials.) If the selected object does not yet have an assigned material, there will be a "New" button in the header at the top of the Shader Editor.
+
+    The Shader Editor visualizes a material as a network of rectangular nodes. A node can have inputs on the left and outputs on the right. An output of one node can be connected to an input of another node (or to inputs of several nodes). The network represents the computation that is used to create the material, and connections represent data flow within that computation. Inputs and outputs are color coded to show the type of data that they represent: gray for numbers, yellow for colors, green for shaders, and blue for vectors. In general, an output should only be connected to an input of the same color, but there are some exceptions. For example, if you connect a color output to a numerical input, then the grayscale equivalent of the color value will be used as the numerical input.
+
+    There must be a "Material Output" node, which represents the final material that will be applied to the object. The "Surface" input of the "Material Output" represents the appearance of the surface of the object. The "Surface" input must be attached to the output of a node that computes the material for the surface. There is also a "Volume" input, which I will not discuss at all, and a "Displacement" input which we will look at briefly below.
+
+    There is an "Add" menu in the Shader Editor that can be used to add new nodes. You can also hit Shift-A, with the mouse over the Shader Editor, to call up the Add menu. You can set up a connection between two nodes by dragging from an output of one node to an input of another node. You can delete a connection by clicking the output to which it is connected and dragging away from the output before releasing the mouse. Or you can drag to a different input to change the destination of the data.
+
+    Here is an example of a node network for a fairly simple material. This combination of "Diffuse" and "Glossy" is the sort of thing that was often done to make basic materials before the Principled Shader existed, and it can still be a lot less intimidating.
+
+    ![123](../../en/a2/blender-glossy-and-diffuse.png)
+
+    To make this material, I started with a New material, and deleted the Principled Shader that was added by default to a new material, because I wanted to use a different shader to compute the "Surface" input for the "Material Output" node. Shader nodes can be found in the "Shader" submenu of the Add menu. I could have just used a "Diffuse BSDF" shader node, which would have produced a fully diffuse color. Or I could have just used a "Glossy BSDF," which would have produced a shiny, metal-like material. But I wanted a mixture of the two types of color, so I added a "Mix Shader," which can combine the outputs from two other shaders. I then added a "Diffuse BSDF" and a "Glossy BSDF" and connected their outputs to the two inputs of the Mix Shader. The "Fac," or "Factor," input of the Mix Shader determines how much of each shader input goes into the mix. I set it to 0.75, which means that 25% of the Mix Shader output comes from the Diffuse BSDF and 75% comes from the Glossy BSDF. I also set the colors for the Diffuse and Glossy shaders (by clicking their color samples next to the word "Color").
+
+    To show what the material looks like, I added a picture of a torus that uses it to the illustration — this is not something that would be shown in the actual Shader Editor.
+
+
+    ----
+
+    A numerical input like the "Fac" input of a Mix shader can be set by hand, or its value can come from another node. If you connect the input to an output from another node, you can get a value that varies from point-to-point on a surface. Here is an example where the degree of mixing between two colors comes from a texture, giving a color that varies from point to point on an object.
+
+    ![123](../../en/a2/blender-color-mix-nodes.png)
+
+    I could have done this example using another Mix Shader, but I decided to use the default Principled Shader and connect its Base Color input to the output from a color mixer node. The node that does the color mixing is of type "MixRGB," which can be found in the "Color" submenu of the "Add" menu. The colors for the mix are set here as constant values, but the "Fac" input comes from a Wave Texture node (found in the "Texture" submenu of the "Add" menu). With the settings shown for the Wave texture, this gives a marble-like pattern of color. I tried connecting the output from the Wave texture directly to the "Fac" input, but I wanted the bands of red color in the material to be narrower. To make that happen, I inserted a "Math" node — from the "Converter" submenu of the "Add" menu — between the Wave Texture node and the Mix node. The Math node has a selection menu to say which mathematical operation it performs on its two inputs. I selected "Power," so the math node computes the output from the wave texture raised to the power 5.000. (I should have used the "Fac" output of the Wave Texture rather than the "Color" output, but the Fac output just gives the grayscale level of the Color output, which is the same thing that you get when you connect a color output to a numerical input. So the two outputs are actually equivalent for this example.)
+
+    ----
+
+    In the next example, the base color of the material comes from an image texture. In the sample render that is shown in the following illustration, the texture is applied to a smooth-shaded isosphere. The texture is represented by an "Image Texture" node, from the "Texture" submenu of the Add menu. We already saw in [Subsection B.1.4](./s1.md#b14--光源材质和纹理) how to apply a texture to an object. The problem here is that the default mapping of the texture to the isosphere isn't correct, so I needed to add another node to change the mapping. The "Vector" input of the Image Texture node sets the texture coordinates for mapping. I added a "Texture Coordinates" node, from the "Input" submenu of the Add menu, and connected the "Generated" output from the Texture Coordinate node to the Vector input of the Image Texture node. I also had to change the center selection menu in the Image Texture node from the default "Flat" to "Sphere." That gave the correct mapping in this case.
+
+    ![123](../../en/a2/blender-image-texture-node.png)
+
+    It turns out that the texture would work fine on a UVSphere with no extra nodes. The default texture mapping uses the UV texture coordinates of the object. A UVSphere comes with textures coordinates that map the texture once around the sphere, which is what I wanted here. You could get exactly the same result by adding a Texture Coordinate node and connecting the UV output from that node to the Vector input of the Image Texture node. For the Icosphere, however, the default UV coordinates were not correct.
+
+    The "Generated" output of the Texture Coordinates node means that the output value is given by the object coordinates of the object to which the material is applied. (Generated texture coordinates are discussed in [Subsection 7.3.2](../c7/s3.md#732-生成纹理坐标).) The central select menu in the Image Texture node, which is set to Sphere in the example, determines an extra function that is applied to the 3D Vector input, to map it to the 2D coordinate space of the image. The default, "Flat," means that the third component of the vector input is simply dropped.
+
+    By the way, you might want to apply a texture transformation to the texture coordinates, to fit the texture better to the object. (See [Subsection 4.3.4](../c4/s3.md#434-纹理变换).) For that, you can insert a computation between the Texture Coordinate node and the Texture Image node. You can use a "Vector Math" node, from the "Converter" submenu of the Add menu, to add an offset to the texture coordinates or to multiply them by scaling factors. If you want to do both, you can use two Vector Math nodes. There is also a "Mapping" node in the "Vector" submenu that can apply a combined scale, rotate, and translate.
+
+    ----
+
+    Next, we look at an example that uses the "Displacement" input of the Material Output node. We saw in [Subsection B.2.5](./s2.md#b25--网格修改器) that a Displace constraint can be used in Blender to do displacement mapping. It turns out that you can also do displacement mapping in the Shader Editor, using a Displacement Node attached to the Displacement input of the Material Output node. The "Height" input of the Displacement node gives the amount of displacement, which would ordinarily come from a texture node.
+
+    In [Subsection 7.3.4](../c7/s3.md#734-凹凸贴图), we looked at bump mapping, which makes it look as if the orientation of a surface is changing from point to point by adjusting its normal vectors. bump mapping is basically the cheap version of displacement mapping. When you use displacement in a material, the Eevee renderer will actually do bump mapping. The Cycles rendered can do either bump mapping or displacement mapping, but it will do bump mapping by default. To get Cycles to do actual displacement mapping based on the material, you have to go to the "Settings" section of the Material Properties and change the "Displacement" input from "Bump Only" to "Displacement Only." But note that you will still see actual displacement **only** in a rendered view!
+
+    The sample render for my example uses displacement mapping on an icosphere. You can see that the actual geometry has been modified:
+
+    ![123](../../en/a2/blender-displacement-node.png)
+
+    For displacement mapping to work, the surface must be finely subdivided. For the icosphere in the example, I used 4 subdivisions when I created it, and then I added a Subdivision Surface modifier with three levels of subdivision to divide it even more finely.
+
+    ----
+
+    Transparent materials that refract light, like glass, can be modeled easily in Blender. The lens in the image at the start of this section was made entirely in a Principled Shader simply by setting the "Transmission" value to 1.0 and the "Roughness" value to 0.0. (I also set the IOR in the shader to 0.5, which is not at all physically realistic. But I liked how it looked.) Remember that to see the effect when using the Eevee renderer, you need to adjust render and material properties as shown in the illustration earlier in this section.
+
+    Note that even though the lens transmits 100% of light, it is not simply invisible, since it bends light that passes through it. Simple transparency, without bending of light, can be done with alpha blending, where the alpha component of the color determines the degree of opaqueness. The Principled Shader has an "Alpha" input that represents the alpha value for the material color. Setting the value to zero would make the object completely invisible. Setting it to a value between 0.0 and 1.0 makes the object translucent. (Again, if you want to see the effect in Eevee, you need to change the "Blend Mode" in the material settings; refer back to the above illustration.)
+
+    You can also control transparency using a Transparent Shader in the Shader Editor. For no good reason, I decided to make a material in which the alpha component varies from point to point, with the degree of transparency coming from a wave texture. In the sample render, the material is used on a cylinder. I put an orange inside the cylinder so that you can see the transparency (so to speak). You can even see the shadows of the opaque parts on the orange. Here is the node setup that I used:
+
+    ![123](../../en/a2/blender-partial-transparent-nodes.png)

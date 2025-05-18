@@ -1,0 +1,341 @@
+.. _c2.4:
+
+第4节: 分层建模
+================
+
+**Hierarchical Modeling**
+
+.. tab:: 中文
+
+    在本节中,我们将看看如何从非常简单的形状构建复杂的场景。关键是分层结构。也就是说,复杂的对象可以由更简单的对象组成,这些对象又可以由更简单的对象组成,依此类推,直到最终由简单的几何图元组成,可以直接绘制。这被称为**分层建模**。我们将看到,在分层建模中,在[上一节](./s3.md)中学习的变换起着重要的作用。
+
+    分层结构是处理复杂性的关键,在计算机科学的许多领域(以及现实世界的其他领域)中都是如此,所以它在计算机图形学中发挥着重要的作用,这一点并不令人意外。
+
+.. tab:: 英文
+
+    In this section, we look at how complex scenes can be built from very simple shapes. The key is hierarchical structure. That is, a complex object can be made up of simpler objects, which can in turn be made up of even simpler objects, and so on until it bottoms out with simple geometric primitives that can be drawn directly. This is called **hierarchical modeling**. We will see that the transforms that were studied in the [previous section](./s3.md) play an important role in hierarchical modeling.
+
+    Hierarchical structure is the key to dealing with complexity in many areas of computer science (and in the rest of reality), so it be no surprise that it plays an important role in computer graphics.
+
+2.4.1  构建复杂对象
+--------------------
+
+**Building Complex Objects**
+
+.. tab:: 中文
+
+    引入新的坐标系的一个主要动机是应该能够使用对要绘制的场景最自然的坐标系。我们可以将这个想法扩展到场景中的单个对象：在绘制一个对象时，使用最适合该对象的坐标系。
+
+    通常情况下，我们希望一个对象在其自然坐标系中以原点(0,0)为中心，或者至少使用原点作为便捷的参考点。然后，为了将其放置在场景中，我们可以使用缩放变换，接着是旋转变换，接着是平移变换，以设置其在场景中的大小、方向和位置。回想一下，在这种方式下使用的变换被称为建模变换。通常，变换的顺序是先缩放，然后旋转，最后平移，因为缩放和旋转会保持参考点(0,0)不变。一旦对象被缩放和旋转，使用平移变换将参考点移动到场景中的任意所需点就很容易了。（当然，在特定情况下，您可能不需要所有三个操作。）请记住，在代码中，变换的顺序与应用于对象的顺序相反，并且变换是在绘制对象之前指定的。因此，在代码中，平移应该首先出现，然后是旋转，然后是缩放。建模变换的组合顺序不总是这样，但这是最常见的用法。
+
+    用于将对象放置在场景中的建模变换不应影响场景中的其他对象。为了将其应用于仅一个对象，我们可以在开始处理对象之前保存当前的变换状态，并在之后恢复它。这样做的方式因不同的图形API而异，但假设这里有用于执行这些任务的子程序`saveTransform()`和`restoreTransform()`。也就是说，`saveTransform`将复制当前生效的建模变换，并存储该副本。它不会改变当前的变换；它只是保存一个副本。稍后，当调用restoreTransform时，它将检索该副本，并将当前的建模变换替换为检索到的变换。绘制对象的典型代码将采用以下形式：
+
+    ```text
+    saveTransform()
+    translate(dx,dy) // move object into position
+    rotate(r)        // set the orientation of the object
+    scale(sx,sy)     // set the size of the object
+        .
+        .  // draw the object, using its natural coordinates
+        .
+    restoreTransform()
+    ```
+
+    请注意，我们不知道并且不需要知道保存的变换是做什么的。也许它只是所谓的**单位变换(identity transform)**，它是一个不修改应用于其上的坐标的变换。或者可能已经有另一个变换存在，例如影响整个场景的坐标变换。对象的建模变换实际上是在之前指定的任何其他变换的基础上应用的。建模变换将对象从其自然坐标移动到场景中的适当位置。然后，在此基础上，应用于整个场景的坐标变换将随之移动对象。
+
+    现在让我们扩展这个想法。假设我们要绘制的对象本身是一个复杂的实体，由许多较小的对象组成。例如，想象一下由盆、茎、叶子和花朵组成的盆栽花卉。我们希望能够以它们自己的自然坐标系绘制较小的组件对象，就像我们对待主对象一样。例如，我们希望在以花朵的中心为(0,0)的坐标系中指定花朵。但这很容易：我们在每个小组件对象（如花朵）的自己的坐标系中绘制，并使用建模变换将子对象移动到**主对象内部**的位置。我们在其自然坐标系中组合复杂对象，仿佛它是一个完整的场景。
+
+    在此基础上，我们可以对整个复杂对象应用**另一个**建模变换，将其放置在实际场景中；复杂对象的子对象将随之移动。也就是说，应用于子对象的总体变换由将子对象放置到复杂对象的建模变换，以及将复杂对象放置到场景中的变换组成。
+
+    事实上，我们可以构建由较小对象组成的对象，这些较小对象又由更小的对象组成，以任意级别。例如，我们可以在它们自己的坐标系中绘制花朵的花瓣，然后应用建模变换将花瓣放置到花朵的自然坐标系中。还将有另一个变换将花朵放置到茎上，以及另一个变换将整个盆栽花卉放置到场景中。这就是层次建模。
+
+    让我们看一个小例子。假设我们想要绘制一个简单的二维图像，其中包含一个有两个车轮的手推车。
+
+    <figure markdown="span">
+        ![pixel-coordinates](../../en/c2/cart.png)
+    </figure>
+
+    这辆手推车是下面示例中复杂场景的一部分。手推车的车身可以绘制为一对矩形。对于车轮，假设我们已经编写了一个子程序
+
+    ```text
+    drawWheel()
+    ```
+
+    它用于绘制车轮。这个子程序在它自己的自然坐标系中绘制车轮。在这个坐标系中，车轮以(0,0)为中心，半径为1。
+
+    在手推车的坐标系中，我发现使用大矩形底部的中点作为参考点很方便。我假设y轴的正方向向上，这是数学中的常见约定。手推车的矩形车身宽度为6，高度为2，因此矩形的左下角坐标为(-3,0)，我们可以使用类似fillRectangle(-3,0,6,2)的命令来绘制它。车顶是一个较小的红色矩形，可以用类似的方式绘制。要完成手推车，我们需要在对象上添加两个车轮。为了使车轮的尺寸适合手推车，它们需要进行缩放。为了将它们相对于手推车的车身放置在正确的位置，一个车轮必须向左平移，另一个车轮必须向右平移。当我编写这个示例时，我不得不尝试各种数字，以获得车轮的正确尺寸和位置，并且我发现如果我将它们稍微向下移动，车轮看起来更好。使用层次建模的常规技术，我们在绘制每个车轮之前保存当前的变换，并在绘制车轮之后恢复它。这将限制车轮的建模变换的影响范围仅限于该车轮本身，以确保它不会影响手推车的任何其他部分。以下是一个以自己的坐标系绘制手推车的子程序的伪代码：
+
+    ```text
+    subroutine drawCart() :
+    saveTransform()       // save the current transform
+    translate(-1.65,-0.1) // center of first wheel will be at (-1.65,-0.1)
+    scale(0.8,0.8)        // scale to reduce radius from 1 to 0.8
+    drawWheel()           // draw the first wheel
+    restoreTransform()    // restore the saved transform 
+    saveTransform()       // save it again
+    translate(1.5,-0.1)   // center of second wheel will be at (1.5,-0.1)
+    scale(0.8,0.8)        // scale to reduce radius from 1 to 0.8
+    drawWheel()           // draw the second wheel
+    restoreTransform()    // restore the transform
+    setDrawingColor(RED)  // use red color to draw the rectangles
+    fillRectangle(-3, 0, 6, 2)      // draw the body of the cart
+    fillRectangle(-2.3, 1, 2.6, 1)  // draw the top of the cart
+    ```
+
+    需要注意的是，同一个子程序用于绘制两个车轮。两个车轮在图片中出现在不同位置的原因是对两个子程序调用使用了不同的建模变换。
+
+    一旦我们有了这个绘制手推车的子程序，我们就可以将其添加到场景中。在这样做时，我们对整个手推车应用另一个建模变换。实际上，如果需要，我们可以通过多次使用不同的建模变换调用drawCart子程序来向场景中添加多辆手推车。
+
+    你应该注意到这里的类比：将对象组合成复杂场景类似于将子程序组合成复杂程序。在这两种情况下，您可以分别处理问题的各个部分，可以通过将小问题的解决方案组合成大问题的解决方案，一旦解决了一个问题，就可以在多个地方重复使用该解决方案。
+
+    这里有一个使用手推车在动画场景中的演示：
+
+    <iframe src="../../../en/demos/c2/cart-and-windmills.html" width="450" height="400"></iframe>
+
+    <iframe src="../../../en/demos/c2/cart-and-windmills.html" width="450" height="400"></iframe>
+
+    你可能可以猜到在这个例子中如何使用层次建模来绘制三个风车。有一个drawWindmill方法用于在其自己的坐标系中绘制风车。然后，通过对标准风车应用不同的建模变换来生成场景中的每个风车。此外，风车本身是一个由几个子对象使用各种建模变换构建而成的复杂对象。
+
+    ---
+
+    也许很难看出场景的不同部分如何进行动画。实际上，动画只是建模的另一个方面。计算机动画由一系列帧组成。每一帧都是一个单独的图像，与下一帧相比有微小的变化。从我们的角度来看，每一帧都是一个单独的场景，必须单独绘制。同一个对象可以出现在许多帧中。为了给对象添加动画效果，我们可以在每一帧中对对象应用不同的建模变换。变换中使用的参数可以根据当前时间或帧编号计算。例如，为了使手推车从左到右移动，我们可以对手推车应用一个建模变换
+
+    ```text
+    translate( frameNumber * 0.1, 0 )
+    ```
+
+    其中frameNumber是帧编号。在每一帧中，手推车将比上一帧向右移动0.1个单位。（实际上，在实际程序中，应用于手推车的平移是
+
+    ```text
+    translate( -3 + 13*(frameNumber % 300) / 300.0,  0 )
+    ```
+
+    它在每300帧中将手推车的参考点从水平轴上的-3移动到13。在用于场景的坐标系中，x坐标的范围是从0到7，因此在大部分循环中，这将使手推车超出场景范围。）
+
+    真正好的是，这种类型的动画与层次建模一起使用。例如，drawWindmill方法不仅仅绘制一个风车-它绘制一个带有旋转叶片的动画风车。这意味着应用于叶片的旋转取决于帧编号。当对风车应用建模变换时，旋转的叶片作为整体对象的一部分进行缩放和移动。这是层次建模的一个例子。叶片是风车的子对象。叶片的旋转是将叶片放置到风车对象中的建模变换的一部分。然后，进一步的建模变换被应用到风车对象中以将其放置在场景中。
+
+    文件[java2d/HierarchicalModeling2D.java](../../../en/source/java2d/HierarchicalModeling2D.java)包含了这个示例的Java版本的完整源代码。本书的[下一节](./s5.md)涵盖了Java中的图形编程。一旦你熟悉了那部分内容，你应该看一下源代码，特别是paintComponent()方法，它绘制整个场景。同样的示例，使用相同的场景图API，在[canvas2d/HierarchicalModel2D.html](../../../en/source/canvas2d/HierarchicalModel2D.html)中用JavaScript实现。
+
+.. tab:: 英文
+
+    A major motivation for introducing a new coordinate system is that it should be possible to use the coordinate system that is most natural to the scene that you want to draw. We can extend this idea to individual objects in a scene: When drawing an object, use the coordinate system that is most natural for the object.
+
+    Usually, we want an object in its natural coordinates to be centered at the origin, (0,0), or at least to use the origin as a convenient reference point. Then, to place it in the scene, we can use a scaling transform, followed by a rotation, followed by a translation to set its size, orientation, and position in the scene. Recall that transformations used in this way are called modeling transformations. The transforms are often applied in the order scale, then rotate, then translate, because scaling and rotation leave the reference point, (0,0), fixed. Once the object has been scaled and rotated, it's easy to use a translation to move the reference point to any desired point in the scene. (Of course, in a particular case, you might not need all three operations.) Remember that in the code, the transformations are specified in the opposite order from the order in which they are applied to the object and that the transformations are specified before drawing the object. So in the code, the translation would come first, followed by the rotation and then the scaling. Modeling transforms are not always composed in this order, but it is the most common usage.
+
+    The modeling transformations that are used to place an object in the scene should not affect other objects in the scene. To limit their application to just the one object, we can save the current transformation before starting work on the object and restore it afterwards. How this is done differs from one graphics API to another, but let's suppose here that there are subroutines `saveTransform()` and `restoreTransform()` for performing those tasks. That is, `saveTransform` will make a copy of the modeling transformation that is currently in effect and store that copy. It does not change the current transformation; it merely saves a copy. Later, when restoreTransform is called, it will retrieve that copy and will replace the current modeling transform with the retrieved transform. Typical code for drawing an object will then have the form:
+
+    ```text
+    saveTransform()
+    translate(dx,dy) // move object into position
+    rotate(r)        // set the orientation of the object
+    scale(sx,sy)     // set the size of the object
+        .
+        .  // draw the object, using its natural coordinates
+        .
+    restoreTransform()
+    ```
+
+    Note that we don't know and don't need to know what the saved transform does. Perhaps it is simply the so-called **identity transform**, which is a transform that doesn't modify the coordinates to which it is applied. Or there might already be another transform in place, such as a coordinate transform that affects the scene as a whole. The modeling transform for the object is effectively applied in addition to any other transform that was specified previously. The modeling transform moves the object from its natural coordinates into its proper place in the scene. Then on top of that, a coordinate transform that is applied to the scene as a whole would carry the object along with it.
+
+    Now let's extend this idea. Suppose that the object that we want to draw is itself a complex entity, made up of a number of smaller objects. Think, for example, of a potted flower made up of pot, stem, leaves, and bloom. We would like to be able to draw the smaller component objects in their own natural coordinate systems, just as we do the main object. For example, we would like to specify the bloom in a coordinate system in which the center of the bloom is at (0,0). But this is easy: We draw each small component object, such as the bloom, in its own coordinate system, and use a modeling transformation to move the sub-object into position **within the main object**. We are composing the complex object in its own natural coordinate system as if it were a complete scene.
+
+    On top of that, we can apply **another** modeling transformation to the complex object as a whole, to move it into the actual scene; the sub-objects of the complex object are carried along with it. That is, the overall transformation that applies to a sub-object consists of a modeling transformation that places the sub-object into the complex object, followed by the transformation that places the complex object into the scene.
+
+    In fact, we can build objects that are made up of smaller objects which in turn are made up of even smaller objects, to any level. For example, we could draw the bloom's petals in their own coordinate systems, then apply modeling transformations to place the petals into the natural coordinate system for the bloom. There will be another transformation that moves the bloom into position on the stem, and yet another transformation that places the entire potted flower into the scene. This is hierarchical modeling.
+
+    Let's look at a little example. Suppose that we want to draw a simple 2D image of a cart with two wheels.
+
+    <figure markdown="span">
+        ![pixel-coordinates](../../en/c2/cart.png)
+    </figure>
+
+    This cart is used as one part of a complex scene in an example below. The body of the cart can be drawn as a pair of rectangles. For the wheels, suppose that we have written a subroutine
+
+    ```text
+    drawWheel()
+    ```
+
+    that draws a wheel. This subroutine draws the wheel in its own natural coordinate system. In this coordinate system, the wheel is centered at (0,0) and has radius 1.
+
+    In the cart's coordinate system, I found it convenient to use the midpoint of the base of the large rectangle as the reference point. I assume that the positive direction of the y-axis points upward, which is the common convention in mathematics. The rectangular body of the cart has width 6 and height 2, so the coordinates of the lower left corner of the rectangle are (-3,0), and we can draw it with a command such as fillRectangle(-3,0,6,2). The top of the cart is a smaller red rectangle, which can be drawn in a similar way. To complete the cart, we need to add two wheels to the object. To make the size of the wheels fit the cart, they need to be scaled. To place them in the correct positions relative to body of the cart, one wheel must be translated to the left and the other wheel, to the right. When I coded this example, I had to play around with the numbers to get the right sizes and positions for the wheels, and I found that the wheels looked better if I also moved them down a bit. Using the usual techniques of hierarchical modeling, we save the current transform before drawing each wheel, and we restore it after drawing the wheel. This restricts the effect of the modeling transformation for the wheel to that wheel alone, so that it does not affect any other part of the cart. Here is pseudocode for a subroutine that draws the cart in its own coordinate system:
+
+    ```text
+    subroutine drawCart() :
+    saveTransform()       // save the current transform
+    translate(-1.65,-0.1) // center of first wheel will be at (-1.65,-0.1)
+    scale(0.8,0.8)        // scale to reduce radius from 1 to 0.8
+    drawWheel()           // draw the first wheel
+    restoreTransform()    // restore the saved transform 
+    saveTransform()       // save it again
+    translate(1.5,-0.1)   // center of second wheel will be at (1.5,-0.1)
+    scale(0.8,0.8)        // scale to reduce radius from 1 to 0.8
+    drawWheel()           // draw the second wheel
+    restoreTransform()    // restore the transform
+    setDrawingColor(RED)  // use red color to draw the rectangles
+    fillRectangle(-3, 0, 6, 2)      // draw the body of the cart
+    fillRectangle(-2.3, 1, 2.6, 1)  // draw the top of the cart
+    ```
+
+    It's important to note that the same subroutine is used to draw both wheels. The reason that two wheels appear in the picture in different positions is that different modeling transformations are in effect for the two subroutine calls.
+
+    Once we have this cart-drawing subroutine, we can use it to add a cart to a scene. When we do this, we apply another modeling transformation to the cart as a whole. Indeed, we could add several carts to the scene, if we wanted, by calling the drawCart subroutine several times with different modeling transformations.
+
+    You should notice the analogy here: Building up a complex scene out of objects is similar to building up a complex program out of subroutines. In both cases, you can work on pieces of the problem separately, you can compose a solution to a big problem from solutions to smaller problems, and once you have solved a problem, you can reuse that solution in several places.
+
+    Here is a demo that uses the cart in an animated scene:
+
+    <iframe src="../../../en/demos/c2/cart-and-windmills.html" width="450" height="400"></iframe>
+
+    <iframe src="../../../en/demos/c2/cart-and-windmills.html" width="450" height="400"></iframe>
+
+    You can probably guess how hierarchical modeling is used to draw the three windmills in this example. There is a drawWindmill method that draws a windmill in its own coordinate system. Each of the windmills in the scene is then produced by applying a different modeling transform to the standard windmill. Furthermore, the windmill is itself a complex object that is constructed from several sub-objects using various modeling transformations.
+
+    ---
+
+    It might not be so easy to see how different parts of the scene can be animated. In fact, animation is just another aspect of modeling. A computer animation consists of a sequence of frames. Each frame is a separate image, with small changes from one frame to the next. From our point of view, each frame is a separate scene and has to be drawn separately. The same object can appear in many frames. To animate the object, we can simply apply a different modeling transformation to the object in each frame. The parameters used in the transformation can be computed from the current time or from the frame number. To make a cart move from left to right, for example, we might apply a modeling transformation
+
+    ```text
+    translate( frameNumber * 0.1, 0 )
+    ```
+
+    to the cart, where frameNumber is the frame number. In each frame, the cart will be 0.1 units farther to the right than in the previous frame. (In fact, in the actual program, the translation that is applied to the cart is
+
+    ```text
+    translate( -3 + 13*(frameNumber % 300) / 300.0,  0 )
+    ```
+
+    which moves the reference point of the cart from -3 to 13 along the horizontal axis every 300 frames. In the coordinate system that is used for the scene, the x-coordinate ranges from 0 to 7, so this puts the cart outside the scene for much of the loop.)
+
+    The really neat thing is that this type of animation works with hierarchical modeling. For example, the drawWindmill method doesn't just draw a windmill—it draws an animated windmill, with turning vanes. That just means that the rotation applied to the vanes depends on the frame number. When a modeling transformation is applied to the windmill, the rotating vanes are scaled and moved as part of the object as a whole. This is an example of hierarchical modeling. The vanes are sub-objects of the windmill. The rotation of the vanes is part of the modeling transformation that places the vanes into the windmill object. Then a further modeling transformation is applied to the windmill object to place it in the scene.
+
+    The file [java2d/HierarchicalModeling2D.java](../../../en/source/java2d/HierarchicalModeling2D.java) contains the complete source code for a Java version of this example. The [next section](./s5.md) of this book covers graphics programming in Java. Once you are familiar with that, you should take a look at the source code, especially the paintComponent() method, which draws the entire scene. The same example, using the same scene graph API, is implemented in JavaScript in [canvas2d/HierarchicalModel2D.html](../../../en/source/canvas2d/HierarchicalModel2D.html).
+
+## 2.4.2  场景图
+
+**Scene Graphs**
+
+.. tab:: 中文
+
+    从逻辑上讲，复杂场景的组件形成了一个结构。在这个结构中，每个对象都与其包含的子对象相关联。如果场景是分层的，那么结构就是分层的。这种结构被称为**场景图(scene graph)**。场景图是一种类似树的结构，根表示整个场景，根的子节点表示场景中的顶级对象，依此类推。我们可以可视化我们示例场景的场景图：
+
+    <figure markdown="span">
+        ![pixel-coordinates](../../en/c2/scene-graph.png)
+    </figure>
+
+    在这个图中，一个单独的对象可以与一个或多个父对象有多个连接。每个连接表示该对象在其父对象中的一个实例。例如，“填充的正方形”对象在手推车和风车中作为子对象出现。它在手推车中使用了两次，在风车中使用了一次。（手推车包含两个红色矩形，它们被创建为具有非均匀缩放的正方形；风车的杆是一个缩放的正方形。）“填充的圆”在太阳中使用，并在轮子中使用了两次。“线”在太阳中使用了12次，在轮子中使用了12次；我画了一根粗箭头，标有12，表示12个连接。轮子又在手推车中使用了两次。（出于空间原因，我的图表中省略了场景中填充的正方形的两个出现：它们用于制作道路和道路中央的线。）
+
+    图片中的每个箭头都可以与将子对象放置到其父对象中的建模变换相关联。当一个对象包含多个子对象的副本时，连接子对象与对象的每个箭头将具有不同的关联建模变换。对于每个副本，对象是相同的；只有变换不同。
+
+    虽然场景图在概念上存在，但在某些应用中，它只是隐式存在的。例如，上面提到的程序的Java版本以“过程化”的方式绘制图像，即通过调用子程序。没有数据结构来表示场景图。相反，场景图隐含在绘制场景的子程序调用序列中。图中的每个节点都是一个子程序，每个箭头都是一个子程序调用。使用不同的建模变换绘制各种对象。正如[子节 2.3.8](./s3.md#238--矩阵和向量)中所讨论的那样，计算机只跟踪表示应用于对象的所有变换的“当前变换”。当子程序绘制对象时，程序在调用子程序之前保存当前变换。子程序返回后，保存的变换将被恢复。在子程序内部，对象在其自己的坐标系中绘制，可能调用其他子程序以绘制具有自己的建模变换的子对象。这些额外的变换在子程序外部不会产生影响，因为在调用子程序之前生效的变换在子程序返回后将被恢复。
+
+    场景图也可以由程序中的实际数据结构表示。在面向对象的方法中，场景中的图形对象由程序对象表示。有许多方法可以构建面向对象的场景图API。对于一个在Java中实现的简单示例，你可以看一下[java2d/SceneGraphAPI2D.java](../../../en/source/java2d/SceneGraphAPI2D.java)。这个程序绘制了与前面示例相同的动画场景，但它使用了面向对象的数据结构来表示场景，而不是过程化的方式。相同的场景图API在此页面早期显示的实时演示中用JavaScript实现，阅读完[第2.6节](./s6.md)中关于HTML画布图形的内容后，你可以查看其源代码。
+
+    在示例程序中，无论是在Java还是JavaScript中，场景图中的节点都由属于名为{++SceneGraphNode++}的类的对象表示。{++SceneGraphNode++}是一个抽象类，场景图中的实际节点由该类的子类定义。例如，有一个名为{++CompoundObject++}的子类，用于表示由子对象组成的复杂图形对象。类型为{++CompoundObject++}的变量obj包括一个方法obj.add(subobj)，用于将子对象添加到复合对象中。
+
+    当将场景图实现为由对象组成的数据结构时，必须决定如何处理变换。一个选择是允许将变换与场景图中的任何节点关联起来。然而，在这种情况下，我决定使用特殊节点来表示变换，作为{++TransformedObject++}类型的对象。{++TransformedObject++}是一个包含指向另一个{++SceneGraphNode++}的链接以及包含要应用于该对象的建模变换的{++SceneGraphNode++}。建模变换是以缩放、旋转和平移的量形式给出的，这些量是对象中的实例变量。值得注意的是，无论代码中设置实例变量的顺序如何，这些变换总是按照缩放、旋转和平移的顺序应用。如果要进行平移后旋转的操作，则需要使用两个{++TransformedObject++}来实现，因为在同一个{++TransformedObject++}中的平移和旋转将按照旋转-然后-平移的顺序应用。值得注意的是，缩放、旋转和平移的设置器方法的返回值等于对象本身。这使得可以将调用方法的链式调用链成一个语句，例如
+
+    ```text
+    transformedObject.setScale(5,2).setTranslation(3.5,0);
+    ```
+
+    甚至可以这样说
+
+    ```text
+    world.add(
+        new TransformedObject(windmill).setScale(0.4,0.4).setTranslation(2.2,1.3)
+    );
+    ```
+
+    这种链式调用可以使代码更紧凑，可以消除许多额外的临时变量的需要。
+
+    还必须决定如何处理颜色。一种可能性是创建一个类似于{++TransformedObject++}的{++ColoredObject++}类。然而，在这种情况下，我只是在主{++ScreenGraphNode++}类中添加了一个setColor()方法。设置在复合对象上的颜色会被其子对象继承，除非在子对象上设置了不同的颜色。换句话说，复合对象上的颜色充当其子对象的默认颜色，但可以在子对象上覆盖颜色。
+
+    除了复合对象和变换对象之外，我们还需要场景图节点来表示占据场景图底层的基本图形对象。这些节点在最后进行实际绘制。
+
+    对于熟悉数据结构的人来说，我要注意的是，场景图实际上是一个“有向无环图”或“DAG”的例子。绘制场景的过程涉及对该DAG的遍历。术语“无环”意味着图中不能有循环。对于场景图来说，这是一个明显的要求，即一个对象不能是其本身的子对象，无论是直接还是间接的。
+
+.. tab:: 英文
+
+    Logically, the components of a complex scene form a structure. In this structure, each object is associated with the sub-objects that it contains. If the scene is hierarchical, then the structure is hierarchical. This structure is known as a scene graph. A scene graph is a tree-like structure, with the root representing the entire scene, the children of the root representing the top-level objects in the scene, and so on. We can visualize the scene graph for our sample scene:
+
+    <figure markdown="span">
+        ![pixel-coordinates](../../en/c2/scene-graph.png)
+    </figure>
+
+    In this drawing, a single object can have several connections to one or more parent objects. Each connection represents one occurrence of the object in its parent object. For example, the "filled square" object occurs as a sub-object in the cart and in the windmill. It is used twice in the cart and once in the windmill. (The cart contains two red rectangles, which are created as squares with a non-uniform scaling; the pole of the windmill is made as a scaled square.) The "filled circle" is used in the sun and is used twice in the wheel. The "line" is used 12 times in the sun and 12 times in the wheel; I've drawn one thick arrow, marked with a 12, to represent 12 connections. The wheel, in turn, is used twice in the cart. (My diagram leaves out, for lack of space, two occurrences of the filled square in the scene: It is used to make the road and the line down the middle of the road.)
+
+    Each arrow in the picture can be associated with a modeling transformation that places the sub-object into its parent object. When an object contains several copies of a sub-object, each arrow connecting the sub-object to the object will have a different associated modeling transformation. The object is the same for each copy; only the transformation differs.
+
+    Although the scene graph exists conceptually, in some applications it exists only implicitly. For example, the Java version of the program that was mentioned above draws the image "procedurally," that is, by calling subroutines. There is no data structure to represent the scene graph. Instead, the scene graph is implicit in the sequence of subroutine calls that draw the scene. Each node in the graph is a subroutine, and each arrow is a subroutine call. The various objects are drawn using different modeling transformations. As discussed in [Subsection 2.3.8](./s3.md#238--矩阵和向量), the computer only keeps track of a "current transformation" that represents all the transforms that are applied to an object. When an object is drawn by a subroutine, the program saves the current transformation before calling the subroutine. After the subroutine returns, the saved transformation is restored. Inside the subroutine, the object is drawn in its own coordinate system, possibly calling other subroutines to draw sub-objects with their own modeling transformations. Those extra transformations will have no effect outside of the subroutine, since the transform that is in effect before the subroutine is called will be restored after the subroutine returns.
+
+    It is also possible for a scene graph to be represented by an actual data structure in the program. In an object-oriented approach, the graphical objects in the scene are represented by program objects. There are many ways to build an object-oriented scene graph API. For a simple example implemented in Java, you can take a look at [java2d/SceneGraphAPI2D.java](../../../en/source/java2d/SceneGraphAPI2D.java). This program draws the same animated scene as the previous example, but it represents the scene with an object-oriented data structure rather than procedurally. The same scene graph API is implemented in JavaScript in the live demo shown earlier on this page, and you might take a look at its source code after you read about HTML canvas graphics in [Section 2.6](./s6.md).
+
+    In the example program, both in Java and in JavaScript, a node in the scene graph is represented by an object belonging to a class named {++SceneGraphNode++}. {++SceneGraphNode++} is an abstract class, and actual nodes in the scene graph are defined by subclasses of that class. For example, there is a subclass named {++CompoundObject++} to represent a complex graphical object that is made up of sub-objects. A variable, obj, of type {++CompoundObject++} includes a method obj.add(subobj) for adding a sub-object to the compound object.
+
+    When implementing a scene graph as a data structure made up of objects, a decision has to be made about how to handle transforms. One option is to allow transformations to be associated with any node in the scene graph. In this case, however, I decided to use special nodes to represent transforms as objects of type {++TransformedObject++}. A {++TransformedObject++} is a {++SceneGraphNode++} that contains a link to another {++SceneGraphNode++} and also contains a modeling transformation that is to be applied to that object. The modeling transformation is given in terms of scaling, rotation, and translation amounts that are instance variables in the object. It is worth noting that these are always applied in the order scale, then rotate, then translate, no matter what order the instance variables are set in the code. If you want to do a translation followed by a rotation, you will need two {++TransformedObject++} to implement it, since a translation plus a rotation in the same {++TransformedObject++} would be applied in the order rotate-then-translate. It is also worth noting that the setter methods for the scaling, rotation, and translation have a return value that is equal to the object. This makes it possible to chain calls to the methods into a single statement such as
+
+    ```text
+    transformedObject.setScale(5,2).setTranslation(3.5,0);
+    ```
+
+    and even say things like
+
+    ```text
+    world.add(
+        new TransformedObject(windmill).setScale(0.4,0.4).setTranslation(2.2,1.3)
+    );
+    ```
+
+    This type of chaining can make for more compact code and can eliminate the need for a lot of extra temporary variables.
+
+    Another decision has to be made about how to handle color. One possibility would be to make a {++ColoredObject++} class similar to {++TransformedObject++}. However, in this case I just added a setColor() method to the main {++ScreenGraphNode++} class. A color that is set on a compound object is inherited by any sub-objects, unless a different color is set on the sub-object. In other words, a color on a compound object acts as a default color for its sub-objects, but color can be overridden on the sub-objects.
+
+    In addition to compound objects and transformed objects, we need scene graph nodes to represent the basic graphical objects that occupy the bottom level of the scene graph. These are the nodes that do the actual drawing in the end.
+
+    For those who are familiar with data structures, I will note that a scene graph is actually an example of a "directed acyclic graph" or "dag." The process of drawing the scene involves a traversal of this dag. The term "acyclic" means that there can't be cycles in the graph. For a scene graph, this is the obvious requirement that an object cannot be a sub-object, either directly or indirectly, of itself.
+
+## 2.4.3  变换堆栈
+
+**The Transform Stack**
+
+.. tab:: 中文
+
+    假设您编写了一个绘制对象的子例程。在子例程的开始,您使用诸如`saveTransform()`之类的例程来保存当前变换的副本。在子例程的末尾,您调用`restoreTransform()`将当前变换重置为已保存的值。现在,为了这在分层图形中正确工作,这些例程实际上必须使用变换的**堆栈(stack)**。(回想一下,堆栈只是一个列表,可以在列表的一端添加或"推入"项目,并从同一端移除或"弹出"项目。)问题在于,在绘制复杂对象时,一个子例程可以调用其他子例程。这意味着可以同时激活多个绘图子例程,每个子例程都有自己保存的变换。当在另一个变换已经保存的情况下保存一个变换时,系统需要记住两个变换。当调用`restoreTransform()`时,应该恢复最近保存的变换。
+
+    堆栈正好具有实现这些操作所需的结构。在开始绘制对象之前,您会将当前变换推入堆栈。绘制对象后,您会从堆栈中弹出变换。在这两个操作之间,如果对象是分层的,则其子对象的变换将根据需要被推入和弹出堆栈。
+
+    一些图形API已经定义了变换堆栈。例如,原始的OpenGL API包括glPushMatrix()和glPopMatrix()函数,用于使用内置于OpenGL中的变换矩阵堆栈。Java Graphics2D API没有内置的变换堆栈,但它确实有获取和设置当前变换的方法,这些获取和设置方法可以与显式的堆栈数据结构一起使用,以实现必要的操作。当我们转向用于2D图形的HTML canvas API时,我们会看到它包含名为save()和restore()的函数,它们实际上是对堆栈的推入和弹出操作。这些函数对于实现HTML canvas的分层图形至关重要。
+
+    让我们试着将这些全部结合起来,考虑一下如何应用于示例场景中前轮车轮的一个填充圆圈这样一个简单的对象。这里,我重新排列了该场景图的一部分,并添加了标签来显示应用于每个对象的建模变换:
+
+
+    <figure markdown="span">
+        ![pixel-coordinates](../../en/c2/hierarchical-transforms.png)
+    </figure>
+
+    轮子的旋转量和车的平移量被显示为变量，因为它们在动画的不同帧中是不同的。当计算机开始绘制场景时，生效的建模变换是恒等变换，即没有任何变换。在准备绘制车时，它通过将当前变换（恒等变换）推入堆栈来保存当前变换的副本。然后，它通过将车的建模变换scale(0.3,0.3)和translate(dx,0)与当前变换相乘来修改当前变换。当绘制轮子时，它再次将当前变换（整个车的建模变换）推入堆栈，并修改当前变换以考虑轮子的建模变换。类似地，当绘制填充圆时，它保存轮子的建模变换，然后应用圆的建模变换。
+
+    当圆实际绘制在场景中时，它会通过组合变换进行变换。该变换将圆直接放入场景中，但是它是由将圆放入轮子的变换、将轮子放入车中的变换和将车放入场景中的变换组成的。在绘制圆之后，计算机使用从堆栈中弹出的当前变换替换当前变换。那将是整个轮子的建模变换，并且该变换将用于绘制任何进一步的轮子部分。当完成轮子时，车的变换被弹出。当完成车时，原始变换（恒等变换）被弹出。当计算机进入场景中的下一个对象时，它再次从恒等变换作为起点开始整个过程。
+
+    这听起来可能很复杂，但我应该强调，这是计算机为您执行的操作。您的责任只是设计各个对象，使用它们自己的自然坐标系。作为其中的一部分，您指定了应用于该对象的子对象的建模变换。您以类似的方式构建整个场景。计算机将为您将所有内容组合在一起，考虑到许多层次的分层结构。您一次只需处理结构的一个组成部分。这就是分层设计的威力所在；这就是它如何帮助您处理复杂性。
+
+.. tab:: 英文
+
+    Suppose that you write a subroutine to draw an object. At the beginning of the subroutine, you use a routine such as saveTransform() to save a copy of the current transform. At the end of the subroutine, you call restoreTransform() to reset the current transform back to the value that was saved. Now, in order for this to work correctly for hierarchical graphics, these routines must actually use a **stack** of transforms. (Recall that a stack is simply a list where items can be added, or "pushed," onto one end of the list and removed, or "popped," from the same end.) The problem is that when drawing a complex object, one subroutine can call other subroutines. This means that several drawing subroutines can be active at the same time, each with its own saved transform. When a transform is saved after another transform has already been saved, the system needs to remember both transforms. When restoreTransform() is called, it is the most recently saved transform that should be restored.
+
+    A stack has exactly the structure that is needed to implement these operations. Before you start drawing an object, you would push the current transform onto the stack. After drawing the object, you would pop the transform from the stack. Between those two operations, if the object is hierarchical, the transforms for its sub-objects will have been pushed onto and popped from the stack as needed.
+
+    Some graphics APIs come with transform stacks already defined. For example, the original OpenGL API includes the functions glPushMatrix() and glPopMatrix() for using a stack of transformation matrices that is built into OpenGL. The Java Graphics2D API does not include a built-in stack of transforms, but it does have methods for getting and setting the current transform, and the get and set methods can be used with an explicit stack data structure to implement the necessary operations. When we turn to the HTML canvas API for 2D graphics, we'll see that it includes functions named save() and restore() that are actually push and pop operations on a stack. These functions are essential to implementing hierarchical graphics for an HTML canvas.
+
+    Let's try to bring this all together by considering how it applies to a simple object in a complex scene: one of the filled circles that is part of the front wheel on the cart in our example scene. Here, I have rearranged part of the scene graph for that scene, and I've added labels to show the modeling transformations that are applied to each object:
+
+
+    <figure markdown="span">
+        ![pixel-coordinates](../../en/c2/hierarchical-transforms.png)
+    </figure>
+
+    The rotation amount for the wheel and the translation amount for the cart are shown as variables, since they are different in different frames of the animation. When the computer starts drawing the scene, the modeling transform that is in effect is the identity transform, that is, no transform at all. As it prepares to draw the cart, it saves a copy of the current transform (the identity) by pushing it onto the stack. It then modifies the current transform by multiplying it by the modeling transforms for the cart, scale(0.3,0.3) and translate(dx,0). When it comes to drawing the wheel, it again pushes the current transform (the modeling transform for the cart as a whole) onto the stack, and it modifies the current transform to take the wheel's modeling transforms into account. Similarly, when it comes to the filled circle, it saves the modeling transform for the wheel, and then applies the modeling transform for the circle.
+
+    When, finally, the circle is actually drawn in the scene, it is transformed by the combined transform. That transform places the circle directly into the scene, but it has been composed from the transform that places the circle into the wheel, the one that places the wheel into the cart, and the one that places the cart into the scene. After drawing the circle, the computer replaces the current transform with one it pops from the stack. That will be the modeling transform for the wheel as a whole, and that transform will be used for any further parts of the wheel that have to be drawn. When the wheel is done, the transform for the cart is popped. And when the cart is done, the original transform, the identity, is popped. When the computer goes onto the next object in the scene, it starts the whole process again, with the identity transform as the starting point.
+
+    This might sound complicated, but I should emphasize that it is something that the computer does for you. Your responsibility is simply to design the individual objects, in their own natural coordinate system. As part of that, you specify the modeling transformations that are applied to the sub-objects of that object. You construct the scene as a whole in a similar way. The computer will then put everything together for you, taking into account the many layers of hierarchical structure. You only have to deal with one component of the structure at a time. That's the power of hierarchical design; that's how it helps you deal with complexity.

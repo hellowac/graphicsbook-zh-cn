@@ -36,6 +36,18 @@
 
    preface.rst
    c1/index.rst
+   c2/index.rst
+   c3/index.rst
+   c4/index.rst
+   c5/index.rst
+   c6/index.rst
+   c7/index.rst
+   c8/index.rst
+   c9/index.rst
+
+   a1/index.rst
+   a2/index.rst
+   a3/index.rst
 
    glossary.rst
 

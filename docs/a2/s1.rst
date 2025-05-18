@@ -1,0 +1,372 @@
+# B.1 节  [Blender 基础知识](./a2/s1.md)
+
+**Section B.1  Blender Basics**
+
+.. tab:: 中文
+
+    Blender 拥有一个独特的界面，它在 Windows、MacOS 和 Linux 系统上保持一致。它在较大的显示屏和三键鼠标上表现最佳。大多数鼠标上的滚轮作为第三个鼠标按钮。数字小键盘也很有用。Blender 的最新版本几乎使其所有功能仅使用左鼠标按钮和基本键盘即可使用，但了解快捷键仍然可以使工作更加高效。
+
+    本节讨论了 Blender 中 3D 图形的一些基本工作原理，包括几何对象、变换、光照、材质和纹理。如果您尚未阅读本书的相关章节，请参阅 [第 1.2 节](../c1/s2.md) 以获取这些概念的基本介绍。
+
+    当 Blender 首次启动时，您有机会选择一些自定义设置。我假设您使用的是默认设置，其中包括使用左鼠标按钮进行选择。
+
+.. tab:: 英文
+
+    Blender has a unique interface, which is consistent across Windows, MacOS, and Linux. It works best with a fairly large display and a three-button mouse. The scroll wheel on most mice works as the third mouse button. A numeric keypad is also useful. Recent versions of Blender have made almost all of its functionality usable with just a left mouse button and basic keyboard, but knowing the shortcuts can still make it easier to work efficiently.
+
+    This section discusses how some fundamental aspects of 3D graphics work in Blender, including geometric objects, transformations, light, material, and textures. See [Section 1.2](../c1/s2.md) for a basic introduction to these concepts, if you have not already read the relevant chapters of the book.
+
+    When Blender starts for the first time, you have a chance to select some customizations. I will assume that you are using the defaults, which include using the left mouse button for selecting things.
+
+## B.1.1  3D 视图
+
+**B.1.1  The 3D View**
+
+.. tab:: 中文
+
+    Blender 窗口被划分为不重叠的多个部分，称为“区域”。每个区域包含一个“编辑器”。可以通过下图所示区域左上角的菜单更改任何区域显示的编辑器。你可以通过垂直或水平拖动区域的角落将一个区域分割成两个，或者将两个相邻的区域合并为一个。（或者右键点击两个区域之间的分隔线，并从弹出菜单中选择“分割”或“合并”命令。）
+
+    区域进一步被划分为“区域”。如果你没有自定义布局，窗口的中央区域是一个大型的“3D视图”编辑器，它显示你正在工作的3D世界视图。启动时，它包含一个简单的默认场景。以下是它的样子，比典型大小小得多，并对其部分内容进行了注释：
+
+    ![123](../../en/a2/blender-3d-viewport.png)
+
+    你在3D视图中看到的并不是你在渲染场景图像时会看到的，图像也不会从相同的角度制作。上述3D视图中唯一会在渲染场景中可见的是立方体。相机代表将制作渲染图像的视点。点光源为场景提供照明。3D视图中的其他东西是为了帮助你编辑场景或帮助你理解你正在看到的内容。
+
+    你可以通过按“t”键来显示或隐藏3D视图的各个部分，这将切换左侧工具栏的可见性。而“n”键将切换一个控制面板的可见性（未在插图中显示）。例如，该面板允许你以数值方式输入选定对象的位置、比例和旋转。
+
+    **重要提示**：在 Blender 中，按键会被发送到包含鼠标光标的编辑器，除非你正在文本输入框中输入。这意味着鼠标光标必须在3D视图中，按键才能被发送到该编辑器。当你按下一个键而没有达到预期效果时，请检查鼠标光标的位置！
+
+    你可以通过点击或拖动3D视图右侧的控件来改变你在3D视图中看到的世界视图，如上图所示。但还有其他方法可以控制视图。当你的鼠标在3D视图上方时滚动鼠标滚轮，可以放大或缩小视图。使用中键鼠标拖动（通常意味着按住滚轮的同时拖动）将旋转视图。Shift-中键拖动将平移视图。键盘上的数字键会影响视图：1、3、7 和 9 选择沿坐标轴的视图；2、4、6 和 8 旋转视图；0 选择从相机的视图；5 在透视和正交投影之间切换。另外，Numpad-Period 将放大选定的对象或对象。（如果使用数字小键盘，请确保键盘上的 NumLock 已启用。）
+
+    另外两个键盘技巧：如果你在3D视图中迷失方向，只需按“Home”键，这将使所有对象都可见。如果你想清除视觉杂乱，以便只在一个或几个对象上工作，选择你想要工作的对象，并按“/”键；视图将放大选定的选项，其他对象将被隐藏。再次按“/”键返回通常的视图。
+
+
+    ----
+
+    3D 视图左边缘的工具栏决定了左鼠标按钮的用途。默认工具是选择工具：单击一个对象以选择它，或者单击并拖动以绘制一个框，并选择与框相交的所有对象。在选择时按住 Shift 键可以添加到当前选择。
+
+    注意 Blender 窗口右上角的区域包含当前场景的场景图视图（在 Blender 中称为“大纲编辑器”）。你也可以通过点击场景图视图中的名称来选择对象。当你想要选择的对象在 3D 视图中被隐藏时，这可能非常方便。
+
+    使用第二个工具，光标工具，你可以单击以设置 3D 光标的位置。你也可以通过使用任何工具 Shift-右键单击来设置其位置。3D 光标将在本节后面讨论。
+
+    接下来的四个工具也可用于选择对象，但它们会在所选对象或对象组上添加“操作器”。操作器可用于变换对象。以下是在立方体上操作器用于平移、旋转和缩放对象的样子：
+
+    ![123](../../en/a2/blender-manipulator-controls.png)
+
+    例如，使用平移操作器，你可以拖动一个箭头头以沿坐标轴之一的方向平移对象，或者你可以拖动白色圆圈以在 3D 视图平面上平移对象。与大多数 Blender 界面元素一样，你可以将鼠标悬停在操作器的任何部分上以查看它的功能。
+
+    但是，如果你熟悉键盘快捷键，有其他方法可以变换对象，而无需更改你正在使用的工具。选择你想要变换的对象，然后按以下方式应用变换：
+
+    - 按 "G" 键。（G 代表“抓取”。）在不按住任何鼠标按钮的情况下移动鼠标。你只能在屏幕平面上移动对象。用左鼠标按钮点击以完成。用右鼠标按钮点击以中止。（按回车键也会完成；按 Esc 键也会中止。）在按 "G" 键后，你可以按 "X"、"Y" 或 "Z" 将运动限制在一个轴上。特别注意，你**不能**简单地单击并拖动对象来移动它！
+    - 按 "S" 键。在不按住任何鼠标键的情况下移动鼠标向对象靠近或远离以改变其大小。大小在所有三个维度上都会改变。按与 "G" 键相同的方式结束操作。在按 "S" 后，你可以按 "X"、"Y" 或 "Z" 仅在一个轴的方向上缩放对象，或者按 Shift-X、-Y 或 -Z 在垂直于轴的两个方向上缩放。
+    - 按 "R" 键。在不按住任何鼠标键的情况下移动鼠标以围绕垂直于屏幕的线旋转对象。用左鼠标按钮点击以完成。按与 "G" 键相同的方式结束操作。**如果你第二次按 "R"，你可以自由旋转对象**。或者，在按 "R" 后，你可以按 "X"、"Y" 或 "Z" 绕指定轴旋转对象。
+
+    如果你不记得按左键或右键来完成变换操作，你可能会非常困惑。在操作完成之前，你不能做其他任何事情。
+
+    无论是旋转、缩放还是平移，你可以按住 Ctrl 键来限制变化，例如在平移时限制为整数量，或在旋转时限制为十度的倍数。同样，你可以使用箭头键进行小的调整。
+
+    所有这些操作都可以像应用于任何其他对象一样应用于相机。你可以移动和旋转相机，以便在渲染图像时获得你想要看到的世界视图。你甚至可以在相机视图（Numpad 0）中应用变换，只要相机是选定的对象。这是获得你想要为渲染图像的确切视图的好方法。
+
+
+.. tab:: 英文
+
+    The Blender window is divided into non-overlapping sections, which are called "areas." Each area contains an "editor." Any area can be changed to show any editor, using the menu shown at the top left of the area in the illustration below. You can drag a corner of an area vertically or horizontally to split an area in two, or to join two neighboring areas into one. (Or right-click the dividing line between two areas and select a "Split" or "Join" command from the popup menu.)
+
+    Areas are in turn divided into "regions." If you have not customized the layout, the central area of the window is a large "3D View" editor that shows a view of the 3D world that you are working in. At startup, it contains a simple default scene. Here's what it looks like, much reduced from its typical size, with annotations on some of its contents:
+
+    ![123](../../en/a2/blender-3d-viewport.png)
+
+    What you see in the 3D view is not what you will see when you make a rendered image of the scene, and the image won't be made from the same point of view. The only thing in the above 3D View that would be visible in the rendered scene is the cube. The camera represents the point of view from which a rendered image will be made. The point light provides illumination for the scene. The other things in the 3D View are there to help you edit the scene or to help you to understand what you are seeing
+
+    You can show and hide various parts of the 3D view. For example, pressing the "t" key will toggle the visibility of the toolbar on the left. And the "n" key will toggle a control panel that appears on the right (not shown in the illustration). That panel, for example, lets you enter the position, scale, and rotation of the selected object numerically.
+
+    **Important Note**: In Blender, key presses are sent to the editor that contains the mouse cursor, except when typing into a text input box. This means that the mouse cursor must be in the 3D View for key presses to be sent to that editor. When pressing a key doesn't seem to do what you expect, check the position of the mouse cursor!
+
+    You can change the view of the world that you see in the 3D View by clicking or dragging on the controls along the right edge of the 3D View, as shown in the above illustration. But there are also other ways to control the view. Rolling your mouse's scroll wheel while the mouse is over the 3D view will zoom the view in or out. Dragging with the middle mouse button (which usually means pressing and holding down the scroll wheel while dragging) will rotate the view. Shift-dragging with the middle mouse button will translate the view. And the number keys on a keyboard's numpad will affect the view: 1, 3, 7, and 9 select views along the coordinate axes; 2, 4, 6, and 8 rotate the view; 0 selects the view from the camera; and 5 toggles between perspective and orthographic projections. Also, Numpad-Period will zoom in on the selected object or objects. (If using the Numpad, make sure that NumLock is enabled on your keyboard.)
+
+    Two other keyboard tricks: If you get lost in the 3D view, just hit the "Home" key, which will bring all objects into view. And if you want to clear away visual clutter so that you can just work on one or a few objects, select the object or objects that you want to work on, and hit the "/" key; the view will zoom in on the selection, and other objects will be hidden. Hit the "/" key again to return to the usual view.
+
+    ----
+
+    The toolbar at the left edge of the 3D View determines how the left mouse button is used. The default tool is the Select Tool: Click an object to select it, or click and drag to draw a box and select all the objects that intersect the box. Hold down the shift key while selecting to add to the current selection.
+
+    Note that the area on the top right of the Blender window contains a scene graph view of the current scene (called an "Outliner" editor in Blender). You can also select objects by clicking on their names in the scene graph view. This can be convenient when the object that you want to select is hidden in the 3D View.
+
+    When using the second tool, the Cursor Tool, you can click to set the position of the 3D cursor. You can also set its position by shift-right-clicking with any tool. The 3D cursor is discussed later in this section.
+
+    The next four tools can also be used for selecting objects, but they add "manipulators" to the selected object or group of objects. Manipulators can be used to transform an object. Here is what the manipulators for translating, rotating, and scaling an object look like on a cube:
+
+    ![123](../../en/a2/blender-manipulator-controls.png)
+
+    For example, using the translation manipulator, you can drag one of the arrowheads to translate the object in the direction of one of the coordinate axes, or you can drag the white circle to translate the object in the plane of the 3D View. As with most Blender interface elements, you can hover your mouse over any part of a manipulator to see what it does.
+
+    But if you are comfortable with keyboard shortcuts, there are other ways to transform objects, without changing the tool that you are using. Select the object or objects you want to transform, then apply the transformation as follows:
+
+    - Press the "G" key. (G stands for "grab".) Move the mouse **without holding down any mouse button**. You can move the object in the plane of the screen only. Click with the left mouse button to finish. Click with the right mouse button to abort. (Hitting return will also finish; hitting escape will also abort.) After hitting the "G" key, you can hit "X", "Y", or "Z" to constrain motion to one axis. Note in particular that you **cannot** simply click-and-drag an object to move it!
+    - Press the "S" key. Without holding down any mouse key, move the mouse towards or away from the object to change its size. The size changes in all three dimensions. End the operation in the same way as for the "G" key. After hitting "S", you can hit "X", "Y", or "Z" to scale the object in the direction of one axis only, or hit Shift-X, -Y, or -Z to scale in the two directions perpendicular to the axis.
+    - Press the "R" key. Without holding down any mouse key, move the mouse to rotate the object around a line perpendicular to the screen. Click with the left mouse button to finish. End the operation in the same way as for the "G" key. **If you hit "R" a second time, you can freely rotate the object**. Or, after hitting "R", you can hit "X", "Y", or "Z" to rotate the object about the specified axis.
+
+    You can get yourself real confused if you don't remember to press the left or right mouse button to complete a transformation operation. You can't do anything else until the operation is completed.
+
+    Whether rotating, scaling, or translating, you can hold the Control key down to limit the changes, such as to integral amounts while translating or to multiples of ten degrees while rotating. Also, you can use the arrow keys to make small adjustments.
+
+    All these operations can be applied to the camera, just as they are applied to any other object. You can move and rotate the camera to get the view of the world that you want to see when you render an image. You can even apply transformations to the camera while in the camera view (Numpad 0), as long as the camera is the selected object. This can be a good way to get the exact view that you want for the rendered image.
+
+## B.1.2  将对象添加到场景中
+
+**B.1.2  Adding Objects to the Scene**
+
+.. tab:: 中文
+
+    更改视图不会修改世界的内容。要那样做，你需要使用编辑操作，例如向世界添加对象。这就是 3D 光标的作用。3D 光标在上述 3D 视图编辑器的图像中有标记。新添加的对象总是在 3D 光标的位置添加到世界中。（你可能更愿意让 3D 光标保持在原点，并在添加它们之后将对象移动到位置。）
+
+    在添加对象之前，你必须定位 3D 光标。你可以通过在 3D 视图中 Shift-右键单击来做到这一点。或者，选择 3D 视图左边缘工具栏中的光标工具，并使用左键单击来定位 3D 光标。3D 光标存在于三维空间中。你不能仅从单一视点看世界就知道它在哪里。通常，你将通过旋转视图或使用数字键盘 1、3 和 7 键在视图之间切换，从几个视点检查 3D 光标的位置。
+
+    另一种定位 3D 光标的方法是使用“吸附”菜单，你可以通过在 3D 视图窗口中按下 SHIFT-S 来调出它。（记住，鼠标必须在 3D 视图中，按键才能发送到该编辑器。）这是 Blender 的奇怪圆形菜单之一，它会出现在鼠标光标的位置——只需将光标移动到其中一个选项上以选择它，并按左鼠标按钮。你还可以在右键单击 3D 视图时得到的弹出菜单中找到一个更正常的吸附菜单，作为该菜单的子菜单。吸附菜单包含定位光标以及定位对象的命令。例如，使用“光标到世界原点”将 3D 光标移动到点 (0,0,0)。
+
+    一旦你定位好了 3D 光标，使用“添加”菜单向世界添加一个对象。你可以通过按下 Shift-A 在鼠标位置弹出添加菜单，或者在 3D 视图的顶部标题栏中找到它。添加菜单有子菜单用于添加几种类型的对象。我建议你最初坚持使用网格对象。（网格是由多边形或由线段组成的曲线组成的表面。）在添加菜单的“网格”子菜单中有各种网格对象可用。例如，UV 球体是一个通过纬度和经度线分段的球体。ICO 球体被分成三角形。平面实际上只是一个矩形。（当你第一次启动 Blender 时，默认场景中的对象是一个网格立方体。）
+
+    在添加某些类型的对象时，有一些选项你可以更改。当你添加对象时，包含这些选项的面板会出现在 3D 视图的左下区域。你可能只看到一个面板的名称；点击它以显示整个面板。下图显示了网格 UV 球体的面板。你可以更改段数和环数，它们是围绕球体赤道的细分数和从北极到南极的细分数。这是你设置这些属性的唯一机会。
+
+    ![123](../../en/a2/blender-add-uvsphere.png)
+
+    请注意，你可以通过输入值来设置新添加对象的位置和旋转。这个面板中的数值输入控件是 Blender 有趣的输入按钮的例子。以下是如何使用这些按钮：你可以点击按钮，输入值，然后按回车。你可以点击按钮末端的箭头来增加/减少值。或者，你可以在按钮上左右拖动鼠标来更改值。
+
+    注意“生成 UV”复选框。这里的“UV”指的是对象的纹理坐标。如果你想要将纹理应用到对象上，你将需要它们。（在这个意义上，“UV”与“UV 球体”名称中的“UV”无关，后者指的是用作参数化表面的输入的 u 和 v 参数。）
+
+    要**删除**选定的对象或对象，只需按“X”键或删除键。使用“X”键时，系统会要求你确认删除。（记住，鼠标光标必须在 3D 窗口中才能接收键盘命令。（这是我最后一次说这个！））
+
+    当你修改世界时，你可以通过按 Ctrl-Z 撤销大多数操作。这包括添加、删除和编辑对象。Ctrl-Shift-Z 是重做操作。
+
+
+.. tab:: 英文
+
+    Changing the view does not modify the contents of the world. To do that, you need editing operations such as adding objects to the world. This is where the 3D cursor comes in. The 3D cursor is labeled in the above image of the 3D View editor. A newly added object is always added to the world at the position of the 3D cursor. (You might prefer to just leave the 3D cursor at the origin and move objects into position after you add them.)
+
+    You must position the 3D cursor **before** adding the object. You can do that by shift-right-clicking in the 3D View. Or, select the Cursor Tool in the toolbar on the left edge of the 3D View, and use left-click to position the 3D cursor. The 3D cursor exists in three-dimensional space. You can't tell where it is by looking at the world from just one point of view. Typically, you would check the position of the 3D cursor from several viewpoints by rotating the view or by using the Numpad 1, 3, and 7 keys to switch between views.
+
+    Another way to position the 3D cursor is with the "Snap" menu, which you can call up by pressing SHIFT-S while the mouse cursor is in the 3D Vew window. (Remember that the mouse must be in the 3D View for keystrokes to be sent to that editor.) This is one of Blender's strange circular menus that pops up at the position of the mouse cursor—just move the cursor towards one of the options to select it, and press the left mouse button. You can also find a more normal Snap menu as a submenu in the popup menu that you get by right-clicking the 3D View. The Snap menu contains commands for positioning the cursor as well as for positioning objects. For example, use "Cursor To World Origin" to move the 3D cursor to the point (0,0,0).
+
+    Once you have the 3D cursor in position, use the "Add" menu to add an object to the world. You can pop up the Add menu at the mouse position by hitting Shift-A, or you can find it in the header at the top the 3D View. The Add menu has submenus for adding several types of objects. I suggest that you stick with mesh objects at first. (A mesh is a surface made up of polygons or a curve made up of line segments.) Various mesh objects are available in the "Mesh" submenu of the Add menu. For example, A UVSphere is a sphere divided into segments by lines of latitude and longitude. An ICOSphere is divided into triangles. A Plane is actually just a rectangle. (When you first start Blender, the object in the default scene is a mesh Cube.)
+
+    When adding certain types of objects, there are some options you can change. When you add the object, a panel containing these options appears in the lower left region of the 3D View. You might just see the name of the panel; click it to show the entire panel. The following image shows the panel for a Mesh UVSphere. You can change the number of Segments and Rings, which are the number of subdivisions around the equator of the sphere and the number from the north pole to the south pole. This is the only chance that you will get to set those properties.
+
+    ![123](../../en/a2/blender-add-uvsphere.png)
+
+    Note that you can set the position and rotation of the newly added object by typing in values. The numerical input widgets in this panel are examples of Blender's funny input buttons. Here's how to use such buttons: You can click the button, type in a value, and press return. You can click the arrows at the ends of the button to increase/decrease the value. Or you can drag the mouse left-to-right or right-to-left on the button to change the value.
+
+    Note the "Generate UVs" checkbox. "UV" here refers to texture coordinates for the object. You will need them if you want to apply a texture to the object. ("UV" in this sense has nothing to do with the "UV" in the name "UVSphere," which refers to the u and v parameters used as inputs for a parametric surface.)
+
+    To **delete** the selected object or objects, just hit the "X" key or the Delete key. With the "X" key, you will be asked to confirm the deletion. (Remember that the mouse cursor must be in the 3D window for it to get keyboard commands. (This is the last time I will say this!))
+
+    As you modify the world, you can undo most operations by pressing Control-Z. That includes adding, deleting, and editing objects. Control-Shift-Z is the Redo operation.
+
+## B.1.3  编辑模式
+
+**B.1.3  Edit Mode**
+
+.. tab:: 中文
+
+    普通的变换（以及许多其他操作）是作为整体应用于对象的。然而，有时，您可能想要处理对象的顶点、边或面。为此，您需要使用“编辑模式”。
+
+    要使选定的对象进入编辑模式，请按 TAB 键。当处于编辑模式时，按 TAB 键退出编辑模式。在编辑模式下，您可以选择单个顶点和顶点组。您可以通过选择该面的所有顶点来选择一个面。您可以通过选择该边的两个顶点来选择一条边。您可以使用 S、R 和 G 键或使用操作器以常规方式缩放、旋转和移动选定的元素。您可以使用 X 键删除对象。右键单击将弹出一个大型菜单，列出您可以在选定元素上执行的操作。
+
+    在编辑模式下，选定的顶点和面呈橙色。下图左侧显示了一个在编辑模式下的所有顶点都被选中的立方体。在第二张图中，只有顶部面的顶点被选中。使用“线框”视图代替默认的“实体”视图可能更容易在编辑模式下工作。按“Z”键可以调出一个圆形菜单，显示可能的视图，并选择“线框”；默认视图是“实体”。第三张图显示了立方体的线框视图。
+
+    ![123](../../en/a2/blender-edit-mode.png)
+
+    编辑模式下的顶点选择与通常的“对象”模式下的对象选择方式相同。您也可以按“A”键选择所有顶点。ALT-A（或 Mac 上的 Option-A）将取消选择所有顶点。当您第一次进入网格对象的编辑模式时，它的所有顶点都会被选中。在线框模式下选择顶点集可能更容易。在选择顶点和对它们执行操作时，您可能需要多次更改视点。
+
+    编辑模式下有很多事情是**不能做的**，所以不要忘记您必须按 TAB 键退出该模式！
+
+    顺便说一下，“Z”键可以在编辑模式之外用来选择如何在 3D 视图中渲染对象。“A”和“ALT-A”可以在编辑模式之外用来选择对象集。
+
+
+.. tab:: 英文
+
+    Ordinary transformations (and many other operations) are applied to an object as a whole. Sometimes, however, you want to work on the vertices, edges, or faces of an object. For that, you use "edit mode."
+
+    To enter Edit Mode for the selected object, press TAB. When in Edit Mode, press TAB to exit Edit Mode. In Edit Mode, you can select individual vertices and groups of vertices. You can select a face by selecting all the vertices of that face. You can select an edge by selecting both vertices of that edge. You can scale, rotate, and translate selected elements in the usual way, with the S, R, and G keys, or using a manipulator. You can delete things with the X key. Right-clicking will pop up a large menu of actions that you can take on the selected elements.
+
+    In Edit Mode, selected vertices and faces are orange. The picture on the left below shows a cube in edit mode with all vertices selected. In the second picture, only the vertices of the top face are selected. In can be easier to work in Edit Mode using a "wireframe" view instead of the default "solid" view. Hit the "Z" key to bring up a circular menu of possible views, and select "wireframe"; the default view is "Solid." The third picture shows the cube as a wireframe.
+
+    ![123](../../en/a2/blender-edit-mode.png)
+
+    Selection of vertices in Edit mode works in the same way as the seletion of objects in the usual "Object" mode. You can also hit the "A" key to select all vertices. ALT-A (or Option-A on a Mac) will deselect all vertices. When you first enter Edit Mode for a mesh object, all of its vertices are selected. It can be easier to select sets of vertices in wireframe mode. You might have to change the point of view several times while selecting the vertices and performing operations on them.
+
+    There are a lot of things you **can't do** in Edit Mode, so don't forget that you have to press the TAB key to get out of that mode!
+
+    By the way, the "Z" key can be used outside of Edit Mode to select how objects are rendered in the 3D View. And "A" and "ALT-A" can be used outside of Edit Mode for selecting sets of objects.
+
+## B.1.4  光源、材质和纹理
+
+**B.1.4  Light, Material, and Texture**
+
+.. tab:: 中文
+
+    我们已经看到，“Z”键可以用来选择在 3D 视图中对象的渲染方式。在标题栏中还有一组四个小按钮，可以用来选择视图风格。在默认的“实体”视图和“线框”视图中，光照和材质不会影响你看到的。在“材质预览”视图中，会显示对象的材质，但不会显示所有光照效果。“渲染”视图则同时应用光照。
+
+    默认场景中已经有一个点光源（加上一个背景，增加了类似环境光的效果）。你可以像其他对象一样选择和变换光源。确保所有可见对象都得到照明的一个简单方法是将光源放置在相机的位置。你可以使用“添加”菜单中的“光源”子菜单添加额外的光源。你可能需要添加几个光源来很好地照亮你的场景。
+
+    “光源”子菜单中有几种类型的光源。一个“点”光源向所有方向发光。初始场景中的光源就是一个点光源。“太阳”是一个方向光，从某个方向发出平行光线，由一条线表示，该线从 3D 视图中的光源位置绘制。“聚光灯”是一个聚光灯，发出一个锥形的光。你需要将太阳或聚光灯瞄准你想要照亮的对象。你会看到一个黄色的点，你可以拖动它来改变方向，或者你可以按常规方式给太阳或聚光灯应用旋转。
+
+    ---
+
+    默认情况下，对象的颜色是灰色。要改变这一点，你必须给对象添加一个“材质”并设置该材质的属性。（启动世界中的立方体有一个材质；你添加的新对象没有。）要处理材质，请使用属性编辑器，你可以在窗口的右下角找到它。属性编辑器允许你设置对象的所有属性。在左侧边缘，有一列按钮，用来选择你想处理的属性组。出现的按钮取决于当前选择的是哪种对象，尽管有些按钮始终存在。以下是选择网格对象时显示的按钮：
+
+    ![123](../../en/a2/blender-property-header.png)
+
+    在这张图中，点击了“材质”按钮。选择了材质按钮后，按钮右侧的编辑器面板的其余部分就填满了用于设置选定对象材质属性的控件。大多数控件在添加材质到对象之前不会出现。如果没有材质，你会在属性编辑器中看到一个“新建”按钮。点击“新建”按钮向对象添加新材料，或者点击“新建”左侧的图标从菜单中选择一个已经存在的材质。完整的控件集会出现。以下是你将看到的一部分：
+
+    ![123](../../en/a2/blender-material-properties.png)
+
+    Blender 的材质系统非常复杂，默认的材质类型是“Principled BSDF”，它本身相当复杂。Principled BSDF 尝试实现基于物理的渲染——使用基于物理的真实材料和光照，而不是 OpenGL 1.1 中使用的漫反射和镜面反射属性等近似值。我们只会使用 Principled BSDF 的一些基本设置。关于它以及材质的更多信息，请参阅 [Blender 手册](https://docs.blender.org/manual/en/latest/render/shader_nodes/shader/principled.html)。我们将在 [第 B.4 节](./s4.md) 中更详细地介绍光照和材质。
+
+    标记为“基础颜色”的输入就是材料的基本颜色。如果你点击它，会弹出一个 RGB 颜色选择器，你可以在那里设置颜色。或者，你可以从纹理中获取颜色，如下所述。
+
+    下一个最重要的输入是“金属”。输入是一个介于 0.0 和 1.0 之间的数字，它决定了材料与金属的光交互的程度。基本上，金属是有光泽的，它们的镜面反射是金属的颜色。对于非金属，镜面反射是白色的。“镜面”输入决定了镜面反射的量。请注意，在 Principled BSDF 中没有镜面颜色这一说。（不要被“镜面色彩”所欺骗，它根本不是那么回事，据我所知，它几乎没有什么可见的效果。）
+
+    “粗糙度”输入表示表面有多粗糙。它类似于 OpenGL 的光泽度属性。也就是说，更粗糙的表面具有更大的镜面高光。它的反射也不够锐利。
+
+    我还标记了与次表面散射相关的控件。这指的是光可以进入一个物体，四处反弹，并在不同的点出现。这对于像皮肤、牛奶和玉这样的材料是一个重要的效果，你可以通过将“次表面”控件设置为大于 0.0 的值来启用它。
+
+
+    ----
+
+    纹理可以使对象的颜色或某些其他属性在不同点之间变化。一种类型的纹理从图像中复制颜色，有效地将图像绘制在对象表面上。这称为图像纹理。或者，颜色可以通过算法从点的坐标计算出来。这称为程序纹理。Blender 拥有这两种类型的纹理。
+
+    将纹理用作 Principled BSDF 中的“基础颜色”并不难。点击“基础颜色”旁边的黄色圆点，并从弹出菜单中选择“图像纹理”。（注意，弹出菜单中的大多数项目在这里并不适用！）然后点击“打开”并浏览图像文件。你可能需要将投影类型设置为“盒子”或“球体”，否则你可以接受默认设置。不幸的是，如果不使用更高级的材料配置，就无法应用纹理变换。在属性编辑器中它看起来像这样：
+
+    ![123](../../en/a2/blender-image-texture-settings.png)
+
+    弹出菜单中的一些其他条目是程序纹理。你可以尝试“棋盘格”、“Voronoi”或“噪声”纹理。“波形”程序纹理可以用来制作类似大理石的纹理，尽管目前它仅限于灰度。（请参阅第 B.4 节了解如何添加颜色。）这里有一个示例，使用显示的设置：
+
+    ![123](../../en/a2/blender-wave-texture.png)
+
+.. tab:: 英文
+
+    We have seen that the "Z" key can be used to select how objects are rendered in the 3D View. There is also a set of four small buttons in the header that can be used to select the view style. In the default "Solid" view and the "Wireframe" view, lighting and material don't affect what you see. The "Material Preview" view, will show objects' materials, but not all lighting effects. The "Rendered" view applies lighting as well.
+
+    There is already one point light in the default scene (plus a background that adds something like ambient light). You can select and transform a light just like any other object. An easy way to be sure of lighting all visible objects is to place a light at the position of the camera. You can add additional lights, using the "Light" submenu in the "Add" menu. You will probably need to add several lights to light your scene well.
+
+    There are several kinds of light in the "light" submenu. A "Point" light gives off light in all directions. The light in the initial scene is a point light. A "Sun" is a directional light that shines in parallel rays from some direction, indicated by a line drawn from the light position in the 3D view. A "Spot" is a spotlight that gives off a cone of light. You need to aim a sun or spotlight at the objects you want to illuminate. You will see a yellow dot that you can drag to change the direction, or you can apply a rotation to the sun or spot in the usual way.
+
+    ----
+
+    The default color of an object is gray. To change this, you have to add a "material" to the object and set the properties of that material. (The cube in the start-up world has a material; new objects that you add don't.) To work on materials, use the Properties Editor, which you can find in the lower right area of the window. The Properties Editor allows you to set all kinds of properties of objects. Along the left edge, there is a a column of buttons that select which group of properties you want to work on. The buttons that appear depend on what kind of object is currently selected, although some are always present. Here are the buttons that are shown when the selected object is a mesh:
+
+    ![123](../../en/a2/blender-property-header.png)
+
+    In this picture, the Materials button has been clicked. With the materials button selected, the rest of the editor panel, to the right of the buttons, is filled with controls for setting the material properties of the selected object. Most of the controls don't appear until a material has been added to the object. If there is no material, you will see a "New" button in the Properties Editor. Click the "New" button to add a new material to the object, or click the icon to the left of "New" to select a material that already exists from a menu. The full set of controls will appear. Here's just a part of what you will see:
+
+    ![123](../../en/a2/blender-material-properties.png)
+
+
+    Blender's system for materials is very complex, and the default type of material is the "Principled BSDF," which is itself rather complex. The Principled BSDF tries to implement physically based rendering — using physically realistic materials and lighting rather then approximations like the diffuse and specular reflection properties that are used in OpenGL 1.1. We will just use some of the basic settings of the Principled BSDF. For more information about it and about materials in general, see the [Blender manual](https://docs.blender.org/manual/en/latest/render/shader_nodes/shader/principled.html). We will cover light and materials in a little more detail in [Section B.4](./s4.md).
+
+    The input labeled "Base Color" is just that, the basic color of the material. If you click it, an RBG color chooser will pop up where you can set the color. Alternatively, you can get the color from a texture, as discussed below.
+
+    The next most important input us "Metalic." The input is a number between 0.0 and 1.0 that determines the degree to which the material interacts with light like a metal. Basically, metals are shiny and their specular reflection is the color of the metal. For a non-metal, the specular reflection is white. The "Specular" input determines the amount of specular reflection. Note that there is no specular color as such in the Principled BSDF. (Don't be fooled by "Specular Tint," which is nothing of the sort and which has almost no visible effect that I can see.)
+
+    The "Roughness" input tells how rough the surface is. It is similar to OpenGL's shininess property. That is, a rougher surface has larger specular highlights. It also has less sharp reflections.
+
+    I have also labeled controls relevant to subsurface scattering. This refers to the fact that light can enter an object, bounce around, and emerge at a different point. It is an important effect for material like skin, milk, and jade, and you can enable it by setting the "Subsurface" control to a value greater than 0.0.
+
+    ----
+
+    A texture makes the color or some other property of an object vary from point to point. One type of texture copies colors from an image, effectively painting the image on the surface of the object. This is called an image texture. Alternatively, the color can be computed algorithmically from the coordinates of the point. This is called a procedural texture. Blender has both types of texture.
+
+    It's not hard to use a texture as the "Base Color" in a Principled BSFD. Click the yellow dot next to "Base Color," and select "Image Texture" from the popup. (Note that most of the items in the popup are not useful here!) Then click "Open" and browse for an image file. You will probably need to set the projection type to "Box" or "Sphere," but otherwise you can accept the default settings. Unfortunately, there is no way to apply a texture transformation, without using more advanced material configuration. Here is what it looks like in the Properties Editor:
+
+    ![123](../../en/a2/blender-image-texture-settings.png)
+
+    Some of the other entries in the popup are procedural textures. You might try the "Checker," "Voronoi," or "Noise" texture. The "Wave" procedural texture can be used to make marble-like textures, although for now it is limited to grayscale. (See Section B.4 to learn how to add color.) Here is an example, using settings as shown:
+
+    ![123](../../en/a2/blender-wave-texture.png)
+
+## B.1.5  保存您的工作
+
+**B.1.5  Saving Your Work**
+
+.. tab:: 中文
+
+    3D 窗口显示了您的对象的位置、大小和颜色。要从相机的视角看一个完全渲染的场景，按 F12 键。要返回主窗口，按 Escape 或 F11（或者只需关闭渲染窗口）。Blender 菜单顶部的“渲染”菜单中也有执行相同功能的命令。请记住，您需要渲染图像才能看到场景的一些方面。
+
+    当您渲染图像时，图像会被创建但并没有保存在任何地方。要保存它，请使用渲染窗口顶部“图像”菜单中的“保存”命令。图像的大小可以在属性编辑器中设置，选择“输出”属性。文件格式也可以在那里设置，或者在保存图像时在文件浏览器窗口中设置。
+
+    当您保存图像——或者由于其他原因需要从文件系统中选择一个文件——您将看到 Blender 文件浏览器窗口。文件浏览器和 Blender 的其他部分一样，使用非标准界面。然而，它并不难使用。窗口左侧边缘列出了一些目录的快捷方式。保存文件时，您应该在窗口底部的输入字段中输入文件名。
+
+    要保存您的整个 Blender 会话，请使用主 Blender 窗口“文件”菜单中的“保存”命令。Blender 会话存储在一个带有 ".blend" 扩展名的文件中。打开 .blend 文件将恢复程序的保存状态。如果您使用“文件”菜单的“默认”子菜单中的“保存启动文件”命令，Blender 将在您的主目录中的某个位置将当前程序状态保存在 .blend 文件中。之后，当您启动 Blender 时，它将打开该文件作为您会话的起点，而不是通常的初始场景。这个功能允许您自定义启动环境。
+
+.. tab:: 英文
+
+    The 3D window shows positions, sizes, and colors of your objects. To see a fully rendered scene from the point of view of the camera, hit the F12 key. To return to the main window, hit Escape or F11 (or just close the render window). There are also commands in the "Render" menu, at the top of the Blender menu, that do the same things. Remember that you need to render an image to see some aspects of the scene.
+
+    When you render an image, the image is created but it is not saved anywhere. To save it, use the "Save" command from the "Image" menu at the top of the render window. The size of the image is set in the Properties Editor, with the "Output" properties selected. The file format can be set there, or in the file browser window when you save the image.
+
+    When you save an image—or need to choose a file from the file system for some other reason—you will see the Blender File Browser window. The File Browser, like the rest of Blender, uses a non-standard interface. However, it is not difficult to use. Shortcuts to some directories are listed along the left edge of the window. For saving a file, you should type the file name into the input field at the bottom of the window.
+
+    To save your entire Blender session, use the "Save" command in the "File" menu of the main Blender window. A Blender session is stored in a file with the extension ".blend". Opening a .blend file will restore the saved state of the program. If you use the "Save Startup File" command in the "Defaults" submenu of the "File" menu, Blender will save the current state of the program in a .blend file somewhere in your home directory. After that, when you start Blender, it will open that file as the starting point for your session, instead of the usual initial scene. This feature allows you to customize your startup environment.
+
+
+
+## B.1.6  更多功能
+
+**B.1.6  More Features**
+
+.. tab:: 中文
+
+    我们已经介绍了很多关于 Blender 的基础知识，但在深入探讨更高级的建模和动画之前，还有一些背景信息将会很有用...
+
+    **渲染引擎**：渲染引擎产生一个 3D 世界的 2D 图像。Blender 有两个可以产生高质量图像的渲染引擎：Eevee 和 Cycles。Eevee 渲染器默认被选中，但你可以在属性编辑器的“渲染属性”中的“渲染引擎”菜单中选择 Cycles 渲染器。所选的渲染引擎在你进行场景的最终渲染（F12 键）或在 3D 视图中使用“渲染”视图风格时使用。（菜单中还有一个 Workbench 渲染引擎，它用于 3D 视图的其他视图风格，但它不是用来产生高质量图像的。）Eevee 是一个快速的实时渲染器，使用 OpenGL，包括许多技巧和高级着色器程序来实现特效。Cycles 使用路径追踪，这要慢得多，但可以产生高度逼真、物理上准确的渲染（见第 8.2 节）。当您使用 Cycles 进行最终渲染图像时，预计需要一段时间。当 Cycles 用于 3D 视图的渲染视图风格时，它做的工作较少，产生的图像“噪声”更多。路径追踪是一种渐进算法，这意味着它可以快速产生一个有噪声的图像，然后随着时间的推移添加细节。运行时间越长，它可以更物理准确。在渲染属性中有许多控制项用于配置渲染过程。调整该过程可能很困难，需要比这里提供的更多的知识。
+
+    **活动对象**：当多个对象被选中时，只有一个对象是“活动”的。如果你通过依次 shift-点击它们来选择几个对象，活动对象将是最后一个被点击的。活动对象将以比其他选定对象更浅的橙色轮廓显示。你可以 shift-点击任何一个选定的对象来使其成为活动对象。当你使用属性编辑器来查看或修改对象的属性时，你正在处理的是活动对象。当你按下 Tab 键时，进入编辑模式的是活动对象。
+
+    **父子关系**：一个对象可以是另一个对象的“父级”。这允许你创建层次模型。当你拖动、旋转或缩放父对象时，它所有的子对象都会作为一组与父对象一起变换。但子对象仍然可以在组内拥有自己的变换。此外，一个对象的子对象可以是另一个对象的父对象，所以你可以进行多级层次图形。如果你想组合几个对象，并且没有明显的父对象，你应该考虑将所有对象都父级化到一个空对象，使用“添加”菜单中的“空”命令来制作。要创建父级关系，选择两个或更多对象。你想成为父级的对象应该是活动对象；也就是说，你应该最后 shift-点击它。按下 Control-P。你将必须确认你想要制作一个父级；从弹出菜单中选择“对象”。在 3D 视图中，每个子对象都会用虚线连接到它的父对象。要删除父级关系，选择子对象，按下 ALT-P，并从弹出菜单中选择“清除父级”。
+
+    **复制**：要复制选定的对象或对象，你可以按 Shift-D，或者在你通过右键点击 3D 视图得到的菜单中找到相应的命令。副本将与原始对象完全在同一位置，但会处于“抓取”模式，以便你可以通过移动鼠标并点击来立即将其从原始对象移开并移动到适当的位置。
+
+    **平滑着色**：默认情况下，网格对象具有“面状”外观，构成网格的多边形看起来是平的。这种效果称为平面着色。有时这是正确的，但通常你想将网格作为平滑对象的近似，例如球体。在这种情况下，你想使用平滑着色。要为网格对象选择平面着色和平滑着色，请选择对象，在 3D 视图中右键单击，并从弹出菜单中选择“平滑着色”或“平面着色”。将网格对象设置为使用平滑着色不会改变对象的几何形状；它只是使用不同的法向量（见 [4.1.3 小节](../c4/s1.md#413-法向量)）。
+
+    **命名**：在 Blender 中，对象、材质、场景等都有名称。当你创建或复制一个对象时，Blender 会自动分配通用名称，如“Cube.002”。有时，你需要知道某物的名称。一个例子是将在 [下一节](./s2.md) 中讨论的“文本在曲线上”功能。为了更容易识别一个对象，你可能想使用一个更有意义的名称。名称通常显示在可编辑的框中。你只需点击该框并输入一个新名称。对于对象，名称显示在属性编辑器中的“对象”属性中。点击那里的名称进行更改，或者在 Blender 窗口右上角的场景图视图中找到对象，并双击那里的名称进行更改。
+
+    **屏幕**：Blender 中的“屏幕”是 Blender 窗口的定制布局，适用于某种编辑任务。在 Blender 窗口顶部菜单栏中间，有一组按钮用于选择当前屏幕。（如果你在一个小窗口中工作，你可能需要中键鼠标拖动菜单栏以看到它们。）以下是默认屏幕：
+
+    ![123](../../en/a2/blender-screens.png)
+
+    我们只谈到了“布局”屏幕，这是 Blender 启动时的默认屏幕。我们将在后面看到其他一些屏幕，但它们大多数是用于本教科书甚至不会提及的技术。右端的“+”号可以用来添加你自己的新的定制屏幕。
+
+    **场景**：Blender 中的“场景”是它自己的 3D 世界。每个场景都可以包含独特的对象，但场景之间也可以共享对象。Blender 窗口顶部有一个弹出菜单，你可以使用它来创建新场景并从一个场景切换到另一个场景。场景控制位于菜单栏的右端附近，旁边是一组我将不讨论的视图层控制：
+
+    ![123](../../en/a2/blender-scenes.png)
+
+    点击控制的左端图标弹出菜单，你可以在那里选择一个场景。点击控制的中心为当前场景输入一个新名称。点击名称右侧的图标添加一个新场景。当你这样做时，你会在一个弹出菜单中得到几个选项：“新建”或“复制设置”将创建一个空场景。“链接复制”将创建一个场景，其中包含与当前场景相同的对象，具有相同的变换；如果你在一个场景中移动一个对象，它也会在另一个场景中移动。然后你可以稍后添加新对象，这些对象只在一个场景中。例如，如果你想设置一个共同的静态背景世界，然后在不同的场景中展示不同的“演员”在不同的场景中做不同的事情，但具有相同的环境，你可能会使用这个功能。“完全复制”会复制当前场景中的所有内容，这样场景最初看起来是一样的，但实际上没有共同的数据。
+
+
+.. tab:: 英文
+
+    We have covered a lot of basic ground about Blender, but before looking at more advanced modeling and animation, there is a little more background information that will be useful...
+
+    **The Render Engine**: A render engine produces a 2D image of a 3D world. Blender has two render engines that can produce high-quality images: Eevee and Cycles. The Eevee renderer is selected by default, but you can select the Cycles renderer in the "Render Engine" menu of the "Render Properties" in the Properties Editor. The selected render engine is used when you make a final render of the scene (F12 key) or when you use the Rendered view style in the 3D View. (There is also a Workbench render engine in the menu, which is used for the other view styles in the 3D View, but it is not meant for producing high-quality images.) Eevee is a fast real-time renderer that uses OpenGL, including a lot of tricks and fancy shader programs for advanced effects. Cycles uses path tracing, which is much slower but can produce highly realistic, physically accurate renderings (see Section 8.2). When you use Cycles for a final rendered image, expect it to take a while. When Cycles is used for the rendered view style in the 3D View, it does less work and produces a "noisier" image. Path tracing is a progressive algorithm, which means that it can produce a fast, noisy image and then add detail to it over time. The longer it runs, the more physically accurate it can be. There are many controls in the Render Properities for configuring the render process. Tuning the process can be difficult, and requires a lot more knowledge than you will get here.
+
+    **Active Object**: When several objects are selected, only one of those objects is "active." If you select several objects by shift-clicking each of them in turn, the active object will be the last one clicked. The active object is shown in a lighter orange outline than the other selected objects. You can shift-click any of the selected objects to make it the active object. When you use the Properties Editor to view or modify properties of an object, it is the active object that you are working with. When you press the Tab key, it is the active object that goes into edit mode.
+
+    **Parenting**: One object can be a "parent" of another. This allows you to create hierarchical models. When you drag, rotate, or scale a parent, all its child objects are transformed as a group along with the parent. But child objects can still have their own transformations within the group. Furthermore, a child of one object can be a parent of another object, so you can do multi-level hierarchical graphics. If you want to group several objects, and there is no obvious parent, you should consider parenting all the objects to an empty object, made with the "Empty" command in the "Add" menu. To create a parent relationship, select two or more objects. The object that you want to be the parent should be the active object; that is, you should shift-click it last. Hit Control-P. You will have to confirm that you want to make a parent; select "Object" from the popup menu. A dotted line will join each child to its parent in the 3D View. To delete a parent relationship, select the child, hit ALT-P, and select "Clear Parent" from the popup menu.
+
+    **Duplicating**: To duplicate the selected object or object, you can hit Shift-D, or find the corresponding command in the menu that you get by right-clicking the 3D View. The copy will be in the exact same place as the original, but will be in "grab" mode so that you can immediately move it away from the original by moving the mouse and clicking after moving it into position.
+
+    **Smooth Shading**: By default, mesh objects have a "faceted" appearance where the polygons that make up the mesh look flat. The effect is called flat shading. Sometimes this is correct, but often you want to use the mesh as an approximation for a smooth object, such as a sphere. In that case you want to use smooth shading instead. To select between flat shading and smooth shading for a mesh object, select the object, right-click in the 3D View, and select "Shade Smooth" or "Shade flat" from the popup menu. Setting a mesh object to use smooth shading does not change the geometry of the object; it just uses different normal vectors (see [Subsection 4.1.3](../c4/s1.md#413-法向量)).
+
+    **Naming**: In Blender, objects, materials, scenes, etc., all have names. Blender automatically assigns generic names such as "Cube.002" when you create or duplicate an object. Sometimes, you need to know something's name. An example is the "text on curve" feature that will be discussed in the [next section](./s2.md). To make it easier to identify an object, you might want to use a more meaningful name. Names are generally displayed in editable boxes. You can just click the box and enter a new name. For objects, the name is displayed in the "Object" properties in the Properties Editor. Click the name there to change it, or find the object in the scene graph view in the upper right area of the Blender window, and double-click the name there to change it.
+
+    **Screens**: A screen in Blender is a customized layout for the Blender window, appropriate to some editing task. In the middle of the menu bar at the top of the Blender window, there is a set of buttons for selecting the current screen. (If you are working in a small window, you might have to middle-mouse-drag the menu bar to see them all.) Here are the default screens:
+
+    ![123](../../en/a2/blender-screens.png)
+
+    We have only been talking about the "Layout" screen, which is the default when Blender starts up. We will look at some of the other screens later, but most of them are for techniques that will not even be mentioned in this textbook. The "+" sign on the right end can be used to add new, customized screens of your own.
+
+    **Scenes**: A "scene" in Blender is its own 3D world. Each scene can contain unique objects, but it is also possible for scenes to share objects. There is a popup menu at the top of the Blender window that you can use to create new scenes and to switch from one scene to another. Scene controls can be found near the right end of the menu bar, next to a set of View Layer controls that I will not discuss:
+
+    ![123](../../en/a2/blender-scenes.png)
+
+    Click the icon at the left end of the controls to pop up the menu where you can select a scene. Click the center of the control to enter a new name for the current scene. Click the icon to the right of the name to add a new scene. When you do that, you will get several options in a popup menu: "New" or "Copy Settings" will create an empty scene. "Linked Copy" will create a scene that contains the same objects as the current scene, with the same transforms; if you move an object in one scene, it also moves in the other one. You can then add new objects later that will be in only one of the scenes. You might use this, for example, if you want to set up a common static background world and then make several scenes that show different "actors" doing different things in different scenes, but with the same environment. "Full Copy" makes a new copy of everything in the current scene, so the scenes look the same originally, but really have no shared data in common.

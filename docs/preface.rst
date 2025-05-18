@@ -49,7 +49,7 @@ OpenGL 仍然受到广泛支持，但是，由于各种原因，它易于使用�
 
 :ref:`第 9 章 <c9>` 介绍了 WebGPU，这是最新的 Web 图形 API 。
 
-:ref:`附录 A <appendx A>`简要介绍了本书中使用的三种编程语言：Java、C 和 JavaScript。 :ref:`附录 B <appendx B>` 旨在让读者开始了解 Blender（一个复杂的 3D 建模程序）的最基本用法。我发现向学生介绍 Blender 是帮助他们发展三维直觉的好方法。 :ref:`附录 C <appendx C>` 包含对两个 2D 图形程序 Gimp 和 Inkscape 的更简要介绍。
+:ref:`附录 A <appendx A>` 简要介绍了本书中使用的三种编程语言：Java、C 和 JavaScript。 :ref:`附录 B <appendx B>` 旨在让读者开始了解 Blender（一个复杂的 3D 建模程序）的最基本用法。我发现向学生介绍 Blender 是帮助他们发展三维直觉的好方法。 :ref:`附录 C <appendx C>` 包含对两个 2D 图形程序 Gimp 和 Inkscape 的更简要介绍。
 
 ----
 

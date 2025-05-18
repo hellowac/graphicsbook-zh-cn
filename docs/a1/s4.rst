@@ -1,0 +1,286 @@
+# A.4  [JavaScript Promise 和异步函数](./a1/s4.md)
+
+**Section A.4  JavaScript Promises and Async Functions**
+
+.. tab:: 中文
+
+    本节介绍了 JavaScript 中的两个新特性：**promises**（承诺）和 **async functions**（异步函数）。这些特性在 JavaScript API 中越来越常见。特别是，它们在 WebGPU 中使用，WebGPU 在 [第9章](../c9/index.md) 中有介绍。然而，请注意，它们在这本教科书的其他部分并没有使用。
+
+    JavaScript 承诺代表了一个可能在某个时候可用的结果。如果并且当结果变得可用时，承诺被履行；它被称为“解决”。当这种情况发生时，可以返回结果，尽管在某些情况下，结果仅仅是知道承诺等待的事情已经发生了。如果发生了某些事情，意味着承诺无法实现，那么承诺被称为“拒绝”。程序员可以提供在承诺解决或拒绝时调用的函数。
+
+    承诺是回调函数的替代品。回调函数是由程序员提供的函数，由系统在稍后发生某事时调用。例如，在标准 JavaScript 函数中：
+
+    ```js
+    setTimeout( callbackFunction, timeToWait );
+    ```
+
+    在 setTimeout() 函数执行后，系统将在 timeToWait 毫秒后调用 callbackFunction。重要的是，setTimeout() 立即返回；它只是设置回调函数在未来被调用。同样的事情适用于承诺：程序不会等待承诺解决或拒绝；它只是简单地安排稍后发生一些事情，当其中一件事情发生时。
+
+    典型的程序员更有可能使用由某些 API 创建的承诺，而不是直接创建它们。并且他们更有可能在 async 函数中使用 await 操作符使用这些承诺，而不是直接使用它们，所以我们将首先介绍这种情况。
+
+
+.. tab:: 英文
+
+    This section introduces two new features in JavaScript: **promises** and **async functions**. These features are becoming increasingly common in JavaScript APIs. In particular, they are used in WebGPU, which is covered in [Chapter 9](../c9/index.md). However, note that they are not used in any other part of this textbook.
+
+    A JavaScript promise represents a result that might be available at some time. If and when the result becomes available, the promise is fulfilled; it is said to "resolve." When that happens, the result can be returned, although in some cases the result is simply the knowledge that whatever the promise was waiting for has occurred. If something happens that means the promise cannot be fulfilled, then the promise is said to "reject." A programmer can provide functions to be called when the promise resolves or rejects.
+
+    Promises are a replacement for callback functions. A callback function is a function that is provided by a programmer to be called later, by the system, when something happens. For example in the standard JavaScript function
+
+    ```js
+    setTimeout( callbackFunction, timeToWait );
+    ```
+
+    The *callbackFunction* will be called by the system timeToWait milliseconds after the *setTimeout()* function is executed. An important point is that *setTimeout()* returns immediately; it simply sets up the callback function to be called in the future. The same thing applies to promises: A program does not wait for a promise to resolve or reject; it simply arranges for something to happen later, when one of those things occurs.
+
+    Typical programmers are more likely to use promises created by some API than to create them directly. And they are more likely to use those promises with the await operator in async functions than to use them directly, so we will cover that case first.
+
+## A.4.1  异步函数和等待
+
+**A.4.1  Async Functions and await**
+
+.. tab:: 中文
+
+    等待运算符（await operator）用于检索已解决的承诺的结果。如果承诺被拒绝，则等待运算符将抛出异常。等待表达式的语法非常简单：
+
+    ```js
+    await promise
+    ```
+
+    这里的 **promise** 是一个承诺。当承诺解决时，其结果成为表达式的值。以下是一个来自 WebGPU API 的示例（见 [9.1.1 小节](../c9/s1.md#911-适配器设备和画布)）：
+
+    ```js
+    let adapter = await navigator.gpu.requestAdapter();
+    ```
+
+    `navigator.gpu.requestAdapter()` 的返回值是一个承诺。当该承诺解决时，承诺的结果成为等待表达式的值，并且该值被赋给 adapter。
+
+    重要的是要理解，await 实际上并不会停下来等待结果，也就是说，它不会在等待时使 JavaScript 程序停止。相反，包含 await 表达式的函数会一直挂起，直到结果可用，而程序的其他部分可以继续运行。
+
+    等待运算符只能在标记为 async 的异步函数内部使用：
+
+    ```js
+    async function name( parameters ) {
+        // 这里可以使用 await
+    }
+    ```
+
+    当调用一个异步函数时，它会立即执行到函数定义中首次出现 await 的位置。在这一点上，执行被挂起，直到承诺解决或拒绝。如果解决了，执行就会恢复，并继续执行到下一个 await，依此类推。如果在任何时候承诺被拒绝而不是解决，就会抛出一个异常，可以像通常一样捕获和处理。直到所有 await 表达式中的承诺都解决，或者异常导致函数退出，函数才会返回。注意，调用异步函数的那个函数也必然被挂起，即使那个函数不是异步的。
+
+    总的来说，等待表达式很像普通表达式，异步函数也很像普通函数。它们的编写和使用方式相同。这可以使承诺比回调函数更容易使用，这是它们的一大优势。然而，异步函数可以被挂起的事实引入了潜在问题的新来源：你必须记住，在异步函数中间，可能发生其他不相关的事情。
+
+    让我们来看看一个具体的例子。fetch API 是一个从互联网检索文件的 API。（但如果没有额外的工作，它只能从与使用它的网页相同的来源获取文件。）如果 url 是某个文件的 URL，那么 fetch(url) 函数返回一个承诺，当文件被定位时解决，当文件找不到时拒绝。表达式 await fetch(url) 等待文件被定位并返回结果。奇怪的是，文件已经被定位，但不一定已经下载。如果 response 是 await fetch(url) 返回的对象，那么函数 response.text() 返回另一个承诺，当文件内容可用时解决。await response.text() 的值将为文件内容。一个检索文本文件并将其内容放置在网页元素中的函数可以这样编写：
+
+    ```js
+    async function loadTextFile( textFileURL ) {
+        let response = await fetch(textFileURL);
+        let text = await response.text();
+        document.getElementById("textdisplay").innerHTML = text;
+    }
+    ```
+
+    这将工作，但可能会抛出异常，例如如果不允许访问文件，或者没有这样的文件存在。我们可能想要捕获那个异常。此外，获取文件可能需要一些时间，而在函数等待时程序中可能会发生其他事情。特别是，用户可能会生成更多事件，甚至可能是一个事件，导致再次调用 loadTextFile()，但使用不同的 URL！现在，正在下载两个文件。哪一个将显示在网页上？哪一个**应该**显示在网页上？这就是我们在并行编程时可能遇到的同样类型的混乱。（公平地说，使用回调函数时我们也可能会陷入类似的混乱，而那里可能会更难解开这个混乱。）
+
+    假设文件下载是由用户点击某个按钮触发的。解决双重下载混乱的一种解决方案是在下载进行时禁用该按钮，以防止启动另一个下载。因此，我们程序的改进版本可能会更像这样：
+
+    ```js
+    async function loadTextFile( textFileURL ) {
+        document.getElementById("downloadButton").disabled = true;
+        document.getElementById("textdisplay").innerHTML = "Loading...";
+        try {
+            let response = await fetch(textFileURL);
+            let text = await response.text();
+            document.getElementById("textdisplay").innerHTML = text;
+        }
+        catch (e) {
+            document.getElementById("textdisplay").innerHTML =
+                "Can't fetch " + textFileURL + ".  Error: " + e;
+        }
+        finally {
+            document.getElementById("downloadButton").disabled = false;
+        }
+    }
+    ```
+
+    好处在于，异步函数看起来本质上和常规 JavaScript 函数相同。潜在的陷阱是，使用异步函数的程序的控制流程可能与常规控制流程大不相同：常规函数从头到尾运行，没有中断。
+
+
+.. tab:: 英文
+
+    The await operator is used to retrieve the result of a promise, when the promise has resolved. If, instead, the promise rejects, then the await operator will throw an exception. The syntax of an await expression is simply
+
+    ```js
+    await  promise
+    ```
+
+    where **promise** is a promise. When the promise resolves, its result becomes the value of the expression. Here is an example from the WebGPU API (see [Subsection 9.1.1](../c9/s1.md#911-适配器设备和画布)):
+
+    ```js
+    let adapter = await navigator.gpu.requestAdapter();
+    ```
+
+    The return value of `navigator.gpu.requestAdapter()` is a promise. When that promise resolves, the result of the promise becomes the value of the await expression, and that value is assigned to adapter.
+
+    An important thing to understand is that await does not actually stop and wait for the result—that is, it does not bring the JavaScript program to a halt while waiting. Instead, the function that contains the await expression is suspended until the result is available, while other parts of the program can continue to run.
+
+    The await operator can only be used inside an async function, that is, one whose definition is marked as async:
+
+    ```js
+    async function name( parameters ) {
+        // await can be used here
+    }
+    ```
+
+    When an async function is called, it is immediately executed up to the first occurrence of await in the function definition. At that point, the execution is suspended until the promise resolves or rejects. If it resolves, the execution resumes and continues until the next await, and so on. If at any point a promise rejects instead of resolving, an exception is thrown that can be caught and handled in the usual way. The function does not return until all of the promises in await expressions have resolved or until an exception causes the function to exit. Note that, necessarily, the function that called the async function is also suspended, even if that function is not async.
+
+    What this all amounts to is that await expressions are much like ordinary expressions and async functions are much like ordinary functions. They are written and used in the same way. This can make promises easier to use than callback functions, and this usage is one of their big advantages. However, the fact that async functions can be suspended introduces a new source of potential problems: You have to remember that other, unrelated things can happen in the middle of an async function.
+
+    Let's look at a specific example. The fetch API is an API for retrieving files from the Internet. (But without extra work, it can only fetch files from the same source as the web page on which it is used.) If url is the URL for some file, the function fetch(url) returns a promise that resolves when the file has been located or rejects when the file cannot be found. The expression await fetch(url) waits for the file to be located and returns the result. Curiously, the file has been located but not necessarily downloaded. If response is the object returned by await fetch(url), then the function response.text() returns another promise that resolves when the contents of the file are available. The value of await response.text() will be the file contents. A function to retrieve a text file and place its content in an element on the web page could be written like this:
+
+    ```js
+    async function loadTextFile( textFileURL ) {
+    let response = await fetch(textFileURL);
+    let text = await response.text();
+    document.getElementById("textdisplay").innerHTML = text;
+    }
+    ```
+
+    This will work, but might throw an exception, for example if access to the file is not allowed or if no such file exists. We might want to catch that exception. Furthermore, it can take some time to get the file, and other things can happen in the program while the function is waiting. In particular, the user might generate more events, maybe even an event that causes loadTextFile() to be called again, with a different URL! Now, there are two files being downloaded. Which one will appear on the web page? Which one **should** appear on the web page? This is the same sort of mess we can get into when doing parallel programming. (To be fair, we can get into a similar sort of mess when using callback functions, and there it can be even harder to untangle the mess.)
+
+    Let's say that a file download is triggered when the user clicks a certain button. One solution to the double-download mess would be to disable that button while a download is in progress, to prevent another download from being started. So, an improved version of our program might go something more like this:
+
+    ```js
+    async function loadTextFile( textFileURL ) {
+        document.getElementById("downloadButton").disabled = true;
+        document.getElementById("textdisplay").innerHTML = "Loading...";
+        try {
+        let response = await fetch(textFileURL);
+        let text = await response.text();
+        document.getElementById("textdisplay").innerHTML = text;
+        }
+        catch (e) {
+        document.getElementById("textdisplay").innerHTML =
+            "Can't fetch " + textFileURL + ".  Error: " + e;
+        }
+        finally {
+        document.getElementById("downloadButton").disabled = false;
+        }
+    }
+    ```
+
+    The nice thing is that an async function looks essentially the same as a regular JavaScript function. The potential trap is that the flow of control in a program that uses async functions can be very different from the regular flow of control: Regular functions run from beginning to end with no interruption.
+
+
+
+## A.4.2  直接使用 Promise
+
+**A.4.2  Using Promises Directly**
+
+.. tab:: 中文
+
+    等待运算符使承诺相当容易使用，但并不总是合适的。JavaScript 中的承诺是一个属于名为 ***Promise*** 的类的对象。该类中的方法可以在承诺解决或拒绝时作出响应。如果 somePromise 是一个承诺，onResolve 是一个函数，那么
+
+    ```js
+    somePromise.then( onResolve );
+    ```
+
+    如果承诺解决，则计划调用 onResolve。传递给 onResolve 的参数将是承诺的结果。注意，我们基本上回到了使用回调函数的状态：somePromise.then() 立即返回，如果 at all，onResolve 将在某个不确定的未来时间被调用。then() 的参数往往是一个匿名函数。例如，假设 textPromise 是一个最终产生字符串的承诺，
+
+    ```js
+    textPromise.then(
+        str => alert("Hey, I just got " + str)
+    );
+    ```
+
+    现在，技术上，onResolve 回调函数的返回值在 promise.then(onResolve) 中必须是另一个承诺。如果不是，系统将以立即解决为同一值的承诺包装返回值。由 onResolve 返回的承诺成为对 *promise.then()* 调用的返回值。这意味着你可以在 *promise.then()* 的返回值上链式另一个 then()。例如，让我们使用 then() 重写我们的 loadTextFile() 示例。基本版本是：
+
+    ```js
+    function loadTextFileWithThen( textFileURL ) {
+        fetch(textFileURL)
+            .then( response => response.text() )
+            .then( text => document.getElementById("textdisplay").innerHTML = text )
+    }
+    ```
+
+    在这里，fetch(textFileURL) 返回一个承诺，我们可以将 then() 附加到该承诺上。当匿名函数 response => response.text() 被调用时，其参数 response 的值是 fetch(textFileURL) 解决时产生的结果。返回值 response.text() 是一个承诺，该承诺成为第一个 then() 的返回值。第二个 then() 附加到该承诺上。当第二个 then() 中的回调函数被调用时，它的参数是由 *result.text()* 承诺产生的结果。
+
+    注意，loadTextFileWithThen() 不是异步函数。它不使用 await。当它被调用时，它立即返回，不等待文本到达。
+
+    现在，你可能会想知道如果承诺被拒绝会发生什么。拒绝会导致异常，但该异常在某个不确定的未来时间被抛出，当承诺被拒绝时。实际上，then() 接受一个可选的第二个参数，这是一个回调函数，如果承诺被拒绝则被调用。然而，你更有可能使用 ***Promise*** 类的另一个方法来响应拒绝：
+
+    ```js
+    somePromise.catch( onReject )
+    ```
+
+    参数 onReject 是一个函数，如果承诺被拒绝（或者，当 catch() 附加到 then() 调用链时，链中的任何一个承诺被拒绝）将被调用。传递给 onReject 的参数将是由拒绝的承诺生成的错误消息。（*catch()* 也会捕获由承诺生成的其他类型的异常。）并且 ***Promise*** 类中有一个 finally() 方法，它计划在 then/catch 链的末尾调用回调函数。*finally()* 中的回调函数参数不接受任何参数。因此，我们可能会像下面这样改进我们的文本加载示例：
+
+    ```js
+    function loadTextFileWithThen(textFileURL) {
+        document.getElementById("downloadButton").disabled = true;
+        fetch(textFileURL)
+            .then( response => response.text() )
+            .then( text => document.getElementById("textdisplay").innerHTML = text )
+            .catch( e => document.getElementById("textdisplay").innerHTML =
+                        "Can't fetch " + textFileURL + ".  Error: " + e )
+            .finally( () => document.getElementById("downloadButton").disabled = false )
+    }
+    ```
+
+    ----
+
+    通常，你应该尽可能使用异步函数和 await。你只应偶尔使用 then() 和 catch()。虽然你可能会发现自己使用基于承诺的 API，但你可能永远不需要创建自己的承诺对象——这不是本教科书所涵盖的主题。
+
+
+.. tab:: 英文
+
+    The await operator makes promises fairly easy to use, but it is not always appropriate. A JavaScript promise is an object belonging to a class named ***Promise***. There are methods in that class that make it possible to respond when a promise resolves or rejects. If somePromise is a promise, and onResolve is a function, then
+
+    ```js
+    somePromise.then( onResolve );
+    ```
+
+    schedules onResolve to be called if and when the promise resolves. The parameter that is passed to onResolve will be the result of the promise. Note that we are essentially back to using callback functions: somePromise.then() returns immediately, and onResolve will be called, if at all, at some indeterminate future time. The parameter to then() is often an anonymous function. For example, assuming textPromise is a promise that eventually produces a string,
+
+    ```js
+    textPromise.then(
+        str => alert("Hey, I just got " + str)
+    );
+    ```
+
+    Now, technically, the return value of the onResolve callback in promise.then(onResolve) must be another promise. If not, the system will wrap the return value in a promise that immediately resolves to the same value. The promise that is returned by onResolve becomes the return value of the call to *promise.then()*. This means that you can chain another then() onto the return value from *promise.then()*. For example, let's rewrite our loadTextFile() example using then(). The basic version is:
+
+    ```js
+    function loadTextFileWithThen( textFileURL ) {
+    fetch(textFileURL)
+        .then( response => response.text() )
+        .then( text => document.getElementById("textdisplay").innerHTML = text )
+    }
+    ```
+
+    Here, fetch(textFileURL) returns a promise, and we can attach then() to that promise. When the anonymous function, response => response.text(), is called, the value of its parameter, response, is the result produced when fetch(textFileURL) resolves. The return value response.text() is a promise, and that promise becomes the return value from the first then(). The second then() is attached to that promise. When the callback function in the second then() is called, its parameter is the result produced by the *result.text()* promise.
+
+    Note that loadTextFileWithThen()is not an async function. It does not use await. When it is called, it returns immediately, without waiting for the text to arrive.
+
+    Now, you might wonder what happens if the promise rejects. The rejection causes an exception, but that exception is thrown at some indeterminate future time, when the promise rejects. Now, in fact, then() takes an optional second parameter that is a callback function, to be called if the promise rejects. However, you are more likely to respond to the rejection by using another method from the ***Promise*** class:
+
+    ```js
+    somePromise.catch( onReject )
+    ```
+
+    The parameter, onReject, is a function that will be called if and when the promise rejects (or, when *catch()* is attached to a chain of calls to then(), when any of the promises in the chain rejects). The parameter to onReject will be the error message produced by the promise that rejects. (A *catch()* will also catch other kinds of exceptions that are generated by the promise.) And there is a finally() method in the ***Promise*** class that schedules a callback function to be called at the end of a then/catch chain. The callback function parameter in *finally()* takes no parameters. So, we might improve our text-loading example as follows:
+
+    ```js
+    function loadTextFileWithThen(textFileURL) {
+    document.getElementById("downloadButton").disabled = true;
+    fetch(textFileURL)
+        .then( response => response.text() )
+        .then( text => document.getElementById("textdisplay").innerHTML = text )
+        .catch( e => document.getElementById("textdisplay").innerHTML =
+                        "Can't fetch " + textFileURL + ".  Error: " + e )
+        .finally( () => document.getElementById("downloadButton").disabled = false )
+    }
+    ```
+
+    ----
+
+    Generally, you should try to use async functions and await when possible. You should only occasionally have to use then() and catch(). And while you might find yourself using promise-based APIs, you will probably never need to create your own promise objects—a topic that is not covered in this textbook.

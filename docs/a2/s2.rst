@@ -1,0 +1,253 @@
+# B.2 节  [Blender 建模](./a2/s2.md)
+
+**Section B.2  Blender Modeling**
+
+.. tab:: 中文
+
+    Blender 提供了丰富多样的基本形状和工具，用于创建更复杂的对象。本节将只讨论一些用于建模 3D 形状的可能性。
+
+.. tab:: 英文
+
+    Blender has a wide variety of basic shapes and tools for making more complex objects. This section will discuss just a few of the possibilities for modeling 3D shapes.
+
+## B.2.1  文本
+
+**B.2.1  Text**
+
+.. tab:: 中文
+
+    Blender 可以处理文本，它可以将文本渲染为平面的 2D 形状或具有一定厚度的 3D 形状。
+
+    要将文本对象添加到您的场景中，请使用“添加”菜单中的“文本”命令。当您通过在选中时按 TAB 键将文本对象放入编辑模式时，可以使用键盘（包括退格键和方向键）编辑其中包含的文本；您肯定想要这样做，因为初始文本只是单词 "Text"。
+
+    当文本对象被选中时，属性编辑器中选择对象数据属性的按钮会显示一个 "a"。点击 "a" 会显示各种有用的控件，其中一些在下图中展示：
+
+    ![123](../../en/a2/blender-text-buttons.png)
+
+    例如，有按钮可以控制多行文本是右对齐、左对齐还是居中对齐，还有数字输入来控制字符、单词和行间距。（这里没有显示 —— 在对象数据属性的“段落”部分中查找。）您还可以选择用于文本的字体。Blender 只有一个相当基本的内置字体，但您也可以从文件系统中选择字体文件来使用。Blender 可以处理 Postscript Type 1、True Type 和 Open Type 字体。要选择合适的字体文件，请点击“字体”部分中的小“文件夹”图标，如上图所示。您可以为“常规”、“粗体”、“斜体”和“粗斜体”样式设置不同的字体。在编辑文本对象时，有菜单命令可供选择样式，但默认情况下只使用“常规”样式的字体。（顺便说一下，您可以从 Google 字体网站 <www.google.com/fonts> 下载大量免费字体。）
+
+    一个有趣的特性是，您可以沿着曲线的形状排列文本。您需要一个曲线对象，您可以按照下一子节的描述创建它。您需要知道曲线对象的名称；您可能想要将名称更改为有意义的名称。选择文本对象。转到文本的对象数据控件，如上图所示。找到标记为 "Text on Curve"（在“字体”下的“转换”部分）的框，点击框左端的图标，并从可用曲线的弹出菜单中选择曲线。文本的基线将弯曲以匹配曲线的形状。如果您改变曲线的形状或缩放它，文本将遵循新的形状。您可能需要缩放文本和/或曲线以使其很好地适应。注意，文本不会跳到曲线上；它只是使用曲线对象的形状，无论曲线位于何处。曲线本身在渲染图像中不会可见。如果您不想在 3D 视图中看到曲线，您可以在 Blender 窗口右上角的场景图显示中关闭曲线的可见性。在下面的示例图像中，我使用了 Bezier Circle 作为 Text on Curve 特性，并使用一个圆从中心删除另一个圆来制作背景。我在背景上使用了 Checker 纹理作为材质。
+
+    ![123](../../en/a2/blender-text-on-curve.png)
+
+    一旦您有了文本，您可以像下一子节中对曲线的描述一样对其进行挤出和倒角，以获得漂亮的 3D 外观。上图中的文本已经进行了挤出和倒角处理，您可以看到 3D 文本对象在背景上的阴影。
+
+
+.. tab:: 英文
+
+    Blender can work with text, which it can render either as a flat 2D shape or as a 3D shape with added thickness.
+
+    To add a text object to your scene, use the "Text" command in the "Add" menu. When you put a text object into Edit Mode, by pressing the TAB key while it is selected, you can use the keyboard, including the backspace and arrow keys, to edit the text that it contains; you will certainly want to do this, since the initial text is just the word "Text".
+
+    When a text object is selected, the button for selecting the Object Data properties in the Properties Editor shows an "a". Clicking the "a" reveals various useful controls, some of which are shown in this picture:
+
+    ![123](../../en/a2/blender-text-buttons.png)
+
+    For example, there are buttons to control whether multi-line text is Right, Left, or Center justified, and there are numeric inputs to control character, word, and line spacing. (Not shown here — look further down, in the "Paragraph" section of the Object Data properties.) You can also select the font to be used for the text. Blender has only one pretty basic built-in font, but you can select a font file from the file system to be used instead. Blender can work with Postscript Type 1, True Type, and Open Type fonts. To select a font file, click a small "folder" icon in the "Font" section, as shown above. You can set separate fonts for "Regular," "Bold," "Italic," and "BoldItalic" styles. There are menu commands available while editing a Text object for selecting the style, but by default only the "Regular" style font is used. (By the way, you can download lots of free fonts from Google Fonts at <www.google.com/fonts>.)
+
+    An interesting feature is that you can lay your text out along the shape of a curve. You need a curve object, which you can create as described in the next subsection. You need to know the name of the curve object; you might want to change the name to something meaningful. Select the text object. Go to the Object Data controls for the text, shown above. Find the box labeled "Text on Curve" (in the "Transform" section under "Font"), click the icon on the left end of the box, and select the curve from the popup menu of available curves. The baseline of the text will curve to match the shape of the curve. If you change the shape of the curve or scale it, the text will follow the new shape. You will likely have to scale the text and/or the curve to get it to fit nicely. Note that the text does not jump onto the curve; it just uses the curve object's shape, wherever the curve is located. The curve itself will not be visible in a rendered image. If you don't want to see the curve in the 3D View you can turn off the visibility of the curve in the scene graph display in the top right area of the Blender window. For the following sample image, I used a Bezier Circle for the Text on Curve feature, and I made the background using a circle with another circle deleted from its center. I used a Checker texture for the material on the background.
+
+    ![123](../../en/a2/blender-text-on-curve.png)
+
+    Once you have your text, you can extrude and bevel it, exactly as described in the next subsection for curves, to get a nice 3D appearance. The text in the above image has been extruded and beveled, and you can see the shadow of the 3D text object on the background.
+
+
+
+## B.2.2  曲线
+
+**B.2.2  Curves**
+
+.. tab:: 中文
+
+    Blender 有两种类型的曲线：贝塞尔曲线（Bezier curves）和 NURBS 曲线（NURBS curves）。（还有“路径”，这只是 NURBS 曲线的一种。）要将曲线添加到您的场景中，请使用“添加”/“曲线”子菜单。贝塞尔曲线具有“控制点”和“手柄”，可以通过调整它们来改变曲线的形状。NURBS 曲线类似，但是曲线完全由控制点决定，不必通过任何特定的点。NURBS 曲线以制作出平滑的形状而闻名。（还有 NURBS 曲面。）
+
+    默认情况下，曲线是“3D”的，即不必位于一个平面上。通常，您需要“2D”曲线，这些曲线被限制在平面上。要使曲线成为 2D，可以转到属性编辑器中曲线的“对象数据”控件。当曲线被选中时，“对象数据”按钮看起来像连接两点的曲线。点击“2D”按钮。此时曲线内部可能没有填充。要获得填充的曲线，在对象数据属性中将“填充模式”设置为“两者”。
+
+    当您将曲线放入编辑模式时，您将看到它的控制点。对于 NURBS 曲线，它们位于曲线旁边。对于贝塞尔曲线，控制点位于连接到曲线上的点的“手柄”末端。您可以选择控制点并拖动它们（使用 G 键）或以其他方式变换它们。对于贝塞尔曲线，您也可以选择曲线上的点并拖动它们。默认情况下，手柄的两端对齐，形成一条直线；如果您移动一端，另一端也会移动。（实际上有四种类型的手柄：自动、向量、对齐和自由。在编辑模式下选择一个或多个顶点，然后按 V 更改选定顶点的手柄类型。特别是，“自由”允许您在曲线上制作锐角。）
+
+    更重要的是，您可以通过添加新点来延长非闭合曲线。您应该从基本的贝塞尔或 NURBS 曲线开始，而不是从圆开始。如果您希望曲线是 2D 的，最好在添加点之前将其设置为 2D（但如果您稍后将其更改为 2D，它将被强制放到平面上）。将曲线放入编辑模式；曲线必须在编辑模式下才能添加新点。对于贝塞尔曲线，通过在其附近左键单击来选择曲线的一个端点。对于 NURBS 曲线，选择两个端控制点中的一个。要添加一个新点，请在要放置新点的位置用右键控制点击。您添加的新点将连接到所选的端点，并且选择将移动到您刚刚添加的点。这使得通过多次控制右键单击来依次添加几个点变得容易。
+
+    如果曲线尚未闭合，并且您想将其闭合（即将端点连接回起点），只需在曲线处于编辑模式时按“ALT-C”。再次按“ALT-C”键将重新打开曲线。
+
+    曲线实际上可以由几个不相连的线段组成。如果曲线在编辑模式下添加另一条曲线，您将向现有曲线添加一个新线段，而不是一个单独的曲线。例如，如果您向场景中添加一个贝塞尔圆，将其放入编辑模式，然后在第一个圆内部添加另一个贝塞尔圆，您将得到一个戒指——一个圆盘上移除了一个洞。这就是我为上面的图像制作背景的方式。要仅变换曲线的一个线段，请将曲线放入编辑模式，选择要变换的线段的所有顶点，然后应用变换。
+
+    闭合的 2D 曲线围绕一个区域，当您渲染场景时，该区域将显示为平面。当曲线自相交或有多个不相连的线段时，不清楚什么是曲线内部。规则基于点的“环绕次数”，这意味着曲线围绕点的次数。如果曲线围绕点环绕奇数次，则该点在曲线内部；如果曲线围绕它环绕偶数次，则该点在曲线外部。
+
+    您可以通过挤出曲线来将闭合的 2D 区域内的 2D 区域扩展到第三维度。在曲线的“对象数据”控件中查找标记为“挤出”的数字输入（在“几何”下）。增加此框中的值将使曲线垂直于其所在平面延伸到 3D 对象。在“几何”下的“倒角”部分中，您将找到一个“深度”框和一个“分辨率”框。增加“深度”框中的值，从挤出曲线的 3D 形状上切掉一个边缘。“分辨率”框中的值决定了边缘的圆滑程度。对于下图中右侧的对象，我将一个贝塞尔圆放入另一个闭合的贝塞尔曲线内（在编辑模式下！），并将挤出、深度和分辨率设置为正值：
+
+    ![123](../../en/a2/blender-curves.png)
+
+    可以将文本对象转换为曲线。只需选择文本对象，右键单击以获得弹出菜单，然后从弹出菜单的“转换为”子菜单中选择“曲线”。（注意，您将无法将曲线转换回文本对象。）一旦您将文本转换为曲线，您就可以像编辑曲线一样编辑字符轮廓。此外，您可以向文本曲线添加其他曲线段。对于上图中左侧的对象，我创建了文本，将其转换为曲线，将其放入编辑模式，添加了一个贝塞尔圆，并操纵了圆的顶点，使圆围绕文本。文本的内部有效地从圆的内部减去。
+
+
+.. tab:: 英文
+
+    Blender has two types of curves: Bezier curves and NURBS curves. (There are also "paths", which are just a kind of NURBS curve.) To add a curve to your scene use the "Add" / "Curve" sub-menu. A Bezier curve has "control points" with "handles" that can be adjusted to change the shape of the curve. NURBS curves are similar, but the curve is determined entirely by control points and isn't constrained to pass through any particular points. NURBS curves are known for making nice smooth shapes. (There are also NURBS surfaces.)
+
+    By default, a curve is "3D," that is it doesn't have to lie in a plane. Usually, you want "2D" curves that are constrained to lie on a plane. To make a curve 2D, go to the "Object Data" controls for the curve in the Properties Editor. When a curve is selected, the button for "Object Data" looks like a curve connecting two points. Click the "2D" button. The interior of the curve might not be filled in at this point. To get a filled-in curve, set the "Fill Mode" in the Object Data properties to "Both."
+
+    When you put a curve into Edit Mode, you will see its control points. For a NURBS curve, they lie alongside the curve. For a Bezier curve, the control points are at the ends of "handles" that are attached to points on the curve. You can select control points and drag them (using the G key) or otherwise transform them. For a Bezier curve, you can also select the points on the curve and drag them. By default, the two ends of a handle line up, making a straight line; if you move one end, the other end also moves. (There are actually four types of handles: Auto, Vector, Aligned, and Free. Select one or more vertices in Edit Mode, and hit V to change the type of handle at the selected vertices. In particular, "Free" allows you to make sharp corners on a curve.)
+
+    More important, you can extend a non-closed curve by adding new points. You should start with a basic Bezier or NURBS curve, rather than a circle. If you want the curve to be 2D, it's best to set it to 2D before adding points (but if you change it to 2D later, it will be forced onto a plane). Put the curve into Edit Mode; the curve must be in Edit Mode to add new points. For a Bezier curve, select one endpoint of the curve, by left-clicking near it. For a NURBS curve, select one of the two end control points. To add a new point, control click with the right mouse button at the location where you want the new point to be located. The new point that you add will be connected to the selected endpoint, and the selection will move to the point that you just added. This makes it easy to add several points in sequence by control-right-clicking several times.
+
+    If the curve is not already closed and you want to close it (that is, connect the end back to the beginning), just hit "ALT-C" while the curve is in Edit Mode. Hitting "ALT-C" key again will re-open the curve.
+
+    A curve can actually consist of several disconnected segments. If you add another curve while a curve is in Edit Mode, you add a new segment to the existing curve rather than a separate curve. For example, if you add a Bezier circle to the scene, put it into Edit Mode, and then add another Bezier circle inside the first, you will get a ring—a disk with a hole removed. That's how I made the background for the above image. To transform just one of the segments of a curve, put the curve into edit mode, select all the vertices of the segment that you want to transform, and then apply the transformation.
+
+    A closed 2D curve bounds a region, which will be shown as a flat surface when you render the scene. When a curve self-intersects or has several disconnected segments, it's not completely clear what it means to be inside the curve. The rule is based on "winding number" at a point, which means the number of times that the curve encircles the point. If the curve circles the point an odd number of times, then the point is inside the curve; if the curve encircles it an even number of times, then the point is outside.
+
+    You can extend the 2D region inside a closed 2D curve into the third dimension by extruding the curve. Look in the curve's "Object Data" controls for a numerical input labeled "Extrude" (under "Geometry"). Increasing the value in this box extends the curve into a 3D object, perpendicularly to the plane in which it lies. In the "Bevel" section under "Geometry," you will find a "Depth" box and a "Resolution" box. Increase the value in the "Depth" box to cut an edge off the 3D shape of the extruded curve. The value in the "Resolution" box determines how rounded the edge is. For the object on the right in the following picture, I put a Bezier circle inside another closed Bezier curve (while in Edit Mode!) and set Extrude, Depth, and Resolution to be positive values:
+
+    ![123](../../en/a2/blender-curves.png)
+
+    It's possible to transform a Text object into a curve. Just select the text object, right-click to get a pop-up menu, and select "Curve" from the "Convert To" submenu of the popup menu. (Note, however, that you won't be able convert the curve back to a text object.) Once you've converted the text into a curve, you can edit the character outlines as curves. Furthermore, you can add other curve segments to the text curve. For the left object in the above picture, I created the text, converted it to a curve, put it into Edit Mode, added a Bezier circle, and manipulated the vertices of the circle so that the circle surrounded the text. The inside of the text was effectively subtracted from the interior of the circle.
+
+## B.2.3  比例编辑
+
+**B.2.3  Proportional Editing**
+
+.. tab:: 中文
+
+    本节的其余部分主要讨论网格建模，即使如此，它也只涵盖了所有可用选项的一小部分。
+
+    默认情况下，在编辑模式下变换网格对象的选定顶点（或边或面）时，只有选定的项会受到影响。这可能导致难看的、有尖峰的对象！但是，如果您启用了比例编辑，那么一个顶点会对邻近顶点施加一种力，例如，如果您拖动一个顶点，附近的顶点也会随之移动。在 3D 视图下方的标题面板中有一个小按钮，可以在编辑模式下启用比例编辑：
+
+    ![123](../../en/a2/blender-proportional-editing-buttons.png)
+
+    在图片中，小蓝按钮已被点击以启用比例编辑。在蓝色按钮右侧的弹出菜单允许您选择变换顶点对其他顶点将产生何种影响。
+
+    当启用比例编辑并且您正在变换一些顶点时，3D 窗口中会出现一个圆圈，显示“影响半径”，即顶点施加的力所延伸的距离。您可以使用鼠标滚轮或“PageUp”和“PageDown”键来改变影响半径的大小。在以下图像中，一个 icosphere 处于编辑模式，一组顶点正在被拖动。白色圆圈显示了影响半径，您可以看到在该半径内的顶点已经向被拖动顶点的相同方向移动了一些。这次编辑产生的结果形状将比仅移动选定顶点时的形状要好看得多。
+
+    ![123](../../en/a2/blender-proportional-editing.jpg)
+
+    （尝试选择 UV 球体沿赤道的顶点，并启用比例编辑后放大选定的顶点。您可以制作出类似飞碟的形状！）
+
+
+.. tab:: 英文
+
+    The rest of this section deals mostly with mesh modeling, and even then it only covers a small portion of all the options that are available.
+
+    By default, when you transform selected vertices (or edges or faces) of a mesh object in Edit Mode, only the selected items are affected. This can lead to ugly, spikey objects! But if you turn on Proportional Editing, then a vertex exerts a kind of force on neighboring vertices, so that for example if you drag a vertex, nearby vertices are pulled along with it. There is a small button in the header panel below the 3D view that turns on proportional editing in Edit Mode:
+
+    ![123](../../en/a2/blender-proportional-editing-buttons.png)
+
+    In the picture, the small blue button has been clicked to enable proportional editing. The popup menu to the right of the blue button lets you select what kind of influence the transformed vertices will have on other vertices.
+
+    When proportional editing is turned on and you are transforming some vertices, a circle appears in the 3D window to show the "radius of influence", that is, the distance over which the force exerted by a vertex extends. You can change the size of the radius of influence using the scroll wheel on the mouse or the "PageUp" and "PageDown" keys. In the following image, an icosphere is in Edit Mode and a group of vertices is being dragged. The white circle shows the radius of influence, and you can see that vertices within that radius have shifted somewhat in the same direction as the dragged vertices. The shape that results from this edit will be much nicer than if only the selected vertices were moved.
+
+    ![123](../../en/a2/blender-proportional-editing.jpg)
+
+    (Try selecting the vertices along equator of a UV Sphere and scaling the selection up, with proportional editing enabled. You can make something like a flying saucer shape!)
+
+
+
+## B.2.4  拉伸网格
+
+**B.2.4  Extruding Meshes**
+
+.. tab:: 中文
+
+    挤出是一种为网格添加几何体的强大方法。挤出会复制一个或多个几何元素（顶点、边或面），复制的部分通过新的边或面连接到原始网格上。一种方法是使用“快速挤出”（尽管它提供的控制最少）。要使用它，将网格对象置于编辑模式并选择要复制的几何元素。最常见的是选择网格的一个面，尽管您也可以选择多个面或单个边。选择一个面意味着选择该面的所有顶点。然后您所要做的就是在某个点上控制右键单击，选定的面将在该点被复制。（请注意，这与您扩展曲线的方式相同。）原始面现在被取消选择，新的复制面被选中，这使得移动、缩放或旋转新面以及在其他位置添加更多面变得容易。
+
+    为了获得更多的控制，选择要复制的几何体并按“E”键。当您使用“E”键进行挤出时，复制的几何体与原始几何体在相同的位置，不会可见，但它被选中并处于抓取模式，以便您可以通过移动鼠标或按箭头键轻松地将其从该位置移开。记住，在拖动时按住控制键可以限制可能的平移。并记得点击左键或按回车键退出抓取模式！
+
+    例如，我从网格立方体开始，挤出了各种面，并在挤出的过程中对每个挤出的面进行了缩放。以下是在 Blender 3D 窗口中的编辑模式下它的样子：
+
+    ![123](../../en/a2/blender-extrude.jpg)
+
+
+.. tab:: 英文
+
+    Extrusion is a powerful method for adding geometry to a mesh. Extrusion duplicates one or more geometry elements (vertices, edges, or faces), with the duplicate attached to the original mesh with more new edges or faces. One way to do this is with "quick extrude" (although it doesn't offer the most control). To use it, put the mesh object into Edit Mode and select the geometry elements that you want to duplicate. Mostly commonly, that will mean one of the faces of a mesh, although you can also do multiple faces or single edges. Selecting a face means selecting all the vertices of that face. Then all you have to do is control-right-click at some point, and the selected face will be duplicated at that point. (Note that this is the same way that you would extend a curve.) The original face is now de-selected, and the new duplicate face is selected instead, making it easy to move, scale, or rotate the new face and to add more faces at other locations.
+
+    For more control, select the geometry that you want to duplicate and press the "E" key. When you extrude using the "E" key, the duplicated geometry is in the same location as the original and will not be visible, but it is selected and in grab mode so that you can easily move it away from that location simply by moving the mouse or pressing arrow keys. Remember that you can constrain the possible translations by holding down the control keys while dragging. And remember to left-click or press Return to exit from grab mode!
+
+    As an example, I started with a mesh cube and extruded various faces, scaling each extruded face along the way. Here is what it looked like in the Blender 3D window in Edit Mode:
+
+    ![123](../../en/a2/blender-extrude.jpg)
+
+## B.2.5  网格修改器
+
+**B.2.5  Mesh Modifiers**
+
+.. tab:: 中文
+
+    修改器是Blender中一个强大的功能，它可以在不实际修改底层几何体的情况下影响网格对象的渲染视图。要将修改器应用于对象，首先选择该对象。然后转到属性编辑器中的“修改器属性”控件。选择修改器控件的按钮看起来像一个扳手。点击“添加修改器”按钮，从大量可供添加到对象的修改器中进行选择。我只会说其中的一些，实际上我自己也只理解其中的一些。以下是在添加了两个修改器后的修改器控件的图片：
+
+    ![123](../../en/a2/blender-modifier-buttons.png)
+
+    当您将多个修改器应用于一个网格时，它们将按列出的顺序一个接一个地应用。每个修改器都将前一个修改器的结果作为其起点。
+
+    当您点击添加修改器时，会得到一个包含可用修改器的弹出菜单。在弹出菜单的底部，在“生成”标题下，您将看到“细分表面”修改器。这个修改器对于建模形状非常有用，尤其是当它与挤出一起使用时。它使形状更平滑，使用原始形状作为轮廓，有点像NURBS曲线的控制点。试着给一个已经挤出几次的立方体添加一个“细分表面”修改器。当您这样做时，会在“添加修改器”按钮下出现一个小面板，上面有修改器的控件，如上图所示。“视口级别”和“渲染”输入是控制子表面的重要的控件。增加级别会增加子表面的多边形数量，从而使其更平滑。“渲染”控件选择在渲染图像时使用的水平数量。“视口级别”控件选择在3D窗口中看到的级别数量，您可能希望将其设置得比渲染级别小，以加速窗口的绘制。（记住，如果您想让网格有一个真正平滑的外观，您应该将网格设置为使用“平滑着色”而不是“平面着色”。）
+
+    在修改器控制面板标题栏的最右端的“X”图标可以用来从对象中删除修改器。在“X”左侧的弹出菜单中，您会找到一个“应用”命令。如果您选择该命令，原始网格对象将被丢弃并替换为修改后的表面版本。这使得修改成为永久性的。修改器将从修改器控制面板中消失。您可能会这样做，如果您想要开始编辑子表面本身 - 但您将无法恢复原始状态（除非使用撤销）。
+
+    ----
+
+    另一个修改器，“阵列”修改器，可以复制对象并将它们排列成一行。只需向对象添加修改器，调整X、Y和Z方向上对象之间的距离，并使用“计数”控件指定您想要的对象数量。（还有更高级的排列副本的方法，但这里不涉及。）
+
+    在下图中，我从单个“猴子”网格对象开始，它的材质使用“噪声”纹理作为其基础颜色。我给它应用了三个阵列修改器。第一个修改器将猴子变成X方向上的四只猴子的一行，X偏移为1.1，Y和Z偏移为0。将X偏移设置为1.1而不是1.0，可以在副本之间增加一些空间。第二个修改器在Y方向上复制了一行，形成了一个4x4的网格。第三个在Z方向上复制了网格，形成了一个3D的猴子阵列。
+
+    ![123](../../en/a2/blender-array-modifier.png)
+
+
+    ----
+
+    作为使用纹理的不同示例，我们来看一看位移贴图，其中网格的顶点根据纹理移动或位移一定量。你可以使用“位移”修改器来进行位移贴图。
+
+    位移贴图对于icosphere（二十面体）效果很好，可以为其添加一个粗糙的、类似行星的表面。对于地形，你可以对网格“网格”对象应用位移修改器。网格只是一个细分的矩形。要获得漂亮的地形，你需要很多顶点，所以在创建时将网格的“X分辨率”和“Y分辨率”更改为50或更高。（或者，你可以使用网格平面并多次细分它。要细分它，请进入编辑模式，确保所有顶点都被选中，并使用弹出菜单中的“细分”。）同样，如果你想对Ico Sphere应用位移修改器，当你添加它时应该增加细分的数量。
+
+    要在选定的网格对象上使用纹理作为位移贴图，请转到“修改器”控件，并添加一个“位移”修改器，你会在弹出菜单的“变形”部分顶部找到它。你会看到网格跳跃，因为默认的位移是1。要使用纹理作为位移贴图，你需要在位移控件中添加一个纹理，然后编辑该纹理。点击位移修改器控件顶部的“新建”按钮以添加一个新纹理（或使用“新建”左侧的弹出菜单选择现有纹理）。然后转到属性编辑器的“纹理属性”选项卡。（纹理属性的按钮是最下面的一个。）在这里，你可以选择纹理的“类型”。例如，“云彩”程序纹理通常效果很好。你也可以使用“图像”纹理，并打开一个图像作为位移的“高度图”。（高度图通常用于制作看起来自然的地形。）有时，将图像同时用于材质的基本颜色和网格的位移贴图，会得到有趣的效果。
+
+    你应该立即在网格上看到效果。你几乎肯定想回到修改器属性，并减少修改器的“强度”，使位移效果不那么极端。同时，你可能还想为网格使用平滑着色。（要使网格更平滑，你可以在位移修改器之前向网格添加细分表面修改器。注意，你可以在修改器属性面板中拖动修改器。）
+
+    以下是一个应用于网格的位移修改器示例。我在网格上使用云彩纹理产生了棕色地形。要制作蓝色的“水”，我在与网格相同的位置添加了一个平面，并赋予它蓝色材质。
+
+    ![123](../../en/a2/blender-terrain.png)
+
+    （顺便说一下，纹理属性中的纹理称为“旧版纹理”。它们在Blender的旧版本中用于材质，但我还没有找到在当前版本中这样做的方法。实际上，除了位移贴图之外，我还没有找到它们可以用于其他任何用途的东西。）
+
+    ---
+
+    本节的示例被渲染为带有透明背景的.png图像。要让Blender在渲染图像中使用透明背景，你需要进入属性编辑器中的“渲染属性”，并在“胶片”部分启用“透明”复选框。保存图像时，请确保使用RGBA格式，并将其保存为PNG图像，而不是JPEG。
+
+
+.. tab:: 英文
+
+    Modifiers are a powerful feature that can affect the rendered view of a mesh object, without actually modifying the underlying geometry. To apply a modifier to an object, first select the object. Then go to the "Modifier Properties" controls in the Properties Editor. The button for selecting the Modifiers controls looks like a monkey wrench. Click the "Add Modifier" button to choose from a large selection of modifiers to be added to the object. I will mention only a few of them. In fact, I only understand a few of them myself. Here is a picture of the modifier controls after adding two modifiers:
+
+    ![123](../../en/a2/blender-modifier-buttons.png)
+
+    When you apply several modifiers to a mesh, they will be applied one after the other in the order listed. Each modifier will take the result of the previous modifier as its starting point.
+
+    When you click Add Modifier, you get a popup menu containing the available modifiers. Towards the bottom of the popup menu, under the heading "Generate", you will see the "Subdivision Surface" modifier. This modifier is useful for modeling shapes, particularly when used with extrusion. It makes a smoother shape that uses the original shape as an outline, sort of like the control points of a NURBS curve. Try adding a "Subdivision Surface" modifier to a cube that you have extruded a few times. When you do that, a small panel will appear under the "Add Modifier" button with controls for the modifier, as shown above. The "Levels Viewport" and "Render" inputs are important controls for sub-surfaces. Increasing the level increases the number of polygons on the sub-surface, and hence its smoothness. The "Render" control selects the number of levels that will be used when an image of object is rendered. The "Levels Viewport" control selects how many levels you see in the 3D window, which you might want to make smaller than the render level to speed up drawing of the window. (Remember that if you want a really smooth appearance for a mesh, you should set the mesh to use "Smooth Shading" instead of "Flat Shading.")
+
+    The "X" icon at the right end of the header for a modifier's control panel can be used to delete the modifier from the object. In the popup menu just to the left of the "X", you will find an "Apply" command. If you select that command, the original mesh object will be discarded and replaced with the modified version of the surface. This makes the modification permanent. The modifier will disappear from the modifier control panel. You might do this if you want to start editing the sub-surface itself—but you won't be able to get the original back (except with Undo).
+
+    ----
+
+    Another modifier, the "Array" modifier, can make duplicates of an object and arrange them in a line. Just add the modifier to an object, adjust the distance between objects in the X, Y, and Z directions, and use the "Count" control to specify how many objects you want. (There are more advanced ways of arranging the duplicates, but I won't cover them here.)
+
+    In the picture shown below, I started with a single "Monkey" mesh object, with a material that uses the "Noise" texture for its base color. I applied **three** Array modifiers to it. The first modifier turned the monkey into a line of four monkeys in the X direction, with an X-offset of 1.1 and Y- and Z-offsets of 0. Setting the X-offset to 1.1 rather than 1.0 adds a little space between copies. The second modifier duplicated the line in the Y direction to give a 4-by-4 grid. The third duplicated the grid in the Z direction to give a 3D formation of monkeys.
+
+    ![123](../../en/a2/blender-array-modifier.png)
+
+    ----
+
+    As an example of something different that you can do with a texture, we look at displacement mapping, where the vertices of a mesh are moved, or displaced, by an amount that depends on a texture. You can do displacement mapping with a "Displace" modifier.
+
+    Displacement mapping can work well for an icosphere, where it can add a rough, planet-like surface. For terrain, you can apply a Displace modifier to a mesh "Grid" object. A Grid is just a subdivided rectangle. To get nice terrain, you need a lot of vertices, so change the "X Res" and "Y Res" of the grid to 50 or higher when you create it. (Alternatively, you could use a Mesh Plane and subdivide it several times. To subdivide it, go into Edit mode, make sure all vertices are selected, and use "Subdivide" from the popup menu.) Similarly, if you want to apply a Displace modifier to an Ico Sphere, you should increase the number of Subdivisions when you add it.
+
+    To use a texture as a displacement map on the selected Mesh object, go to the "Modifier" controls and add a "Displace" modifier, which you will find towards the top of the "Deform" section of the popup menu. You will see the mesh jump, because the default displacement is one. To use a texture as the displacement map, you will need to add a texture to the displacement controls and then edit the texture. Click the "New" button at the top of the displacement modifier controls to add a new texture (or select an existing texture using the popup menu to the left of "New"). Then go the "Texture Properties" tab of the Properties Editor. (The button for the Texture Properties is the one at the very bottom.) Here you can select the "Type" of texture. For example, a "Clouds" procedural texture often works well. You can also use an "Image" texture, and open an image to be used as a "height map" for the displacement. (Height maps are often used to make natural-looking terrain.) You can sometimes get an interesting effect by using an image both for the base color of the material and as the displacement map for a mesh.
+
+    You should see the effect on the Mesh immediately. You will almost certainly want to go back to the Modifier properties and decrease the "Strength" of the modifier to make the displacement effect less extreme. Also you will probably want to use Smooth Shading for the mesh. (To make the mesh even smoother, you might add a Subdivision Surface modifier to the mesh, before the Displace modifier. Note that you can drag modifiers around in the Modifier Properties panel.)
+
+    Here is an example of a Displace modifier applied to a Grid. I used a Clouds texture on the grid to produce the brown terrain. To make the blue "water", I added a Plane in the same location as the grid and gave it a blue material.
+
+    ![123](../../en/a2/blender-terrain.png)
+
+    (By the way, the textures in the Texture Properties are called "legacy textures." They were used for materials in older versions of Blender, but I haven't found a way to do that in the current version. In fact, I have not yet found anything that they can be used for other than displacement mapping.)
+
+    ----
+
+    The examples for this section were rendered as .png images with a transparent background. To get Blender to use a transparent background in a rendered image, you need to go to the "Render Propreties" in the Properties Editor, and enable the "Transparency" checkbox in the "Film" section. When you save the image, be sure to use RGBA format and save it as a PNG image, not JPEG.

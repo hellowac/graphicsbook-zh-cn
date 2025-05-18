@@ -1,0 +1,792 @@
+.. _c2.6:
+
+第6节: HTML Canvas图形
+=======================
+
+**HTML Canvas Graphics**
+
+.. tab:: 中文
+
+    现代大多数网络浏览器都支持一种2D图形API，可以用于在网页上创建图像。该API是使用JavaScript实现的，这是用于网页的客户端编程语言。在本节中，我不会涉及JavaScript语言。要理解此处呈现的材料，您不需要了解太多有关它的知识。即使您对此一无所知，也可以了解其2D图形API，并了解它与[上一节](./s5.md)中介绍的Java API有何相似之处，以及有何不同之处。 （有关JavaScript的简要介绍，请参阅[附录A](../a1/index.md)中的[第A.3节](../a1/s3.md)。）
+
+.. tab:: 英文
+
+    Most modern web browsers support a 2D graphics API that can be used to create images on a web page. The API is implemented using JavaScript, the client-side programming language for the web. I won't cover the JavaScript language in this section. To understand the material presented here, you don't need to know much about it. Even if you know nothing about it at all, you can learn something about its 2D graphics API and see how it is similar to, and how it differs from, the Java API presented in the [previous section](./s5.md). (For a short introduction to JavaScript, see [Section A.3](../a1/s3.md) in [Appendix A](../a1/index.md).)
+
+## 2.6.1  2D绘制上下文
+
+**The 2D Graphics Context**
+
+.. tab:: 中文
+
+    网页的可见内容由诸如标题和段落之类的“元素”组成。内容是使用HTML语言指定的。一个“画布”是一个HTML元素。它在页面上显示为一个空白的矩形区域，可以通过我所称的“HTML画布”图形API用作绘图表面。在网页的源代码中，可以使用以下形式的代码创建一个画布元素
+
+    ```html
+    <canvas width="800" height="600" id="theCanvas"></canvas>
+    ```
+
+    宽度和*高度*指定了绘图区域的大小，以像素为单位。*id*是一个标识符，可以在JavaScript中用来引用画布。
+
+    要在画布上绘制，您需要一个图形上下文。图形上下文是一个包含用于绘制形状的函数的对象。它还包含记录当前图形状态的变量，包括当前绘图颜色、变换和字体等内容。在这里，我通常将graphics用作指向图形上下文的变量的名称，但变量名当然由程序员决定。这个图形上下文在canvas API中扮演着与Java中的Graphics2D类型的变量相同的角色。一个典型的起点是
+
+    ```js
+    canvas = document.getElementById("theCanvas");
+    graphics = canvas.getContext("2d");
+    ```
+
+    第一行使用其id获取网页上画布元素的引用。第二行为该画布元素创建图形上下文。(这段代码将在不支持canvas的网页浏览器中产生错误，因此您可以添加一些错误检查，例如将这些命令放在try...catch语句中。)
+
+    通常，您将把画布图形上下文存储在一个全局变量中，并在整个程序中使用相同的图形上下文。这与Java中的情况不同，在Java中，每次调用paintComponent()方法时，通常会获得一个新的Graphics2D上下文，该新上下文处于其初始状态，具有默认的颜色和笔画属性，并且没有应用的变换。当图形上下文是全局的时候，在一个函数调用中对状态的更改将延续到后续的函数调用，除非您采取措施限制它们的影响。这实际上可能导致一种相当常见的错误类型：例如，如果在一个函数中应用了30度的旋转，那么每次调用该函数时，这些旋转都将累积，除非您在再次调用该函数之前采取措施来撤销之前的旋转。
+
+    本节的其余部分主要描述了您可以使用画布图形上下文做什么。但是，这里记录了一个使用画布图形的非常简单的网页的完整源代码：
+
+    ```html
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>Canvas Graphics</title>
+    <script>
+        let canvas;    // DOM object corresponding to the canvas
+        let graphics;  // 2D graphics context for drawing on the canvas
+        
+        function draw() {
+            // draw on the canvas, using the graphics context
+            graphics.fillText("Hello World", 10, 20);
+        }
+
+        function init() {
+            canvas = document.getElementById("theCanvas");
+            graphics = canvas.getContext("2d");
+            draw();  // draw something on the canvas
+        }
+        
+        window.onload = init;
+        
+    </script>
+    </head>
+    <body>
+        <canvas id="theCanvas" width="640" height="480"></canvas>
+    </body>
+    </html>
+    ```
+
+    对于一个更完整但仍然很简单的例子，您可以查看示例页面[canvas2d/GraphicsStarter.html](../../../en/source/canvas2d/GraphicsStarter.html)。(您应该在浏览器中查看该页面，但您也应该阅读源代码。)该示例展示了如何使用画布图形绘制一些基本形状，您可以将其用作自己实验的基础。还有三个更高级的“入门”示例：[canvas2d/GraphicsPlusStarter.html](../../../en/source/canvas2d/GraphicsPlusStarter.html)添加了一些绘制形状和设置坐标系统的实用函数；[canvas2d/AnimationStarter.html](../../../en/source/canvas2d/AnimationStarter.html)添加了动画并包括一个简单的层次建模示例；以及[canvas2d/EventsStarter.html](../../../en/source/canvas2d/EventsStarter.html)展示了如何响应键盘和鼠标事件。
+
+.. tab:: 英文
+
+    The visible content of a web page is made up of "elements" such as headlines and paragraphs. The content is specified using the HTML language. A "canvas" is an HTML element. It appears on the page as a blank rectangular area which can be used as a drawing surface by what I am calling the "HTML canvas" graphics API. In the source code of a web page, a canvas element is created with code of the form
+
+    ```html
+    <canvas width="800" height="600" id="theCanvas"></canvas>
+    ```
+
+    The width and *height* give the size of the drawing area, in pixels. The *id* is an identifier that can be used to refer to the canvas in JavaScript.
+
+    To draw on a canvas, you need a graphics context. A graphics context is an object that contains functions for drawing shapes. It also contains variables that record the current graphics state, including things like the current drawing color, transform, and font. Here, I will generally use graphics as the name of the variable that refers to the graphics context, but the variable name is, of course, up to the programmer. This graphics context plays the same role in the canvas API that a variable of type Graphics2D plays in Java. A typical starting point is
+
+    ```js
+    canvas = document.getElementById("theCanvas");
+    graphics = canvas.getContext("2d");
+    ```
+
+    The first line gets a reference to the canvas element on the web page, using its id. The second line creates the graphics context for that canvas element. (This code will produce an error in a web browser that doesn't support canvas, so you might add some error checking such as putting these commands inside a try..catch statement.)
+
+    Typically, you will store the canvas graphics context in a global variable and use the same graphics context throughout your program. This is in contrast to Java, where you typically get a new Graphics2D context each time the paintComponent() method is called, and that new context is in its initial state with default color and stroke properties and with no applied transform. When a graphics context is global, changes made to the state in one function call will carry over to subsequent function calls, unless you do something to limit their effect. This can actually lead to a fairly common type of bug: For example, if you apply a 30-degree rotation in a function, those rotations will accumulate each time the function is called, unless you do something to undo the previous rotation before the function is called again.
+
+    The rest of this section will be mostly concerned with describing what you can do with a canvas graphics context. But here, for the record, is the complete source code for a very minimal web page that uses canvas graphics:
+
+    ```html
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>Canvas Graphics</title>
+    <script>
+        let canvas;    // DOM object corresponding to the canvas
+        let graphics;  // 2D graphics context for drawing on the canvas
+        
+        function draw() {
+            // draw on the canvas, using the graphics context
+            graphics.fillText("Hello World", 10, 20);
+        }
+
+        function init() {
+            canvas = document.getElementById("theCanvas");
+            graphics = canvas.getContext("2d");
+            draw();  // draw something on the canvas
+        }
+        
+        window.onload = init;
+        
+    </script>
+    </head>
+    <body>
+        <canvas id="theCanvas" width="640" height="480"></canvas>
+    </body>
+    </html>
+    ```
+
+    For a more complete, though still minimal, example, you can look at the sample page [canvas2d/GraphicsStarter.html](../../../en/source/canvas2d/GraphicsStarter.html). (You should look at the page in a browser, but you should also read the source code.) This example shows how to draw some basic shapes using canvas graphics, and you can use it as a basis for your own experimentation. There are also three more advanced "starter" examples: [canvas2d/GraphicsPlusStarter.html](../../../en/source/canvas2d/GraphicsPlusStarter.html) adds some utility functions for drawing shapes and setting up a coordinate system; [canvas2d/AnimationStarter.html](../../../en/source/canvas2d/AnimationStarter.html) adds animation and includes a simple hierarchical modeling example; and [canvas2d/EventsStarter.html](../../../en/source/canvas2d/EventsStarter.html) shows how to respond to keyboard and mouse events.
+
+## 2.6.2  形状
+
+.. tab:: 中文
+
+    画布上的默认坐标系统是通常的：单位是一个像素；(0,0)位于左上角；x坐标向右增加；y坐标向下增加。x和y值的范围由<canvas>元素的宽度和高度属性给出。这里对于度量单位的术语“像素”并不完全正确。可能我应该说类似“一个名义像素”的东西。在典型的桌面分辨率下没有放大的情况下，度量单位是一个像素。如果您在浏览器窗口中应用放大，度量单位将被拉伸。在高分辨率屏幕上，默认坐标系统中的一个单位可能对应于显示设备上的多个实际像素。
+
+    画布API只支持一组非常有限的基本形状。事实上，唯一的基本形状是矩形和文本。其他形状必须创建为路径。形状可以描边和填充。这包括文本：当你描边一个文本字符串时，一个笔沿着字符的轮廓被拖动；当你填充一个字符串时，字符的内部被填充。只有在字符相当大时，描边文本才真正有意义。以下是绘制矩形和文本的函数，其中graphics指代表示图形上下文的对象：
+
+    - `graphics.fillRect(x,y,w,h)` — 绘制以(x,y)为角的填充矩形，宽度为w，高度为h。如果宽度或高度小于或等于零，将不绘制任何内容。
+    - `graphics.strokeRect(x,y,w,h)` — 描边相同矩形的轮廓。
+    - `graphics.clearRect(x,y,w,h)` — 通过填充具有完全透明像素的矩形来清除矩形，允许画布的背景显示出来。背景由画布所在的网页的属性确定。它可能是背景颜色、图像，甚至是另一个画布。
+    - `graphics.fillText(str,x,y)` — 填充字符串str中的字符。字符串基线的左端定位在点(x,y)处。
+    - `graphics.strokeText(str,x,y)` — 描边字符串中字符的轮廓。
+
+    可以使用图形上下文中的函数创建路径。上下文跟踪一个“当前路径”。在当前版本的API中，路径不是由对象表示的，也没有办法同时处理多个路径或保留路径的副本以供以后重用。路径可以包含线段、贝塞尔曲线和圆弧。以下是处理路径的最常见函数：
+
+    - `graphics.beginPath()` — 开始一个新路径。任何先前的路径都将被丢弃，图形上下文中的当前路径现在为空。请注意，图形上下文还会跟踪当前点，即当前路径中的最后一个点。调用graphics.beginPath()后，当前点未定义。
+    - `graphics.moveTo(x,y)` — 将当前点移动到(x,y)，而不添加任何内容到路径中。这可以用于路径的起点或者开始新的不连续路径段。
+    - `graphics.lineTo(x,y)` — 将从当前点开始并以(x,y)结束的线段添加到路径中，并将当前点移动到(x,y)。
+    - `graphics.bezierCurveTo(cx1,cy1,c2x,cy2,x,y)` — 将立方贝塞尔曲线添加到路径中。曲线从当前点开始，以(x,y)结束。点(cx1,cy1)和(cx2,cy2)是曲线的两个控制点。（贝塞尔曲线及其控制点在2.2.3小节中有讨论。）
+    - `graphics.quadraticCurveTo(cx,cy,x,y)` — 从当前点到(x,y)添加二次贝塞尔曲线，控制点为(cx,cy)。
+    - `graphics.arc(x,y,r,startAngle,endAngle)` — 添加以中心点(x,y)和半径r的圆的弧。接下来的两个参数给出弧的起始和结束角度。它们以弧度表示。弧在正方向上从起始角度延伸到结束角度。（正方向是从正x轴向正y轴的方向旋转；这在默认坐标系统中是顺时针方向。）可以将可选的第五个参数设置为true以获得一个向负方向延伸的弧。绘制弧后，当前点在弧的末端。如果在调用graphics.arc之前有一个当前点，那么在绘制弧之前，会向路径添加一条从当前点到弧的起始点的线段。（回想一下，graphics.beginPath()之后立即没有当前点。）
+    - `graphics.closePath()` — 将从当前点添加到当前曲线段的起始点的线段添加到路径中。（回想一下，每次使用moveTo时，都会开始一个新的曲线段。）
+
+    使用这些命令创建的曲线不会绘制任何东西。要使图像中出现可见的东西，您必须填充或描边路径。
+
+    命令`graphics.fill()`和`graphics.stroke()`用于填充和描边当前路径。如果填充一个未闭合的路径，填充算法会像添加了一条最终线段来关闭路径一样。当你描边一个形状时，虚拟笔的中心沿着路径移动。因此，对于高精度的画布绘制，通常使用通过像素中心而不是角落的路径。例如，要绘制一条从坐标为(100,200)的像素延伸到坐标为(300,200)的像素的线，实际上要描边的几何线的端点是(100.5,200.5)和(100.5,300.5)。我们应该看一些例子。绘制一条线需要四个步骤：
+
+    ```js
+    graphics.beginPath();          // 开始一个新路径
+    graphics.moveTo(100.5,200.5);  // 新路径的起始点
+    graphics.lineTo(300.5,200.5);  // 添加一条线到点(300.5,200.5)
+    graphics.stroke();             // 绘制线
+    ```
+
+    记住，直到下一次调用`graphics.beginPath()`，线都会作为当前路径的一部分保留。以下是如何绘制一个填充的、正八边形，中心位于(200,400)，半径为100的方法：
+
+    ```js
+    graphics.beginPath();
+    graphics.moveTo(300,400);
+    for (let i = 1; i < 8; i++) {
+        let angle = (2*Math.PI)/8 * i;
+        let x = 200 + 100*Math.cos(angle);
+        let y = 400 + 100*Math.sin(angle);
+        graphics.lineTo(x,y);
+    }
+    graphics.closePath();
+    graphics.fill();
+    ```
+
+    函数`graphics.arc()`可用于绘制圆，起始角度为0，结束角度为2*Math.PI。以下是半径为100、中心位于200,300的填充圆：
+
+    ```js
+    graphics.beginPath();
+    graphics.arc( 200, 300, 100, 0, 2*Math.PI );
+    graphics.fill();
+    ```
+
+    要仅绘制圆的轮廓，请将`graphics.fill()`替换为`graphics.stroke()`。您可以对同一路径应用这两个操作。如果查看`graphics.arc()`的详细信息，您可以看到如何绘制圆的扇形：
+
+    ```js
+    graphics.beginPath();
+    graphics.moveTo(200,300);   // 将当前点移动到圆的中心。
+    graphics.arc(200,300,100,0,Math.PI/4);  // 弧，加上从当前点到弧的末端的线。
+    graphics.lineTo(200,300);  // 从弧的末端回到圆的中心的线。
+    graphics.fill();  // 填充扇形。
+    ```
+
+    没有办法绘制不是圆的椭圆，除非使用变换。我们将在本节后面介绍这一点。但是JavaScript有一个有趣的特性，即可以向现有对象添加新的函数和属性。示例程序[canvas2d/GraphicsPlusStarter.html](../../../en/source/canvas2d/GraphicsPlusStarter.html)展示了如何向图形上下文添加函数来绘制线条、椭圆和其他不在API中的形状。
+
+.. tab:: 英文
+
+    The default coordinate system on a canvas is the usual: The unit of measure is one pixel; (0,0) is at the upper left corner; the x-coordinate increases to the right; and the y-coordinate increases downward. The range of x and y values is given by the width and height properties of the <canvas> element. The term "pixel" here for the unit of measure is not really correct. Probably, I should say something like "one nominal pixel." The unit of measure is one pixel at typical desktop resolution with no magnification. If you apply a magnification to a browser window, the unit of measure gets stretched. And on a high-resolution screen, one unit in the default coordinate system might correspond to several actual pixels on the display device.
+
+    The canvas API supports only a very limited set of basic shapes. In fact, the only basic shapes are rectangles and text. Other shapes must be created as paths. Shapes can be stroked and filled. That includes text: When you stroke a string of text, a pen is dragged along the outlines of the characters; when you fill a string, the insides of the characters are filled. It only really makes sense to stroke text when the characters are rather large. Here are the functions for drawing rectangles and text, where graphics refers to the object that represents the graphics context:
+
+    - `graphics.fillRect(x,y,w,h)` — draws a filled rectangle with corner at (x,y), with width w and with height h. If the width or the height is less than or equal to zero, nothing is drawn.
+    - `graphics.strokeRect(x,y,w,h)` — strokes the outline of the same rectangle.
+    - `graphics.clearRect(x,y,w,h)` — clears the rectangle by filling it with fully transparent pixels, allowing the background of the canvas to show. The background is determined by the properties of the web page on which the canvas appears. It might be a background color, an image, or even another canvas.
+    - `graphics.fillText(str,x,y)` — fills the characters in the string str. The left end of the baseline of the string is positioned at the point (x,y).
+    - `graphics.strokeText(str,x,y)` — strokes the outlines of the characters in the string.
+
+    A path can be created using functions in the graphics context. The context keeps track of a "current path." In the current version of the API, paths are not represented by objects, and there is no way to work with more than one path at a time or to keep a copy of a path for later reuse. Paths can contain lines, Bezier curves, and circular arcs. Here are the most common functions for working with paths:
+
+    - `graphics.beginPath()` — start a new path. Any previous path is discarded, and the current path in the graphics context is now empty. Note that the graphics context also keeps track of the current point, the last point in the current path. After calling graphics.beginPath(), the current point is undefined.
+    - `graphics.moveTo(x,y)` — move the current point to (x,y), without adding anything to the path. This can be used for the starting point of the path or to start a new, disconnected segment of the path.
+    - `graphics.lineTo(x,y)` — add the line segment starting at current point and ending at (x,y) to the path, and move the current point to (x,y).
+    - `graphics.bezierCurveTo(cx1,cy1,c2x,cy2,x,y)` — add a cubic Bezier curve to the path. The curve starts at the current point and ends at (x,y). The points (cx1,cy1) and (cx2,cy2) are the two control points for the curve. (Bezier curves and their control points were discussed in Subsection 2.2.3.)
+    - `graphics.quadraticCurveTo(cx,cy,x,y)` — adds a quadratic Bezier curve from the current point to (x,y), with control point (cx,cy).
+    - `graphics.arc(x,y,r,startAngle,endAngle)` — adds an arc of the circle with center (x,y) and radius r. The next two parameters give the starting and ending angle of the arc. They are measured in radians. The arc extends in the positive direction from the start angle to the end angle. (The positive rotation direction is from the positive x-axis towards the positive y-axis; this is clockwise in the default coordinate system.) An optional fifth parameter can be set to true to get an arc that extends in the negative direction. After drawing the arc, the current point is at the end of the arc. If there is a current point before graphics.arc is called, then before the arc is drawn, a line is added to the path that extends from the current point to the starting point of the arc. (Recall that immediately after graphics.beginPath(), there is no current point.)
+    - `graphics.closePath()` — adds to the path a line from the current point back to the starting point of the current segment of the curve. (Recall that you start a new segment of the curve every time you use moveTo.)
+
+    Creating a curve with these commands does not draw anything. To get something visible to appear in the image, you must fill or stroke the path.
+
+    The commands graphics.fill() and graphics.stroke() are used to fill and to stroke the current path. If you fill a path that has not been closed, the fill algorithm acts as though a final line segment had been added to close the path. When you stroke a shape, it's the center of the virtual pen that moves along the path. So, for high-precision canvas drawing, it's common to use paths that pass through the centers of pixels rather than through their corners. For example, to draw a line that extends from the pixel with coordinates (100,200) to the pixel with coordinates (300,200), you would actually stroke the geometric line with endpoints (100.5,200.5) and (100.5,300.5). We should look at some examples. It takes four steps to draw a line:
+
+    ```js
+    graphics.beginPath();          // start a new path
+    graphics.moveTo(100.5,200.5);  // starting point of the new path
+    graphics.lineTo(300.5,200.5);  // add a line to the point (300.5,200.5)
+    graphics.stroke();             // draw the line
+    ```
+
+    Remember that the line remains as part of the current path until the next time you call graphics.beginPath(). Here's how to draw a filled, regular octagon centered at (200,400) and with radius 100:
+
+    ```js
+    graphics.beginPath();
+    graphics.moveTo(300,400);
+    for (let i = 1; i < 8; i++) {
+        let angle = (2*Math.PI)/8 * i;
+        let x = 200 + 100*Math.cos(angle);
+        let y = 400 + 100*Math.sin(angle);
+        graphics.lineTo(x,y);
+    }
+    graphics.closePath();
+    graphics.fill();
+    ```
+
+    The function graphics.arc() can be used to draw a circle, with a start angle of 0 and an end angle of 2*Math.PI. Here's a filled circle with radius 100, centered at 200,300:
+
+    ```js
+    graphics.beginPath();
+    graphics.arc( 200, 300, 100, 0, 2*Math.PI );
+    graphics.fill();
+    ```
+
+    To draw just the outline of the circle, use graphics.stroke() in place of graphics.fill(). You can apply both operations to the same path. If you look at the details of graphics.arc(), you can see how to draw a wedge of a circle:
+
+    ```js
+    graphics.beginPath();
+    graphics.moveTo(200,300);   // Move current point to center of the circle.
+    graphics.arc(200,300,100,0,Math.PI/4);  // Arc, plus line from current point.
+    graphics.lineTo(200,300);  // Line from end of arc back to center of circle.
+    graphics.fill();  // Fill the wedge.
+    ```
+
+    There is no way to draw an oval that is not a circle, except by using transforms. We will cover that later in this section. But JavaScript has the interesting property that it is possible to add new functions and properties to an existing object. The sample program [canvas2d/GraphicsPlusStarter.html](../../../en/source/canvas2d/GraphicsPlusStarter.html) shows how to add functions to a graphics context for drawing lines, ovals, and other shapes that are not built into the API.
+
+## 2.6.3  描边和填充
+
+.. tab:: 中文
+
+.. tab:: 英文
+
+    Attributes such as line width that affect the visual appearance of strokes and fills are stored as properties of the graphics context. For example, the value of graphics.lineWidth is a number that represents the width that will be used for strokes. (The width is given in pixels for the default coordinate system, but it is subject to transforms.) You can change the line width by assigning a value to this property:
+
+    ```js
+    graphics.lineWidth = 2.5;  // Change the current width.
+    ```
+
+    The change affects subsequent strokes. You can also read the current value:
+
+    ```js
+    saveWidth = graphics.lineWidth;  // Save current width.
+    ```
+
+    The property *graphics.lineCap* controls the appearance of the endpoints of a stroke. It can be set to "round", "square", or "butt". The quotation marks are part of the value. For example,
+
+    ```js
+    graphics.lineCap = "round";
+    ```
+
+    Similarly, graphics.lineJoin controls the appearance of the point where one segment of a stroke joins another segment; its possible values are "round", "bevel", or "miter". (Line endpoints and joins were discussed in [Subsection 2.2.1](../c2/s2.md#221--基本形状).)
+
+    Note that the values for *graphics.lineCap* and *graphics.lineJoin* are strings. This is a somewhat unusual aspect of the API. Several other properties of the graphics context take values that are strings, including the properties that control the colors used for drawing and the font that is used for drawing text.
+
+    Color is controlled by the values of the properties *graphics.fillStyle* and *graphics.strokeStyle*. The graphics context maintains separate styles for filling and for stroking. A solid color for stroking or filling is specified as a string. Valid color strings are ones that can be used in CSS, the language that is used to specify colors and other style properties of elements on web pages. Many solid colors can be specified by their names, such as "red", "black", and "beige". An RGB color can be specified as a string of the form "rgb(r,g,b)", where the parentheses contain three numbers in the range 0 to 255 giving the red, green, and blue components of the color. Hexadecimal color codes are also supported, in the form "#XXYYZZ" where XX, YY, and ZZ are two-digit hexadecimal numbers giving the RGB color components. For example,
+
+    ```js
+    graphics.fillStyle = "rgb(200,200,255)"; // light blue
+    graphics.strokeStyle = "#0070A0"; // a darker, greenish blue
+    ```
+
+    The style can actually be more complicated than a simple solid color: Gradients and patterns are also supported. As an example, a gradient can be created with a series of steps such as
+
+    ```js
+    let lineargradient = graphics.createLinearGradient(420,420,550,200);
+    lineargradient.addColorStop(0,"red");
+    lineargradient.addColorStop(0.5,"yellow");
+    lineargradient.addColorStop(1,"green");
+    graphics.fillStyle = lineargradient;  // Use a gradient fill!
+    ```
+
+    The first line creates a linear gradient that will vary in color along the line segment from the point (420,420) to the point (550,200). Colors for the gradient are specified by the addColorStop function: the first parameter gives the fraction of the distance from the initial point to the final point where that color is applied, and the second is a string that specifies the color itself. A color stop at 0 specifies the color at the initial point; a color stop at 1 specifies the color at the final point. Once a gradient has been created, it can be used both as a fill style and as a stroke style in the graphics context.
+
+    Finally, I note that the font that is used for drawing text is the value of the property graphics.font. The value is a string that could be used to specify a font in CSS. As such, it can be fairly complicated, but the simplest versions include a font-size (such as 20px or 150%) and a font-family (such as serif, sans-serif, monospace, or the name of any font that is accessible to the web page). You can add italic or bold or both to the front of the string. Some examples:
+
+    ```js
+    graphics.font = "2cm monospace";  // the size is in centimeters
+    graphics.font = "bold 18px sans-serif";
+    graphics.font = "italic 150% serif";   // size is 150% of the usual size
+    ```
+
+    The default is "10px sans-serif," which is usually too small. Note that text, like all drawing, is subject to coordinate transforms. Applying a scaling operation changes the size of the text, and a negative scaling factor can produce mirror-image text.
+
+## 2.6.4  变换
+
+.. tab:: 中文
+
+    图形上下文具有三个基本函数，用于通过缩放、旋转和平移修改当前变换。还有一些函数将当前变换与任意变换组合，并完全替换当前变换：
+
+    - `graphics.scale(sx,sy)` — 在x方向缩放sx，y方向缩放sy。
+    - `graphics.rotate(angle)` — 围绕原点以angle弧度旋转。在默认坐标系统中，正旋转是顺时针的。
+    - `graphics.translate(tx,ty)` — 在x方向平移tx，在y方向平移ty。
+    - `graphics.transform(a,b,c,d,e,f)` — 应用仿射变换x1 = a*x + c*y + e，y1 = b*x + d*y + f。
+    - `graphics.setTransform(a,b,c,d,e,f)` — 丢弃当前变换，并将当前变换设置为x1 = a*x + c*y + e，y1 = b*x + d*y + f。
+
+    请注意，没有剪切变换，但可以将剪切作为一般变换应用。例如，对于剪切因子为0.5的水平剪切，使用：
+
+    ```js
+    graphics.transform(1, 0, 0.5, 1, 0, 0)
+    ```
+
+    要实现分层建模，如[第2.4节](../c2/s4.md)中讨论的，您需要能够保存当前变换，以便稍后可以恢复它。不幸的是，并没有提供一种方法来从画布图形上下文中读取当前变换。但是，图形上下文本身保留了一堆变换，并提供了推送和弹出当前变换的方法。实际上，这些方法不仅保存和恢复当前变换，它们实际上保存和恢复了几乎整个图形上下文的状态，包括当前颜色、线宽和字体等属性（但不包括当前路径）：
+
+    - `graphics.save()` — 将图形上下文的当前状态的副本（包括当前变换）推送到堆栈上。
+    - `graphics.restore()` — 从堆栈中移除顶部项目，其中包含图形上下文的已保存状态，并将图形上下文恢复为该状态。
+
+    使用这些方法，使用建模变换绘制对象的基本设置变得如下：
+
+    ```js
+    graphics.save();          // 保存当前状态的副本
+    graphics.translate(a,b);  // 应用建模变换
+    graphics.rotate(r);     
+    graphics.scale(sx,sy);
+    .
+    .  // 绘制对象！
+    .
+    graphics.restore();       // 恢复保存的状态
+    ```
+
+    请注意，如果绘制对象包括对绘制颜色等属性的任何更改，这些更改也将被`graphics.restore()`调用撤消。在分层图形中，这通常是您想要的，这消除了保存和恢复颜色等属性的额外语句的需要。
+
+    要绘制一个分层模型，您需要遍历一个场景图，可以是过程化的，也可以是作为数据结构的。这与Java几乎相同。实际上，您应该看到您学习的有关变换和建模的基本概念如何适用于画布图形API。这些概念非常普遍，并且甚至适用于3D图形API，只是稍微增加了一些复杂性。示例网页[canvas2d/HierarchicalModel2D.html](../../../en/source/canvas2d/HierarchicalModel2D.html)使用2D画布API实现了分层建模。
+
+    ----
+
+    现在我们知道如何进行变换，我们可以看看如何使用画布API绘制一个椭圆。假设我们想要一个中心位于(x,y)，水平半径为r1，垂直半径为r2的椭圆。想法是绘制一个半径为1的圆，中心位于(0,0)，然后对其进行变换。圆需要在水平方向按比例r1缩放，在垂直方向按比例r2缩放。然后，它应该被平移以将其中心从(0,0)移动到(x,y)。我们可以使用`graphics.save()`和`graphics.restore()`确保变换仅影响圆。回想一下，代码中的变换顺序与应用于对象的顺序相反，代码如下：
+
+    ```js
+    graphics.save();
+    graphics.translate( x, y );
+    graphics.scale( r1, r2 );
+    graphics.beginPath();
+    graphics.arc( 0, 0, 1, 0, Math.PI );  // 半径为1的圆
+    graphics.restore();
+    graphics.stroke();
+    ```
+
+    请注意，当前路径不受`graphics.save()`和`graphics.restore()`的影响。因此，在这个例子中，当调用`graphics.restore()`时，椭圆形状的路径不会被丢弃。当在最后调用`graphics.stroke()`时，描边的是椭圆形状的路径。另一方面，用于描边的线宽并不受应用于椭圆的缩放变换的影响。请注意，如果最后两个命令的顺序颠倒了，那么线宽将受到缩放的影响。
+
+    这里关于变换和路径有一个有趣的观点。在HTML画布API中，用于创建路径的点在保存之前会受到当前变换的影响。也就是说，它们以像素坐标保存。稍后，当路径被描边或填充时，当前变换不会影响路径（尽管它可以影响例如描边时的线宽）。特别地，你不能创建一个路径然后应用不同的变换。例如，你不能创建一个椭圆形状的路径，然后用它来绘制不同位置的多个椭圆。每次绘制椭圆时，它都会在同一个位置，即使对图形上下文应用了不同的平移变换。
+
+    在Java中情况不同，在路径中存储的坐标是指定路径的实际数字，即对象坐标。当路径被描边或填充时，会应用当前有效的变换到路径上。路径可以多次重用，以用不同的变换绘制副本。这个评论提供了一个示例，说明看起来非常相似的API可能存在微妙的差异。
+
+.. tab:: 英文
+
+    A graphics context has three basic functions for modifying the current transform by scaling, rotation, and translation. There are also functions that will compose the current transform with an arbitrary transform and for completely replacing the current transform:
+
+    - `graphics.scale(sx,sy)` — scale by sx in the x-direction and sy in the y-direction.
+    - `graphics.rotate(angle)` — rotate by angle radians about the origin. A positive rotation is clockwise in the default coordinate system.
+    - `graphics.translate(tx,ty)` — translate by tx in the x-direction and ty in the y-direction.
+    - `graphics.transform(a,b,c,d,e,f)` — apply the affine transform x1 = a*x + c*y + e, and y1 = b*x + d*y + f.
+    - `graphics.setTransform(a,b,c,d,e,f)` — discard the current transformation, and set the current transformation to be x1 = a*x + c*y + e, and y1 = b*x + d*y + f.
+
+    Note that there is no shear transform, but you can apply a shear as a general transform. For example, for a horizontal shear with shear factor 0.5, use
+
+    ```js
+    graphics.transform(1, 0, 0.5, 1, 0, 0)
+    ```
+
+    To implement hierarchical modeling, as discussed in [Section 2.4](../c2/s4.md), you need to be able to save the current transformation so that you can restore it later. Unfortunately, no way is provided to read the current transformation from a canvas graphics context. However, the graphics context itself keeps a stack of transformations and provides methods for pushing and popping the current transformation. In fact, these methods do more than save and restore the current transformation. They actually save and restore almost the entire state of the graphics context, including properties such as current colors, line width, and font (but not the current path):
+
+    - `graphics.save()` — push a copy of the current state of the graphics context, including the current transformation, onto the stack.
+    - `graphics.restore()` — remove the top item from the stack, containing a saved state of the graphics context, and restore the graphics context to that state.
+
+    Using these methods, the basic setup for drawing an object with a modeling transform becomes:
+
+    ```js
+    graphics.save();          // save a copy of the current state
+    graphics.translate(a,b);  // apply modeling transformations
+    graphics.rotate(r);     
+    graphics.scale(sx,sy);
+    .
+    .  // Draw the object!
+    .
+    graphics.restore();       // restore the saved state
+    ```
+
+    Note that if drawing the object includes any changes to attributes such as drawing color, those changes will be also undone by the call to graphics.restore(). In hierarchical graphics, this is usually what you want, and it eliminates the need to have extra statements for saving and restoring things like color.
+
+    To draw a hierarchical model, you need to traverse a scene graph, either procedurally or as a data structure. It's pretty much the same as in Java. In fact, you should see that the basic concepts that you learned about transformations and modeling carry over to the canvas graphics API. Those concepts apply very widely and even carry over to 3D graphics APIs, with just a little added complexity. The sample web page [canvas2d/HierarchicalModel2D.html](../../../en/source/canvas2d/HierarchicalModel2D.html) implements hierarchical modeling using the 2D canvas API.
+
+    ----
+
+    Now that we know how to do transformations, we can see how to draw an oval using the canvas API. Suppose that we want an oval with center at (x,y), with horizontal radius r1 and with vertical radius r2. The idea is to draw a circle of radius 1 with center at (0,0), then transform it. The circle needs to be scaled by a factor of r1 horizontally and r2 vertically. It should then be translated to move its center from (0,0) to (x,y). We can use graphics.save() and graphics.restore() to make sure that the transformations only affect the circle. Recalling that the order of transforms in the code is the opposite of the order in which they are applied to objects, this becomes:
+
+    ```js
+    graphics.save();
+    graphics.translate( x, y );
+    graphics.scale( r1, r2 );
+    graphics.beginPath();
+    graphics.arc( 0, 0, 1, 0, Math.PI );  // a circle of radius 1
+    graphics.restore();
+    graphics.stroke();
+    ```
+
+    Note that the current path is not affected by the calls to graphics.save() and graphics.restore(). So, in the example, the oval-shaped path is not discarded when graphics.restore() is called. When graphics.stroke() is called at the end, it is the oval-shaped path that is stroked. On the other hand, the line width that is used for the stroke is not affected by the scale transform that was applied to the oval. Note that if the order of the last two commands were reversed, then the line width would be subject to the scaling.
+
+    There is an interesting point here about transforms and paths. In the HTML canvas API, the points that are used to create a path are transformed by the current transformation before they are saved. That is, they are saved in pixel coordinates. Later, when the path is stroked or filled, the current transform has no effect on the path (although it can affect, for example, the line width when the path is stroked). In particular, you can't make a path and then apply different transformations. For example, you can't make an oval-shaped path, and then use it to draw several ovals in different positions. Every time you draw the oval, it will be in the same place, even if different translation transforms are applied to the graphics context.
+
+    The situation is different in Java, where the coordinates that are stored in the path are the actual numbers that are used to specify the path, that is, the object coordinates. When the path is stroked or filled, the transformation that is in effect at that time is applied to the path. The path can be reused many times to draw copies with different transformations. This comment is offered as an example of how APIs that look very similar can have subtle differences.
+
+## 2.6.5  画布辅助
+
+**Auxiliary Canvases**
+
+.. tab:: 中文
+
+    在[第2.5.5小节](../c2/s5.md#255--bufferedimage-and-pixels)中，我们看了一下示例程序[java2d/JavaPixelManipulation.java](../../../en/source/java2d/JavaPixelManipulation.java)，它使用了{++BufferedImage++}来实现离屏画布并允许直接操作单个像素的颜色。相同的思想可以应用在HTML画布图形中，尽管实现方式有些不同。示例网页应用程序[canvas2d/SimplePaintProgram.html](../../../en/source/canvas2d/SimplePaintProgram.html)基本上和Java程序做了相同的事情（除了图像滤镜）。
+
+    下面是具有相同功能的程序的实时演示版本。你可以尝试它来看看各种绘图工具是如何工作的。别忘了试试“Smudge”工具！（它必须应用到你已经绘制的形状上。）
+
+    <iframe src="../../../en/demos/c2/SimplePaintDemo.html" width="600" height="425"></iframe>
+
+    对于JavaScript，网页被表示为一个数据结构，由一个称为DOM（Document Object Model）的标准定义。对于离屏画布，我们可以使用一个不属于该数据结构的<canvas>，因此不是页面的一部分。在JavaScript中，<canvas>可以通过函数调用document.createElement("canvas")来创建。有一种方法可以将这种动态创建的画布添加到DOM中的网页，但是即使不这样做，它也可以作为离屏画布使用。要使用它，您必须设置它的width和height属性，并且需要一个用于绘制的图形上下文。下面是一个创建640x480画布，获取画布的图形上下文，并用白色填充整个画布的示例代码：
+
+    ```js
+    OSC = document.createElement("canvas");  // 离屏画布
+
+    OSC.width = 640;    // 必须明确设置OSC的大小。
+    OSC.height = 480;
+
+    OSG = OSC.getContext("2d");  // 用于在OSC上绘制的图形上下文。
+
+    OSG.fillStyle = "white";  // 使用上下文将OSC填充为白色。
+    OSG.fillRect(0,0,OSC.width,OSC.height);
+    ```
+
+    示例程序允许用户在画布上拖动鼠标来绘制一些形状。离屏画布保存了图片的官方副本，但用户看不到它。还有一个用户可以看到的屏幕画布。每当图片被修改时，离屏画布被复制到屏幕画布上。当用户拖动鼠标来绘制线条、椭圆或矩形时，新形状实际上是在屏幕上绘制的，覆盖在离屏画布的内容上。只有当用户完成拖动操作时，才会将新形状添加到离屏画布上。对于其他工具，更改直接应用于离屏画布，然后将结果复制到屏幕上。这是对Java程序的精确模仿。
+
+    （上面显示的演示版本实际上使用了一种略有不同的技术来实现相同的效果。它使用了两个屏幕画布，一个完全位于另一个之上。较低的画布保存了实际图像。上部的画布完全透明，除非用户正在绘制线条、椭圆或矩形。当用户拖动鼠标绘制这样的形状时，新形状是在上部画布上绘制的，它隐藏了位于形状下方的下部画布的部分。当用户释放鼠标时，形状被添加到下部画布上，上部画布被清除以再次完全透明。同样，其他工具直接操作下部画布。）
+
+.. tab:: 英文
+
+    In [Subsection 2.5.5](../c2/s5.md#255--bufferedimage-and-pixels), we looked at the sample program [java2d/JavaPixelManipulation.java](../../../en/source/java2d/JavaPixelManipulation.java), which uses a {++BufferedImage++} both to implement an off-screen canvas and to allow direct manipulation of the colors of individual pixels. The same ideas can be applied in HTML canvas graphics, although the way it's done is a little different. The sample web application [canvas2d/SimplePaintProgram.html](../../../en/source/canvas2d/SimplePaintProgram.html) does pretty much the same thing as the Java program (except for the image filters).
+
+    Here is a live demo version of the program that has the same functionality. You can try it out to see how the various drawing tools work. Don't forget to try the "Smudge" tool! (It has to be applied to shapes that you have already drawn.)
+
+    <iframe src="../../../en/demos/c2/SimplePaintDemo.html" width="600" height="425"></iframe>
+
+    For JavaScript, a web page is represented as a data structure, defined by a standard called the DOM, or Document Object model. For an off-screen canvas, we can use a <canvas> that is not part of that data structure and therefore is not part of the page. In JavaScript, a <canvas> can be created with the function call document.createElement("canvas"). There is a way to add this kind of dynamically created canvas to the DOM for the web page, but it can be used as an off-screen canvas without doing so. To use it, you have to set its width and height properties, and you need a graphics context for drawing on it. Here, for example, is some code that creates a 640-by-480 canvas, gets a graphics context for the canvas, and fills the whole canvas with white:
+
+    ```js
+    OSC = document.createElement("canvas");  // off-screen canvas
+
+    OSC.width = 640;    // Size of OSC must be set explicitly.
+    OSC.height = 480;
+
+    OSG = OSC.getContext("2d");  // Graphics context for drawing on OSC.
+
+    OSG.fillStyle = "white";  // Use the context to fill OSC with white.
+    OSG.fillRect(0,0,OSC.width,OSC.height);
+    ```
+
+    The sample program lets the user drag the mouse on the canvas to draw some shapes. The off-screen canvas holds the official copy of the picture, but it is not seen by the user. There is also an on-screen canvas that the user sees. The off-screen canvas is copied to the on-screen canvas whenever the picture is modified. While the user is dragging the mouse to draw a line, oval, or rectangle, the new shape is actually drawn on-screen, over the contents of the off-screen canvas. It is only added to the off-screen canvas when the user finishes the drag operation. For the other tools, changes are made directly to the off-screen canvas, and the result is then copied to the screen. This is an exact imitation of the Java program.
+
+    (The demo version shown above actually uses a somewhat different technique to accomplish the same thing. It uses two on-screen canvases, one located exactly on top of the other. The lower canvas holds the actual image. The upper canvas is completely transparent, except when the user is drawing a line, oval, or rectangle. While the user is dragging the mouse to draw such a shape, the new shape is drawn on the upper canvas, where it hides the part of the lower canvas that is beneath the shape. When the user releases the mouse, the shape is added to the lower canvas and the upper canvas is cleared to make it completely transparent again. Again, the other tools operate directly on the lower canvas.)
+
+## 2.6.6  像素操作
+
+**Pixel Manipulation**
+
+.. tab:: 中文
+
+    [*示例程序*](../../../en/source/canvas2d/SimplePaintProgram.html)中的“Smudge”工具是通过对图像中的像素颜色分量值进行计算来实现的。该实现需要一种方法来读取画布中像素的颜色。可以使用函数 *graphics.getPixelData(x,y,w,h)* 来完成，其中 graphics 是画布的 2D 图形上下文。该函数读取一个像素矩形的颜色，其中 (x,y) 是矩形的左上角，w 是宽度，h 是高度。这些参数始终以像素坐标表示。例如：
+
+    ```js
+    colors = graphics.getImageData(0,0,20,10)
+    ```
+
+    这返回了画布左上角的一个 20x10 矩形的颜色数据。返回值 colors 是一个对象，具有属性 *colors.width*、*colors.height* 和 *colors.data*。宽度和高度给出了返回数据中像素的行数和列数（根据文档，在高分辨率屏幕上，它们可能与函数调用中的宽度和高度不同。数据可以是显示设备上的真实物理像素，而不是画布上像素坐标系中使用的“名义”像素。每个名义像素可能对应多个设备像素。我不确定这在实践中是否会真正发生）。
+
+    colors.data 的值是一个数组，对于每个像素有四个数组元素。这四个元素包含了像素的红色、绿色、蓝色和 alpha 颜色分量，以整数形式给出，范围从 0 到 255。对于位于画布外的像素，四个组件值都将为零。该数组是 Uint8ClampedArray 类型的值，其元素是限制在 0 到 255 范围内的 8 位无符号整数。这是 JavaScript 的一种**类型化数组**数据类型，只能保存特定数值类型的值。例如，假设你只想读取坐标为 (x,y) 处的一个像素的 RGB 颜色。你可以设置
+
+    ```js
+    pixel = graphics.getImageData(x,y,1,1);
+    ```
+
+    然后像素的 RGB 颜色分量为 `R = pixel.data[0]`、`G = pixel.data[1]` 和 `B = pixel.data[2]`。
+
+    函数 *graphics.putImageData(imageData,x,y)* 用于将图像数据对象中的颜色复制到画布中，将其放置到画布中的矩形中，其左上角位于 (x,y)。imageData 对象可以是通过调用 *graphics.getImageData* 返回的对象，可能已经修改了其颜色数据。或者你可以通过调用 *graphics.createImageData(w,h)* 创建一个空的图像数据对象，并填充数据。
+
+    让我们考虑示例程序中的“Smudge”工具。当用户使用此工具点击鼠标时，我使用 *OSG.getImageData* 来获取围绕鼠标位置的 9x9 像素正方形的颜色数据。OSG 是包含图像的画布的图形上下文。由于我希望对颜色值进行实数运算，所以将颜色分量复制到另一个类型化数组中，即类型为 {++Float32Array++} 的数组，它可以保存 32 位浮点数。以下是我调用的函数：
+
+    ```js
+    function grabSmudgeData(x, y) {  // (x,y) 表示鼠标位置
+        let colors = OSG.getImageData(x-5,y-5,9,9);
+        if (smudgeColorArray == null) {
+            // 第一次调用此函数时创建图像数据和数组。
+            smudgeImageData = OSG.createImageData(9,9);
+            smudgeColorArray = new Float32Array(colors.data.length);
+        }
+        for (let i = 0; i < colors.data.length; i++) {
+            // 将颜色分量数据复制到 Float32Array 中。
+            smudgeColorArray[i] = colors.data[i];
+        }
+    }
+    ```
+
+    浮点数数组 *smudgeColorArray* 将用于计算鼠标移动时图像的新颜色值。来自该数组的颜色值将被复制到图像数据对象 *smudgeImageData* 中，然后将用于将颜色值放入图像中。这是另一个函数中完成的，该函数在用户将“Smudge”工具拖动到画布上的每个点时调用：
+
+    ```js
+    function swapSmudgeData(x, y) { // (x,y) 是新的鼠标位置
+        let colors = OSG.getImageData(x-5,y-5,9,9);  // 获取图像中的颜色数据
+        for (let i = 0; i < smudgeColorArray.length; i += 4) {
+            // 一个像素的颜色数据在下面四个数组位置中。
+            if (smudgeColorArray[i+3] && colors.data[i+3]) {
+                // alpha 分量不为零；两个像素都在画布中；
+                // （getImageData() 在实际不属于画布的像素坐标处获取 alpha 值为 0）。
+                for (let j = i; j < i+3; j++) { // 计算新的 RGB 值
+                    let newSmudge = smudgeColorArray[j]*0.8 + colors.data[j]*0.2;
+                    let newImage  = smudgeColorArray[j]*0.2 + colors.data[j]*0.8;
+                    smudgeImageData.data[j] = newImage;
+                    smudgeColorArray[j] = newSmudge;
+                }
+                smudgeImageData.data[i+3] = 255;  // alpha 分量
+            }
+            else {
+                // 其中一个 alpha 分量为零；将输出颜色设置为全零，即“透明黑色”，这不会影响画布中像素的颜色。
+                for (let j = i; j <= i+3; j++) {
+                    smudgeImageData.data[j] = 0; 
+                }
+            }
+        }
+        OSG.putImageData(smudgeImageData,x-5,y-5); // 将新颜色复制到画布中
+    }
+    ```
+
+    在此函数中，对鼠标位置周围的一个 9x9 像素正方形中的每个像素计算了一个新的颜色。颜色被当前像素的颜色和*smudgeColorArray*中对应像素的颜色的加权平均值所替代。同时，*smudgeColorArray* 中的颜色也被类似的加权平均值替代。
+
+    值得尝试理解此示例，以了解如何进行颜色数据的逐像素处理。有关更多细节，请查看示例的[源代码](../../../en/source/canvas2d/SimplePaintProgram.html)。
+
+.. tab:: 英文
+
+    The "Smudge" tool in the [*sample program*](../../../en/source/canvas2d/SimplePaintProgram.html) and demo is implemented by computing with the color component values of pixels in the image. The implementation requires some way to read the colors of pixels in a canvas. That can be done with the function *graphics.getPixelData(x,y,w,h)*, where graphics is a 2D graphics context for the canvas. The function reads the colors of a rectangle of pixels, where (x,y) is the upper left corner of the rectangle, w is its width, and h is its height. The parameters are always expressed in pixel coordinates. Consider, for example
+
+    ```js
+    colors = graphics.getImageData(0,0,20,10)
+    ```
+
+    This returns the color data for a 20-by-10 rectangle in the upper left corner of the canvas. The return value, colors, is an object with properties *colors.width*, *colors.height*, and *colors.data*. The width and height give the number of rows and columns of pixels in the returned data. (According to the documentation, on a high-resolution screen, they might not be the same as the width and height in the function call. The data can be for real, physical pixels on the display device, not the "nominal" pixels that are used in the pixel coordinate system on the canvas. There might be several device pixels for each nominal pixel. I'm not sure whether this can really happen in practice.)
+
+    The value of colors.data is an array, with four array elements for each pixel. The four elements contain the red, blue, green, and alpha color components of the pixel, given as integers in the range 0 to 255. For a pixel that lies outside the canvas, the four component values will all be zero. The array is a value of type Uint8ClampedArray whose elements are 8-bit unsigned integers limited to the range 0 to 255. This is one of JavaScript's **typed array** datatypes, which can only hold values of a specific numerical type. As an example, suppose that you just want to read the RGB color of one pixel, at coordinates (x,y). You can set
+
+    ```js
+    pixel = graphics.getImageData(x,y,1,1);
+    ```
+
+    Then the RGB color components for the pixel are `R = pixel.data[0]`, `G = pixel.data[1]`, and `B = pixel.data[2]`.
+
+    The function *graphics.putImageData(imageData,x,y)* is used to copy the colors from an image data object into a canvas, placing it into a rectangle in the canvas with upper left corner at (x,y). The imageData object can be one that was returned by a call to *graphics.getImageData*, possibly with its color data modified. Or you can create a blank image data object by calling *graphics.createImageData(w,h)* and fill it with data.
+
+    Let's consider the "Smudge" tool in the sample program. When the user clicks the mouse with this tool, I use *OSG.getImageData* to get the color data from a 9-by-9 square of pixels surrounding the mouse location. OSG is the graphics context for the canvas that contains the image. Since I want to do real-number arithmetic with color values, I copy the color components into another typed array, one of type {++Float32Array++}, which can hold 32-bit floating point numbers. Here is the function that I call to do this:
+
+    ```js
+    function grabSmudgeData(x, y) {  // (x,y) gives mouse location
+        let colors = OSG.getImageData(x-5,y-5,9,9);
+        if (smudgeColorArray == null) {
+            // Make image data & array the first time this function is called.
+            smudgeImageData = OSG.createImageData(9,9);
+            smudgeColorArray = new Float32Array(colors.data.length);
+        }
+        for (let i = 0; i < colors.data.length; i++) {
+            // Copy the color component data into the Float32Array.
+            smudgeColorArray[i] = colors.data[i];
+        }
+    }
+    ```
+
+    The floating point array, *smudgeColorArray*, will be used for computing new color values for the image as the mouse moves. The color values from this array will be copied into the image data object, *smudgeImageData*, which will then be used to put the color values into the image. This is done in another function, which is called for each point that is visited as the user drags the Smudge tool over the canvas:
+
+    ```js
+    function swapSmudgeData(x, y) { // (x,y) is new mouse location
+        let colors = OSG.getImageData(x-5,y-5,9,9);  // get color data from image
+        for (let i = 0; i < smudgeColorArray.length; i += 4) {
+            // The color data for one pixel is in the next four array locations.
+            if (smudgeColorArray[i+3] && colors.data[i+3]) {
+                // alpha-components are non-zero; both pixels are in the canvas;
+                // (getImageData() gets 0 for the alpha value at pixel coordinates
+                // that are not actually part of the canvas).
+                for (let j = i; j < i+3; j++) { // compute new RGB values
+                    let newSmudge = smudgeColorArray[j]*0.8 + colors.data[j]*0.2;
+                    let newImage  = smudgeColorArray[j]*0.2 + colors.data[j]*0.8;
+                    smudgeImageData.data[j] = newImage;
+                    smudgeColorArray[j] = newSmudge;
+                }
+                smudgeImageData.data[i+3] = 255;  // alpha component
+            }
+            else {
+                // one of the alpha components is zero; set the output
+                // color to all zeros, "transparent black", which will have
+                // no effect on the color of the pixel in the canvas.
+                for (let j = i; j <= i+3; j++) {
+                    smudgeImageData.data[j] = 0; 
+                }
+            }
+        }
+        OSG.putImageData(smudgeImageData,x-5,y-5); // copy new colors into canvas
+    }
+    ```
+
+    In this function, a new color is computed for each pixel in a 9-by-9 square of pixels around the mouse location. The color is replaced by a weighted average of the current color of the pixel and the color of the corresponding pixel in the *smudgeColorArray*. At the same time, the color in *smudgeColorArray* is replaced by a similar weighted average.
+
+    It would be worthwhile to try to understand this example to see how pixel-by-pixel processing of color data can be done. See the [source code](../../../en/source/canvas2d/SimplePaintProgram.html) of the example for more details.
+
+## 2.6.7  图像
+
+**Images**
+
+.. tab:: 中文
+
+    作为另一个像素操作的示例，我们可以看一下图像滤镜，它通过将每个像素的颜色替换为其周围8个像素的颜色的加权平均值来修改图像。根据使用的加权因子，结果可能是图像的轻微模糊版本，或者可能是更有趣的东西。
+
+    以下是一个交互式演示，它允许您将几种不同的图像滤镜应用于各种图像：
+
+    <iframe src="../../../en/demos/c2/image-filters.html" width="600" height="310"></iframe>
+
+    演示中的过滤操作使用了上面讨论过的图像数据函数 getImageData、createImageData 和 putImageData。通过调用 getImageData 获得整个图像的颜色数据。加权平均计算的结果被放置在一个新的图像数据对象中，然后将结果图像数据复制回图像中使用 putImageData。
+
+    剩下的问题是，原始图像从哪里来，它们如何首先出现在画布上？网页中的图像由网页源代码中的元素指定，例如
+
+    ```html
+    <img src="pic.jpg" width="400" height="300" id="mypic">
+    ```
+
+    *src* 属性指定加载图像的 URL。可选的 *id* 可以用于在 JavaScript 中引用图像。在脚本中，
+
+    ```js
+    image = document.getElementById("mypic");
+    ```
+
+    获取了表示文档结构中图像的对象的引用。一旦您拥有了这样一个对象，就可以使用它将图像绘制到画布上。如果 graphics 是画布的图形上下文，则
+
+    ```js
+    graphics.drawImage(image, x, y);
+    ```
+
+    将图像绘制在其左上角为 (x,y) 的位置。点 (x,y) 和图像本身都会受到图形上下文中的任何变换的影响。这将以其自然的宽度和高度绘制图像（如果有变换，则会缩放）。您还可以指定绘制图像的矩形的宽度和高度：
+
+    ```js
+    graphics.drawImage(image, x, y, width, height);
+    ```
+
+    使用这个版本的 drawImage，图像将被缩放以适应指定的矩形。
+
+    现在，假设您要绘制到画布上的图像不是网页的一部分？在这种情况下，可以动态加载图像。这很像创建一个离屏画布，但你在创建一个"离屏图像"。使用 document 对象创建一个 img 元素：
+
+    ```js
+    newImage = document.createElement("img");
+    ```
+
+    一个 img 元素需要一个 src 属性，指定要加载的 URL。例如，
+
+    ```js
+    newImage.src = "pic2.jpg";
+    ```
+
+    一旦给 src 属性赋值，浏览器就开始加载图像。加载是异步进行的；也就是说，计算机继续执行脚本而不等待加载完成。这意味着您不能简单地在上面的赋值语句之后的行上绘制图像：此时图像很可能还没有加载完成。您希望在图像加载完成后绘制图像。为了实现这一点，您需要在设置 src 之前将一个函数分配给图像的 onload 属性。当图像加载完全时，该函数将被调用。将这些组合在一起，下面是一个简单的 JavaScript 函数，用于从指定的 URL 加载图像，并在加载完成后将其绘制到画布上：
+
+    ```js
+    function loadAndDraw( imageURL, x, y ) {
+        let image = document.createElement("img");
+        image.onload = doneLoading;
+        image.src = imageURL;
+        function doneLoading() {
+            graphics.drawImage(image, x, y);
+        }
+    }
+    ```
+
+    在滤镜演示中也使用了类似的技术来加载图像。
+
+    最后还有一个谜要解决。在本节前面讨论 SimplePaintProgram 示例中使用离屏画布时，我指出了离屏画布的内容必须复制到主画布上，但我没有说明如何实现。事实上，使用 drawImage 就可以做到。除了将图像绘制到画布上，drawImage 还可以用来将一个画布的内容绘制到另一个画布上。在示例程序中，命令
+
+    ```js
+    graphics.drawImage( OSC, 0, 0 );
+    ```
+
+    用于将离屏画布绘制到主画布上。这里，graphics 是用于在主画布上绘制的图形上下文，而 OSC 是表示离屏画布的对象。
+
+.. tab:: 英文
+
+    For another example of pixel manipulation, we can look at image filters that modify an image by replacing the color of each pixel with a weighted average of the color of that pixel and the 8 pixels that surround it. Depending on the weighting factors that are used, the result can be as simple as a slightly blurred version of the image, or it can be something more interesting.
+
+    Here is an an interactive demo that lets you apply several different image filters to a variety of images:
+
+    <iframe src="../../../en/demos/c2/image-filters.html" width="600" height="310"></iframe>
+
+    The filtering operation in the demo uses the image data functions getImageData, createImageData, and putImageData that were discussed above. Color data from the entire image is obtained with a call to getImageData. The results of the averaging computation are placed in a new image data object, and the resulting image data is copied back to the image using putImageData.
+
+    The remaining question is, where do the original images come from, and how do they get onto the canvas in the first place? An image on a web page is specified by an element in the web page source such as
+
+    ```html
+    <img src="pic.jpg" width="400" height="300" id="mypic">
+    ```
+
+    The *src* attribute specifies the URL from which the image is loaded. The optional *id* can be used to reference the image in JavaScript. In the script,
+
+    The src attribute specifies the URL from which the image is loaded. The optional id can be used to reference the image in JavaScript. In the script,
+
+    ```js
+    image = document.getElementById("mypic");
+    ```
+
+    gets a reference to the object that represents the image in the document structure. Once you have such an object, you can use it to draw the image on a canvas. If graphics is a graphics context for the canvas, then
+
+    ```js
+    graphics.drawImage(image, x, y);
+    ```
+
+    draws the image with its upper left corner at (x,y). Both the point (x,y) and the image itself are transformed by any transformation in effect in the graphics context. This will draw the image using its natural width and height (scaled by the transformation, if any). You can also specify the width and height of the rectangle in which the image is drawn:
+
+    ```js
+    graphics.drawImage(image, x, y, width, height);
+    ```
+
+    With this version of drawImage, the image is scaled to fit the specified rectangle.
+
+    Now, suppose that the image you want to draw onto the canvas is not part of the web page? In that case, it is possible to load the image dynamically. This is much like making an off-screen canvas, but you are making an "off-screen image." Use the document object to create an img element:
+
+    ```js
+    newImage = document.createElement("img");
+    ```
+
+    An img element needs a src attribute that specifies the URL from which it is to be loaded. For example,
+
+    ```js
+    newImage.src = "pic2.jpg";
+    ```
+
+    As soon as you assign a value to the src attribute, the browser starts loading the image. The loading is done asynchronously; that is, the computer continues to execute the script without waiting for the load to complete. This means that you can't simply draw the image on the line after the above assignment statement: The image is very likely not done loading at that time. You want to draw the image after it has finished loading. For that to happen, you need to assign a function to the image's onload property before setting the src. That function will be called when the image has been fully loaded. Putting this together, here is a simple JavaScript function for loading an image from a specified URL and drawing it on a canvas after it has loaded:
+
+    ```js
+    function loadAndDraw( imageURL, x, y ) {
+        let image = document.createElement("img");
+        image.onload = doneLoading;
+        image.src = imageURL;
+        function doneLoading() {
+            graphics.drawImage(image, x, y);
+        }
+    }
+    ```
+
+    A similar technique is used to load the images in the filter demo.
+
+    There is one last mystery to clear up. When discussing the use of an off-screen canvas in the SimplePaintProgram example earlier in this section, I noted that the contents of the off-screen canvas have to be copied to the main canvas, but I didn't say how that can be done. In fact, it is done using drawImage. In addition to drawing an image onto a canvas, drawImage can be used to draw the contents of one canvas into another canvas. In the sample program, the command
+
+    ```js
+    graphics.drawImage( OSC, 0, 0 );
+    ```
+
+    is used to draw the off-screen canvas to the main canvas. Here, graphics is a graphics context for drawing on the main canvas, and OSC is the object that represents the off-screen canvas.

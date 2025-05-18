@@ -1,0 +1,233 @@
+# C.1 节  [Gimp：2D 绘画程序](./a3/s1.md) 
+
+**Section C.1  Gimp: A 2D Painting Program**
+
+.. tab:: 中文
+
+    Gimp，即GNU图像处理程序，是一个免费且开源的程序，具有许多广为人知的商业程序Adobe Photoshop的功能。Gimp不仅可以从零开始创建图像，还可以修改现有图像。本书仅涵盖了Gimp功能的非常有限的子集。很容易找到Gimp的文档和教程，从它的“帮助”菜单开始。
+
+    Gimp可以从<https://www.gimp.org>下载。它适用于Linux、Mac OS和Windows系统（对于Linux，建议从你的发行版软件仓库中安装）。本节使用的是2023年7月的当前版本Gimp 2.10。3.00版本正在开发中。用户手册可在<https://docs.gimp.org/2.10/en/>在线获取。
+
+    我建议更改一些Gimp界面的偏好设置。从“编辑”菜单（或Mac上的“Gimp 2.10”菜单）打开“首选项”对话框，并查看左侧列表中的“界面”部分。在“工具箱”部分，我建议关闭“使用工具组”选项。这样可以让你一次性看到所有工具，类似于下图所示，而不是将许多工具隐藏在组中。在“界面”部分的“主题”下，我更喜欢“浅色”或“系统”主题。在“图标主题”下，我更喜欢“彩色”或“传统”。本节的Gimp屏幕截图使用了“彩色”图标和“浅色”主题。Gimp 2.10默认以单窗口模式启动，但如果你更喜欢多窗口模式，可以在“窗口”菜单中选择该选项。
+
+    很容易意外更改Gimp窗口的配置。如果发生这种情况，你可以重置配置。在“窗口管理”下的首选项中查找，并点击“恢复保存的窗口位置为默认值”。
+
+    ---
+
+    Gimp的“文件”菜单有一个“新建”命令，允许你从头开始创建一个新图像。你将能够设置图像的大小和其他属性，例如背景颜色。还有一个“打开”命令，让你打开一个现有图像进行编辑。
+
+    保存稍微有些问题。“保存”命令将保存一个“.xcf”文件，这是Gimp自己的格式。XCF文件不是图像，只能通过Gimp打开。它保存了完整的Gimp编辑环境，这对于更复杂的项目是必要的，如果你想以后能够返回编辑它们。
+
+    要保存图像文件，你应该使用“文件”菜单中的“导出”或“另存为导出”命令。如果你打开了图像文件进行编辑，“导出”命令变成了一个“覆盖”命令，用于用编辑后的版本替换原始图像。这些命令允许你以多种格式保存图像。通常情况下，你应该将图像保存为JPEG或PNG格式。
+
+
+.. tab:: 英文
+
+    Gimp, the Gnu Image Manipulation Program, is a free and open-source program that has many of the capabilities of the better-known commercial program, Adobe Photoshop. Gimp can be used both for creating images from scratch and for modifying existing images. This book covers only a very limited subset of Gimp's features. It's easy to find documentation and tutorials on Gimp, starting with its "Help" menu.
+
+    Gimp can be downloaded from <https://www.gimp.org>. It is available for Linux, Mac OS, and Windows. (For Linux, consider installing it from your distribution's software repository.) This section uses Gimp 2.10, the current version in July, 2023. Version 3.00 is under development. A user manual is available on-line at <https://docs.gimp.org/2.10/en/>.
+
+    I recommend changing some of Gimp's interface preferences. Open the "Preferences" dialog from the "Edit" menu (or from the "Gimp 2.10" menu on Mac), and look under the "Interface" section in the list on the left. Under the "Toolbox" section, I recommend turning off the "Use tool groups" option. This will let you see all the tools at once, similar to what is shown in the image below, rather than hiding many of them in groups. Under "Theme" in the "Interface" section, I prefer the "Light" or "System" theme. And under "Icon Theme", I much prefer "Color" or "Legacy". The Gimp screen captures in this section use "Color" icons and the "Light" theme. Gimp 2.10 will start up in single-window mode by default, but there is an option for multi-window mode in the "Windows" menu if you prefer that mode.
+
+    It is easy to accidently change the configuration of the Gimp window. If that happens, you can reset the configuration. Look in the Preferences under "Window Management", and click "Restore Saved Window Positions to Default Values".
+
+    ----
+
+    Gimp's "File" menu has a "New" command that lets you create a new image from scratch. You will be able to set the size of the image and other properties, such as background color. And there is an "Open" command that lets you open an existing image for editing.
+
+    Saving is a little more problematic. The "Save" command will save an ".xcf" file, which is Gimp's own format. An xcf file is not an image, and it can only be opened with Gimp. It saves the full Gimp editing environment, which you need for more complex projects if you want to be able to return to editing them later.
+
+    To save an image file, you should use the "Export" or "Export As" command in the "File" menu. If you opened an image file for editing, the "Export" command becomes an "Overwrite" command that is used to replace the original image with the edited version. These commands let you save images in a wide variety of formats. In general, you should save your images in JPEG or PNG format.
+
+## C.1.1  绘画工具 
+
+**C.1.1  Painting Tools**
+
+.. tab:: 中文
+
+    我强烈建议你在阅读这里的内容时，下载 Gimp 并进行实验！在你进行实验时，请记住你总是可以使用 Ctrl-Z（在 Mac 上是 Command-Z）来撤销任何操作。
+
+    Gimp 拥有各种各样的工具，你可以在窗口左上角的“工具箱”中找到它们。（我的讨论假设你正在以单窗口模式工作，并且窗口保持其原始配置。）你可以将鼠标悬停在工具按钮上，以了解该工具的作用。点击按钮以选择一个工具。在图像窗口上点击或拖动鼠标以应用所选工具。工具箱还有控制前景和背景颜色的按钮。这里有一个带有一些注释的工具箱插图。你计算机上的工具箱的外观将取决于你使用的 Gimp 版本和你使用的主题，但这里展示的所有工具都应该可用：
+
+    ![123](../../en/a3/gimp-tools.png)
+
+    工具箱下方是“工具选项”对话框，其中包含当前所选绘图工具的选项。当你选择一个新工具时，对话框的内容会改变。例如，这里是用于在图像上进行常规绘画的画笔工具的选项。画笔可能是最基本且有用的工具：
+
+    ![123](../../en/a3/gimp-tool-options.png)
+
+    你会注意到 Gimp 没有用于绘制矩形和圆形等形状的工具。然而，你可以使用选择工具来绘制这样的形状。
+
+    选择工具可以用来选择图像中的区域。例如，点击矩形工具，并在图像上拖动鼠标以选择一个矩形区域。在“工具选项”对话框中的矩形选择工具的一个设置允许你对矩形的角落进行圆滑处理。椭圆选择工具可以用来选择椭圆形区域。在上图中的椭圆旁边的自由选择（或套索）工具，可以用来选择多边形区域：只需点击一系列点以选择多边形的顶点，并点击初始点以关闭多边形。你也可以拖动套索工具以手绘方式绘制区域的轮廓。一旦你有了选择，你可以对它做很多事情。
+
+    一个重要的事实是，当有选择时，你只能在选择内进行绘制——选择区域外的区域完全不受绘画工具或你尝试对图像做的任何其他事情的影响！如果你忘记了这一点，当你尝试在选定区域外应用绘画工具而它没有任何效果时，你可能会感到非常困惑。
+
+    看起来像溢出的油漆桶的油漆桶填充工具，在使用选择时特别有用。在选择桶工具后，在其工具选项对话框中将“受影响区域”设置为“填充整个选择”。有了这个设置，点击选定区域内将用颜色填充该区域。另一个有用的选项是“填充类型”，它允许你用前景色、背景色或图案填充区域。要更改使用的图案，请在“图案填充”选项下方点击图案的图像。
+
+    在 Gimp 中绘制直线有点奇怪。要画一条线，点击图像并立即释放鼠标按钮。然后按下 shift 键。在按住 shift 键的同时移动鼠标（不要按住鼠标上的任何按钮）。然后再次点击鼠标。一条线从最初的点击到最终的点击被绘制出来。你可以将这种技术应用到画笔工具以及其他工具，如橡皮擦。
+
+    渐变工具允许你用渐变进行绘画。渐变是一种颜色的平滑变化序列，按照某种模式排列。Gimp 中有许多不同的渐变。在选择渐变工具后，点击工具选项对话框中的渐变图像，以选择你想要使用的渐变。请注意，一些更有趣的渐变包括透明颜色，这些颜色在渐变是透明或半透明的地方创建区域。
+
+
+    线性渐变、径向渐变和其他形状可以通过渐变工具选项中的“形状”设置来选择。通过开启“自适应超采样”选项，你可以获得看起来更平滑的渐变效果。
+
+    要在图像上应用渐变，按下鼠标左键在你希望颜色序列开始的点，按住按钮拖动鼠标，然后在你希望颜色序列结束的点释放按钮。在你绘制渐变后，屏幕上会留下一条带有显示渐变颜色停止点的点的线。你可以通过拖动这些点来编辑渐变。或者点击其中一个点，你将得到一个对话框，你可以在其中编辑颜色。按回车键完成编辑。如果你实际上不想编辑渐变，这可能会很烦人。如果你在渐变工具的工具选项中开启“即时模式”，那么在绘制渐变时你将不会得到编辑选项。
+
+    作为使用渐变可以做什么的一个例子，这里是一张完全用几次渐变工具应用创建的图像：
+
+    ![123](../../en/a3/gimp-gradients.png)
+
+    对于这幅图片，背景是通过选择名为“陆地和海洋”的渐变，将渐变形状设置为“线性”，并从图像底部拖动鼠标到顶部来制作的。边缘的框架是使用“方形木框”渐变制作的，并将形状选项设置为“方形”。“方形木框”渐变的大部分是透明的。框架是通过从图像中心拖动鼠标到边缘来制作的，但渐变中唯一不透明的部分在边缘附近。眼睛是使用形状设置为“径向”的“径向眼球”渐变制作的。彩虹使用了形状设置为“径向”的“径向彩虹环”渐变。在创建彩虹时使用了矩形选择。如果没有选择，彩虹会是一个完整的圆。然而，只有圆的那部分在选中区域内，所以只有那部分被绘制了。
+
+    你也会想尝试一些其他工具，比如涂抹工具、橡皮擦和克隆工具。对于任何工具的使用帮助，可以在使用工具时查看图像窗口底部的消息。如果你想学习更多，请查阅用户手册。
+
+    ---
+
+    除了绘画工具，Gimp 还有各种各样的颜色操作工具，这些工具可以一次性应用于整个图像（或者如果有选择，只应用于图像的选定部分）。在“颜色”菜单和“滤镜”菜单中查找它们。这些工具通常用于修改照片中的颜色或对图像应用效果。
+
+    例如，“颜色”菜单中的“亮度和对比度”命令打开一个对话框，可以用来调整图像的亮度和对比度，而同一菜单中的“色彩平衡”和“色相-饱和度”对话框可以用来调整颜色。记住，如果有选择，那么变化将只应用于选定区域内的像素。
+
+    作为一个例子，我使用“色相-饱和度”对话框将图像中花朵的颜色从紫色变为粉色：
+
+    ![123](../../en/a3/gimp-color-adjust.png)
+
+    （原始图像在左侧，来自维基共享资源，<https://commons.wikimedia.org>，这是一个很好的实验图像来源。这张图像是公共领域的。）注意，只有花朵的颜色被修改了，叶子或树枝没有变化。为了实现这一点，我必须在选择颜色变化之前选择花朵，以便颜色变化仅限于选择。选择是使用“按颜色选择”工具制作的。如果你使用那个工具点击图像，所有颜色与被点击像素相似的像素将被选择。通过按住 shift 键点击，你可以向已经选择的像素中添加新的像素。我发现当我将工具的“阈值”选项从 15.0 更改为 30.0 时，更容易获得我想要的选择；这个选项决定了颜色需要多么相似。我不得不多次点击，每次不小心添加太多到选择中时使用撤销。一旦选择准备好了，我从“颜色”菜单中选择了“色相-饱和度”，改变了色相，并增加了亮度和饱和度，以获得我想要的颜色。
+
+    另一种修改图像的方法是使用滤镜。Gimp 中的滤镜可以非常通用。它们可能更好地被称为“效果”。例如，有一个用于模糊图像的滤镜，一个用于使图像看起来像旧照片的滤镜，还有一个使其看起来像由布料制成的滤镜。Gimp 中的一些滤镜从无中生成图像，有些则做更复杂的事情。你可以在“滤镜”菜单中找到 Gimp 的滤镜。我在这里不再进一步讨论它们，但一些有趣的滤镜尝试包括：扭曲/浮雕，扭曲/马赛克，扭曲/波纹，边缘检测，艺术/应用画布，艺术/立体主义，装饰/老照片，和地图/扭曲。
+
+
+.. tab:: 英文
+
+    I strongly suggest that you get Gimp and experiment with it as you read about it here! As you experiment, remember that you can always use Control-Z to undo any action (Command-Z on a Mac).
+
+    Gimp has a wide variety of tools, which you can find in the "Toolbox" in the upper left corner of the window. (My discussion here assumes that you are working in single-window mode, with the window in its original configuration.) You can hover your mouse over a tool button to find out what the tool is for. Click a button to select a tool. Click or drag the mouse on an image window to apply the selected tool. The Toolbox also has buttons for controlling the foreground and background color. Here is an illustration of the Toolbox with a few annotations. The appearance of the Toolbox on your computer will depend on the version of Gimp and on the theme that you are using, but all the tools shown here should be available:
+
+    ![123](../../en/a3/gimp-tools.png)
+
+    Below the Toolbox is the "Tool Options" dialog, which contains options for the drawing tool that is currently selected. The contents of the dialog change when you select a new tool. Here, for example, are the options for the Brush tool, which is used for painting on an image in the usual sense. The Brush is probably the most basic and useful tool:
+
+    ![123](../../en/a3/gimp-tool-options.png)
+
+    You'll notice that Gimp does not have tools for drawing shapes such as rectangles and circles. However, it is possible to draw such shapes using selections.
+
+    Selection tools can be used to select regions in the image. For example, click the Rectangle tool, and drag the mouse on the image to select a rectangular region. One of the settings in the "Tool Options" dialog for the Rectangle Select tool allows you to round off the corners of the rectangle. The Ellipse Select tool can be used to select oval-shaped regions. The Free Select (or Lasso) tool, which is next to the Ellipse in the above image, can be used to select polygonal regions: Just click a sequence of points to select the vertices of the polygon, and click back on the initial point to close the polygon. You can also drag the Lasso tool to draw the outline of a region freehand. Once you have a selection, there are many things that you can do with it.
+
+    One important fact is that when there is a selection, you can only draw inside the selection—the area outside the selection is completely unaffected by painting tools, or by anything else that you try to do the image! If you forget about this, you can be very confused when you try to apply a painting tool outside the selection and it has no effect at all.
+
+    The Bucket Fill Tool, which looks like a spilling paint bucket, is especially useful with selections. After selecting the bucket tool, set the "Affected Area" in its Tool Options dialog to "Fill whole selection". With that setting, clicking inside the selected area will fill that area with color. Another useful option is the "Fill Type" which allows you to fill regions with either the foreground color, the background color, or a pattern. To change the pattern that is used, click on the image of the pattern, just below the "Pattern fill" option.
+
+    Drawing straight lines in Gimp is a little strange. To draw a line, click the image and immediately release the mouse button. Then press the shift key. Move the mouse while holding down the shift key (without holding down any button on the mouse). Then click the mouse again. A line is drawn from the original click to the final click. You can apply this technique to the Brush tool as well as to other tools, such as the Eraser.
+
+    The Gradient tool allows you to paint with gradients. A gradient is a smoothly-changing sequence of colors, arranged in some pattern. Many different gradients are available in Gimp. After selecting the Gradient tool, click the image of the gradient in the Tool Options dialog to select the gradient that you would like to use. Note that some of the more interesting gradients include transparent colors, which create regions where the gradient is transparent or translucent.
+
+    Linear gradients, radial gradients and other shapes can be selected using the "Shape" setting in the gradient Tool Options. And you can get much smoother-looking gradients by turning on the "Adaptive supersampling" option.
+
+    To apply a gradient to an image, press the left mouse button at the point where you want the color sequence to start, drag the mouse while holding down the button, and release the button at the point where you want the color sequence to end. After you draw the gradient, a line remains on the screen with dots along the line showing the gradient's color stops. You can edit the gradient by dragging the dots. Or click one of the dots and you will get a dialog where you can edit the color. Press return to finish editing. This can get annoying if you don't actually want to edit the gradient. If you turn on "Instant mode" in the Tool Options for the gradient tool, then you will not get the editing option when you draw a gradient.
+
+    As an example of what you can do with gradients, here is an image that was created entirely with a few applications of the gradient tool:
+
+    ![123](../../en/a3/gimp-gradients.png)
+
+    For this picture, the background was made by selecting the gradient named "Land and Sea", setting the gradient Shape set to "Linear", and dragging the mouse from the bottom of the image to the top. The frame around the edges was made using the "Square Wood Frame" gradient with the Shape option set to "Square". Much of the "Square Wood Frame" gradient is transparent. The frame was made by dragging the mouse from the center of the image to the edge, but the only opaque part of the gradient was near the edges. The eye was made using a "Radial Eyeball" gradient with the shape set to "Radial". And the rainbow used the "Radial Rainbow Hoop" gradient with the shape set to "Radial." A rectangular selection was used while creating the rainbow. Without the selection, the rainbow would have been a full circle. However, only part of that circle was inside the selection, so only that part was drawn.
+
+    You will want to try some of the other tools as well, such as the Smudge tool, the Eraser, and the Clone tool. For help on using any tool, look at the message at the bottom of the image window while using the tool. Consult the user manual if you want to learn more.
+
+    ----
+
+    In addition to its painting tools, Gimp has a wide variety of color manipulation tools that apply to an entire image at once (or just to the selected part of the image, if there is a selection). Look for them in the "Color" menu and in the "Filter" menu. These tools are often used to modify the colors in photographs or to apply effects to images.
+
+    For example, the "Brightness and Contrast" command in the "Color" menu opens a dialog that can be used to adjust the brightness and the contrast of an image, while the "Color Balance" and "Hue-Saturation" dialogs in the same menu can be used to adjust the color. Remember that if there is a selection, then the change will apply only to the pixels in the selected area.
+
+    As an example, I used the "Hue-Saturation" dialog to change the color of the flowers in an image from purple to pink:
+
+    ![123](../../en/a3/gimp-color-adjust.png)
+
+    (The original image, on the left, is from Wikimedia Commons, <https://commons.wikimedia.org>, which is a good source of images for experimentation. This image is in the public domain.) Note that only the colors of the flowers have been modified, not the leaves or branches. To make that possible, I had to select the flowers before changing the color, so that the color change would be limited to the selection. The selection was made using the "Select by Color" tool. If you click on an image using that tool, all pixels that have a similar color to the clicked pixel will be selected. By holding down the shift key as you click, you can add new pixels to the pixels that were already selected. I found that it was easier to get the selection that I wanted when I change the "Threshold" option for the tool from 15.0 to 30.0; this option determines how similar the colors have to be. I had to click many times, using Undo whenever I accidently added too much to the selection. Once the selection was ready, I selected "Hue-Saturation" from the "Color" menu, changed the hue, and increased both the lightness and the saturation to get the color that I wanted.
+
+    Another way to modify an image is with a filter. Filters in Gimp can be very general. They might better be called "effects." For example, there is a filter for blurring the image, one for making the image look like an old photograph, and one to make it look like it's made out of cloth. Some filters in Gimp generate images from nothing, and some do even more complicated things. You will find Gimp's filters in the "Filter" menu. I will not discuss them further here, but some interesting filters to try include: Distorts/Emboss, Distorts/Mosaic, Distorts/Ripple, Edge-Detect, Artistic/Apply-Canvas, Artistic/Cubism, Decor/Old-Photo, and Map/Warp.
+
+## C.1.2  选择和路径
+
+**C.1.2  Selections and Paths**
+
+.. tab:: 中文
+
+    选择在 Gimp 中非常重要，还有更多关于它们的知识点需要学习。关于它们的最重要的事情之一是理解像素可以是“部分选中”的。也就是说，选择不一定是像素的集合；它实际上是为每个像素分配了一个“选中程度”。例如，剪切命令（Mac 上的 Control-X 或 Command-X）会删除所选内容。它将完全选中的像素设置为透明（如果图像有 Alpha 通道）或背景颜色（如果没有 Alpha 通道）。然而，部分选中的像素只会部分被剪切。如果有 Alpha 通道，像素会变得半透明；如果没有，像素的当前颜色将与背景颜色混合。类似地，当你填充一个选择时，部分选中的像素的当前颜色会与填充颜色混合。这非常类似于 Alpha 混合，选中程度扮演了 Alpha 通道的角色。（有关 Alpha 颜色组件和 Alpha 混合的讨论，请参阅[2.1.4 小节](../c2/s1.md#214--颜色模型)。）
+
+    获得部分选中像素的一种方法是对选择进行“羽化”。当选择通过比如说 10 像素进行羽化时，选择周围的清晰边界被替换为一个 10 像素宽的边框，选中程度在边框宽度上从 1 减少到 0。使用“选择”菜单中的“羽化”命令来羽化当前选择。或者，选择工具，如矩形选择工具，具有工具选项，可以自动羽化你用工具创建的任何选择的边框。例如，右侧的图像就是通过使用羽化的椭圆形选择从左侧的图像开始制作的：
+
+    ![123](../../en/a3/gimp-feather-selection.png)
+
+    原始图像再次是来自维基共享资源的公共领域图像。我从原始图像中的花朵周围开始进行椭圆形选择。在椭圆形选择工具的工具选项中，“羽化边缘”选项设置为 40。然后我应用了“选择”菜单中的“反转”命令，这反转了选择，使得椭圆的外部被选中而不是内部。最后，我使用“剪切”来删除所选区域，只留下花朵，在花朵逐渐融入背景的 40 像素边框中。（注意：为了给图像增加一些视觉兴趣，在进行选择之前，我将“艺术”/“油画化”滤镜应用于原始图像。）
+
+    Gimp 用户经常在创建选择上投入大量的工作。获得对选择的更多控制的一种方法是使用路径工具，下面将讨论。另一种是“快速蒙版”，它让你完全控制单个像素的选中程度。使用“选择”菜单中的“切换快速蒙版”命令来开启和关闭快速蒙版。当快速蒙版开启时，当前选择被表示为图像上的半透明粉红色叠加层。叠加层的透明度程度对应于像素的选中程度。对于完全选中的像素，叠加层是完全透明的。当快速蒙版开启时，所有绘画工具都会影响蒙版而不是图像。例如，用黑色绘制将添加到蒙版中（从而从选择中减去），用白色绘制或擦除将从蒙版中减去（从而添加到选择中）。在编辑快速蒙版时，考虑使用铅笔工具而不是画笔工具。铅笔工具与画笔工具相同，只是它不进行任何透明度或抗锯齿处理。
+
+    ----
+
+    "路径"在 Gimp 中是一条贝塞尔曲线。（参见[2.2.3 小节](../c2/s2.md#223--多边形曲线和路径)。）路径在实际图像中是不可见的，但你可以“描边”路径使其可见。路径不是选择，但它们密切相关。你可以将路径转换成选择，或者将选择转换成路径。
+
+    使用路径工具创建路径。要创建路径，用路径工具点击一系列点。或者，你可以通过控制点击回到第一个点（或在 Mac 上命令点击）来创建一个封闭路径。这会生成一个多边形路径。然后你可以拖动多边形的一边，将其从直线变成曲线。当你这样做时，通常会在曲线的端点出现贝塞尔控制手柄。你可以拖动控制手柄的末端以更精细地控制形状。在两条曲线段连接的点上，有两个控制手柄。如果你在拖动其中一个手柄的末端时按住 shift 键，那么两个手柄将被限制为直线并且长度相同，这使得曲线在该点平滑。
+
+    路径通常在用路径工具编辑时不可见。然而，你创建的任何路径都会被保存到路径对话框中。路径对话框是一组标签对话框之一，你可以在 Gimp 窗口的右侧边缘找到它们。（参见本节后面图层对话框的插图。）最初，它隐藏在图层对话框后面。点击路径标签查看路径对话框。路径对话框包含路径列表。右键点击列表中的一个路径以获得弹出菜单。从弹出菜单中，选择“路径工具”使路径在图像中再次可见并切换到路径工具以便编辑路径。选择“路径到选择”将路径转换成选择；所有位于路径内的像素将被选中。选择“描边路径”沿着路径绘制一条线或拖动绘画工具。将打开一个对话框框，让你设置描边的属性。还有一个命令“选择到路径”，它将当前选择转换成路径；如果你在路径对话框中任何地方点击，这个命令将在弹出菜单中可用。
+
+    作为使用路径的一个例子，这个插图解释了我是如何在路径工具的帮助下制作心形的：
+
+    ![123](../../en/a3/gimp-heart.png)
+
+.. tab:: 英文
+
+    Selections are very important in Gimp, and there is a lot more to learn about them. One of the most important things to understand about them is that a pixel can be "partially selected." That is, a selection is not necessarily just a collection of pixels; it's really an assignment of a "degree of selectedness" to each pixel. For example, the Cut command (Control-X or Command-X on Mac) deletes the content of a selection. It sets a fully selected pixel to transparent (if the image has an alpha component) or to the background color (if there is no alpha component). However, a partially selected pixel will only be partially cut. If there is an alpha component, the pixel becomes translucent; if not, the current color of the pixel is blended with the background color. Similarly, when you fill a selection, the current color of a partially selected pixel is blended with the fill color. This is very much like alpha blending, with the degree of selectedness playing the role of the alpha component. (See [Subsection 2.1.4](../c2/s1.md#214--颜色模型) for a discussion of the alpha color component and alpha blending.)
+
+    One way to get partially selected pixels is to "feather" a selection. When a selection is feathered by, say, 10 pixels, the sharp boundary around the selection is replaced by a 10-pixel-wide border, with the degree of selectedness decreasing from one to zero across the width of the border. Use the "Feather" command in the "Select" menu to feather the current selection. Alternatively, selection tools, such as the Rectangle Select tool, have a Tool Option that will automatically feather the border of any selection that you create with the tool. As an example, a feathered elliptical selection was used to make the image on the right, starting from the image on the left:
+
+    ![123](../../en/a3/gimp-feather-selection.png)
+
+    The original image is, again, a public-domain image from Wikimedia Commons. I started with an elliptical selection around the flowers in the original image. In the Tool Options for the Elliptical Selection tool, the "Feather Edges" option was set to 40. I then applied the "Invert" command from the "Select" menu, which inverted the selection so that the outside of the ellipse was selected instead of the inside. Finally, I used "Cut" to delete the selected region, leaving just the flowers, with a 40-pixel border in which the flowers fade into the background. (Note: To add some visual interest to the image, I applied the "Artistic" / "Oilify" filter to the original before doing the selection.)
+
+    Gimp users often put a great deal of work into creating a selection. One way to get more control over selections is with the Path tool, which is discussed below. Another is the "Quick Mask," which gives you complete control of the degree of selectedness of individual pixels. Use the "Toggle Quick Mask" command in the "Select" menu to turn the Quick Mask on and off. When the Quick Mask is on, the current selection is represented as a translucent pink overlay on the image. The degree of transparency of the overlay corresponds to the degree of selectedness of the pixel. The overlay is completely transparent for fully selected pixels. When the Quick Mask is on, all painting tools affect the mask rather than the image. For example, drawing with black will add to the mask (and therefore subtract from the selection), and drawing with white—or erasing—will subtract from the mask (and therefore add to the selection). When editing the Quick Mask, consider using the pencil tool instead of the bursh tool. The pencil tool is the same as the brush tool, except that it does not do any transparency or antialiasing.
+
+    ----
+
+    A "path" in Gimp is a Bezier curve. (See [Subsection 2.2.3](../c2/s2.md#223--多边形曲线和路径).) Paths are not visible in the actual image, but you can "stroke" a path to make it visible. Paths are not selections, but they are closely related. You can convert a path into a selection, or a selection into a path.
+
+    Paths are created using the Paths Tool. To create a path, click a sequence of points with the Path Tool. Optionally, you can make a closed path by control-clicking back on the first point (or command-clicking on a Mac). This gives a polygonal path. You can then drag on one of the sides of the polygon to change it from a straight line into a curve. When you do that, the usual Bezier control handles will appear at the endpoints of the curve. You can drag the ends of the control handles for finer control of the shape. At a point where two segments of the curve join, there are two control handles. If you hold down the shift key while dragging an end of one of the two handles, then the two handles are constrained to be a straight line and to have the same length, which makes the curve smooth at that point.
+
+    Paths are ordinarily not visible except when they are being edited with the Paths Tool. However, any path that you create is saved to the Path Dialog. The Path Dialog is one of a group of tabbed dialogs that you will find along the right edge of the Gimp window. (See the illustration of the Layers Dialog, later in this section.) Initially, it is hidden behind the Layers Dialog. Click the Paths tab to see the Path Dialog. The Paths Dialog contains a list of paths. Right-click one of the paths in the list to get a popup menu. From the popup menu, choose "Path Tool" to make the path visible again in the image and to switch to the Path Tool so that the path can be edited. Choose "Path to Selection" from the popup menu to convert the path into a selection; all of the pixels that lie inside the path will be selected. Choose "Stroke Path" to draw a line or drag a paint tool along the path. A dialog box will open to let you set the properties of the stroke. There is also a command "Selection to Path" that will convert the current selection into a path; this command is available in the popup menu if you click anywhere in the Path Dialog.
+
+    As an example of using paths, this illustration explains how I made a heart shape using the Path Tool:
+
+    ![123](../../en/a3/gimp-heart.png)
+
+## C.1.3  层
+
+**C.1.3  Layers**
+
+.. tab:: 中文
+
+
+    在 Gimp 中，一个图像可以由一叠“图层”组成。每个图层本身是一个图像。最终图像是通过从一个空白画布开始，然后依次将每个图层复制到画布上而组成的。一个图层不一定非得和画布大小相同。一个图层可以是半透明的，并且可以有透明的部分。图层的优点是你可以编辑一个图层而不影响其他图层。你可以移动一个图层（使用移动工具），而下面图层的内容仍然会保留。尽管图层主要用于高级应用，但它们是一个重要特性，如果你不了解它们，可能会导致混淆——特别是因为几种工具和命令会自动向图像添加新图层。
+
+    重要的是要理解，在任何给定时间只能编辑一个图层。这个图层被称为活动图层。如果你忘记了哪个图层是活动的，这可能会很烦人。如果活动图层在可见图像中被隐藏或已经完全透明，那尤其烦人！
+
+    图层列在图层对话框中，这是 Gimp 窗口右下角的一个标签对话框。在图层列表中，活动图层会被高亮显示。点击列表中的不同图层使其成为活动的。右键点击对话框会弹出一个菜单，包含用于处理图层的命令。有些命令在“图层”菜单中也有重复。如果你右键点击列表中的一个图层，弹出菜单还将包括适用于该单个图层的命令。这是使用四个图层的项目中图层对话框的插图：
+
+    ![123](../../en/a3/gimp-layers.png)
+
+    一个新图像只会有一个图层。你可以通过在“图层”菜单中或通过右键点击图层对话框得到的弹出菜单中的命令来添加一个新图层。在某些情况下，新图层也会自动添加。特别是文本工具，总是创建一个新图层。文本图层是特殊的。它们只包含文本，并且只能使用文本工具进行编辑。（更准确地说，如果你使用其他工具编辑文本图层，它将被转换成一个普通图层，你不能再将其作为文本进行编辑。）
+
+    粘贴命令也会创建一个新图层。在这种情况下，这个图层是特殊的，因为它是一个“浮动”图层。将图像粘贴到 Gimp 窗口后，你可以使用移动工具将浮动图层拖动到所需位置。在你做其他事情之前，除了移动图层，你需要要么“锚定”图层（即，使其成为活动图层的一部分），要么将其转换成一个新的普通图层。要锚定它，只需点击粘贴图层外面。要将其转换成一个普通图层，右键点击图层对话框中的它的条目，并在弹出菜单中使用“新建图层”命令。（菜单中也会有“锚定”命令。）再说一次，如果你不了解这种行为，它可能会很烦人。
+
+
+.. tab:: 英文
+
+
+    In Gimp, an image can be composed from a stack of "layers." Each layer is itself an image. The final image is composed by starting with a blank canvas, then copying each layer to the canvas, one after the other. A layer doesn't necessarily have to be the same size as the canvas. A layer can be translucent, and can have transparent parts. The advantage of layers is that you can edit one layer without changing the others. You can move a layer (with the Move Tool), and the stuff in the lower layers will be still be there. While layers are used mostly in advanced applications, they are an important feature and one that can lead to confusion if you don't know about them—especially since several tools and commands add new layers to an image automatically.
+
+    It is important to understand that only one layer can be edited at any given time. That layer is called the active layer. This can be annoying if you lose track of which layer is active. It can be especially annoying if the active layer is hidden in the visible image or has been made completely transparent!
+
+    Layers are listed in the Layer Dialog, one of the tabbed dialogs in the lower right corner of the Gimp window. In the list of layers, the active layer is highlighted. Click a different layer in the list to make that one active. Right-click the dialog for a popup menu of commands for working with layers. Some of the commands are duplicated in the "Layer" menu. If you right-click one of the layers in the list, the popup menu will also include commands that apply to that individual layer. Here is an illustration of the Layer Dialog from a project that uses four layers:
+
+    ![123](../../en/a3/gimp-layers.png)
+
+    A new image will only have one layer. You can add a new layer with a command in the "Layer" menu or in the popup menu that you get by right-clicking the Layer Dialog. New layers are also added automatically in some cases. The Text Tool, in particular, always creates a new layer. Text layers are special. They only contain text, and they can only be edited with the text tool. (More exactly, if you edit a text layer with some other tool, it is converted into a regular layer, and you can no longer edit it as text.)
+
+    The Paste command will also create a new layer. In this case, the layer is special because it is a "floating" layer. After pasting an image into a Gimp window, you can use the Move Tool to drag the floating layer to the desired position. Before you do anything else, aside from moving the layer, you need to either "anchor" the layer (that is, make it part of the active layer), or convert it into a new regular layer. To anchor it, just click outside the pasted layer. To convert it into a regular layer, right click on its entry in the Layer Dialog, and use the "To New Layer" command in the popup menu. (There will also be an "Anchor" command in the menu.) Again, this behavior can be annoying if you don't know about it.
