@@ -21,7 +21,7 @@
 
     alpha blending
         Using the alpha component of a color to blend the color with a background color, when the color is drawn over the background color. That is, the new color of a pixel is obtained by blending the drawing color with the current color, with the degree of blending depending on the alpha component of the drawing color. Alpha blending is most commonly used to simulate transparency.
-
+    
     alpha color component
         An extra component (that is, one of the numbers that are used to specify a color) in a color model that is not part of the actual color specification. The alpha component is extra information. It is most often used to specify the degree of transparency of a color.
 
@@ -107,6 +107,7 @@
         In OpenGL, the region of memory that holds the color data for the image. It acts as the drawing surface where images are rendered.
 
     color component
+    color components
         One of the numbers used in a color model to specify a color. For example, in the RGB color model, a color is specified by three color components representing the amounts of red, green, and blue in the color.
 
     color gamut
@@ -260,6 +261,7 @@
     geometric primitives
         Geometric objects in a graphics system, such as OpenGL, that are not made up of simpler objects. Examples in OpenGL include points, lines, and triangles, but the set of available primitives depends on the graphics system. (Note that as the term is used in OpenGL, a single primitive can be made up of many points, line segments, or triangles.)
 
+    transforming
     geometric transform
         A coordinate transformation; that is, a function that can be applied to each of the points in a geometric object to produce a new object. Common transforms include scaling, rotation, and translation.
 
@@ -312,9 +314,11 @@
     homogeneous coordinates
         A way of representing n-dimensional vectors as (n+1)-dimensional vectors where two (n+1) vectors represent the same n-dimensional vector if they differ by a scalar multiple. In 3D, for example, if w is not zero, then the homogeneous coordinates (x,y,z,w) are equivalent to homogeneous coordinates (x/w,y/w,z/w,1), since they differ by multiplication by the scalar w. Both sets of coordinates represent the 3D vector (x/w,y/w,z/w)
 
+    HSL
     HSL color
         A color specified by three numbers giving the hue, saturation, and lightness of the component. The HSL color model is similar to the HSV color model. The main difference is that in HSL, pure spectral colors occur when L=0.5, while in HSV, they occur when V=1.
 
+    HSV
     HSV color
         A color specified by three numbers giving the hue, saturation, and value of the component. The hue represents the basic color. The saturation is the purity of the color, with a saturation value of zero producing a shade of gray, that is a color with no actual hue at all. The value represents the brightness of the color, with a value of zero giving black. (Value is also called brightness, and the name HSB is sometimes used instead of HSV.)
 
@@ -592,6 +596,7 @@
         In WebGL, a buffer (that is, a region of memory) that can be attached to a framebuffer for use as a color buffer, depth buffer, or stencil buffer.
 
     rendering
+    rendered
         The process of producing a 2D image from a 3D scene description.
 
     render-to-texture
@@ -601,6 +606,7 @@
         An RGB color—specified by red, green, and blue component values—together with an alpha component. The alpha component is most often take to specify the degree of transparency of the color, with a maximal alpha value giving a fully opaque color.
 
     RGB color
+    RGB color model
         A color specified by three numbers giving the amount of red, green, and blue in the color.
 
     right-handed coordinate system

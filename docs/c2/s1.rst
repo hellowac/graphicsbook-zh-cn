@@ -46,7 +46,7 @@
        :align: center
        :alt: horizontal lines from canvas
 
-    顶部线段从点（100,100）到点（120,100）绘制。在画布图形中，整数坐标对应于像素之间的线，但是当绘制一像素宽的线时，该线延伸了一个像素的一半。因此，对于顶部线段，绘制的线位于一个像素的一半以及另一个像素的一半。使用抗混叠的图形系统将两行像素都 **渲染** 成了灰色。底部线段从点（100.5,100.5）到（120.5,100.5）绘制。在这种情况下，线段正好位于一个像素的一行中，这个像素被涂成了黑色。底部线段末端的灰色像素与该线段仅延伸到像素一半有关。其他图形系统可能以不同的方式渲染相同的线段。
+    顶部线段从点（100,100）到点（120,100）绘制。在画布图形中，整数坐标对应于像素之间的线，但是当绘制一像素宽的线时，该线延伸了一个像素的一半。因此，对于顶部线段，绘制的线位于一个像素的一半以及另一个像素的一半。使用抗混叠的图形系统将两行像素都 **渲染** (:term:`rendered`) 成了灰色。底部线段从点（100.5,100.5）到（120.5,100.5）绘制。在这种情况下，线段正好位于一个像素的一行中，这个像素被涂成了黑色。底部线段末端的灰色像素与该线段仅延伸到像素一半有关。其他图形系统可能以不同的方式渲染相同的线段。
 
     下面的交互式演示允许您对像素和抗混叠进行实验。（请注意，在本书的任何交互式演示中，您都可以点击左上角的问号图标获取有关如何使用它的更多信息。）
 
@@ -60,7 +60,7 @@
 
     像素有着各种各样的尺寸，这是一个问题，因为我们使用基于像素的坐标系统。一个图像是根据每英寸100个像素的假设创建的，将在400 PPI的显示器上看起来很小。一条一像素宽的线在100 PPI的显示器上看起来不错，但在400 PPI的显示器上，一像素宽的线可能太细了。
 
-    实际上，在许多图形系统中，{++“ **像素** (pixel)”并不真正指的是物理像素的尺寸。相反，它只是另一个度量单位，由系统设置为适当的尺寸。++}（在桌面系统上，一个像素通常大约是一英寸的百分之一。在智能手机上，观看距离更近，这个值可能更接近于1/160英寸。此外，当用户对网页进行放大时，像素作为一个度量单位的含义可能会发生变化。）
+    实际上，在许多图形系统中，“ **像素** (pixel)”并不真正指的是物理像素的尺寸。相反，它只是另一个度量单位，由系统设置为适当的尺寸。（在桌面系统上，一个像素通常大约是一英寸的百分之一。在智能手机上，观看距离更近，这个值可能更接近于1/160英寸。此外，当用户对网页进行放大时，像素作为一个度量单位的含义可能会发生变化。）
 
     像素引起了一些尚未完全解决的问题。幸运的是，对于我们在本书中大多数使用的矢量图形来说，它们不再是一个问题。对于矢量图形来说，像素仅在栅格化期间成为一个问题，即将矢量图像转换为用于显示的像素。矢量图像本身可以使用任何方便的坐标系统创建。它代表了一个理想化的、与分辨率无关的图像。栅格化图像是该理想图像的近似，但如何进行近似可以交给显示硬件处理。
 
@@ -88,16 +88,19 @@
 
     There are other issues involved in mapping real-number coordinates to pixels. For example, which point in a pixel should correspond to integer-valued coordinates such as (3,5)? The center of the pixel? One of the corners of the pixel? In general, we think of the numbers as referring to the top-left corner of the pixel. Another way of thinking about this is to say that integer coordinates refer to the lines between pixels, rather than to the pixels themselves. But that still doesn't determine exactly which pixels are affected when a geometric shape is drawn. For example, here are two lines drawn using HTML canvas graphics, shown greatly magnified. The lines were specified to be colored black with a one-pixel line width:
 
-    <figure markdown="span">
-        ![horizontal lines from canvas](../../en/c2/horizontal-lines-from-canvas.png)
-        <figcaption>horizontal lines from canvas</figcaption>
-    </figure>
+    .. image:: ../en/c2/horizontal-lines-from-canvas.png
+       :align: center
+       :alt: horizontal lines from canvas
 
-    The top line was drawn from the point (100,100) to the point (120,100). In canvas graphics, integer coordinates correspond to the lines between pixels, but when a one-pixel line is drawn, it extends one-half pixel on either side of the infinitely thin geometric line. So for the top line, the line as it is drawn lies half in one row of pixels and half in another row. The graphics system, which uses antialiasing, rendered the line by coloring both rows of pixels gray. The bottom line was drawn from the point (100.5,100.5) to (120.5,100.5). In this case, the line lies exactly along one line of pixels, which gets colored black. The gray pixels at the ends of the bottom line have to do with the fact that the line only extends halfway into the pixels at its endpoints. Other graphics systems might render the same lines differently.
+    The top line was drawn from the point (100,100) to the point (120,100). In canvas graphics, integer coordinates correspond to the lines between pixels, but when a one-pixel line is drawn, it extends one-half pixel on either side of the infinitely thin geometric line. So for the top line, the line as it is drawn lies half in one row of pixels and half in another row. The graphics system, which uses antialiasing, :term:`rendered` the line by coloring both rows of pixels gray. The bottom line was drawn from the point (100.5,100.5) to (120.5,100.5). In this case, the line lies exactly along one line of pixels, which gets colored black. The gray pixels at the ends of the bottom line have to do with the fact that the line only extends halfway into the pixels at its endpoints. Other graphics systems might render the same lines differently.
 
     The following interactive demo lets you experiment with pixels and antialiasing. (Note that in any of the interactive demos that accompany this book, you can click the question mark icon in the upper left for more information about how to use it.)
 
-    <iframe src="../../../en/demos/c2/pixel-magnifier.html" width="530" height="380"></iframe>
+    .. raw:: html
+       
+        <div style="text-align: center;">
+            <iframe src="../_static/demos/c2/pixel-magnifier.html" width="530" height="380" ></iframe>
+        </div>
 
     All this is complicated further by the fact that pixels aren't what they used to be. Pixels today are smaller! The resolution of a display device can be measured in terms of the number of pixels per inch on the display, a quantity referred to as PPI (pixels per inch) or sometimes DPI (dots per inch). Early screens tended to have resolutions of somewhere close to 72 PPI. At that resolution, and at a typical viewing distance, individual pixels are clearly visible. For a while, it seemed like most displays had about 100 pixels per inch, but high resolution displays today can have 200, 300 or even 400 pixels per inch. At the highest resolutions, individual pixels can no longer be distinguished.
 
@@ -114,48 +117,47 @@
 
 .. tab:: 中文
 
-    在进行二维图形绘制时，您会得到一个矩形，在其中您想要绘制一些**图形原语(graphics primitives)**。使用某个坐标系统在矩形上指定原语。应该能够选择一个适合应用程序的坐标系统。例如，如果矩形表示一个15英尺乘12英尺的房间的平面图，则您可能希望使用一个单位为一英尺的坐标系统，坐标范围从水平方向的0到15，垂直方向的0到12。在这种情况下，单位是英尺而不是像素，而且一个英尺可以对应于图像中的许多像素。像素的坐标通常是实数而不是整数。实际上，最好忘记像素，只考虑图像中的点。一个点将由一对实数给出的坐标表示。
+    在进行二维图形绘制时，您会得到一个矩形，在其中您想要绘制一些 **图形原语** (:term:`geometric primitives`) 。使用某个坐标系统在矩形上指定原语。应该能够选择一个适合应用程序的坐标系统。例如，如果矩形表示一个15英尺乘12英尺的房间的平面图，则您可能希望使用一个单位为一英尺的坐标系统，坐标范围从水平方向的0到15，垂直方向的0到12。在这种情况下，单位是英尺而不是像素，而且一个英尺可以对应于图像中的许多像素。像素的坐标通常是实数而不是整数。实际上，最好忘记像素，只考虑图像中的点。一个点将由一对实数给出的坐标表示。
 
     为了在矩形上指定坐标系统，您只需要指定矩形左边缘和右边缘的水平坐标，以及顶部和底部的垂直坐标。让我们将这些值称为left、right、top和bottom。通常情况下，它们被认为是xmin、xmax、ymin和ymax，但是没有理由认为例如top小于bottom。我们可能希望一个坐标系统中垂直坐标从下到上递增，而不是从上到下。在这种情况下，顶部将对应于最大的y值，而不是最小值。
 
     为了让程序员能够指定他们想要使用的坐标系统，最好有一个子程序，例如
 
-    ```python
-    setCoordinateSystem(left,right,bottom,top)
-    ```
+    .. code-block::
 
-    然后，图形系统将负责自动将指定坐标系统的坐标转换为像素坐标。可能没有这样的子程序，所以了解如何手动进行转换是有用的。让我们考虑一般情况。给定第一个坐标系统中一个点的坐标，我们想要在第二个坐标系统中找到相同点的坐标。（请记住，坐标系统只是一种给点分配数字的方法。重要的是点！）假设第一个坐标系统的水平和垂直限制为oldLeft、oldRight、oldTop和oldBottom，第二个坐标系统的限制为newLeft、newRight、newTop和newBottom。假设一个点在第一个坐标系统中的坐标为(oldX,oldY)。我们想要找到在第二个坐标系统中该点的坐标(newX,newY)
+        setCoordinateSystem(left,right,bottom,top)
 
-    <figure markdown="span">
-        ![old to new coords](../../en/c2/old-to-new-coords.png)
-        <figcaption>old to new coords</figcaption>
-    </figure>
+    然后，图形系统将负责自动将指定坐标系统的坐标 转换 (:term:`transforming`) 为像素坐标。可能没有这样的子程序，所以了解如何手动进行转换是有用的。让我们考虑一般情况。给定第一个坐标系统中一个点的坐标，我们想要在第二个坐标系统中找到相同点的坐标。（请记住，坐标系统只是一种给点分配数字的方法。重要的是点！）假设第一个坐标系统的水平和垂直限制为oldLeft、oldRight、oldTop和oldBottom，第二个坐标系统的限制为newLeft、newRight、newTop和newBottom。假设一个点在第一个坐标系统中的坐标为(oldX,oldY)。我们想要找到在第二个坐标系统中该点的坐标(newX,newY)
+
+    .. image:: ../en/c2/old-to-new-coords.png
+       :align: center
+       :alt: old to new coords
 
     *newX* 和 *newY* 的公式如下：
 
-    ```python
-    newX = newLeft + ((oldX - oldLeft) / (oldRight - oldLeft)) * (newRight - newLeft))
-    newY = newTop + ((oldY - oldTop) / (oldBottom - oldTop)) * (newBottom - newTop)
-    ```
+    .. code-block::
 
-    这里的逻辑是，*oldX* 位于从*oldLeft*到*oldRight*的距离的某个比例处。该比例由以下公式给出：
+        newX = newLeft + ((oldX - oldLeft) / (oldRight - oldLeft)) * (newRight - newLeft)
+        newY = newTop + ((oldY - oldTop) / (oldBottom - oldTop)) * (newBottom - newTop)
 
-    ```python
-    ((oldX - oldLeft) / (oldRight - oldLeft))
-    ```
+    这里的逻辑是，*oldX* 位于从 *oldLeft* 到 *oldRight* 的距离的某个比例处。该比例由以下公式给出：
 
-    对于newX的公式只是说newX应该位于从newLeft到newRight的距离的相同比例处。您也可以通过测试来检查这些公式，看看当oldX等于oldLeft或oldRight，以及当oldY等于oldBottom或oldTop时，它们是否起作用。
+    .. code-block::
+        
+        ((oldX - oldLeft) / (oldRight - oldLeft))
+
+    对于newX的公式只是说newX应该位于从newLeft到newRight的距离的相同比例处。您也可以通过测试来检查这些公式，看看当 *oldX* 等于 *oldLeft* 或 *oldRight* ，以及当 *oldY* 等于 *oldBottom* 或 *oldTop* 时，它们是否起作用。
 
     例如，假设我们想要将某个具有左、右、顶部和底部限制的实数坐标系转换为像素坐标，该像素坐标在左边为0、右边为800、顶部为0、底部为600。在这种情况下，newLeft和newTop为零，公式简化为：
 
-    ```python
-    newX = ((oldX - left) / (right - left)) * 800
-    newY = ((oldY - top) / (bottom - top)) * 600
-    ```
+    .. code-block::
+        
+        newX = ((oldX - left) / (right - left)) * 800
+        newY = ((oldY - top) / (bottom - top)) * 600
 
     当然，这将以实数形式给出newX和newY，如果我们需要像素的整数坐标，则必须将它们四舍五入或截断。反向转换——从像素坐标到实数坐标——也是有用的。例如，如果图像显示在计算机屏幕上，并且您希望对图像上的鼠标点击做出反应，您可能会以整数像素坐标形式获得鼠标坐标，但您可能希望将这些像素坐标转换为您选择的坐标系。
 
-    实际上，通常情况下，您不必自己执行转换，因为大多数图形API提供了某种更高级的方式来指定转换。我们将在[第2.3节](./s3.md)中更多地讨论这个问题。
+    实际上，通常情况下，您不必自己执行转换，因为大多数图形API提供了某种更高级的方式来指定转换。我们将在 :ref:`c2.3` 中更多地讨论这个问题。
 
 .. tab:: 英文
 
@@ -165,44 +167,41 @@
 
     To allow programmers to specify the coordinate system that they would like to use, it would be good to have a subroutine such as
 
-    ```python
-    setCoordinateSystem(left,right,bottom,top)
-    ```
+    .. code-block::
+        
+        setCoordinateSystem(left,right,bottom,top)
 
     The graphics system would then be responsible for automatically transforming the coordinates from the specified coordinate system into pixel coordinates. Such a subroutine might not be available, so it's useful to see how the transformation is done by hand. Let's consider the general case. Given coordinates for a point in one coordinate system, we want to find the coordinates for the same point in a second coordinate system. (Remember that a coordinate system is just a way of assigning numbers to points. It's the points that are real!) Suppose that the horizontal and vertical limits are oldLeft, oldRight, oldTop, and oldBottom for the first coordinate system, and are newLeft, newRight, newTop, and newBottom for the second. Suppose that a point has coordinates (oldX,oldY) in the first coordinate system. We want to find the coordinates (newX,newY) of the point in the second coordinate system
 
-    <figure markdown="span">
-        ![old to new coords](../../en/c2/old-to-new-coords.png)
-        <figcaption>old to new coords</figcaption>
-    </figure>
+    .. image:: ../en/c2/old-to-new-coords.png
+       :align: center
+       :alt: old to new coords
 
     Formulas for newX and newY are then given by
 
-    ```python
-    newX = newLeft + 
-          ((oldX - oldLeft) / (oldRight - oldLeft)) * (newRight - newLeft))
-    newY = newTop + 
-            ((oldY - oldTop) / (oldBottom - oldTop)) * (newBottom - newTop)
-    ```
+    .. code-block::
+
+        newX = newLeft + ((oldX - oldLeft) / (oldRight - oldLeft)) * (newRight - newLeft)
+        newY = newTop + ((oldY - oldTop) / (oldBottom - oldTop)) * (newBottom - newTop)
 
     The logic here is that oldX is located at a certain fraction of the distance from *oldLeft* to *oldRight*. That fraction is given by
 
-    ```python
-    ((oldX - oldLeft) / (oldRight - oldLeft))
-    ```
+    .. code-block::
+    
+        ((oldX - oldLeft) / (oldRight - oldLeft))
 
     The formula for *newX* just says that *newX* should lie at the same fraction of the distance from *newLeft* to *newRight*. You can also check the formulas by testing that they work when *oldX* is equal to *oldLeft* or to *oldRight*, and when *oldY* is equal to *oldBottom* or to *oldTop*.
 
     As an example, suppose that we want to transform some real-number coordinate system with limits left, right, top, and bottom into pixel coordinates that range from 0 at left to 800 at the right and from 0 at the top 600 at the bottom. In that case, newLeft and newTop are zero, and the formulas become simply
 
-    ```python
-    newX = ((oldX - left) / (right - left)) * 800
-    newY = ((oldY - top) / (bottom - top)) * 600
-    ```
+    .. code-block::
+
+        newX = ((oldX - left) / (right - left)) * 800
+        newY = ((oldY - top) / (bottom - top)) * 600
 
     Of course, this gives newX and newY as real numbers, and they will have to be rounded or truncated to integer values if we need integer coordinates for pixels. The reverse transformation—going from pixel coordinates to real number coordinates—is also useful. For example, if the image is displayed on a computer screen, and you want to react to mouse clicks on the image, you will probably get the mouse coordinates in terms of integer pixel coordinates, but you will want to transform those pixel coordinates into your own chosen coordinate system.
 
-    In practice, though, you won't usually have to do the transformations yourself, since most graphics APIs provide some higher level way to specify transforms. We will talk more about this in [Section 2.3](./s3.md).
+    In practice, though, you won't usually have to do the transformations yourself, since most graphics APIs provide some higher level way to specify transforms. We will talk more about this in :ref:`Section 2.3 Transforms <c2.3>` .
 
 2.1.3  纵横比
 ----------------
@@ -211,51 +210,50 @@
 
 .. tab:: 中文
 
-    矩形的**宽高比(aspect ratio)**是其宽度与高度的比值。例如，宽高比为2:1意味着矩形的宽度是其高度的两倍，而宽高比为4:3意味着宽度是高度的4/3倍。尽管宽高比通常以*宽度:高度(width:height)*的形式写成，但我将使用该术语来指代分数*宽度/高度(width/height)*。一个正方形的宽高比等于1。一个高度为600且宽高比为5/4的矩形的宽度等于 600*(5/4)，即750。
+    矩形的 **宽高比** (:term:`aspect ratio`) 是其宽度与高度的比值。例如，宽高比为2:1意味着矩形的宽度是其高度的两倍，而宽高比为4:3意味着宽度是高度的4/3倍。尽管宽高比通常以 *宽度:高度(width:height)* 的形式写成，但我将使用该术语来指代分数 *宽度/高度(width/height)* 。一个正方形的宽高比等于1。一个高度为600且宽高比为5/4的矩形的宽度等于 600\*(5/4)，即750。
 
     坐标系统也有一个宽高比。如果坐标系统的水平和垂直限制如上所述为left、right、bottom和top，则宽高比是绝对值
 
-    ```python
-    (right - left) / (top - bottom)
-    ```
+    .. code-block::
+
+        (right - left) / (top - bottom)
+
 
     如果在具有相同宽高比的矩形上使用坐标系统，则在该矩形中查看时，水平方向上的一个单位将具有与垂直方向上的单位相同的视觉长度。如果宽高比不匹配，则会存在一些畸变。例如，由方程x2 + y2 = 9定义的形状应该是一个圆，但只有在(x,y)坐标系的宽高比与绘图区域的宽高比相匹配时才成立。
 
-    <figure markdown="span">
-        ![aspect ratio 1](../../en/c2/aspect-ratio-1.png)
-        <figcaption>aspect ratio 1</figcaption>
-    </figure>
+    .. image:: ../en/c2/aspect-ratio-1.png
+       :align: center
+       :alt: aspect ratio 1
 
     这并不总是一件坏事，使用不同的长度单位在垂直和水平方向上。然而，假设您希望使用具有限制left、right、bottom和top的坐标，并且确实希望保持宽高比。在这种情况下，根据显示矩形的形状，您可能需要调整left和right或bottom和top的值，以使宽高比匹配：
 
-    <figure markdown="span">
-        ![aspect ratio 2](../../en/c2/aspect-ratio-2.png)
-    </figure>
+    .. image:: ../en/c2/aspect-ratio-2.png
+       :align: center
+       :alt: aspect ratio 2
 
     我们将在本章后面更深入地研究几何变换，到那时，我们将看到一些用于设置坐标系统的程序代码。
 
 .. tab:: 英文
 
-    The aspect ratio of a rectangle is the ratio of its width to its height. For example an aspect ratio of 2:1 means that a rectangle is twice as wide as it is tall, and an aspect ratio of 4:3 means that the width is 4/3 times the height. Although aspect ratios are often written in the form *width:height*, I will use the term to refer to the fraction *width/height*. A square has aspect ratio equal to 1. A rectangle with aspect ratio 5/4 and height 600 has a width equal to 600*(5/4), or 750.
+    The :term:`aspect ratio` of a rectangle is the ratio of its width to its height. For example an aspect ratio of 2:1 means that a rectangle is twice as wide as it is tall, and an aspect ratio of 4:3 means that the width is 4/3 times the height. Although aspect ratios are often written in the form *width:height*, I will use the term to refer to the fraction *width/height*. A square has aspect ratio equal to 1. A rectangle with aspect ratio 5/4 and height 600 has a width equal to 600*(5/4), or 750.
 
     A coordinate system also has an aspect ratio. If the horizontal and vertical limits for the coordinate system are left, right, bottom, and top, as above, then the aspect ratio is the absolute value of
 
-    ```python
-    (right - left) / (top - bottom)
-    ```
+    .. code-block::
+        
+        (right - left) / (top - bottom)
 
     If the coordinate system is used on a rectangle with the same aspect ratio, then when viewed in that rectangle, one unit in the horizontal direction will have the same apparent length as a unit in the vertical direction. If the aspect ratios don't match, then there will be some distortion. For example, the shape defined by the equation x2 +y2 = 9 should be a circle, but that will only be true if the aspect ratio of the (x,y) coordinate system matches the aspect ratio of the drawing area.
 
-    <figure markdown="span">
-        ![aspect ratio 1](../../en/c2/aspect-ratio-1.png)
-        <figcaption>aspect ratio 1</figcaption>
-    </figure>
+    .. image:: ../en/c2/aspect-ratio-1.png
+       :align: center
+       :alt: aspect ratio 1
 
     It is not always a bad thing to use different units of length in the vertical and horizontal directions. However, suppose that you want to use coordinates with limits left, right, bottom, and top, and that you do want to preserve the aspect ratio. In that case, depending on the shape of the display rectangle, you might have to adjust the values either of left and right or of bottom and top to make the aspect ratios match:
 
-    <figure markdown="span">
-        ![aspect ratio 2](../../en/c2/aspect-ratio-2.png)
-    </figure>
+    .. image:: ../en/c2/aspect-ratio-2.png
+       :align: center
+       :alt: aspect ratio 2
 
     We will look more deeply into geometric transforms later in the chapter, and at that time, we'll see some program code for setting up coordinate systems.
 
@@ -268,19 +266,19 @@
 
     我们正在谈论计算机图形学最基础的基础知识之一。其中之一是坐标系。另一个是颜色。事实上，颜色是一个令人惊讶的复杂话题。我们将看一些与计算机图形应用程序最相关的部分。
 
-    计算机屏幕上的颜色是通过红、绿和蓝光的组合产生的。通过改变每种类型光的强度来产生不同的颜色。颜色可以通过三个数字来指定，分别表示颜色中红、绿和蓝的强度。强度可以用范围从零（最小强度）到一（最大强度）的数字来指定。这种指定颜色的方法称为**RGB颜色模型(RGB color model)**，其中RGB代表红/绿/蓝(Red/Green/Blue)。例如，在RGB颜色模型中，数值三元组（1，0.5，0.5）表示将红色设置为全强度，而绿色和蓝色设置为半强度的颜色。颜色的红、绿和蓝值在RGB颜色模型中称为该颜色的**颜色分量(color components)**。
+    计算机屏幕上的颜色是通过红、绿和蓝光的组合产生的。通过改变每种类型光的强度来产生不同的颜色。颜色可以通过三个数字来指定，分别表示颜色中红、绿和蓝的强度。强度可以用范围从零（最小强度）到一（最大强度）的数字来指定。这种指定颜色的方法称为 **RGB颜色模型** (:term:`RGB color model`) ，其中RGB代表红/绿/蓝(Red/Green/Blue)。例如，在RGB颜色模型中，数值三元组（1，0.5，0.5）表示将红色设置为全强度，而绿色和蓝色设置为半强度的颜色。颜色的红、绿和蓝值在RGB颜色模型中称为该颜色的 **颜色分量** (:term:`color components`) 。
 
     光由具有各种波长的波构成。纯色是指所有光具有相同波长的光，但一般来说，一个颜色可以包含许多波长 - 从数学上讲，是无限多个波长。那么，我们如何通过仅组合红、绿和蓝光来表示所有颜色呢？实际上，我们不能完全做到这一点。
 
     你可能听说过，三种基本或“主要”颜色的组合足以表示所有颜色，因为人眼有三种颜色传感器，可以检测红、绿和蓝光。然而，这只是一个近似值。眼睛确实包含三种颜色传感器。这些传感器称为“锥形细胞(cone cells)”。然而，锥形细胞不仅对红、绿和蓝光做出反应。每种类型的锥形细胞对广泛范围内的光波长以不同程度作出反应。一组给定的波长混合物将使每种类型的细胞以一定程度被刺激，而刺激的强度决定了我们看到的颜色。将每种类型的锥细胞刺激到同样程度的不同波长混合物将被感知为相同的颜色。因此，事实上，可以通过三个数字指定感知到的颜色，这三个数字分别表示三种类型的锥细胞的刺激强度。但是，无论如何选择这三种颜色，都不可能通过组合来产生所有可能的刺激模式。这只是关于我们眼睛实际工作方式的事实；这可能会有所不同。三种基本颜色可以产生相当大比例的可感知颜色集合，但是在计算机屏幕上可能看不到的颜色有很多。（这整个讨论仅适用于实际拥有三种类型锥细胞的人。色盲，即某人缺少一种或多种类型的锥细胞，是令人惊讶地普遍的。）
 
-    诸如计算机屏幕之类的设备可以产生的颜色范围称为该设备的色域。不同的计算机屏幕可以具有不同的色域，并且相同的 RGB 值在不同的屏幕上可能会产生略有不同的颜色。彩色打印机的色域明显不同，而且可能比屏幕的色域要小，这就解释了为什么打印出来的图像可能看起来与屏幕上的图像并不完全相同。（顺便说一句，打印机制造颜色的方式与屏幕不同。屏幕是通过组合光来生成颜色，而打印机则是通过组合墨水或染料。由于这种差异，为打印机设计的颜色通常使用不同的基本颜色集合。一种常见的打印机颜色模型是 CMYK，使用青色、品红色、黄色和黑色。）
+    诸如计算机屏幕之类的设备可以产生的颜色范围称为该设备的 **色域** (:term:`color gamut`) 。不同的计算机屏幕可以具有不同的色域，并且相同的 RGB 值在不同的屏幕上可能会产生略有不同的颜色。彩色打印机的色域明显不同，而且可能比屏幕的色域要小，这就解释了为什么打印出来的图像可能看起来与屏幕上的图像并不完全相同。（顺便说一句，打印机制造颜色的方式与屏幕不同。屏幕是通过组合光来生成颜色，而打印机则是通过组合墨水或染料。由于这种差异，为打印机设计的颜色通常使用不同的基本颜色集合。一种常见的打印机颜色模型是 CMYK，使用青色、品红色、黄色和黑色。）
 
     无论如何，计算机图形最常见的颜色模型是 RGB。RGB 颜色通常使用每个颜色分量 8 位表示，总共需要 24 位来表示一个颜色。这种表示有时被称为 "24 位颜色(24-bit color)"。8 位数字可以表示 2^8，或 256，个不同的值，我们可以将其视为从 0 到 255 的正整数。然后，颜色被指定为在该范围内的整数三元组 (r,g,b)。
 
     这种表示方法很有效，因为 256 种红色、绿色和蓝色的色调几乎是人眼可以区分的。在图像通过颜色分量进行计算的应用程序中，通常使用每个颜色分量额外的位数，以避免由于计算中的舍入误差而产生的视觉效果。这种应用程序可能会为每个颜色分量使用 16 位整数甚至 32 位浮点值。另一方面，有时会使用更少的位数。例如，一种常见的颜色方案使用 5 位用于红色和蓝色分量，以及 6 位用于绿色分量，总共为颜色使用 16 位。（绿色获得额外的位，因为眼睛对绿光的敏感性比对红色或蓝色的敏感性更高。）这种 "16 位颜色" 相对于 24 位颜色可以节省内存，并且在内存更昂贵时更为常见。
 
-    除了 RGB 外，还有许多其他颜色模型。RGB 有时被批评为不直观。例如，对大多数人来说，黄色是由红色和绿色的组合而成并不明显。密切相关的颜色模型 HSV 和 HSL 描述与 RGB 相同的颜色集，但试图以更直观的方式进行描述。（HSV 有时被称为 HSB，其中的 "B" 代表 "亮度"。HSV 和 HSB 是完全相同的模型。）
+    除了 RGB 外，还有许多其他颜色模型。RGB 有时被批评为不直观。例如，对大多数人来说，黄色是由红色和绿色的组合而成并不明显。密切相关的颜色模型 :term:`HSV` 和 :term:`HSL` 描述与 RGB 相同的颜色集，但试图以更直观的方式进行描述。（HSV 有时被称为 HSB，其中的 "B" 代表 "亮度"。HSV 和 HSB 是完全相同的模型。）
 
     这些模型中的 "H" 代表 "色相(hue)"，是基本的光谱颜色。随着 H 的增加，颜色从红色(red)变为黄色(yellow)、绿色(green)、青色(cyan)、蓝色(blue)、品红(magenta)，然后回到红色(red)。通常将 H 的值取为从 0 到 360，因为颜色可以被看作是围绕一个圆圈排列，红色在 0 和 360 度处。
 
@@ -288,23 +286,29 @@
 
     让我们来看看 HSV 颜色模型中的一些颜色。下面的示例显示了具有全范围 H 值的颜色，其中 S 和 V 分别等于 1 和 0.5。请注意，对于 S=V=1，你会得到明亮、纯净的颜色。S=0.5 会给出较苍白、饱和度较低的颜色。V=0.5 会产生较暗的颜色。
 
-    <figure markdown="span">
-        ![aspect ratio 2](../../en/c2/hsv.png)
-    </figure>
+    .. image:: ../en/c2/hsv.png
+       :align: center
+       :alt: hsv
 
     可能通过观察一些实际颜色及其表示方式来更容易理解颜色模型。以下是一个交互式演示，让您可以使用RGB和HSV颜色模型来实现这一点：
 
-    <iframe src="../../../en/demos/c2/rgb-hsv.html" width="600" height="370"></iframe>
+
+    .. raw:: html
+       
+        <div style="text-align: center;">
+            <iframe src="../_static/demos/c2/rgb-hsv.html" width="600" height="370" ></iframe>
+        </div>
 
     ----
 
-    通常，颜色模型会添加第四个分量。第四个分量称为 **阿尔法(alpha)**，使用它的颜色模型通常被称为 RGBA 和 HSLA 等名称。Alpha 并不是一种颜色，它通常用来表示**透明度(transparency)**。具有最大 alpha 值的颜色是完全不透明的；也就是说，它完全不透明。具有 alpha 等于零的颜色是完全透明的，因此是不可见的。中间值给出半透明或部分透明的颜色。透明度决定了在另一种颜色（前景色）之上绘制另一种颜色（背景色）时会发生什么情况。如果前景色完全不透明，则简单地替换背景色。如果前景色部分透明，则与背景色混合。假设 alpha 分量的范围是从 0 到 1，则可以计算得到的颜色为
+    通常，颜色模型会添加第四个分量。第四个分量称为 **阿尔法** (:term:`alpha <alpha color component>`)，使用它的颜色模型通常被称为 RGBA 和 HSLA 等名称。Alpha 并不是一种颜色，它通常用来表示 **透明度(transparency)** 。具有最大 alpha 值的颜色是完全不透明的；也就是说，它完全不透明。具有 alpha 等于零的颜色是完全透明的，因此是不可见的。中间值给出半透明或部分透明的颜色。透明度决定了在另一种颜色（前景色）之上绘制另一种颜色（背景色）时会发生什么情况。如果前景色完全不透明，则简单地替换背景色。如果前景色部分透明，则与背景色混合。假设 alpha 分量的范围是从 0 到 1，则可以计算得到的颜色为
 
-    ```python
-    new_color = (alpha)*(foreground_color) + (1 - alpha)*(background_color)
-    ```
+    .. code-block::
+    
+        new_color = (alpha)*(foreground_color) + (1 - alpha)*(background_color)
 
-    这个计算是分别对红色、蓝色和绿色的颜色分量进行的。这被称为 **阿尔法混合(alpha blending)**。效果就像透过有色玻璃观察背景一样；玻璃的颜色会给背景色添加一种色调。这种混合并不是 alpha 分量的唯一可能用法，但它是最常见的。
+
+    这个计算是分别对红色、蓝色和绿色的颜色分量进行的。这被称为 **阿尔法混合** (:term:`alpha blending`)。效果就像透过有色玻璃观察背景一样；玻璃的颜色会给背景色添加一种色调。这种混合并不是 alpha 分量的唯一可能用法，但它是最常见的。
 
     使用每个分量 8 位的 RGBA 颜色模型总共使用 32 位来表示一个颜色。这是一个方便的数字，因为整数值通常使用 32 位值表示。32 位整数值可以被解释为 32 位 RGBA 颜色。如何在 32 位整数内排列颜色分量在某种程度上是任意的。最常见的布局是将 alpha 分量存储在高 8 位中，然后是红色、绿色和蓝色。（这可能应该称为 ARGB 颜色。）但是，也有其他布局在使用中。
 
@@ -312,19 +316,19 @@
 
     We are talking about the most basic foundations of computer graphics. One of those is coordinate systems. The other is color. Color is actually a surprisingly complex topic. We will look at some parts of the topic that are most relevant to computer graphics applications.
 
-    The colors on a computer screen are produced as combinations of red, green, and blue light. Different colors are produced by varying the intensity of each type of light. A color can be specified by three numbers giving the intensity of red, green, and blue in the color. Intensity can be specified as a number in the range zero, for minimum intensity, to one, for maximum intensity. This method of specifying color is called the RGB color model, where RGB stands for Red/Green/Blue. For example, in the RGB color model, the number triple (1, 0.5, 0.5) represents the color obtained by setting red to full intensity, while green and blue are set to half intensity. The red, green, and blue values for a color are called the color components of that color in the RGB color model.
+    The colors on a computer screen are produced as combinations of red, green, and blue light. Different colors are produced by varying the intensity of each type of light. A color can be specified by three numbers giving the intensity of red, green, and blue in the color. Intensity can be specified as a number in the range zero, for minimum intensity, to one, for maximum intensity. This method of specifying color is called the :term:`RGB color model`, where RGB stands for Red/Green/Blue. For example, in the RGB color model, the number triple (1, 0.5, 0.5) represents the color obtained by setting red to full intensity, while green and blue are set to half intensity. The red, green, and blue values for a color are called the :term:`color components` of that color in the RGB color model.
 
     Light is made up of waves with a variety of wavelengths. A pure color is one for which all the light has the same wavelength, but in general, a color can contain many wavelengths—mathematically, an infinite number. How then can we represent all colors by combining just red, green, and blue light? In fact, we can't quite do that.
 
     You might have heard that combinations of the three basic, or "primary," colors are sufficient to represent all colors, because the human eye has three kinds of color sensors that detect red, green, and blue light. However, that is only an approximation. The eye does contain three kinds of color sensors. The sensors are called "cone cells." However, cone cells do not respond exclusively to red, green, and blue light. Each kind of cone cell responds, to a varying degree, to wavelengths of light in a wide range. A given mix of wavelengths will stimulate each type of cell to a certain degree, and the intensity of stimulation determines the color that we see. A different mixture of wavelengths that stimulates each type of cone cell to the same extent will be perceived as the same color. So a perceived color can, in fact, be specified by three numbers giving the intensity of stimulation of the three types of cone cell. However, it is not possible to produce all possible patterns of stimulation by combining just three basic colors, no matter how those colors are chosen. This is just a fact about the way our eyes actually work; it might have been different. Three basic colors can produce a reasonably large fraction of the set of perceivable colors, but there are colors that you can see in the world that you will never see on your computer screen. (This whole discussion only applies to people who actually have three kinds of cone cell. Color blindness, where someone is missing one or more kinds of cone cell, is surprisingly common.)
 
-    The range of colors that can be produced by a device such as a computer screen is called the color gamut of that device. Different computer screens can have different color gamuts, and the same RGB values can produce somewhat different colors on different screens. The color gamut of a color printer is noticeably different—and probably smaller—than the color gamut of a screen, which explains why a printed image probably doesn't look exactly the same as it did on the screen. (Printers, by the way, make colors differently from the way a screen does it. Whereas a screen combines light to make a color, a printer combines inks or dyes. Because of this difference, colors meant for printers are often expressed using a different set of basic colors. A common color model for printer colors is CMYK, using the colors cyan, magenta, yellow, and black.)
+    The range of colors that can be produced by a device such as a computer screen is called the :term:`color gamut` of that device. Different computer screens can have different color gamuts, and the same RGB values can produce somewhat different colors on different screens. The color gamut of a color printer is noticeably different—and probably smaller—than the color gamut of a screen, which explains why a printed image probably doesn't look exactly the same as it did on the screen. (Printers, by the way, make colors differently from the way a screen does it. Whereas a screen combines light to make a color, a printer combines inks or dyes. Because of this difference, colors meant for printers are often expressed using a different set of basic colors. A common color model for printer colors is CMYK, using the colors cyan, magenta, yellow, and black.)
 
     In any case, the most common color model for computer graphics is RGB. RGB colors are most often represented using 8 bits per color component, a total of 24 bits to represent a color. This representation is sometimes called "24-bit color." An 8-bit number can represent 28, or 256, different values, which we can take to be the positive integers from 0 to 255. A color is then specified as a triple of integers (r,g,b) in that range.
 
     This representation works well because 256 shades of red, green, and blue are about as many as the eye can distinguish. In applications where images are processed by computing with color components, it is common to use additional bits per color component to avoid visual effects that might occur due to rounding errors in the computations. Such applications might use a 16-bit integer or even a 32-bit floating point value for each color component. On the other hand, sometimes fewer bits are used. For example, one common color scheme uses 5 bits for the red and blue components and 6 bits for the green component, for a total of 16 bits for a color. (Green gets an extra bit because the eye is more sensitive to green light than to red or blue.) This "16-bit color" saves memory compared to 24-bit color and was more common when memory was more expensive.
 
-    There are many other color models besides RGB. RGB is sometimes criticized as being unintuitive. For example, it's not obvious to most people that yellow is made of a combination of red and green. The closely related color models HSV and HSL describe the same set of colors as RGB, but attempt to do it in a more intuitive way. (HSV is sometimes called HSB, with the "B" standing for "brightness." HSV and HSB are exactly the same model.)
+    There are many other color models besides RGB. RGB is sometimes criticized as being unintuitive. For example, it's not obvious to most people that yellow is made of a combination of red and green. The closely related color models :term:`HSV <HSV color>` and :term:`HSL <HSL color>` describe the same set of colors as RGB, but attempt to do it in a more intuitive way. (HSV is sometimes called HSB, with the "B" standing for "brightness." HSV and HSB are exactly the same model.)
 
     The "H" in these models stands for "hue," a basic spectral color. As H increases, the color changes from red to yellow to green to cyan to blue to magenta, and then back to red. The value of H is often taken to range from 0 to 360, since the colors can be thought of as arranged around a circle with red at both 0 and 360 degrees.
 
@@ -332,22 +336,26 @@
 
     Let's look at some colors in the HSV color model. The illustration below shows colors with a full range of H-values, for S and V equal to 1 and to 0.5. Note that for S=V=1, you get bright, pure colors. S=0.5 gives paler, less saturated colors. V=0.5 gives darker colors.
 
-    <figure markdown="span">
-        ![aspect ratio 2](../../en/c2/hsv.png)
-    </figure>
+    .. image:: ../en/c2/hsv.png
+       :align: center
+       :alt: hsv
 
     It's probably easier to understand color models by looking at some actual colors and how they are represented. Here is an interactive demo that let's you do that for the RGB and HSV color models:
 
-    <iframe src="../../../en/demos/c2/rgb-hsv.html" width="600" height="370"></iframe>
+    .. raw:: html
+       
+        <div style="text-align: center;">
+            <iframe src="../_static/demos/c2/rgb-hsv.html" width="600" height="370" ></iframe>
+        </div>
 
     ----
 
-    Often, a fourth component is added to color models. The fourth component is called alpha, and color models that use it are referred to by names such as RGBA and HSLA. Alpha is not a color as such. It is usually used to represent transparency. A color with maximal alpha value is fully opaque; that is, it is not at all transparent. A color with alpha equal to zero is completely transparent and therefore invisible. Intermediate values give translucent, or partly transparent, colors. Transparency determines what happens when you draw with one color (the foreground color) on top of another color (the background color). If the foreground color is fully opaque, it simply replaces the background color. If the foreground color is partly transparent, then it is blended with the background color. Assuming that the alpha component ranges from 0 to 1, the color that you get can be computed as
+    Often, a fourth component is added to color models. The fourth component is called :term:`alpha <alpha color component>`, and color models that use it are referred to by names such as RGBA and HSLA. Alpha is not a color as such. It is usually used to represent transparency. A color with maximal alpha value is fully opaque; that is, it is not at all transparent. A color with alpha equal to zero is completely transparent and therefore invisible. Intermediate values give translucent, or partly transparent, colors. Transparency determines what happens when you draw with one color (the foreground color) on top of another color (the background color). If the foreground color is fully opaque, it simply replaces the background color. If the foreground color is partly transparent, then it is blended with the background color. Assuming that the alpha component ranges from 0 to 1, the color that you get can be computed as
 
-    ```python
-    new_color = (alpha)*(foreground_color) + (1 - alpha)*(background_color)
-    ```
+    .. code-block::
 
-    This computation is done separately for the red, blue, and green color components. This is called alpha blending. The effect is like viewing the background through colored glass; the color of the glass adds a tint to the background color. This type of blending is not the only possible use of the alpha component, but it is the most common.
+        new_color = (alpha)*(foreground_color) + (1 - alpha)*(background_color)
+
+    This computation is done separately for the red, blue, and green color components. This is called :term:`alpha blending`. The effect is like viewing the background through colored glass; the color of the glass adds a tint to the background color. This type of blending is not the only possible use of the alpha component, but it is the most common.
 
     An RGBA color model with 8 bits per component uses a total of 32 bits to represent a color. This is a convenient number because integer values are often represented using 32-bit values. A 32-bit integer value can be interpreted as a 32-bit RGBA color. How the color components are arranged within a 32-bit integer is somewhat arbitrary. The most common layout is to store the alpha component in the eight high-order bits, followed by red, green, and blue. (This should probably be called ARGB color.) However, other layouts are also in use.
