@@ -1,7 +1,7 @@
 .. _appendx B:
 .. _a2:
 
-**附录 B：** Blender：3D 建模程序
+附录 B Blender 3D建模程序
 ==================================================
 
 **Blender: A 3D Modeling Program**
@@ -16,12 +16,22 @@
 
     这个附录是为 Blender 2.93 编写的。然而，它对 Blender 3.6 仍然有效，这是 2023 年 7 月的当前版本。Blender 3.6 增加了新功能和改进的性能，但本附录讨论的界面和基本特性并未改变。
 
-    **附录 B 的内容：**
+    .. toctree::
+       :maxdepth: 1
+       :caption: 附录B内容
 
-    - 第 1 节：[Blender 基础](./s1.md)
-    - 第 2 节：[Blender 建模](./s2.md)
-    - 第 3 节：[Blender 动画](./s3.md)
-    - 第 4 节：[更多关于光源和材质](./s4.md)
+       s1.rst
+       s2.rst
+       s3.rst
+       s4.rst
+
+    ..
+        **附录 B 的内容：**
+
+        - 第 1 节：[Blender 基础](./s1.md)
+        - 第 2 节：[Blender 建模](./s2.md)
+        - 第 3 节：[Blender 动画](./s3.md)
+        - 第 4 节：[更多关于光源和材质](./s4.md)
 
 
 .. tab:: 英文

@@ -1,6 +1,6 @@
 .. _c2.6:
 
-第6节: HTML Canvas图形
+2.6 HTML Canvas图形
 =======================
 
 **HTML Canvas Graphics**
@@ -13,7 +13,8 @@
 
     Most modern web browsers support a 2D graphics API that can be used to create images on a web page. The API is implemented using JavaScript, the client-side programming language for the web. I won't cover the JavaScript language in this section. To understand the material presented here, you don't need to know much about it. Even if you know nothing about it at all, you can learn something about its 2D graphics API and see how it is similar to, and how it differs from, the Java API presented in the [previous section](./s5.md). (For a short introduction to JavaScript, see [Section A.3](../a1/s3.md) in [Appendix A](../a1/index.md).)
 
-## 2.6.1  2D绘制上下文
+2.6.1  2D绘制上下文
+--------------------
 
 **The 2D Graphics Context**
 
@@ -127,7 +128,8 @@
 
     For a more complete, though still minimal, example, you can look at the sample page [canvas2d/GraphicsStarter.html](../../../en/source/canvas2d/GraphicsStarter.html). (You should look at the page in a browser, but you should also read the source code.) This example shows how to draw some basic shapes using canvas graphics, and you can use it as a basis for your own experimentation. There are also three more advanced "starter" examples: [canvas2d/GraphicsPlusStarter.html](../../../en/source/canvas2d/GraphicsPlusStarter.html) adds some utility functions for drawing shapes and setting up a coordinate system; [canvas2d/AnimationStarter.html](../../../en/source/canvas2d/AnimationStarter.html) adds animation and includes a simple hierarchical modeling example; and [canvas2d/EventsStarter.html](../../../en/source/canvas2d/EventsStarter.html) shows how to respond to keyboard and mouse events.
 
-## 2.6.2  形状
+2.6.2  形状
+--------------------
 
 .. tab:: 中文
 
@@ -265,7 +267,8 @@
 
     There is no way to draw an oval that is not a circle, except by using transforms. We will cover that later in this section. But JavaScript has the interesting property that it is possible to add new functions and properties to an existing object. The sample program [canvas2d/GraphicsPlusStarter.html](../../../en/source/canvas2d/GraphicsPlusStarter.html) shows how to add functions to a graphics context for drawing lines, ovals, and other shapes that are not built into the API.
 
-## 2.6.3  描边和填充
+2.6.3  描边和填充
+--------------------
 
 .. tab:: 中文
 
@@ -322,7 +325,8 @@
 
     The default is "10px sans-serif," which is usually too small. Note that text, like all drawing, is subject to coordinate transforms. Applying a scaling operation changes the size of the text, and a negative scaling factor can produce mirror-image text.
 
-## 2.6.4  变换
+2.6.4  变换
+--------------------
 
 .. tab:: 中文
 
@@ -440,7 +444,8 @@
 
     The situation is different in Java, where the coordinates that are stored in the path are the actual numbers that are used to specify the path, that is, the object coordinates. When the path is stroked or filled, the transformation that is in effect at that time is applied to the path. The path can be reused many times to draw copies with different transformations. This comment is offered as an example of how APIs that look very similar can have subtle differences.
 
-## 2.6.5  画布辅助
+2.6.5  画布辅助
+--------------------
 
 **Auxiliary Canvases**
 
@@ -496,7 +501,8 @@
 
     (The demo version shown above actually uses a somewhat different technique to accomplish the same thing. It uses two on-screen canvases, one located exactly on top of the other. The lower canvas holds the actual image. The upper canvas is completely transparent, except when the user is drawing a line, oval, or rectangle. While the user is dragging the mouse to draw such a shape, the new shape is drawn on the upper canvas, where it hides the part of the lower canvas that is beneath the shape. When the user releases the mouse, the shape is added to the lower canvas and the upper canvas is cleared to make it completely transparent again. Again, the other tools operate directly on the lower canvas.)
 
-## 2.6.6  像素操作
+2.6.6  像素操作
+--------------------
 
 **Pixel Manipulation**
 
@@ -643,7 +649,8 @@
 
     It would be worthwhile to try to understand this example to see how pixel-by-pixel processing of color data can be done. See the [source code](../../../en/source/canvas2d/SimplePaintProgram.html) of the example for more details.
 
-## 2.6.7  图像
+2.6.7 图像
+--------------------
 
 **Images**
 

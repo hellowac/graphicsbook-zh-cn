@@ -1,0 +1,959 @@
+.. _c7.2:
+
+7.2 照明和材质
+=========================
+
+**Lighting and Material**
+
+.. tab:: 中文
+
+    在本节中，我们将讨论WebGL中的光照和材质问题。我们将继续使用在[第4.1节](../c4/s1.md)和[第4.2节](../c4/s2.md)中介绍的基本OpenGL模型，但现在我们负责在自己的GLSL着色器程序中实现光照方程。这意味着需要更加注意实现细节。这也意味着我们可以为特定应用程序选择实现光照方程的哪些部分。
+
+    光照方程的目标是计算表面上某点的颜色。方程的输入包括表面的材质属性和照亮表面的光源属性。光线击中表面的角度起着重要作用。该角度可以从光源的方向和表面法线向量计算得出。镜面反射的计算还使用到观察者的方向和反射光线的方向。在[4.1.4小节](../c4/s1.md#414-opengl-11-光照方程)的光照图中展示了用于计算的四个向量：
+
+    ![123](../../en/c7/light-equation.png)
+
+    向量L、N、R和V应该是单位向量。回想一下，单位向量具有这样的属性：两个单位向量之间角度的余弦值由这两个向量的点积给出。
+
+    光照方程还涉及环境光和自发光颜色，这些颜色不依赖于图中显示的方向向量。
+
+    在我们通过使用光照模型的各个方面的一些示例时，你应该牢记这个大局。
+
+.. tab:: 英文
+
+    In this section, we turn to the question of lighting and material in WebGL. We will continue to use the basic OpenGL model that was covered in [Section 4.1](../c4/s1.md) and [Section 4.2](../c4/s2.md), but now we are responsible for implementing the lighting equation in our own GLSL shader programs. That means being more aware of the implementation details. It also means that we can pick and choose which parts of the lighting equation we will implement for a given application.
+
+    The goal of the lighting equation is to compute a color for a point on a surface. The inputs to the equation include the material properties of the surface and the properties of light sources that illuminate the surface. The angle at which the light hits the surface plays an important role. The angle can be computed from the direction to the light source and the normal vector to the surface. Computation of specular reflection also uses the direction to the viewer and the direction of the reflected ray. The four vectors that are used in the computation are shown in this lighting diagram from [Subsection 4.1.4](../c4/s1.md#414-opengl-11-光照方程):
+
+    ![123](../../en/c7/light-equation.png)
+
+    The vectors L, N, R, and V should be unit vectors. Recall that unit vectors have the property that the cosine of the angle between two unit vectors is given by the dot product of the two vectors.
+
+    The lighting equation also involves ambient and emission color, which do not depend the direction vectors shown in the diagram.
+
+    You should keep this big picture in mind as we work through some examples that use various aspects of the lighting model.
+
+7.2.1 最小照明
+-------------------------
+
+**Minimal Lighting**
+
+.. tab:: 中文
+
+    即使是非常简单的光照也能让3D图形看起来更加逼真。对于最小化的光照，我有时会使用我所说的“视点光”，这是一种从观察者方向照射进场景的白光。在最简单的情况下，可以使用方向光。在眼睛坐标系中，方向视点光沿着负z轴方向照射。指向光源的光方向向量（上图中的*L*）是(0,0,1)。
+
+    为了保持简单，我们只考虑漫反射。在这种情况下，从表面反射的光的颜色是表面漫反射材质颜色、光的颜色以及光击中表面角度的余弦值的乘积。红色、绿色和蓝色颜色分量的乘积分别计算。我们假设光是白色的，所以在公式中光的颜色是1。材质颜色可能来自JavaScript端作为uniform或attribute变量。
+
+    光击中表面角度的余弦值由法线向量N与光方向向量*L*的点积给出。在眼睛坐标系中，*L*是(0,0,1)。点积*N·L*或*N·(0,0,1)*因此仅仅是*N.z*，即*N*的z分量。然而，这假设N也是以眼睛坐标系给出的。法线向量通常来自JavaScript端，并且以对象坐标系表示。在用于光照计算之前，它必须转换到眼睛坐标系。如在[7.1.4小节](../c7/s1.md#714-变换法线)中讨论的，要做到这一点我们需要一个从模型视图矩阵派生的法线变换矩阵。由于法线向量必须是长度为一的，计算N的GLSL代码可能是这样的：
+
+    ```js
+    vec3 N = normalize(normalMatrix * normal);
+    ```
+
+    其中*normal*是对象坐标系中的原始法线向量，*normalMatrix*是法线变换矩阵，*normalize*是一个内置的GLSL函数，它返回一个长度为一且与其参数指向同一方向的向量。
+
+    还有一个复杂情况：点积*N·L*可能是负数，这意味着法线向量指向光源的相反方向（在这种情况下是指向屏幕内部）。通常，这意味着表面不被照亮。在视点光的情况下，我们知道每个可见表面都是被照亮的，这意味着我们正在看表面的“背面”（或者指定了错误的法线）。假设我们希望以相同的方式处理表面的两侧。背面的正确法线向量是正面法线向量的负数，正确的点积是(−N)·L。我们可以通过简单地使用*abs(N·L)*来处理这两种情况。对于*L = (0,0,1)*，那就是*abs(N.z)*。如果*color*是一个给出表面漫反射颜色的*vec3*，可见颜色可以这样计算：
+
+    ```js
+    vec3 visibleColor = abs(N.z) * color;
+    ```
+
+    如果*color*是一个给出RGBA颜色的*vec4*，只有RGB分量应该乘以点积：
+
+    ```js
+    vec4 visibleColor = vec4(abs(N.z)*color.rgb, color.a);
+    ```
+
+    示例程序[webgl/cube-with-basic-lighting.html](../../../en/source/webgl/cube-with-basic-lighting.html)实现了这个最小化光照模型。光照计算在顶点着色器中完成。场景的一部分没有使用光照绘制，顶点着色器有一个uniform *bool*变量来指定是否应用光照。这是该程序的顶点着色器源代码：
+
+    ```js
+    attribute vec3 a_coords;            // 顶点的对象坐标。
+    uniform mat4 modelviewProjection;   // 组合变换矩阵。
+    uniform bool lit;            // 是否应用光照？
+    uniform vec3 normal;         // 法线向量（在对象坐标中）。
+    uniform mat3 normalMatrix;   // 法线向量的变换矩阵。
+    uniform vec4 color;          // 基本（漫反射）颜色。
+    varying vec4 v_color;        // 发送到片段着色器的颜色。
+    void main() {
+        vec4 coords = vec4(a_coords,1.0);
+        gl_Position = modelviewProjection * coords;
+        if (lit) {
+            vec3 N = normalize(normalMatrix*normal); // 变换后的单位法线。
+            float dotProduct = abs(N.z);
+            v_color = vec4(dotProduct*color.rgb, color.a);
+        }
+        else {
+            v_color = color;
+        }
+    }
+    ```
+
+    向这个模型添加环境光很容易，使用uniform变量来指定环境光级别。自发光颜色也很容易添加。
+
+    这个例子中使用的方向光在技术上只适用于正交投影，尽管它通常也会为透视投影提供可接受的结果。但透视投影的正确视点光是在(0,0,0)处的点光源——眼睛坐标中“眼睛”的位置。点光源比方向光稍微复杂一些。
+
+    请记住，光照计算是在眼睛坐标系中完成的。指向光源的向量*L*可以这样计算：
+
+    ```js
+    vec3 L = normalize(lightPosition - eyeCoords.xyz);
+    ```
+
+    其中*lightPosition*是一个*vec3*，表示光源在眼睛坐标系中的位置，而eyeCoords是一个*vec4*，表示表面点在眼睛坐标系中的位置。对于视点光，*lightPosition*是*(0,0,0)*，*L*可以简单地计算为*normalize(-eyeCoords.xyz)*。表面点的眼睛坐标必须通过将模型视图矩阵应用于该点的对象坐标来计算。这意味着着色器程序需要知道模型视图矩阵；仅仅知道组合的模型视图和投影矩阵是不够的。上面显示的顶点着色器可以修改为使用位于(0,0,0)的点光源，如下所示：
+
+    ```js
+    attribute vec3 a_coords;      // 顶点的对象坐标。
+    uniform mat4 modelview;       // 模型视图变换矩阵。
+    uniform mat4 projection;      // 投影变换矩阵。
+    uniform bool lit;             // 是否应用光照？
+    uniform vec3 normal;          // 法线向量（在对象坐标中）。
+    uniform mat3 normalMatrix;    // 法线向量的变换矩阵。
+    uniform vec4 color;           // 基本（漫反射）颜色。
+    varying vec4 v_color;         // 发送到片段着色器的颜色。
+    void main() {
+        vec4 coords = vec4(a_coords,1.0);
+        vec4 eyeCoords = modelview * coords;
+        gl_Position = projection * eyeCoords;
+        if (lit) {
+            vec3 L = normalize(-eyeCoords.xyz); // 指向光源。
+            vec3 N = normalize(normalMatrix * normal); // 变换后的单位法线。
+            float dotProduct = abs(dot(N, L));
+            v_color = vec4(dotProduct * color.rgb, color.a);
+        } else {
+            v_color = color;
+        }
+    }
+    ```
+
+    （注意，然而，在某些情况下，将光照计算移到片段着色器可能会更好，我们很快就会看到。）
+
+.. tab:: 英文
+
+    Even very simple lighting can make 3D graphics look more realistic. For minimal lighting, I sometimes use what I call a "viewpoint light," a white light that shines from the direction of the viewer into the scene. In the simplest case, a directional light can be used. In eye coordinates, a directional viewpoint light shines in the direction of the negative z-axis. The light direction vector (*L* in the above diagram), which points towards the light source, is (0,0,1).
+
+    To keep things minimal, let's consider diffuse reflection only. In that case, the color of the light reflected from a surface is the product of the diffuse material color of the surface, the color of the light, and the cosine of the angle at which the light hits the surface. The product is computed separately for the red, green, and blue components of the color. We are assuming that the light is white, so the light color is 1 in the formula. The material color will probably come from the JavaScript side as a uniform or attribute variable.
+
+    The cosine of the angle at which the light hits the surface is given by the dot product of the normal vector N with the light direction vector *L*. In eye coordinates, *L* is (0,0,1). The dot product, *N·L* or *N·(0,0,1)*, is therefore simply *N.z*, the z-component of *N*. However, this assumes that N is also given in eye coordinates. The normal vector will ordinarily come from the JavaScript side and will be expressed in object coordinates. Before it is used in lighting calculations, it must be transformed to the eye coordinate system. As discussed in [Subsection 7.1.4](../c7/s1.md#714-变换法线), to do that we need a normal transformation matrix that is derived from the modelview matrix. Since the normal vector must be of length one, the GLSL code for computing N would be something like
+
+    ```js
+    vec3 N = normalize( normalMatrix * normal );
+    ```
+
+    where *normal* is the original normal vector in object coordinates, *normalMatrix* is the normal transformation matrix, and *normalize* is a built-in GLSL function that returns a vector of length one pointing in the same direction as its parameter.
+
+    There is one more complication: The dot product *N·L* can be negative, which would mean that the normal vector points away from the light source (into the screen in this case). Ordinarily, that would mean that the light does not illuminate the surface. In the case of a viewpoint light, where we know that every visible surface is illuminated, it means that we are looking at the "back side" of the surface (or that incorrect normals were specified). Let's assume that we want to treat the two sides of the surface the same. The correct normal vector for the back side is the negative of the normal vector for the front side, and the correct dot product is (−N)·L. We can handle both cases if we simply use *abs(N·L)*. For *L = (0,0,1)*, that would be *abs(N.z)*. If *color* is a *vec3* giving the diffuse color of the surface, the visible color can be computed as
+
+    ```js
+    vec3 visibleColor = abs(N.z) * color;
+    ```
+
+    If *color* is instead a *vec4* giving an RGBA color, only the RGB components should be multiplied by the dot product:
+
+    ```js
+    vec4 visibleColor = vec4( abs(N.z)*color.rgb, color.a );
+    ```
+
+    The sample program [webgl/cube-with-basic-lighting.html](../../../en/source/webgl/cube-with-basic-lighting.html) implements this minimal lighting model. The lighting calculations are done in the vertex shader. Part of the scene is drawn without lighting, and the vertex shader has a uniform *bool* variable to specify whether lighting should be applied. Here is the vertex shader source code from that program:
+
+    ```js
+    attribute vec3 a_coords;            // Object coordinates for the vertex.
+    uniform mat4 modelviewProjection;   // Combined transformation matrix.
+    uniform bool lit;            // Should lighting be applied?
+    uniform vec3 normal;         // Normal vector (in object coordinates).
+    uniform mat3 normalMatrix;   // Transformation matrix for normal vectors.
+    uniform vec4 color;          // Basic (diffuse) color.
+    varying vec4 v_color;        // Color to be sent to fragment shader.
+    void main() {
+        vec4 coords = vec4(a_coords,1.0);
+        gl_Position = modelviewProjection * coords;
+        if (lit) {
+            vec3 N = normalize(normalMatrix*normal); // Transformed unit normal.
+            float dotProduct = abs(N.z);
+            v_color = vec4( dotProduct*color.rgb, color.a );
+        }
+        else {
+            v_color = color;
+        }
+    }
+    ```
+
+    It would be easy to add ambient light to this model, using a uniform variable to specify the ambient light level. Emission color is also easy.
+
+    The directional light used in this example is technically only correct for an orthographic projection, although it will also generally give acceptable results for a perspective projection. But the correct viewpoint light for a perspective projection is a point light at (0,0,0)—the position of the "eye" in eye coordinates. A point light is a little more difficult than a directional light.
+
+    Remember that lighting calculations are done in eye coordinates. The vector *L* that points from the surface to the light can be computed as
+
+    ```js
+    vec3 L = normalize( lightPosition - eyeCoords.xyz );
+    ```
+
+    where *lightPosition* is a *vec3* that gives the position of the light in eye coordinates, and eyeCoords is a *vec4* giving the position of the surface point in eye coordinates. For a viewpoint light, the *lightPosition* is *(0,0,0)*, and *L* can be computed simply as *normalize(−eyeCoords.xyz)*. The eye coordinates for the surface point must be computed by applying the modelview matrix to the object coordinates for that point. This means that the shader program needs to know the modelview matrix; it's not sufficient to know the combined modelview and projection matrix. The vertex shader shown above can modified to use a point light at (0,0,0) as follows:
+
+    ```js
+    attribute vec3 a_coords;      // Object coordinates for the vertex.
+    uniform mat4 modelview;       // Modelview transformation matrix
+    uniform mat4 projection;      // Projection transformation matrix.
+    uniform bool lit;             // Should lighting be applied?
+    uniform vec3 normal;          // Normal vector (in object coordinates).
+    uniform mat3 normalMatrix;    // Transformation matrix for normal vectors.
+    uniform vec4 color;           // Basic (diffuse) color.
+    varying vec4 v_color;         // Color to be sent to fragment shader.
+    void main() {
+        vec4 coords = vec4(a_coords,1.0);
+        vec4 eyeCoords = modelview * coords;
+        gl_Position = projection * eyeCoords;
+        if (lit) {
+            vec3 L = normalize( - eyeCoords.xyz ); // Points to light.
+            vec3 N = normalize(normalMatrix*normal); // Transformed unit normal.
+            float dotProduct = abs( dot(N,L) );
+            v_color = vec4( dotProduct*color.rgb, color.a );
+        }
+        else {
+            v_color = color;
+        }
+    }
+    ```
+
+    (Note, however, that in some situations, it can be better to move the lighting calculations to the fragment shader, as we will soon see.)
+
+7.2.2 镜面反射和 Phong 着色
+----------------------------
+
+**Specular Reflection and Phong Shading**
+
+.. tab:: 中文
+
+    要在我们的基本光照模型中添加镜面光，我们需要处理光照图中的向量*R*和*V*。在完美的镜面反射中，只有当*R*等于*V*时，观察者才能看到镜面高光，这非常不可能。但在我们使用的光照方程中，镜面反射的量取决于点积*R·V*，这代表了*R*和*V*之间角度的余弦值。镜面反射对可见颜色的贡献公式是：
+
+    \[ (R \cdot V)^s \times \text{specularMaterialColor} \times \text{lightIntensity} \]
+
+    其中s是镜面指数（在OpenGL中称为“光泽度”的材料属性）。如果*R·V*大于零，则该公式才有效；否则，镜面贡献为零。
+
+    单位向量R可以从L和N计算得出。（一些三角学显示R由*2*(N·L)*N − L*给出。）GLSL有一个内置函数*reflect(I,N)*，用于计算向量*I*通过单位法线向量*N*的反射；然而，*reflect(L,N)*的值是−R而不是*R*。（GLSL假设一个指向从光源指向表面的光方向向量，而我的L向量则相反。）
+
+    单位向量*V*从表面指向观察者的位置。请记住，我们在眼睛坐标系中进行计算。对于正交投影，观察者本质上在无限远处，V可以取为(0,0,1)。对于透视投影，观察者在眼睛坐标系中的点(0,0,0)，*V*由*normalize(−eyeCoords)*给出，其中*eyeCoords*包含眼睛坐标系中表面点的xyz坐标。将所有这些结合起来，并假设我们已经拥有N和L，计算颜色的GLSL代码形式如下：
+
+    ```js
+    R = -reflect(L,N);
+    V = normalize(-eyeCoords.xyz);  // （假设为透视投影。）
+    vec3 color = dot(L,N) * diffuseMaterialColor.rgb * diffuseLightColor;
+    if (dot(R,V) > 0.0) {
+        color = color + (pow(dot(R,V), specularExponent) *
+                            specularMaterialColor * specularLightColor);
+    }
+    ```
+
+    示例程序[webgl/basic-specular-lighting.html](../../../en/source/webgl/basic-specular-lighting.html)实现了具有漫反射和镜面反射的光照。对于这个绘制曲面的程序，法线向量作为顶点属性给出，而不是作为uniform变量。为了增加光照的灵活性，光的位置被指定为uniform变量而不是常量。遵循OpenGL的惯例，*lightPosition*是一个*vec4*。对于方向光，w坐标是0，光的眼睛坐标是*lightPosition.xyz*。如果w坐标非零，光是点光源，其眼睛坐标是*lightPosition.xyz/lightPosition.w*。（通过lightPosition.w的除法是齐次坐标的惯例，但实际上，lightPosition.w通常要么是零要么是一。）该程序允许不同的漫反射和镜面材料颜色，但光总是白色的，漫反射强度为0.8，镜面强度为0.4。你应该能够理解顶点着色器中的所有代码：
+
+    ```js
+    attribute vec3 a_coords;
+    attribute vec3 a_normal;
+    uniform mat4 modelview;
+    uniform mat4 projection;
+    uniform mat3 normalMatrix;
+    uniform vec4 lightPosition;
+    uniform vec4 diffuseColor;
+    uniform vec3 specularColor;
+    uniform float specularExponent;
+    varying vec4 v_color;
+    void main() {
+        vec4 coords = vec4(a_coords,1.0);
+        vec4 eyeCoords = modelview * coords;
+        gl_Position = projection * eyeCoords;
+        vec3 N, L, R, V;  // 光照方程的向量。
+        N = normalize(normalMatrix * a_normal);
+        if (lightPosition.w == 0.0) { // 方向光。
+            L = normalize(lightPosition.xyz);
+        } else { // 点光源。
+            L = normalize((lightPosition.xyz / lightPosition.w) - eyeCoords.xyz);
+        }
+        R = -reflect(L, N);
+        V = normalize(-eyeCoords.xyz);  // （假设为透视投影。）
+        if (dot(L, N) <= 0.0) {
+            v_color = vec4(0, 0, 0, 1);  // 顶点没有被照亮。
+        } else {
+            vec3 color = 0.8 * dot(L, N) * diffuseColor.rgb;
+            if (dot(R, V) > 0.0) {
+                color += 0.4 * pow(dot(R, V), specularExponent) * specularColor;
+            }
+            v_color = vec4(color, diffuseColor.a);
+        }
+    }
+    ```
+
+    片段着色器只是将*v_color*的值赋给*gl_FragColor*。
+
+    ----
+
+    这种方法模仿了OpenGL 1.1，在顶点着色器中进行光照计算。这有时被称为**逐顶点光照**。它类似于*three.js*中的Lambert着色，只是Lambert着色只使用漫反射。但有许多情况下逐顶点光照不能给出好的结果。我们在[5.1.5小节](../c5/s1.md#515-灯光)中看到，对于聚光灯来说，它可能会给出非常糟糕的结果。除非原语非常小，否则它也倾向于产生不好的镜面高光。
+
+    如果光源相对于原语的位置非常接近，与原语的大小相比，光在顶点处与原语形成的角度可能与光在原语内部某点的角度关系很小：
+
+    ![123](../../en/c7/close-light.png)
+
+    由于光照严重依赖角度，逐顶点光照在这种情况下不会给出好的结果。为了获得更好的结果，我们可以进行**逐像素光照**。也就是说，我们可以将顶点着色器中的光照计算移动到片段着色器中。
+
+    要进行逐像素光照，必须将顶点着色器中可用的某些数据通过变化变量传递给片段着色器。这包括例如表面点的对象坐标或眼睛坐标。如果漫反射颜色是属性而不是uniform变量，也可能适用。当然，uniform变量可以直接被片段着色器访问。光属性通常uniform，材料属性也可能是。
+
+    然后，当然还有法线向量，它们对光照至关重要。尽管法线向量有时可以是uniform变量，但它们通常是属性。逐像素光照通常使用插值的法线向量，通过变化变量传递给片段着色器。（Phong着色只是使用插值法线的逐像素光照。）插值法线向量通常只是几何正确法线的一个近似，但通常足够好，可以给出好的结果。另一个问题是，即使顶点着色器中的法线向量是单位向量，插值的法线向量也不一定是单位向量。因此，在片段着色器中标准化插值的法线向量很重要。顶点着色器中的原始法线向量也应该标准化，以便插值正常工作。
+
+    示例程序[webgl/basic-specular-lighting-Phong.html](../../../en/source/webgl/basic-specular-lighting-Phong.html)使用逐像素光照。我强烈建议你阅读该程序中的着色器源代码。除了光照计算已经移动到片段着色器之外，它与之前的示例程序完全相同。
+
+    这个演示允许你并排查看使用逐顶点光照绘制的对象和使用逐像素光照绘制的相同对象。它使用与两个示例程序相同的着色器程序。有关更多信息，请参见演示中的帮助文本：
+
+    <iframe src="../../../en/demos/c7/per-pixel-vs-per-vertex.html" width="660" height="520"></iframe>
+
+    示例程序[webgl/basic-specular-lighting-Phong-webgl2.html](../../../en/source/webgl/basic-specular-lighting-Phong-webgl2.html)是将原始的WebGL 1.0 Phong光照程序移植到WebGL 2.0的版本。它展示了在GLSL ES 3.00中着色器程序的样子。变化很小。属性变量变为"in"变量，变化变量在顶点着色器中变为"out"变量，在片段着色器中变为"in"变量，内置片段着色器变量gl_FragColor被自定义的"out"变量替换。JavaScript端根本不需要更改，但作为一个例子，它已经被修改为使用顶点数组对象来组织程序中可以绘制的各种对象的数据。
+
+.. tab:: 英文
+
+    To add specular lighting to our basic lighting model, we need to work with the vectors *R* and *V* in the lighting diagram. In perfect specular reflection, the viewer sees a specular highlight only if *R* is equal to *V*, which is very unlikely. But in the lighting equation that we are using, the amount of specular reflection depends on the dot product *R·V*, which represents the cosine of the angle between *R* and *V*. The formula for the contribution of specular reflection to the visible color is
+
+        (R·V)<sup>s</sup> * specularMaterialColor * lightIntensity
+
+    where s is the specular exponent (the material property called "shininess" in OpenGL). The formula is only valid if R·V is greater than zero; otherwise, the specular contribution is zero.
+
+    The unit vector R can be computed from L and N. (Some trigonometry shows that R is given by *2\*(N·L)\*N − L*.) GLSL has a built-in function *reflect(I,N)* that computes the reflection of a vector *I* through a unit normal vector *N*; however, the value of *reflect(L,N)* is −R rather than *R*. (GLSL assumes a light direction vector that points from the light toward the surface, while my L vector does the reverse.)
+
+    The unit vector *V* points from the surface towards the position of the viewer. Remember that we are doing the calculations in eye coordinates. For an orthographic projection, the viewer is essentially at infinite distance, and V can be taken to be (0,0,1). For a perspective projection, the viewer is at the point (0,0,0) in eye coordinates, and *V* is given by *normalize(−eyeCoords)* where *eyeCoords* contains the xyz coordinates of the surface point in the eye coordinate system. Putting all this together, and assuming that we already have N and L, the GLSL code for computing the color takes the form:
+
+    ```js
+    R = -reflect(L,N);
+    V = normalize( -eyeCoords.xyz );  // (Assumes a perspective projection.)
+    vec3 color = dot(L,N) *diffuseMaterialColor.rgb* diffuseLightColor;
+    if (dot(R,V) > 0.0) {
+        color = color + ( pow(dot(R,V),specularExponent) *
+                            specularMaterialColor* specularLightColor );
+    }
+    ```
+
+    The sample program [webgl/basic-specular-lighting.html](../../../en/source/webgl/basic-specular-lighting.html) implements lighting with diffuse and specular reflection. For this program, which draws curved surfaces, normal vectors are given as a vertex attribute rather than a uniform variable. To add some flexibility to the lighting, the light position is specified as a uniform variable rather than a constant. Following the OpenGL convention, *lightPosition* is a *vec4*. For a directional light, the w-coordinate is 0, and the eye coordinates of the light are *lightPosition.xyz*. If the w-coordinate is non-zero, the light is a point light, and its eye coordinates are *lightPosition.xyz/lightPosition.w*. (The division by lightPosition.w is the convention for homogeneous coordinates, but in practice, lightPosition.w will usually be either zero or one.) The program allows for different diffuse and specular material colors, but the light is always white, with diffuse intensity 0.8 and specular intensity 0.4. You should be able to understand all of the code in the vertex shader:
+
+    ```js
+    attribute vec3 a_coords;
+    attribute vec3 a_normal;
+    uniform mat4 modelview;
+    uniform mat4 projection;
+    uniform mat3 normalMatrix;
+    uniform vec4 lightPosition;
+    uniform vec4 diffuseColor;
+    uniform vec3 specularColor;
+    uniform float specularExponent;
+    varying vec4 v_color;
+    void main() {
+        vec4 coords = vec4(a_coords,1.0);
+        vec4 eyeCoords = modelview *coords;
+        gl_Position = projection* eyeCoords;
+        vec3 N, L, R, V;  // Vectors for lighting equation.
+        N = normalize( normalMatrix*a_normal );
+        if ( lightPosition.w == 0.0 ) { // Directional light.
+            L = normalize( lightPosition.xyz );
+        }
+        else { // Point light.
+            L = normalize( lightPosition.xyz/lightPosition.w - eyeCoords.xyz );
+        }
+        R = -reflect(L,N);
+        V = normalize( -eyeCoords.xyz);  // (Assumes a perspective projection.)
+        if ( dot(L,N) <= 0.0 ) {
+            v_color = vec4(0,0,0,1);  // The vertex is not illuminated.
+        }
+        else {
+            vec3 color = 0.8* dot(L,N) *diffuseColor.rgb;
+            if (dot(R,V) > 0.0) {
+                color += 0.4* pow(dot(R,V),specularExponent) * specularColor;
+            }
+            v_color = vec4(color, diffuseColor.a);
+        }
+    }
+    ```
+
+    The fragment shader just assigns the value of *v_color* to *gl_FragColor*.
+
+    ----
+
+    This approach imitates OpenGL 1.1 in that it does lighting calculations in the vertex shader. This is sometimes called **per-vertex lighting**. It is similar to Lambert shading in *three.js*, except that Lambert shading only uses diffuse reflection. But there are many cases where per-vertex lighting does not give good results. We saw in [Subsection 5.1.5](../c5/s1.md#515-灯光) that it can give very bad results for spotlights. It also tends to produce bad specular highlights, unless the primitives are very small.
+
+    If a light source is close to a primitive, compared to the size of the primitive, the angles that the light makes with the primitive at the vertices can have very little relationship to the angle of the light at an interior point of the primitive:
+
+    ![123](../../en/c7/close-light.png)
+
+    Since lighting depends heavily on the angles, per-vertex lighting will not give a good result in this case. To get better results, we can do **per-pixel lighting**. That is, we can move the lighting calculations from the vertex shader into the fragment shader.
+
+    To do per-pixel lighting, certain data that is available in the vertex shader must be passed to the fragment shader in varying variables. This includes, for example, either object coordinates or eye coordinates for the surface point. The same might apply to properties such as diffuse color, if they are attributes rather then uniform variables. Of course, uniform variables are directly accessible to the fragment shader. Light properties will generally be uniforms, and material properties might well be.
+
+    And then, of course, there are the normal vectors, which are so essential for lighting. Although normal vectors can sometimes be uniform variables, they are usually attributes. Per-pixel lighting generally uses interpolated normal vectors, passed to the fragment shader in a varying variable. (Phong shading is just per-pixel lighting using interpolated normals.) An interpolated normal vector is in general only an approximation for the geometrically correct normal, but it's usually good enough to give good results. Another issue is that interpolated normals are not necessarily unit vectors, even if the normals in the vertex shader are unit vectors. So, it's important to normalize the interpolated normal vectors in the fragment shader. The original normal vectors in the vertex shader should also be normalized, for the interpolation to work properly.
+
+    The sample program [webgl/basic-specular-lighting-Phong.html](../../../en/source/webgl/basic-specular-lighting-Phong.html) uses per-pixel lighting. I urge you to read the shader source code in that program. Aside from the fact that lighting calculations have been moved to the fragment shader, it is identical to the previous sample program.
+
+    This demo lets you view objects drawn using per-vertex lighting side-by-side with identical objects drawn using per-pixel lighting. It uses the same shader programs as the two sample programs. See the help text in the demo for more information:
+
+    <iframe src="../../../en/demos/c7/per-pixel-vs-per-vertex.html" width="660" height="520"></iframe>
+
+    The sample program [webgl/basic-specular-lighting-Phong-webgl2.html](../../../en/source/webgl/basic-specular-lighting-Phong-webgl2.html) is a port of the original WebGL 1.0 Phong lighting program to WebGL 2.0. It shows what the shader program looks like in GLSL ES 3.00. The changes are minimal. Attribute variables become "in" variables, varying variables become "out" variables in the vertex shader and "in" variables in the fragment shader, and the built-in fragment shader variable gl_FragColor is replaced with a custom "out" variable. The JavaScript side would not have to be changed at all, but as an example, it has been modified to use vertex array objects to organize the data for the various objects that can be drawn in the in program.
+
+7.2.3 增加复杂性
+-------------------------
+
+**Adding Complexity**
+
+.. tab:: 中文
+
+    我们的着色器程序正在变得更加复杂。随着我们增加对多个光源、额外的光属性、双面光照、纹理等特性的支持，使用数据结构和函数来帮助管理复杂性将是有用的。GLSL 数据结构在 [6.3.2小节](../c6/s3.md#632-数据结构) 中介绍，函数定义在 [6.3.5小节](../c6/s3.md#635-函数定义) 中介绍。让我们简要看看它们如何被用来处理光和材质。
+
+    定义一个结构体来保存光的属性是有意义的。这些属性通常至少包括光的位置和颜色。根据应用和使用的光照模型的细节，可以添加其他属性。例如，为了能够打开和关闭光源，可以添加一个*bool*变量来表示光是否启用：
+
+    ```js
+    struct LightProperties {
+        bool enabled;
+        vec4 position;
+        vec3 color;
+    };
+    ```
+
+    然后，可以用*LightProperties*类型的变量来表示光。它很可能是一个*uniform*变量，以便可以在 JavaScript 端指定其值。通常，会有多个光源，由数组表示；例如，允许最多四个光源：
+
+    ```js
+    uniform LightProperties lights[4];
+    ```
+
+    材质属性也可以表示为*struct*。同样，细节会因应用而异。例如，为了允许漫反射和镜面颜色：
+
+    ```js
+    struct MaterialProperties {
+        vec3 diffuseColor;
+        vec3 specularColor;
+        float specularExponent;
+    };
+    ```
+
+    有了这些数据类型，我们可以编写一个函数来帮助进行光照计算。下面的函数计算一个光源对表面上某点颜色的贡献。（其中一些参数可以是着色器程序中的全局变量。）
+
+    ```js
+    vec3 lightingEquation(LightProperties light,       
+                            MaterialProperties material, 
+                            vec3 eyeCoords, // 点的眼睛坐标。
+                            vec3 N, // 表面的法线向量。
+                            vec3 V  // 指向观察者的方向。
+                        ) {
+        vec3 L, R; // 光的方向和反射光的方向。
+        if (light.position.w == 0.0) { // 方向光
+            L = normalize(light.position.xyz);
+        }
+        else { // 点光源
+            L = normalize((light.position.xyz / light.position.w) - eyeCoords);
+        }
+        if (dot(L, N) <= 0.0) { // 光没有照亮表面
+            return vec3(0.0);
+        }
+        vec3 reflection = dot(L, N) * light.color * material.diffuseColor;
+        R = -reflect(L, N);
+        if (dot(R, V) > 0.0) { // 光线反射向观察者
+            float factor = pow(dot(R, V), material.specularExponent);
+            reflection += factor * material.specularColor * light.color;
+        }
+        return reflection;
+    }
+    ```
+
+    然后，假设有四个光源，光照方程的完整计算可能看起来像这样：
+
+    ```js
+    vec3 color = vec3(0.0);  // 从黑色（所有颜色分量为零）开始。
+    for (int i = 0; i < 4; i++) {  // 添加第 i 个光源的贡献。
+        if (lights[i].enabled) { // 只有启用的光才能贡献颜色。
+            color += lightingEquation(lights[i], material,
+                                        eyeCoords, normal, viewDirection);
+        }
+    }
+    ```
+
+.. tab:: 英文
+
+    Our shader programs are getting more complex. As we add support for multiple lights, additional light properties, two-sided lighting, textures, and other features, it will be useful to use data structures and functions to help manage the complexity. GLSL data structures were introduced in [Subsection 6.3.2](../c6/s3.md#632-数据结构), and function definitions in [Subsection 6.3.5](../c6/s3.md#635-函数定义). Let's look briefly at how they can be used to work with light and material.
+
+    It makes sense to define a struct to hold the properties of a light. The properties will usually include, at a minimum, the position and color of the light. Other properties can be added, depending on the application and the details of the lighting model that are used. For example, to make it possible to turn lights on and off, a *bool* variable might be added to say whether the light is enabled:
+
+    ```js
+    struct LightProperties {
+    bool enabled;
+    vec4 position;
+    vec3 color; 
+    };
+    ```
+
+    A light can then be represented as a variable of type *LightProperties*. It will likely be a *uniform* variable so that its value can be specified on the JavaScript side. Often, there will be multiple lights, represented by an array; for example, to allow for up to four lights:
+
+    ```js
+    uniform LightProperties lights[4];
+    ```
+
+    Material properties can also be represented as a *struct*. Again, the details will vary from one application to another. For example, to allow for diffuse and specular color:
+
+    ```js
+    struct MaterialProperties {
+        vec3 diffuseColor;
+        vec3 specularColor;
+        float specularExponent;
+    };
+    ```
+
+    With these data types in hand, we can write a function to help with the lighting calculation. The following function computes the contribution of one light to the color of a point on a surface. (Some of the parameters could be global variables in the shader program instead.)
+
+    ```js
+    vec3 lightingEquation( LightProperties light,       
+                                MaterialProperties material, 
+                                vec3 eyeCoords, // Eye coordinates for the point.
+                                vec3 N, // Normal vector to the surface.
+                                vec3 V  // Direction to viewer.
+                            ) {
+        vec3 L, R; // Light direction and reflected light direction.
+        if ( light.position.w == 0.0 ) { // directional light
+            L = normalize( light.position.xyz );
+        }
+        else { // point light
+            L = normalize( light.position.xyz/light.position.w - eyeCoords );
+        }
+        if (dot(L,N) <= 0.0) { // light does not illuminate the surface
+            return vec3(0.0); 
+        }
+        vec3 reflection = dot(L,N) * light.color * material.diffuseColor;
+        R = -reflect(L,N);
+        if (dot(R,V) > 0.0) { // ray is reflected toward the viewer
+            float factor = pow(dot(R,V),material.specularExponent);
+            reflection += factor * material.specularColor * light.color;
+        }
+        return reflection;
+    }
+    ```
+
+    Then, assuming that there are four lights, the full calculation of the lighting equation might look like this:
+
+    ```js
+    vec3 color = vec3(0.0);  // Start with black (all color components zero).
+    for (int i = 0; i < 4; i++) {  // Add in the contribution from light i.
+        if (lights[i].enabled) { // Light can only contribute color if enabled.
+            color += lightingEquation( lights[i], material,
+                                            eyeCoords, normal, viewDirection );
+        }
+    }
+    ```
+
+7.2.4 两侧照明
+-------------------------
+
+**Two-sided Lighting**
+
+.. tab:: 中文
+
+    示例程序 [webgl/parametric-function-grapher.html](../../../en/source/webgl/parametric-function-grapher.html) 使用了类似于我们刚刚看到的 GLSL 数据结构。它还引入了一些新特性。该程序绘制了一个参数曲面的图形。曲面上点的 *(x,y,z)* 坐标由两个变量 *u* 和 *v* 的函数给出。用户可以输入这些函数的定义。有一个视点光，但为了提供更均匀的照明，额外添加了两个光源。该图形被视为有两个面，分别被涂成黄色和蓝色。程序可以选择性地在表面上显示网格线。这是默认曲面的样子，带有网格线：
+
+    ![123](../../en/c7/parametric-function-webgl.png)
+
+    这是一个双面光照的例子 ([4.2.4小节](../c4/s2.md#424-全局光照属性))。我们需要两种材料，一种用于绘制面向外的多边形的前材料，一种用于绘制面向内的多边形的后材料。此外，在绘制背面时，我们必须反转法线向量的方向，因为法线向量被假定为指向前面。
+
+    但是当着色器程序执行光照计算时，它如何知道它正在绘制前面还是后面呢？这些信息来自着色器程序外部：片段着色器有一个内置的布尔变量名为 *gl_FrontFacing*，如果着色器正在处理多边形的前面，则在调用片段着色器之前，该变量的值被设置为 *true*。当进行逐像素光照时，片段着色器可以检查这个变量的值，以决定在光照方程中使用前材料还是后材料。示例程序有两个 uniform 变量来表示这两种材料。它有三种光源。法线向量和点的眼睛坐标是变化变量。法线变换矩阵也在片段着色器中应用：
+
+    ```js
+    uniform MaterialProperties frontMaterial;
+    uniform MaterialProperties backMaterial;
+    uniform LightProperties lights[3];
+    uniform mat3 normalMatrix;
+    varying vec3 v_normal;
+    varying vec3 v_eyeCoords;
+    ```
+
+    使用这些变量和上面显示的 lightingEquation 函数计算片段的颜色：
+
+    ```js
+    vec3 normal = normalize(normalMatrix * v_normal);
+    vec3 viewDirection = normalize(-v_eyeCoords);
+    vec3 color = vec3(0.0);
+    for (int i = 0; i < 3; i++) {
+        if (lights[i].enabled) {
+            if (gl_FrontFacing) {  // 计算前面的颜色。
+                color += lightingEquation(lights[i], frontMaterial, v_eyeCoords,
+                                            normal, viewDirection);
+            } else {  // 计算后面的颜色。
+                color += lightingEquation(lights[i], backMaterial, v_eyeCoords,
+                                            -normal, viewDirection);
+            }
+        }
+    }
+    gl_FragColor = vec4(color, 1.0);
+    ```
+
+    注意，在对 *lightEquation* 的第二次调用中，法线向量被给出为 *-normal*。负号用于在背面使用时反转法线向量的方向。
+
+    如果你想在进行逐顶点光照时使用双面光照，你必须处理 *gl_FrontFacing* 在顶点着色器中不可用的事实。一个选择是在顶点着色器中计算前颜色和后颜色，并将两个值作为变化变量传递给片段着色器。然后片段着色器可以基于 *gl_FrontFacing* 的值决定使用哪种颜色。
+
+    ----
+
+    WebGL 中有一些设置与双面光照有关。通常，WebGL 根据一个规则来确定三角形的正面，即当正面被观察时，顶点按逆时针顺序列出。JavaScript 命令 *gl.frontFace(gl.CW)* 反转了这个规则，使得当正面被观察时，顶点按顺时针顺序列出。命令 *gl.frontFace(gl.CCW)* 恢复了默认规则。
+
+    在某些情况下，你可以确定没有背面是可见的。当对象是封闭表面且从外部观察，所有三角形都朝向外部时，就会发生这种情况。在这种情况下，绘制背面是浪费努力的，因为你可以放心它们会被前面隐藏。JavaScript 命令 *gl.enable(gl.CULL_FACE)* 告诉 WebGL 根据三角形是面向正面还是背面来决定是否绘制它们。命令 *gl.cullFace(gl.BACK)* 和 *gl.cullFace(gl.FRONT)* 确定在启用 CULL_FACE 时是丢弃背面还是正面的三角形；默认是丢弃背面的三角形。
+
+    ---
+
+    示例程序可以在表面上显示一组网格线。正如我们之前在 [3.4.1小节](../c3/s4.md#341-索引面集) 的末尾和 [5.1.4小节](../c5/s1.md#514-物体几何形状材料) 中看到的那样，绘制两个完全相同深度的对象可能会导致深度测试问题。OpenGL 使用多边形偏移来解决这个问题。WebGL 中也有相同的解决方案。多边形偏移可以通过以下命令开启：
+
+    ```js
+    gl.enable(gl.POLYGON_OFFSET_FILL);
+    gl.polygonOffset(1,1);
+    ```
+
+    并可以通过以下命令关闭：
+
+    ```js
+    gl.disable(gl.POLYGON_OFFSET_FILL);
+    ```
+
+    在示例程序中，在绘制图形时启用了多边形偏移，在绘制网格线时关闭了多边形偏移。
+
+.. tab:: 英文
+
+    The sample program [webgl/parametric-function-grapher.html](../../../en/source/webgl/parametric-function-grapher.html) uses GLSL data structures similar to the ones we have just been looking at. It also introduces a few new features. The program draws the graph of a parametric surface. The *(x,y,z)* coordinates of points on the surface are given by functions of two variables *u* and *v*. The definitions of the functions can be input by the user. There is a viewpoint light, but two extra lights have been added in an attempt to provide more even illumination. The graph is considered to have two sides, which are colored yellow and blue. The program can, optionally, show grid lines on the surface. Here's what the default surface looks like, with grid lines:
+
+    ![123](../../en/c7/parametric-function-webgl.png)
+
+    This is an example of two-sided lighting ([Subsection 4.2.4](../c4/s2.md#424-全局光照属性)). We need two materials, a front material for drawing front-facing polygons and a back material for drawing back-facing polygons. Furthermore, when drawing a back face, we have to reverse the direction of the normal vector, since normal vectors are assumed to point out of the front face.
+
+    But when the shader program does lighting calculations, how does it know whether it's drawing a front face or a back face? That information comes from outside the shader program: The fragment shader has a built-in boolean variable named *gl_FrontFacing* whose value is set to *true* before the fragment shader is called, if the shader is working on the front face of a polygon. When doing per-pixel lighting, the fragment shader can check the value of this variable to decide whether to use the front material or the back material in the lighting equation. The sample program has two uniform variables to represent the two materials. It has three lights. The normal vectors and eye coordinates of the point are varying variables. And the normal transformation matrix is also applied in the fragment shader:
+
+    ```js
+    uniform MaterialProperties frontMaterial;
+    uniform MaterialProperties backMaterial;
+    uniform LightProperties lights[3];
+    uniform mat3 normalMatrix;
+    varying vec3 v_normal;
+    varying vec3 v_eyeCoords;
+    ```
+
+    A color for the fragment is computed using these variables and the lightingEquation function shown above:
+
+    ```js
+    vec3 normal = normalize( normalMatrix * v_normal );
+    vec3 viewDirection = normalize( -v_eyeCoords);
+    vec3 color = vec3(0.0);
+    for (int i = 0; i < 3; i++) {
+        if (lights[i].enabled) {
+            if (gl_FrontFacing) {  // Computing color for a front face.
+                color += lightingEquation( lights[i], frontMaterial, v_eyeCoords,
+                                                normal, viewDirection);
+            }
+            else {  // Computing color for a back face.
+                color += lightingEquation( lights[i], backMaterial, v_eyeCoords,
+                                                -normal, viewDirection);
+            }
+        }
+    }
+    gl_FragColor = vec4(color,1.0);
+    ```
+
+    Note that in the second call to *lightEquation*, the normal vector is given as *−normal*. The negative sign reverses the direction of the normal vector for use on a back face.
+
+    If you want to use two-sided lighting when doing per-vertex lighting, you have to deal with the fact that *gl_FrontFacing* is not available in the vertex shader. One option is to compute both a front color and a back color in the vertex shader and pass both values to the fragment shader as varying variables. The fragment shader can then decide which color to use, based on the value of *gl_FrontFacing*.
+
+    ----
+
+    There are a few WebGL settings related to two-sided lighting. Ordinarily, WebGL determines the front face of a triangle according to the rule that when the front face is viewed, vertices are listed in counterclockwise order around the triangle. The JavaScript command *gl.frontFace(gl.CW)* reverses the rule, so that vertices are listed in clockwise order when the front face is viewed. The command *gl.frontFace(gl.CCW)* restores the default rule.
+
+    In some cases, you can be sure that no back faces are visible. This will happen when the objects are closed surfaces seen from the outside, and all the triangles face towards the outside. In such cases, it is wasted effort to draw back faces, since you can be sure that they will be hidden by front faces. The JavaScript command *gl.enable(gl.CULL_FACE)* tells WebGL to discard triangles without drawing them, based on whether they are front-facing or back-facing. The commands *gl.cullFace(gl.BACK)* and *gl.cullFace(gl.FRONT)* determine whether it is back-facing or front-facing triangles that are discarded when CULL_FACE is enabled; the default is to discard back-facing triangles.
+
+    ----
+
+    The sample program can display a set of grid lines on the surface. As always, drawing two objects at exactly the same depth can cause a problem with the depth test. As we have already seen at the end of [Subsection 3.4.1](../c3/s4.md#341-索引面集) and in [Subsection 5.1.4](../c5/s1.md#514-物体几何形状材料), OpenGL uses polygon offset to solve the problem. The same solution is available in WebGL. Polygon offset can be turned on with the commands
+
+    ```js
+    gl.enable(gl.POLYGON_OFFSET_FILL);
+    gl.polygonOffset(1,1);
+    ```
+
+    and turned off with
+
+    ```js
+    gl.disable(gl.POLYGON_OFFSET_FILL);
+    ```
+
+    In the sample program, polygon offset is turned on while drawing the graph and is turned off while drawing the grid lines.
+
+7.2.5 移动灯
+-------------------------
+
+**Moving Lights**
+
+.. tab:: 中文
+
+    在我们目前的示例中，光源相对于观察者是固定的。但有些光源，比如汽车的前灯，应该随着物体移动。还有些光源，比如路灯，应该保持在世界中相同的位置，但随着视点的变化而在渲染场景中改变位置。
+
+    光照计算是在眼睛坐标系中完成的。当光源的位置以对象坐标或世界坐标给出时，必须通过应用适当的模型视图变换将其转换为眼睛坐标。变换不能在着色器程序中完成，因为着色器程序中的模型视图矩阵代表了正在渲染的对象的变换，而这几乎从来不是光源的变换。解决方案是存储眼睛坐标中光源的位置。也就是说，代表光源位置的着色器的 uniform 变量必须设置为眼睛坐标中的位置。
+
+    对于相对于观察者固定的光源，光源的位置已经用眼睛坐标表示了。例如，用作视点光的点光源的位置是 (0,0,0)，这是观察者在眼睛坐标中的位置。对于这样的光源，适当的模型视图变换是单位矩阵。
+
+    对于在世界坐标中处于固定位置的光源，适当的模型视图变换是观察变换。必须将观察变换应用于世界坐标的光源位置，以将其转换为眼睛坐标。在 WebGL 中，应该在 JavaScript 端应用变换，并将变换的输出发送到着色器程序中代表眼睛坐标中光源位置的 uniform 变量。同样，对于在世界中移动的光源，应该在 JavaScript 端将组合的建模和观察变换应用于光源位置。*glMatrix* 库 ([7.1.2小节](./s1.md#712-glmatrix简介)) 定义了函数
+
+    ```js
+    vec4.transformMat4( transformedVector, originalVector, matrix );
+    ```
+
+    可以用来执行变换。函数调用中的 *matrix* 将是模型视图变换矩阵。顺便回忆一下，光源位置是以 *vec4* 的形式给出的，使用齐次坐标。（见 [4.2.3小节](../c4/s2.md#423-应用灯光)。）乘以模型视图矩阵将适用于任何光源，无论方向光还是点光源，只要以这种方式表示其位置。以下是一个可以用来设置位置的 JavaScript 函数：
+
+    ```js
+    /* 设置眼睛坐标中光源的位置。
+    * @param u_position_loc 光源位置属性的 uniform 变量位置。
+    * @param modelview 将光源位置转换为眼睛坐标的模型视图矩阵。
+    * @param lightPosition 光源的位置，以对象坐标表示（一个 vec4）。
+    */
+    function setLightPosition( u_position_loc, modelview, lightPosition ) {
+        let transformedPosition = new Float32Array(4);
+        vec4.transformMat4( transformedPosition, lightPosition, modelview );
+        gl.uniform4fv( u_position_loc, transformedPosition );
+    }
+    ```
+
+    对于相对于观察者固定的光源，适当的 *modelview* 矩阵是单位矩阵；对于在世界中有固定位置的光源，只是观察变换；或者对于在世界中移动的光源，是组合的观察和建模变换。
+
+    记住，光源位置和其他光源属性一样，必须在渲染任何要被光源照亮的几何体之前设置。
+
+.. tab:: 英文
+
+    In our examples so far, lights have been fixed with respect to the viewer. But some lights, such as the headlights on a car, should move along with an object. And some, such as a street light, should stay in the same position in the world, but change position in the rendered scene as the point of view changes.
+
+    Lighting calculations are done in eye coordinates. When the position of a light is given in object coordinates or in world coordinates, the position must be transformed to eye coordinates, by applying the appropriate modelview transformation. The transformation can't be done in the shader program, because the modelview matrix in the shader program represents the transformation for the object that is being rendered, and that is almost never the same as the transformation for the light. The solution is to store the light position in eye coordinates. That is, the shader's uniform variable that represents the position of the light must be set to the position in eye coordinates.
+
+    For a light that is fixed with respect to the viewer, the position of the light is already expressed in eye coordinates. For example, the position of a point light that is used as a viewpoint light is (0,0,0), which is the location of the viewer in eye coordinates. For such a light, the appropriate modelview transformation is the identity.
+
+    For a light that is at a fixed position in world coordinates, the appropriate modelview transformation is the viewing transformation. The viewing transformation must be applied to the world-coordinate light position to transform it to eye coordinates. In WebGL, the transformation should be applied on the JavaScript side, and the output of the transformation should be sent to the uniform variable in the shader program that represents the light position in eye coordinates. Similarly, for a light that moves around in the world, the combined modeling and viewing transform should be applied to the light position on the JavaScript side. The *glMatrix* library ([Subsection 7.1.2](./s1.md#712-glmatrix简介)) defines the function
+
+    ```js
+    vec4.transformMat4( transformedVector, originalVector, matrix );
+    ```
+
+    which can be used to do the transformation. The *matrix* in the function call will be the modelview transformation matrix. Recall, by the way, that light position is given as a *vec4*, using homogeneous coordinates. (See [Subsection 4.2.3](../c4/s2.md#423-应用灯光).) Multiplication by the modelview matrix will work for any light, whether directional or point, whose position is represented in this way. Here is a JavaScript function that can be used to set the position:
+
+    ```js
+    /* Set the position of a light, in eye coordinates.
+    * @param u_position_loc The uniform variable location for 
+    *                       the position property of the light.
+    * @param modelview The modelview matrix that transforms light 
+    *                  position to eye coordinates.
+    * @param lightPosition The location of the light, in object 
+    *                      coordinates (a vec4).
+    */
+    function setLightPosition( u_position_loc, modelview, lightPosition ) {
+        let transformedPosition = new Float32Array(4);
+        vec4.transformMat4( transformedPosition, lightPosition, modelview );
+        gl.uniform4fv( u_position_loc, transformedPosition );
+    }
+    ```
+
+    The appropriate *modelview* matrix is the identity, for a light fixed with respect to the viewer; just the viewing transformation, for a light that has a fixed position in the world; or a combined viewing and modeling transformation, for a light that moves around in the world.
+
+    Remember that the light position, like other light properties, must be set before rendering any geometry that is to be illuminated by the light.
+
+7.2.6 聚光灯
+-------------------------
+
+**Spotlights**
+
+.. tab:: 中文
+
+    我们在 *three.js* 中的 [5.1.5小节](../c5/s1.md#515-灯光) 遇到了聚光灯。实际上，尽管我没有提到，聚光灯在 OpenGL 1.1 中已经存在。与四面八方发射光线不同，聚光灯只发射一个光锥。聚光灯是一种点光源。光锥的顶点位于光源的位置。光锥指向某个方向，称为 *聚光方向*。聚光方向被指定为一个向量。光锥的大小由一个截止角指定；只有与聚光方向的角度小于截止角的方向才会发射光线。此外，对于小于截止角的角度，随着光线与聚光方向之间角度的增加，光线的强度可以减小。强度减小的速率由一个非负数决定，称为 *聚光指数*。光线的强度由 <i>I*c^s</i> 给出，其中 I 是光的基本强度，c 是光线与聚光方向之间角度的余弦值，s 是聚光指数。
+
+    这张图示显示了三个聚光灯照射在表面上；图像取自示例程序 [webgl/spotlights.html](../../../en/source/webgl/spotlights.html)：
+
+    ![123](../../../en/c7/spotlights.png)
+
+    三个聚光灯的截止角为30度。在左侧的图像中，聚光指数为零，这意味着随着与聚光方向角度的增加，强度没有衰减。中间的图像聚光指数为10，右侧的图像为20。
+
+    假设我们想要将光照方程应用于聚光灯。考虑表面上的一个点 **P**。光照方程使用一个单位向量，*L*，从 **P** 指向光源。对于聚光灯，我们需要一个从光源指向 **P** 的向量；我们可以使用 *−L*。考虑 *−L* 与聚光方向之间的角度。如果该角度大于截止角，则 **P** 从聚光灯那里得不到任何照明。否则，我们可以将 *−L* 与聚光方向之间角度的余弦作为点积 *−D·L* 来计算，其中 D 是指向聚光方向的单位向量。
+
+    ![123](../../en/c7/spotlight-light-equation.png)
+
+    要在 GLSL 中实现聚光灯，我们可以添加 uniform 变量来表示聚光方向、截止角和聚光指数。我的实现实际上使用截止角的余弦而不是角度本身，因为我可以这样使用点积 *−D·L* 来比较截止值，它代表了光线与聚光方向之间角度的余弦。LightProperties 结构变为：
+
+    ```js
+    struct LightProperties {
+        bool enabled;
+        vec4 position;
+        vec3 color;
+        vec3 spotDirection;  
+        float spotCosineCutoff; 
+        float spotExponent;
+    };
+    ```
+
+    如果 *position.z* 为零，则光是方向光，不能是聚光灯。对于点光源，如果 *spotCosineCutoff* 小于或等于零，则光是常规点光源，不是聚光灯。对于聚光灯，我们需要计算在表面上一个点的聚光灯的有效光强度的 c^e 因子。以下是来自示例程序片段着色器的计算代码。对于聚光灯，c^e 的值被赋给 spotFactor：
+
+    ```js
+    float spotFactor = 1.0;  // 用于考虑聚光灯的乘数
+    if ( light.position.w == 0.0 ) {
+        L = normalize( light.position.xyz );
+    }
+    else {
+        L = normalize( light.position.xyz/light.position.w - v_eyeCoords );
+        if (light.spotCosineCutoff > 0.0) { // 光是聚光灯
+            vec3 D = -normalize(light.spotDirection);
+            float spotCosine = dot(D,L);
+            if (spotCosine >= light.spotCosineCutoff) { 
+                spotFactor = pow(spotCosine,light.spotExponent);
+            }
+            else { // 该点在聚光灯的光锥之外
+                spotFactor = 0.0; // 光将不会给该点添加任何颜色
+            }
+        }
+    }
+    // 光强度将乘以 spotFactor
+    ```
+
+    你应该尝试 [示例程序](../../../en/source/webgl/spotlights.html)，并阅读源代码。或者尝试这个演示，它与示例程序类似，但增加了使聚光灯动画化的选项：
+
+    <iframe src="../../../en/demos/c7/spotlight-demo.html" width="710" height="400"></iframe>
+
+    ----
+
+    `spotDirection` 这个 uniform 变量给出了聚光灯在眼睛坐标中的方向。对于移动的聚光灯，除了变换位置之外，我们还必须考虑变换聚光灯面对的方向。聚光方向是一个向量，它的变换方式与法线向量相同。也就是说，用于变换法线向量的相同的法线变换矩阵也用于变换聚光方向。以下是一个 JavaScript 函数，可以用来将模型视图变换应用于聚光方向向量，并将输出发送到着色器程序：
+
+    ```js
+    /* 设置聚光灯的方向向量，以眼睛坐标表示。
+    * @param modelview 执行对象到眼睛坐标变换的矩阵
+    * @param u_direction_loc 聚光方向的 uniform 变量位置
+    * @param lightDirection 聚光灯在对象坐标中的方向（一个 vec3）
+    */
+    function setSpotlightDirection(u_direction_loc, modelview, lightDirection) {
+        let normalMatrix = mat3.create();
+        mat3.normalFromMat4(normalMatrix, modelview);
+        let transformedDirection = new Float32Array(3);
+        vec3.transformMat3(transformedDirection, lightDirection, normalMatrix);
+        gl.uniform3fv(u_direction_loc, transformedDirection);
+    }
+    ```
+
+    当然，聚光灯的位置也必须像任何移动的光源一样进行变换。
+
+.. tab:: 英文
+
+    We encountered spotlights in *three.js* in [Subsection 5.1.5](../c5/s1.md#515-灯光). In fact, although I didn't mention it, spotlights already existed in OpenGL 1.1. Instead of emitting light in all directions, a spotlight emits only a cone of light. A spotlight is a kind of point light. The vertex of the cone is located at the position of the light. The cone points in some direction, called the *spot direction*. The spot direction is specified as a vector. The size of the cone is specified by a cutoff angle; light is only emitted from the light position in directions whose angle with the spot direction is less than the cutoff angle. Furthermore, for angles less than the cutoff angle, the intensity of the light ray can decrease as the angle between the ray and spot direction increases. The rate at which the intensity decreases is determined by a non-negative number called the *spot exponent*. The intensity of the ray is given by <i>I\*c<sup>s</sup></i> where I is the basic intensity of the light, c is the cosine of the angle between the ray and the spot direction, and s is the spot exponent.
+
+    This illustration shows three spotlights shining on a surface; the images are taken from the sample program [webgl/spotlights.html](../../../en/source/webgl/spotlights.html):
+
+    ![123](../../../en/c7/spotlights.png)
+
+    The cutoff angle for the three spotlights is 30 degrees. In the image on the left, the spot exponent is zero, which means there is no falloff in intensity with increasing angle from the spot direction. For the middle image, the spot exponent is 10, and for the image on the right, it is 20.
+
+    Suppose that we want to apply the lighting equation to a spotlight. Consider a point **P** on a surface. The lighting equation uses a unit vector, *L*, that points from **P** towards the light source. For a spotlight, we need a vector that points from the light source towards **P**; for that we can use *−L*. Consider the angle between *−L* and the spot direction. If that angle is greater than the cutoff angle, then **P** gets no illumination from the spotlight. Otherwise, we can compute the cosine of the angle between *−L* and the spot direction as the dot product *−D·L*, where D is a unit vector that points in the spot direction.
+
+    ![123](../../en/c7/spotlight-light-equation.png)
+
+    To implement spotlights in GLSL, we can add uniform variables to represent the spot direction, cutoff angle, and spot exponent. My implementation actually uses the cosine of the cutoff angle instead of the angle itself, since I can then compare the cutoff value using the dot product, *−D·L*, that represents the cosine of the angle between the light ray and the spot direction. The LightProperties struct becomes:
+
+    ```js
+    struct LightProperties {
+        bool enabled;
+        vec4 position;
+        vec3 color;
+        vec3 spotDirection;  
+        float spotCosineCutoff; 
+        float spotExponent;
+    };
+    ```
+
+    If *position.z* is zero, then the light is directional and cannot be a spotlight. For a point light, if *spotCosineCutoff* is less than or equal to zero, then the light is a regular point light, not a spotlight. For a spotlight, we need to compute the factor c<sup>e</sup> that is multiplied by the basic light color to give the effective light intensity of the spotlight at a point on a surface. The following code for the computation is from the fragment shader in the sample program. For a spotlight, the value of c<sup>e</sup> is assigned to spotFactor:
+
+    ```js
+    float spotFactor = 1.0;  // multiplier to account for spotlight
+    if ( light.position.w == 0.0 ) {
+        L = normalize( light.position.xyz );
+    }
+    else {
+        L = normalize( light.position.xyz/light.position.w - v_eyeCoords );
+        if (light.spotCosineCutoff > 0.0) { // the light is a spotlight
+            vec3 D = -normalize(light.spotDirection);
+            float spotCosine = dot(D,L);
+            if (spotCosine >= light.spotCosineCutoff) { 
+                spotFactor = pow(spotCosine,light.spotExponent);
+            }
+            else { // The point is outside the cone of light from the spotlight.
+                spotFactor = 0.0; // The light will add no color to the point.
+            }
+        }
+    }
+    // Light intensity will be multiplied by spotFactor
+    ```
+
+    You should try the [sample program](../../../en/source/webgl/spotlights.html), and read the source code. Or try this demo, which is similar to the sample program, but with an added option to animate the spotlights:
+
+    <iframe src="../../../en/demos/c7/spotlight-demo.html" width="710" height="400"></iframe>
+
+    ----
+
+    The *spotDirection* uniform variable gives the direction of the spotlight in eye coordinates. For a moving spotlight, in addition to transforming the position, we also have to worry about transforming the direction in which the spotlight is facing. The spot direction is a vector, and it transforms in the same way as normal vectors. That is, the same normal transformation matrix that is used to transform normal vectors is also used to transform the spot direction. Here is a JavaScript function that can be used to apply a modelview transformation to a spot direction vector and send the output to the shader program:
+
+    ```js
+    /* Set the direction vector of a light, in eye coordinates.
+    * @param modelview the matrix that does object-to-eye coordinate transforms
+    * @param u_direction_loc the uniform variable location for the spotDirection
+    * @param lightDirection the spot direction in object coordinates (a vec3)
+    */
+    function setSpotlightDirection( u_direction_loc, modelview, lightDirection ) {
+        let normalMatrix = mat3.create();
+        mat3.normalFromMat4( normalMatrix,modelview );
+        let transformedDirection = new Float32Array(3);
+        vec3.transformMat3( transformedDirection, lightDirection, normalMatrix );
+        gl.uniform3fv( u_direction_loc, transformedDirection );
+    }
+    ```
+
+    Of course, the position of the spotlight also has to be transformed, as for any moving light.
+
+7.2.7 光衰减
+-------------------------
+
+**Light Attenuation**
+
+.. tab:: 中文
+
+    光线还有一个要考虑的一般属性：衰减。这指的是随着距离光源的增加，光源的照明量应该减少。衰减只适用于点光源，因为方向光实际上在无限远的地方。根据物理学，正确的行为是照明量与距离的平方成反比。然而，这在计算机图形学中通常不会得到好的结果。实际上，到目前为止，我所有的光源都没有随距离而衰减。
+
+    OpenGL 1.1 支持衰减。光强度可以乘以 1.0 / *(a+b*d+c*d^2)*，其中 d 是到光源的距离，a、b 和 c 是光的属性。数字 a、b 和 c 分别称为光源的“常数衰减”、“线性衰减”和“二次衰减”。默认情况下，a 是 1，b 和 c 是 0，这意味着没有衰减。
+
+    当然，在你的应用程序中没有必要实现完全相同的模型。例如，很少使用二次衰减。在下一个示例程序中，我使用公式 1 / *(1+a*d)* 作为衰减因子。衰减常数 a 被添加为光源的另一个属性。值为零意味着没有衰减。在光照计算中，光源对光照方程的贡献会乘以光的衰减因子。
+
+.. tab:: 英文
+
+    There is one more general property of light to consider: attenuation. This refers to the fact that the amount of illumination from a light source should decrease with increasing distance from the light. Attenuation applies only to point lights, since directional lights are effectively at infinite distance. The correct behavior, according to physics, is that the illumination is proportional to one over the square of the distance. However, that doesn't usually give good results in computer graphics. In fact, for all of my light sources so far, there has been **no** attenuation with distance.
+
+    OpenGL 1.1 supports attenuation. The light intensity can be multiplied by 1.0 / *(a+b\*d+c\*d2)*, where d is the distance to the light source, and a, b, and c are properties of the light. The numbers a, b, and c are called the "constant attenuation," "linear attenuation," and "quadratic attenuation" of the light source. By default, a is one, and b and c are zero, which means that there is no attenuation.
+
+    Of course, there is no need to implement exactly the same model in your own applications. For example, quadratic attenuation is rarely used. In the next sample program, I use the formula 1 / *(1+a\*d)* for the attenuation factor. The attenuation constant a is added as another property of light sources. A value of zero means no attenuation. In the lighting computation, the contribution of a light source to the lighting equation is multiplied by the attenuation factor for the light.
+
+7.2.8 磁盘世界2
+-------------------------
+
+**Diskworld 2**
+
+.. tab:: 中文
+
+    示例程序 [webgl/diskworld-2.html](../../../en/source/webgl/diskworld-2.html) 是我们在 WebGL 中关于光照的最终、更复杂的例子。基本场景与 [Subsection 5.1.6](../c5/s1.md#516-建模示例) 中的 *three.js* 示例 [threejs/diskworld-1.html](../../../en/source/threejs/diskworld-1.html) 相同，但我增加了几种光照效果。
+
+    场景显示了一辆红色的“车”在“世界”的边缘，这个世界是圆盘形的。在新版本中，有一个围绕世界旋转的“太阳”。在夜晚，当太阳在圆盘下面时，太阳被关闭了（因为没有阴影，如果夜晚太阳还亮着，它会从圆盘下照射上来，从下面照亮物体）。到了夜晚，汽车的前灯会打开。它们被实现为聚光灯，随着汽车一起移动；也就是说，它们受到与汽车相同的模型视图变换的影响。到了夜晚，世界中心的一盏灯也会打开。这盏灯使用了光衰减，所以除了靠近灯的物体外，它的照明很弱。最后，还有一种微弱的视点光总是亮着，以确保没有任何东西处于绝对黑暗中。下面是程序中的一个夜景，你可以看到前灯如何照亮道路和树木，你可能也能看到靠近灯的地方灯的照明更强：
+
+    ![123](../../en/c7/diskworld2.png)
+
+    但你应该运行程序来亲眼看看！并阅读源代码来了解它是如何实现的。
+
+    ---
+
+    我的 diskworld 示例使用了逐像素光照，这比逐顶点光照得到了更好的结果，特别是对于聚光灯。然而，有了多个光源、聚光灯和衰减，逐像素光照需要在片段着色器中使用大量的 uniform 变量——可能超过了一些实现所支持的数量。对于教科书中的示例程序来说，这并不严重，也不大可能在现代 GPU 上出现；这只是意味着这个示例有可能在某些设备上的某些浏览器中无法工作。但对于更严肃的应用程序，使用更复杂的光照，人们会希望有替代的方法，希望比简单地将计算移动到顶点着色器更好。一个选择是使用多遍算法，其中场景被渲染多次，每次通过都为较少数量的光源进行光照计算。参见 [7.5.4小节](./s5.md#754-延迟着色)，了解一种可以高效实现这个想法的技术。
+
+.. tab:: 英文
+
+    The sample program [webgl/diskworld-2.html](../../../en/source/webgl/diskworld-2.html) is our final, more complex, example of lighting in WebGL. The basic scene is the same as the *three.js* example [threejs/diskworld-1.html](../../../en/source/threejs/diskworld-1.html) from [Subsection 5.1.6](../c5/s1.md#516-建模示例), but I have added several lighting effects.
+
+    The scene shows a red "car" traveling around the edge of a disk-shaped "world." In the new version, there is a sun that rotates around the world. The sun is turned off at night, when the sun is below the disk. (Since there are no shadows, if the sun were left on at night, it would shine up through the disk and illuminate objects from below.) At night, the headlights of the car turn on. They are implemented as spotlights that travel along with the car; that is, they are subject to the same modelview transformation that is used on the car. Also at night, a lamp in the center of the world is turned on. Light attenuation is used for the lamp, so that its illumination is weak except for objects that are close to the lamp. Finally, there is dim viewpoint light that is always on, to make sure that nothing is ever in absolute darkness. Here is a night scene from the program, in which you can see how the headlights illuminate the road and the trees, and you can probably see that the illumination from the lamp is stronger closer to the lamp:
+
+    ![123](../../en/c7/diskworld2.png)
+
+    But you should run the program to see it in action! And read the source code to see how it's done.
+
+    ----
+
+    My diskworld example uses per-pixel lighting, which gives much better results than per-vertex lighting, especially for spotlights. However, with multiple lights, spotlights, and attenuation, per-pixel lighting requires a lot of uniform variables in the fragment shader — possibly more than are supported in some implementations. (See [Subsection 6.3.7](../c6/s3.md#637-限制) for information about limitations in shader programs.) That's not really serious for a sample program in a textbook and not really likely on modern GPUs; it just means that there is some possibility that the example won't work in some browsers on some devices. But for more serious applications, using even more complex lighting, an alternative approach would be desirable, hopefully better than simply moving the calculation to the vertex shader. One option is to use a multi-pass algorithm in which the scene is rendered several times, with each pass doing the lighting calculation for a smaller number of lights. See [Subsection 7.5.4](./s5.md#754-延迟着色) for a technique that can be used to implement this idea efficiently.

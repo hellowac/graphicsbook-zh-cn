@@ -1,4 +1,7 @@
-# A.1  [Java 编程语言](./a1/s1.md)
+.. _a.1:
+
+A.1 Java 编程语言
+====================================
 
 **A.1  The Java Programming Language**
 
@@ -19,7 +22,8 @@
 
     Java has had several 2D graphics APIs: AWT, Swing, and JavaFX. Swing is built on top of the AWT, while JavaFX is a completely new API. JavaFX is not used in this textbook, but you will see references here both to Swing and to the AWT.
 
-## A.1.1  基本语言结构
+A.1.1  基本语言结构
+-------------------------
 
 **A.1.1  Basic Language Structure**
 
@@ -241,7 +245,8 @@
 
     There is also a formatted output method, `System.out.printf`, which is similar to C's printf function.
 
-## A.1.2  对象和数据结构
+A.1.2  对象和数据结构
+-------------------------
 
 **A.1.2  Objects and Data Structures**
 
@@ -411,7 +416,8 @@
 
     (The for loop in this class is one that is specific to Java. It iterates automatically through all of the objects in the list.)
 
-## A.1.3  窗口和事件
+A.1.3  窗口和事件
+-------------------------
 
 **A.1.3  Windows and Events**
 

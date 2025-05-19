@@ -1,4 +1,7 @@
-# A.2  [C 编程语言](./a1/s2.md)
+.. _a.2:
+
+A.2 C 编程语言
+====================================
 
 **Section A.2  The C Programming Language**
 
@@ -17,7 +20,8 @@
 
     My own experience with C is mostly limited to using it on Linux, where I can use the gcc command to compile C programs. If you want to use gcc on Windows, you might consider installing the Linux Subsystem for Windows (<https://docs.microsoft.com/en-us/windows/wsl/>) or Cygwin (<https://cygwin.com/>). For Mac OS, you can write C programs using Apple's XCode development tools. Using Cygwin or XCode tools for OpenGL programming is briefly covered in [Subsection 3.6.1](../c3/s6.md#361-使用glut).
 
-## A.2.1  语言基础知识
+A.2.1  语言基础知识
+-------------------------
 
 **A.2.1  Language Basics**
 
@@ -190,7 +194,8 @@
 
     Control structures in C are similar to those in Java and JavaScript, with a few exceptions. The switch statement in C works only with integer or character values. There is no try..catch statement. Depending on your C compiler, you might not be able to declare variables in for loops, as in *for* (int i =.... The original version of C had only one type of comment, starting with /* and ending with */. Modern C also allows single line comments starting with `//`, so your compiler should accept comments of either form.
 
-## A.2.2  指针和数组
+A.2.2  指针和数组
+-------------------------
 
 **A.2.2  Pointers and Arrays**
 
@@ -381,7 +386,8 @@
 
     By the way, I can now explain the parameters to the main() routine, int argc and char `**argv`. The parameter argv of type `char**` is an array of strings (one \* to mean array and one \* to mean string). This array holds the command that was used to run the program, with `argv[0]` holding the name of the program and the rest of the array holding any command line arguments. The value of the first parameter, argc, is the length of the array.
 
-## A.2.3  数据结构
+A.2.3  数据结构
+-------------------------
 
 **A.2.3  Data Structures**
 

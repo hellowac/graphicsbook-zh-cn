@@ -1,6 +1,6 @@
 :hide-toc:
 
-第 3 节 硬件与软件
+1.3 硬件与软件
 ======================
 
 **Hardware and Software**

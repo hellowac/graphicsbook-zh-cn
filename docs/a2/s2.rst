@@ -1,4 +1,7 @@
-# B.2 节  [Blender 建模](./a2/s2.md)
+.. _b.2:
+
+B.2 Blender 建模
+====================================
 
 **Section B.2  Blender Modeling**
 
@@ -10,7 +13,8 @@
 
     Blender has a wide variety of basic shapes and tools for making more complex objects. This section will discuss just a few of the possibilities for modeling 3D shapes.
 
-## B.2.1  文本
+B.2.1 文本
+-------------------------
 
 **B.2.1  Text**
 
@@ -53,7 +57,8 @@
 
 
 
-## B.2.2  曲线
+B.2.2 曲线
+-------------------------
 
 **B.2.2  Curves**
 
@@ -102,7 +107,8 @@
 
     It's possible to transform a Text object into a curve. Just select the text object, right-click to get a pop-up menu, and select "Curve" from the "Convert To" submenu of the popup menu. (Note, however, that you won't be able convert the curve back to a text object.) Once you've converted the text into a curve, you can edit the character outlines as curves. Furthermore, you can add other curve segments to the text curve. For the left object in the above picture, I created the text, converted it to a curve, put it into Edit Mode, added a Bezier circle, and manipulated the vertices of the circle so that the circle surrounded the text. The inside of the text was effectively subtracted from the interior of the circle.
 
-## B.2.3  比例编辑
+B.2.3 比例编辑
+-------------------------
 
 **B.2.3  Proportional Editing**
 
@@ -141,7 +147,8 @@
 
 
 
-## B.2.4  拉伸网格
+B.2.4 拉伸网格
+-------------------------
 
 **B.2.4  Extruding Meshes**
 
@@ -166,7 +173,8 @@
 
     ![123](../../en/a2/blender-extrude.jpg)
 
-## B.2.5  网格修改器
+B.2.5 网格修改器
+-------------------------
 
 **B.2.5  Mesh Modifiers**
 

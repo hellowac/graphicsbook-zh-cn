@@ -1,4 +1,7 @@
-# A.3  [JavaScript 编程语言](./a1/s3.md)
+.. _a.3:
+
+A.3 JavaScript 编程语言
+====================================
 
 **Section A.3  The JavaScript Programming Language**
 
@@ -19,7 +22,8 @@
 
     This page is a short overview of JavaScript. If you really want to learn JavaScript in detail, you might consider the book JavaScript: The Definitive Guide, seventh edition, by David Flanagan.
 
-## A.3.1  核心语言
+A.3.1  核心语言
+-------------------------
 
 **A.3.1  The Core Language**
 
@@ -403,7 +407,8 @@
 
     In C, functions can be assigned to variables and passed as parameters to functions. However, there are no anonymous functions in C. Something similar to arrow functions has been added to Java in the form of "lambda expressions."
 
-## A.3.2  数组和对象
+A.3.2  数组和对象
+-------------------------
 
 **A.3.2  Arrays and Objects**
 
@@ -736,7 +741,8 @@
 
     The properties of the prototype are shared by all objects of type ***Point2D***. In this case, there is a single copy of move in the prototype, which is used by all such objects. The result is then a ***Point2D*** class that is essentially the same as the class defined using the class keyword.
 
-## A.3.3  网页上的 JavaScript
+A.3.3  网页上的 JavaScript
+-------------------------
 
 **A.3.3  JavaScript on Web Pages**
 
@@ -917,7 +923,8 @@
 
 .. tab:: 英文
 
-## A.3.4  与页面交互
+A.3.4  与页面交互
+-------------------------
 
 **A.3.4  Interacting with the Page**
 

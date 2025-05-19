@@ -1,8 +1,8 @@
 .. _appendx C:
 .. _a3:
 
-**附录 C：** 用于 2D 图形的 Gimp 和 Inkscape
-==============================================================
+附录 C 用于2D图形的Gimp和Inkscape
+=========================================
 
 **Gimp and Inkscape for 2D Graphics**
 
@@ -14,6 +14,14 @@
 
     当我教授计算机图形学时，我经常包括一些关于 Gimp 和 Inkscape 的实验室课程。这个附录中的材料就是从这些实验室课程中改编而来的。虽然 Gimp 和 Inkscape 并不完全等同于商业程序 Photoshop 和 Illustrator，但它们是免费的，可以用于严肃的图形项目，而且它们拥有的功能远超过几个实验室所能覆盖的。
 
+    .. toctree::
+       :maxdepth: 1
+       :caption: 附录C内容
+
+       s1.rst
+       s2.rst
+
+..
     附录 C 的内容：
 
     - 第 1 节：[Gimp：一个二维绘画程序](./s1.md)

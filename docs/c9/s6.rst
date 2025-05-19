@@ -1,0 +1,597 @@
+.. _c9.6:
+
+9.6 计算着色器
+=================
+
+**Compute Shaders**
+
+.. tab:: 中文
+
+    WebGL 和 WebGPU 之间的一个主要区别是增加了计算着色器。计算着色器执行的是一种纯粹的计算任务，它不是图像渲染任务的直接部分（尽管它产生的结果可以用于后续的渲染）。虽然顶点和片段着色器在渲染管线中使用，但计算着色器只能在另一种类型的管线中使用，称为计算管线。本节讨论了如何创建和使用计算着色器和计算管线。
+
+.. tab:: 英文
+
+    One of the major differences between WebGL and WebGPU is the addition of compute shaders. A compute shader performs a purely computational task that is not directly a part of an image rendering task (although it can produce results that will be used later for rendering). While vertex and fragment shaders are used in a render pipeline, compute shaders can only be used in another type of pipeline, called a compute pipeline. This section discusses how to create and use compute shaders and compute pipelines.
+
+9.6.1 工作组和调度
+-------------------------
+
+**Workgroups and Dispatches**
+
+.. tab:: 中文
+
+    在图像渲染中，`draw()` 或 `drawIndexed()` 函数在渲染通道编码器中被用来启动渲染管线的处理过程。这个处理过程涉及多次调用顶点着色器入口点函数，然后多次调用片段着色器入口点。对于计算管线，使用计算通道编码器，并通过调用 `dispatchWorkgroups()` 函数来启动处理。我将在下一个子节中讨论 JavaScript 和 WGSL 代码，但在此之前，你需要对工作组以及调度它们的基本概念有所了解。
+
+    计算着色器执行的工作被认为是一维、二维或三维的。这是一种基于被处理数据结构的工作组织方式。与图像相关的工作很可能是二维的。处理数组的工作可能是一维的。因此，计算着色器的调用在逻辑上被安排在一个一维、二维或三维的网格中。每个调用都有一个“全局调用 ID”，由一个、两个或三个整数组成，表示其在网格中的位置。
+
+    事情变得复杂的地方在于，调用被分成更小的组，称为工作组。同一工作组中的调用可以更紧密地协同工作。例如，有一个工作组地址空间，包含同一工作组中的调用共享的数据，但对其他工作组的调用不可见。工作组中的调用也按照与整体工作相同的维度排列在一个网格中。每个调用都有一个“本地调用 ID”，表示其在工作组中的位置。工作组本身有一个大小，由一个、两个或三个整数组成，表示其在每个维度的大小。所有工作组的大小都是相同的。二维工作的调用可以这样想象：
+
+    ![123](../../en/c9/gpu-workgroups.png)
+
+    小黄方格是计算着色器的单独调用。工作组大小为 (4,4)，所以每个工作组由一个 4x4 的网格组成。调用的本地调用 ID 是一个介于 0 到 3 之间的数字对。工作组以 4x3 的网格形式组织。全局调用 ID 是一个 (x,y) 对，其中 x 的范围是 0 到 15，y 的范围是 0 到 11。
+
+    工作的调用结构由两件事决定：WGSL 源代码中指定的单个工作组的大小，以及在 JavaScript 端的 `dispatchWorkgroups()` 调用中指定的整体工作网格每个维度的工作组数量。对于图中所示的例子，工作组大小为 (4,4)，工作将通过调用 `dispatchWorkgroups(4,3)` 来创建。
+
+    工作组内的调用次数限制为 256。允许小至单个调用的工作组。然而，通常建议在大多数情况下将 64 作为合理的工作组大小，我在大多数示例中使用这个值。
+
+    （你可能会想知道为什么工作组应该存在。这与 GPU 的物理结构有关。典型 GPU 中的处理单元被物理上分成小组。小组中的处理器不是独立的；它们都运行相同的代码，并共享一些它们可以快速访问的本地内存。使用小于 GPU 上处理器小组物理大小的 WebGPU 工作组大小可能会导致小组中的一些处理器无事可做。通过利用 GPU 的物理结构，可以优化某些程序的性能。然而，我怀疑这种优化真的需要针对特定的 GPU 结构进行调整。对于旨在在多个平台上运行的 WebGPU 程序，我不确定可以进行多少优化。无论如何，这种优化超出了我的专业范围，我的示例中没有以重大方式使用工作组。）
+
+
+.. tab:: 英文
+
+    For image rendering, the `draw()` or `drawIndexed()` function is used in a render pass encoder to start processing of a render pipeline. The processing involves multiple invocations of the vertex shader entry-point function and then multiple invocations of the fragment shader entry-point. For a compute pipeline, a compute pass encoder is used, and processing is started with a call to the function `dispatchWorkgroups()`. I will discuss the JavaScript and WGSL code in the next subsection, but before that, you need to have some basic understanding of workgroups and what it means to dispatch them.
+
+    The job performed by a compute shader is thought of as one-, two-, or three-dimensional. This is a way to organize the work, based on the structure of the data that is processed. A job that works with an image is likely to be two-dimensional. A job that processes an array is likely to be one-dimensional. So, the invocations of a compute shader are arranged logically in a one-, two-, or three-dimension grid. Each invocation has a "global invocation ID," consisting of one, two, or three integers that give its position in the grid.
+
+    To complicate things, the invocations are broken into smaller groups called workgroups. Invocations in the same workgroup can work more closely together. For example, there is a workgroup address space that contains data shared by invocations in the same workgroup but not visible to invocations in other workgroups. The invocations in a workgroup are arranged in a grid with the same dimension as the overall job. Every invocation has a "local invocation ID" that gives its position in its workgroup. The workgroup as a whole has a size, consisting of one, two, or three integers giving its size in each dimension. All workgroups in a job have the same size. The invocations for a 2D job can be visualized something like this:
+
+    ![123](../../en/c9/gpu-workgroups.png)
+
+    The tiny yellow squares are individual invocations of the compute shader. The workgroup size is (4,4), so each workgroup consists of a 4-by-4 grid. The local invocation ID of an invocation is a pair of numbers in the range 0 to 3. The workgroups are organized in a 4-by-3 grid. The global invocation ID is a pair (x,y) where x is in the range 0 to 15 and y is the range 0 to 11.
+
+    The structure of the invocations for a job is determined by two things: The size of an individual workgroup is specified in the WGSL source code for the shader, and the number of workgroups in each dimension of the overall job grid is specified in the call to dispatchWorkgroups() on the JavaScript side. For the example shown in the illustration, the workgroup size is (4,4), and the job would be created with a call to dispatchWorkgroups(4,3).
+
+    The number of invocations in a workgroup is limited to 256. Workgroups as small as a single invocation are allowed. However, 64 is recommended as a reasonable workgroup size in most cases, and I use that value in most of my examples.
+
+    (You might wonder why workgroups should exist at all. It has to do with the physical structure of GPUs. The processors in a typical GPU are physically divided into groups. Processors in a group are not independent; they all run the same code, and they share some local memory that they can access very quickly. It is possible that using a WebGPU workgroup size that is less than the physical size of processor groups on the GPU might leave some processors in a group with nothing to do. The performance of some programs can be optimized by making use of the physical structure of a GPU. However, I suspect that that optimization really needs to be tuned to a particular GPU structure. For a WebGPU program that is designed to run on multiple platforms, I'm not sure how much optimization can be done. In any case, such optimization is beyond my expertise, and none of my examples use workgroups in a significant way.)
+
+9.6.2 计算着色
+-------------------------
+
+**Compute Shaders**
+
+.. tab:: 中文
+
+    我的首个计算着色器示例，[webgpu/first_compute_shader.html](../../../en/source/webgpu/first_compute_shader.html)，是之前程序的修改版，之前的程序展示了在画布中移动并从边缘反弹的彩色圆盘。在之前的程序中，圆盘的位置在 JavaScript 端更新，然后写入 GPU 上的缓冲区。新版本将计算移动到 GPU 上运行的计算着色器中。这提高了效率，因为 GPU 可以并行计算，并且新值不需要复制到 GPU。
+
+    使用计算管线的工作方式与使用渲染管线类似：为着色器创建 WGSL 源代码；创建一个计算管线来处理着色器，并创建管线使用的绑定组和资源；使用命令编码器和计算通道编码器来组装运行管线所需的命令；将命令提交到 WebGPU 设备队列。
+
+    在 WGSL 源代码中，计算着色器的入口点函数用 @compute 注解标记（与顶点着色器入口点用 @vertex 注解的方式相同）。计算着色器入口点还需要另一个注解来指定工作组大小。例如，注解 @workgroup_size(16,8) 指定了一个二维工作组，大小在 x 方向上为 16，在 y 方向上为 8。
+
+    计算着色器入口点函数有几个内置值作为参数。最有用的是 @builtin(global_invocation_id)，它作为 vec3u 提供当前调用的全局调用 ID。对于一维任务，向量的 y 和 z 分量将是 1；对于二维问题，z 分量将是 1。就 WGSL 而言，所有问题都是三维的，缺失维度的大小设置为 1。这里，例如，是第一个示例程序入口点函数的开始：
+
+    ```js
+    @compute @workgroup_size(64)
+    fn main( @builtin(global_invocation_id) global_id : vec3u ) { . . .
+    ```
+
+    计算着色器的其他内置值包括：
+
+    - @builtin(local_invocation_id) — 当前调用在其工作组中的本地调用 ID。
+    - @builtin(num_workgroups) — 每个方向上的工作组数量。这些值只是启动当前作业的 dispatchWorkgroups() 调用的参数。
+    - @builtin(workgroup_id) — 当前调用所在的工作组在工作组网格中的位置。
+
+    所有这些的类型都是 vec3u，缺失维度的值设置为 1。
+
+    计算着色器可以通过绑定组从 JavaScript 端获取输入。没有像顶点缓冲区那样为计算着色器入口点函数提供参数值的东西，因此唯一的参数将是内置值。该函数也没有返回类型。计算着色器通过写入存储缓冲区或存储纹理（它们是绑定组的一部分）来产生输出。
+
+    在示例程序中，动画的数据包括移动圆盘的位置和速度。计算着色器在动画帧之间运行以更新位置。当圆盘从边缘反弹时，它会反转方向，这种情况下圆盘的速度也会改变。位置和速度的 x 和 y 分量需要更新。两个分量的计算相同。计算着色器的一个调用的任务是更新一个圆盘在 x 或 y 方向上的位置和速度。如果有 N 个圆盘，我们需要 2*N 个着色器调用。
+
+    位置和速度存储在两个存储缓冲区中，在着色器程序中由类型为 `array<32>` 的变量表示。初始值由程序的 JavaScript 端写入缓冲区。之后，缓冲区完全在 GPU 端使用。另一个存储缓冲区保存了一个包含三个浮点数的数组，提供计算所需的其他数据：圆盘的数量、圆盘的半径和自上次更新以来的时间变化。着色器变量声明为：
+
+    ```js
+    @group(0) @binding(0) var<storage,read_write> diskOffsets : array<f32>;
+    @group(0) @binding(1) var<storage,read_write> diskVelocities : array<f32>;
+    @group(0) @binding(2) var<storage> params : array<f32,3>;
+    ```
+
+    由于内容将被更新，前两个数组需要 read_write 访问权限。要调用着色器，将需要一个管线和一个绑定组。计算着色器的管线描述符相当简单。它有一个 layout 属性，以及一个 compute 属性来指定着色器模块和着色器入口点函数。管线本身是使用 device.createComputePipeline() 函数创建的。以下是示例程序如何创建计算管线和将附加到管线的绑定组：
+
+    ```ts
+    function createComputePipelineConfig() {
+        
+        let pipelineDescriptor = {
+            compute: {
+                module: computeShader,
+                entryPoint: "main"
+            },
+            layout: "auto"
+        };
+            
+        computePipeline = device.createComputePipeline(pipelineDescriptor);
+        
+        computeBindGroup = device.createBindGroup({ 
+            layout: computePipeline.getBindGroupLayout(0),
+            entries: [
+                {    // 圆盘的位置。
+                    binding: 0,
+                    resource: {buffer: offsetBuffer} 
+                },
+                {    // 圆盘的速度。
+                    binding: 1,
+                    resource: {buffer: velocityBuffer} 
+                },
+                {   // 计算所需的其他数据。
+                    binding: 2,
+                    resource: {buffer: paramsBuffer} 
+                }
+            ]
+        });
+    }
+    ```
+
+    管线由 JavaScript 函数运行，该函数在动画帧之间调用。计算通道编码器方法 `dispatchWorkgroups()` 被用来调用着色器，参数指定工作组的数量。我们需要 `2*DISK_COUNT` 个着色器调用，工作组的大小是 64，所以我们至少需要 `(2*DISK_COUNT)/64` 个工作组。由于工作组的数量必须是整数，我们需要使用 `Math.ceil()` 向上取整到整数值。
+
+    ```ts
+    /**
+     *  使用计算通道来更新圆盘位置，基于它们的速度和自上一动画帧以来的时间变化。
+     *  速度也可能改变。参数 dt 是时间的变化。
+     */
+    function update(dt) {
+        
+        /* 将时间变化写入 paramsBuffer 的第三个位置 */
+        
+        device.queue.writeBuffer(paramsBuffer,8,new Float32Array([dt]));
+        
+        /* 编码一个计算通道来完成工作。 */
+        
+        let commandEncoder = device.createCommandEncoder();
+        let passEncoder = commandEncoder.beginComputePass();
+        passEncoder.setPipeline(computePipeline);
+        passEncoder.setBindGroup(0, computeBindGroup);
+        let workGroupCount = Math.ceil( (2*DISK_COUNT) / 64 );
+        passEncoder.dispatchWorkgroups( workGroupCount );
+        passEncoder.end();
+        
+        /* 将工作提交到 GPU 设备队列。 */
+        
+        device.queue.submit([commandEncoder.finish()]);
+    }
+    ```
+
+    如你所见，所有这些与使用渲染管线和渲染通道的工作非常相似。
+
+
+    ----
+
+    我的第二个计算着色器示例是 [webgpu/life_3.html](../../../en/source/webgpu/life_3.html)，它实现了康威的生命游戏。它是 [life_1.html](../../../en/source/webgpu/life_1.html) 的修改版，见 [9.5.5小节](../c9/s5.md)。原始版本在显示当前代的同时，在片段着色器中计算了棋盘的新代。新版本将计算移动到计算着色器中。计算着色器版本如果有什么不同的话，实际上是**效率更低**的，这可以作为一个提醒，即片段着色器可以完成计算工作。
+
+    生命游戏本质上是一个二维问题，因为每个调用处理二维棋盘的一个单元格。工作组大小有两个组成部分，dispatchWorkgroups() 将需要两个参数。我使用 (8,8) 作为工作组大小，每个工作组有 64 个调用。
+
+    这个示例特别展示了计算着色器可以与纹理一起工作。棋盘的当前状态存储在一个纹理中。新状态写入第二个纹理。两个纹理都是计算管线的资源。第一个用于输入，是类型为 texture 的资源；第二个用于输出，是类型为 storage texture 的资源。计算着色器可以使用 `textureLoad()` 从纹理资源中读取，并可以使用 `textureStore()` 写入存储纹理资源。（有关存储纹理、`textureLoad()` 和 `textureStore()` 的信息，见 [9.5.5小节](../c9/s5.md#955-纹理格式)。）请注意，计算着色器不能使用 `textureSample()`。
+
+    以下是计算着色器的源代码，省略了计算的细节：
+
+    ```ts
+    @group(0) @binding(0) var currentGen : texture_2d<u32>;
+    @group(0) @binding(1) var nextGen : texture_storage_2d<r32uint,write>;
+
+    @compute @workgroup_size(8,8)
+    fn main( @builtin(global_invocation_id) id: vec3u) {
+    let boardSize = textureDimensions(currentGen);
+    let cell = id.xy; // 正在处理的单元格的行和列。
+    if (cell.x >= boardSize.x || cell.y >= boardSize.y) {
+        return;  // 分配的单元格在棋盘外。
+    }
+    let alive = textureLoad(currentGen, cell, 0).r;
+        .
+        . // (计算此单元格的新 "alive" 值。)
+        .
+    textureStore( nextGen, cell, vec4u(newAlive,0,0,1) );
+    }
+    ```
+
+    调度工作组时，我们需要的调用数量取决于棋盘的大小，这与画布的大小相同。同样，我们必须将调用数量除以工作组大小并向上取整到整数值：
+
+    ```ts
+    /**
+     *  计算下一代并将其复制到 currentGeneration 纹理。
+     *  （只有在渲染着色器中使用 currentGeneration。）
+     */
+    function computeNextGeneration() {
+    let commandEncoder = device.createCommandEncoder();
+    let passEncoder = commandEncoder.beginComputePass();
+    passEncoder.setPipeline(computePipeline);
+    passEncoder.setBindGroup(0,computeBindGroup);
+    let workgroupCountX = Math.ceil(context.canvas.width/8);
+    let workgroupCountY = Math.ceil(context.canvas.height/8);
+    passEncoder.dispatchWorkgroups( workgroupCountX, workgroupCountY );
+    passEncoder.end();
+    commandEncoder.copyTextureToTexture(  // 将结果复制到 nextGeneration。
+        { texture: nextGeneration },
+        { texture: currentGeneration },
+        [ context.canvas.width, context.canvas.height ]
+    );
+    let commandBuffer = commandEncoder.finish();
+    device.queue.submit([commandBuffer]);
+    }
+    ```
+
+    请注意调用了一个新函数 `commandEncoder.copyTextureToTexture()`。这个函数接受三个参数，提供源纹理、目标纹理和要复制区域的大小。前两个参数是对象，有可选参数来指定 mipmap 级别以及要复制区域的左上角或起始点。
+
+    ----
+
+    在第一个计算着色器示例中，着色器从缓冲区读取值，并将新值写回同一个缓冲区。在第二个示例中，使用了两个纹理，一个用于输入，一个用于输出。你可能会想知道为什么我们不使用一个纹理，并让着色器更新该纹理中的值。（实际上我们不能对纹理这样做，因为没有办法在同一个纹理上使用 `textureLoad()` 和 `textureStore()`，但我们可以通过使用存储缓冲区而不是纹理来存储棋盘的状态来解决这个问题。）在生命游戏中，着色器调用必须读取单元格的八个邻居的状态。问题是其他调用正在为这些邻居写新状态。如果它们将新值写入旧值存储的相同资源，就没有办法确保调用读取的是邻居的旧值而不是新值。如果我们能够强制所有读取在任何写入完成之前完成，那将很好。WebGPU 有一种方法可以在单个工作组内实现那种事情，但它没有办法针对整个计算作业来实现。移动圆盘示例没有这个问题，因为每个着色器调用都处理数据数组的单个元素，并且不依赖于其他调用所写的值。
+
+
+.. tab:: 英文
+
+    My first compute shader example, [webgpu/first_compute_shader.html](../../../en/source/webgpu/first_compute_shader.html), is a modification of earlier programs that showed colored disks moving in the canvas and bouncing off the edges. In the earlier programs, the positions of the disks were updated on the JavaScript side and then written to a buffer on the GPU. The new version moves that computation into a compute shader that runs on the GPU. This increases efficiency both because the GPU parallelizes the computation and because the new values do not have be copied to the GPU.
+
+    Working with compute pipelines is similar to working with render pipelines: Create the WGSL source code for the shader; create a compute pipeline to process the shader and create the bind groups and resources used by the pipeline; use a command encoder and compute pass encoder to assemble the commands that are needed to run the pipeline; and submit the commands to the WebGPU device queue.
+
+    In WGSL source code, the entry-point function for a compute shader is marked by the annotation @compute (in the same way that a vertex shader entry-point is annotated with @vertex). The compute shader entry-point also requires another annotation to specify the workgroup size. For example, the annotation @workgroup_size(16,8) specifies a two-dimensional workgroup with size 16 in the x direction and 8 in the y direction.
+
+    Several builtin values are available as parameters to a compute shader entry-point function. The most useful is probably @builtin(global_invocation_id), which gives the global invocation ID of the current invocation as a vec3u. For a one-dimensional task, the y and z component of the vector will be 1; for a two-dimensional problem, the z component will be 1. As far as WGSL is concerned, all problems are three-dimensional, with the sizes for missing dimensions set to 1. Here, for example, is the start of the entry-point function from the first sample program:
+
+    ```js
+    @compute @workgroup_size(64)
+    fn main( @builtin(global_invocation_id) global_id : vec3u ) { . . .
+    ```
+
+    Other builtins for the compute shader include:
+
+    - @builtin(local_invocation_id) — The local invocation ID of the current invocation in its workgroup.
+    - @builtin(num_workgroups) — The number of workgroups in each direction. The values are just the parameters from the call to dispatchWorkgroups() that started the current job.
+    - @builtin(workgroup_id) — The position in the grid of workgroups of the workgroup that contains the current invocation.
+
+    All of these are of type vec3u, with values for missing dimensions set to 1.
+
+    The compute shader can get input from the JavaScript side in bind groups. There is nothing like a vertex buffer to provide parameter values for the compute shader entry point function, so the only parameters will be builtins. The function also has no return type. A compute shader produces output by writing it to a storage buffer or storage texture that is part of a bind group.
+
+    In the sample program, the data for the animation consists of the positions of the moving disks and their velocities. The compute shader is run between frames of the animation to update the positions. When a disk bounces off an edge, it reverses direction, and in that case the velocity of the disk also changes. The x and y components of the positions and velocities have to be updated. The computation is the same for both components. The task for one invocation of the compute shader is to update the position and velocity of one disk in either the x or y direction. If there are N disks, we need 2*N invocations of the shader.
+
+    The positions and velocities are stored in two storage buffers, which are represented in the shader program by variables of type `array<32>`. Initial values are written to the buffers by the JavaScript side of the program. After that, the buffers are used entirely on the GPU side. An additional storage buffer holds an array of three floats giving other data needed for the computation: the number of disks, the radius of the disks, and the change in time since the previous update. The shader variables are declared as
+
+    ```js
+    @group(0) @binding(0) var<storage,read_write> diskOffsets : array<f32>;
+    @group(0) @binding(1) var<storage,read_write> diskVelocities : array<f32>;
+    @group(0) @binding(2) var<storage> params : array<f32,3>;
+    ```
+
+    The first two arrays need read_write access since their contents will be updated. To call the shader, a pipeline and a bind group will be needed. The pipeline descriptor for a compute shader is fairly simple. It has a layout property, and a compute property to specify the shader module and shader entry point function. The pipeline itself is created with the function device.createComputePipeline(). Here is how the sample program creates the compute pipeline and a bind group that will be attached to the pipeline:
+
+    ```ts
+    function createComputePipelineConfig() {
+    
+    let pipelineDescriptor = {
+        compute: {
+            module: computeShader,
+            entryPoint: "main"
+        },
+        layout: "auto"
+    };
+        
+    computePipeline = device.createComputePipeline(pipelineDescriptor);
+    
+    computeBindGroup = device.createBindGroup({ 
+        layout: computePipeline.getBindGroupLayout(0),
+        entries: [
+            {    // For positions of the disks.
+                binding: 0,
+                resource: {buffer: offsetBuffer} 
+            },
+            {    // For velocities of the disks.
+                binding: 1,
+                resource: {buffer: velocityBuffer} 
+            },
+            {   // Other data for the computation.
+                binding: 2,
+                resource: {buffer: paramsBuffer} 
+            }
+        ]
+    });
+    }
+    ```
+
+    The pipeline is run by a JavaScript function that is called between frames of the animation. The compute pass encoder method `dispatchWorkgroups()` is used to invoke the shader, with a parameter that specifies the number of workgroups. We need `2*DISK_COUNT invocations` of the shader, and the size of a workgroup is 64, so we need at least `(2*DISK_COUNT)/64` workgroups. Since the number of workgroups must be an integer, we need to round the number up to an integer value using `Math.ceil()`.
+
+    ```ts
+    /**
+     *  Use a compute pass to update the disk positions, based on their
+     *  velocities and the change in time since the previous animation frame.
+     *  Velocities can also change.  The parameter, dt, is the change in time.
+     */
+    function update(dt) {
+    
+    /* Write the change in time to the third position in the paramsBuffer */
+    
+    device.queue.writeBuffer(paramsBuffer,8,new Float32Array([dt]));
+    
+    /* Encode a compute pass that will do the work. */
+    
+    let commandEncoder = device.createCommandEncoder();
+    let passEncoder = commandEncoder.beginComputePass();
+    passEncoder.setPipeline(computePipeline);
+    passEncoder.setBindGroup(0, computeBindGroup);
+    let workGroupCount = Math.ceil( (2*DISK_COUNT) / 64 );
+    passEncoder.dispatchWorkgroups( workGroupCount );
+    passEncoder.end();
+    
+    /* Submit the work to the GPU device queue. */
+    
+    device.queue.submit([commandEncoder.finish()]);
+    }
+    ```
+
+    As you can see, all of this is very similar to working with render pipelines and render passes.
+
+    ----
+
+    My second compute shader example is [webgpu/life_3.html](../../../en/source/webgpu/life_3.html), which implements Conway's Game of Life. It is a modification of [life_1.html](../../../en/source/webgpu/life_1.html) from [Subsection 9.5.5](../c9/s5.md). The original version computed the new generation of the board in the fragment shader, at the same time that it was displaying the current generation. The new version moves that computation into a compute shader. The compute shader version is, if anything, **less** efficient than the original version—which can be taken as a reminder that fragment shaders can do computational work.
+
+    Life is naturally a two-dimensional problem, since each invocation processes one cell of a two-dimensional board. The workgroup size has two components, and dispatchWorkgroups() will need two parameters. I use (8,8) as the workgroup size, giving 64 invocations per workgroup.
+
+    This example shows, in particular, that compute shaders can work with textures. The current state of the board is stored in a texture. The new state is written to a second texture. Both textures are resources for the compute pipeline. The first, which is used for input, is a resource of type texture; the second, which is used for output, is a resource of type storage texture. A compute shader can use `textureLoad()` to read from a texture resource, and it can use `textureStore()` to write to a storage texture resource. (See [Subsection 9.5.5](../c9/s5.md#955-纹理格式) for information about storage textures, `textureLoad()`, and `textureStore()`.) Note that a compute shader cannot use `textureSample()`.
+
+    Here is the source code for the compute shader, omitting the details of the computation:
+
+    ```ts
+    @group(0) @binding(0) var currentGen : texture_2d<u32>;
+    @group(0) @binding(1) var nextGen : texture_storage_2d<r32uint,write>;
+
+    @compute @workgroup_size(8,8)
+    fn main( @builtin(global_invocation_id) id: vec3u) {
+    let boardSize = textureDimensions(currentGen);
+    let cell = id.xy; // Row and column for the cell that is being processed.
+    if (cell.x >= boardSize.x || cell.y >= boardSize.y) {
+        return;  // The assigned cell is outside the board.
+    }
+    let alive = textureLoad(currentGen, cell, 0).r;
+            .
+            . // (Compute new "alive" value for this cell.)
+            .
+    textureStore( nextGen, cell, vec4u(newAlive,0,0,1) );
+    }
+    ```
+
+    When dispatching workgroups, the number of invocations that we need depends on the size of the board, which is the same as the size of the canvas. Again, we have to divide the number of invocations by the workgroup size and round up to an integer value:
+
+    ```ts
+    /**
+     *  Compute the next generation and copy it to the currentGeneration texture.
+     *  (Only currentGenertion is used in the render shader.)
+     */
+    function computeNextGeneration() {
+    let commandEncoder = device.createCommandEncoder();
+    let passEncoder = commandEncoder.beginComputePass();
+    passEncoder.setPipeline(computePipeline);
+    passEncoder.setBindGroup(0,computeBindGroup);
+    let workgroupCountX = Math.ceil(context.canvas.width/8);
+    let workgroupCountY = Math.ceil(context.canvas.height/8);
+    passEncoder.dispatchWorkgroups( workgroupCountX, workgroupCountY );
+    passEncoder.end();
+    commandEncoder.copyTextureToTexture(  // Copy result to nextGeneration.
+        { texture: nextGeneration },
+        { texture: currentGeneration },
+        [ context.canvas.width, context.canvas.height ]
+    );
+    let commandBuffer = commandEncoder.finish();
+    device.queue.submit([commandBuffer]);
+    }
+    ```
+
+    Note the call to a new function, commandEncoder.copyTextureToTexture(). This function takes three parameters, giving the source texture, the destination texture, and the size of the region to be copied. The first two parameters are objects, with optional parameters to specify the mipLevel and the top-left corner, or origin, of the region to be copied.
+
+    ----
+
+    In the first compute shader example, the shader reads values from a buffer and writes new values back to the same buffer. In the second, two textures are used, one for input and one for output. You might wonder why we didn't use one texture and let the shader update the values in that texture. (In fact we couldn't do that with textures, since there is no way to use `textureLoad()` and `textureStore()` on the same texture, but we could solve that problem by using a storage buffer instead of a texture to hold the state of the board.) In the Life game, a shader invocation has to read the states of the cell's eight neighbors. The problem is that other invocations are writing new states for those neighbors. If they are writing the new values to same resource where old values are stored, there is no way to ensure that an invocation reads the old values of the neighbors rather than the new values. It would be nice if we could force all of the reads to be done before any of the writes are done. WebGPU has a way to do that sort of thing within a single workgroup, but it has no way to do it for a compute job as a whole. The moving disk example doesn't have this problem because each invocation of the shader works on a single element of the data array and does not depend on values being written by other invocations.
+
+9.6.3 模拟
+-------------------------
+
+**A Simulation**
+
+.. tab:: 中文
+
+    计算机经常用于进行物理模拟，许多模拟都可以从 GPU 的并行性中受益。示例程序 [webgpu/diffusion.html](../../../en/source/webgpu/diffusion.html) 是一个相当简单的例子，展示了可以实现什么。该程序显示了许多白色点随机移动。每个点都是一个像素。运动是一种“随机游走”：在每个时间步，粒子选择一个随机方向——上、下、左或右——并朝那个方向移动一个像素。还有黄色和青色的粒子，它们不移动。最初，在左侧有一排黄色粒子，在右侧有一排青色粒子。当一个白色粒子碰到一个黄色或青色粒子时，它会变色以匹配并停止移动。结果是在有趣的分支模式中积累了有色的粒子。这个过程很有趣。以下是一个程序的演示版本：
+
+    <iframe src="../../../en/demos/c9/diffusion-demo.html" width="530" height="480"></iframe>
+
+    （这个模拟的想法不是我的原创。我在很久以前读到了一个类似的模拟，尽管我不记得在哪里了。）
+
+    一个有趣的点是在计算着色器中使用伪随机数。WGSL 着色器语言中没有随机数生成器。但是，其他语言使用简单的数学公式产生伪随机数。从初始的“种子”值开始，公式产生了一系列数字。序列完全由初始种子值决定，但从统计学上看是随机的。我的程序采用了 Java 编程语言中使用的伪随机数生成器的公式。每个粒子运行自己的伪随机数生成器，从不同的种子值开始。种子值是使用 JavaScript 的 Math.random() 函数在 JavaScript 端创建的。
+
+    该程序使用两个存储缓冲区，一个保存有关每个粒子的信息，另一个保存画布上每个像素的颜色信息。粒子信息包括粒子的随机数生成器的当前种子值、粒子的 x 和 y 坐标以及粒子的颜色。颜色被编码为整数：1、2 或 3 分别代表白色、黄色或青色。颜色缓冲区也将颜色表示为整数代码号，增加了 0 作为背景颜色黑色的代码。
+
+    有两个计算着色器。对于两个着色器，每个调用处理一个粒子。第一个着色器对黄色或青色粒子什么也不做。对于白色粒子，它通过将粒子朝随机方向移动来更新粒子缓冲区的数据，除非它试图移动到包含有色粒子的像素中，然后粒子变色并不移动。着色器需要访问颜色缓冲区，以便检查白色粒子想要移动到的像素是否已经包含有色粒子。第一个着色器运行后，颜色缓冲区被清除。然后第二个计算着色器更新颜色缓冲区：对于每个粒子，它将包含粒子的像素的颜色设置为粒子的颜色。
+
+    该程序还有一个渲染着色器，它为每个像素调用一次。它查询颜色缓冲区以确定应该分配给像素的颜色。
+
+    我不会讨论这个示例的细节，但我鼓励你查看 [源代码](../../../en/source/webgpu/diffusion.html)。
+
+
+.. tab:: 英文
+
+    Computers are often used to do physical simulations, and many simulations can benefit from the parallelism of a GPU. The sample program [webgpu/diffusion.html](../../../en/source/webgpu/diffusion.html) is a fairly simple example of what can be done. The program shows a large number of white dots moving randomly. Each dot is a pixel. The motion is a "random walk": In each time step, the particle chooses a random direction—up, down, left, or right—and moves one pixel in that direction. There are also yellow and cyan particles, which don't move. Initially, there is a line of yellow particles on the left and a line of cyan particles on the right. When a white particle hits a yellow or cyan particle, it changes color to match and stops moving. The result is a buildup of colored particles in an interesting, branching pattern. The process is interesting to watch. Here is a demo version of the program:
+
+    <iframe src="../../../en/demos/c9/diffusion-demo.html" width="530" height="480"></iframe>
+
+    (The idea for this simulation is not original with me. I read about a similar simulation some time ago, though I can't remember where.)
+
+    One point of interest is the use of pseudo-random numbers in the compute shader. There is no random number generator in the WGSL shading language. But pseudo-random numbers are produced in other languages using simple mathematical formulas. Starting from an initial "seed" value, the formula produces a sequence of numbers. The sequence is completely determined by the initial seed value, but it looks statistically random. My program takes the formula from the pseudo-random number generator that used in the Java programming language. Each particle runs its own pseudo-random number generator, starting from different seed values. The seed values are created on the JavaScript side using JavaScript's Math.random() function.
+
+    The program uses two storage buffers, one holding information about each particle and one holding color information for each pixel in the canvas. Particle information includes the current seed value for the particle's random number generator, the x and y coordinates of the particle, and the particle's color. Color is encoded as an integer: 1, 2, or 3 representing white, yellow, or cyan. The color buffer also represents color as an integer code number, adding 0 as a code for black, the background color.
+
+    There are two compute shaders. For both shaders, each invocation processes one particle. The first shader does nothing for a yellow or cyan particle. For a white particle, it updates data in the particle buffer by moving the particle in a random direction, except that if it tries to move into a pixel that contains a colored particle, then the particle changes color and does not move. The shader needs access to the color buffer so that it can check whether the pixel to which the white particle wants to move already contains a colored particle. After the first shader runs, the color buffer is cleared. Then the second compute shader updates the color buffer: For each particle, it sets the color of the pixel that contains the particle to match the color of the particle.
+
+    The program also has a render shader, which is invoked once for each pixel. It consults the color buffer to determine what color should be assigned to a pixel.
+
+    I will not discuss the details of this example, but I encourage you to take a look at the [source code](../../../en/source/webgpu/diffusion.html).
+
+9.6.4 检索输出
+-------------------------
+
+**Retrieving Output**
+
+.. tab:: 中文
+
+    在我到目前为止的例子中，计算着色器被用来处理数据，这些数据被渲染着色器使用。但有些任务纯粹是计算性的，没有可见组件。必须有一种方法来检索计算任务的输出，以便在程序的 JavaScript 端使用。
+
+    计算着色器可以将数据输出到存储缓冲区。存储缓冲区通常存储在 GPU 内存中，JavaScript 无法访问，因此我们需要一种方法将缓冲区的内容复制到 JavaScript 可以访问的内存中。解决方案是使用第二个缓冲区，其使用属性包括 MAP_READ 和 COPY_DST。这样的缓冲区通常被称为“暂存缓冲区”。GPU 可以将数据复制到暂存缓冲区，然后 JavaScript 可以“映射”该暂存缓冲区以进行读取。一旦 JavaScript 从暂存缓冲区检索了数据，它必须“取消映射”该缓冲区，因为在映射期间 GPU 无法访问该缓冲区。
+
+    示例程序 [webgpu/map_buffer_for_read.html](../../../en/source/webgpu/map_buffer_for_read.html) 在 GPU 上执行一个简单的计算，输出一个浮点数数组。（这里具体的计算不重要。）该程序使用存储缓冲区和暂存缓冲区，创建方式如下：
+
+    ```ts
+    buffer = device.createBuffer({
+        size: 4*intervals,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC
+    });
+    stagingBuffer = device.createBuffer({
+        size: 4*intervals,
+        usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST
+    });
+    ```
+
+    计算着色器输出到 buffer，然后将 buffer 复制到 stagingBuffer。您可能会想知道为什么我们不直接给存储缓冲区添加 MAP_READ 使用。但 MAP_READ 只能与 COPY_DST 结合使用。存储缓冲区旨在存储在 GPU 内存中；暂存缓冲区旨在存储在共享内存中。因此，通常，缓冲区不能同时是两者。
+
+    在将计算作业提交给 GPU 后，输出在作业完成后才会可用。JavaScript 必须等待这种情况发生，然后才能映射暂存缓冲区。这种类型的同步在 WebGPU 中使用承诺来处理（[第 A.4 节](../a1/s4.md)）。暂存缓冲区使用 mapAsync() 方法进行映射，该方法返回一个承诺。当缓冲区准备好映射时，承诺解决。mapAsync() 通常使用 await 调用。例如，在示例程序中，
+
+    ```ts
+    await stagingBuffer.mapAsync(GPUMapMode.READ, 0, intervals*4);
+    ```
+
+    第一个参数可以是 GPUMapMode.READ 或 GPUMapMode.WRITE。另外两个参数指定要映射的缓冲区区域的起始点和大小（以字节为单位）。
+
+    一旦映射准备好，就可以使用暂存缓冲区方法 getMappedRange() 将映射区域的全部或部分视为 ***ArrayBuffer***。***ArrayBuffer*** 只是一个字节容器。在示例程序中，这些字节实际上是一个浮点数组。要将数据作为浮点数组访问，我们可以将 ***ArrayBuffer*** 包装在 ***Float32Array*** 中。示例程序这样做，然后添加数组中的数字以获得最终答案。计算的两个方面都在以下函数中完成：
+
+    ```ts
+    async function compute() {
+
+        /* 运行计算着色器，并将输出复制到暂存缓冲区。 */
+
+        let commandEncoder = device.createCommandEncoder();
+        let passEncoder = commandEncoder.beginComputePass();
+        passEncoder.setPipeline(pipeline);
+        passEncoder.setBindGroup(0, bindGroup);
+        passEncoder.dispatchWorkgroups( Math.ceil(intervals/64) );
+        passEncoder.end();
+        commandEncoder.copyBufferToBuffer(buffer, 0, stagingBuffer, 0, intervals*4);
+        device.queue.submit([commandEncoder.finish()]);
+
+        /* 映射暂存缓冲区，将其解释为 Float32Array，并找到总和。 */
+
+        await stagingBuffer.mapAsync(GPUMapMode.READ, 0, intervals*4);
+
+        let data = new Float32Array(stagingBuffer.getMappedRange(0,intervals*4));
+        let sum = 0;
+        for (let i = 0; i < data.length; i++) {
+            sum = sum + data[i];
+        }
+
+        /* 取消映射暂存缓冲区，并返回总和。 */
+
+        stagingBuffer.unmap();
+
+        return sum;
+    }
+    ```
+
+    特别注意最后使用 `stagingBuffer.unmap()`。在 GPU 可以重用缓冲区之前，必须取消映射缓冲区。如果处理数据将花费非平凡的时间，最好在处理之前制作数据的副本并取消映射缓冲区。
+
+    也可以将缓冲区映射以进行写入，以为 GPU 提供输入。暂存缓冲区将使用 MAP_WRITE 和 COPY_DST 使用。JavaScript 将映射缓冲区以进行写入，将数据复制到映射的缓冲区中，并取消映射缓冲区。然后，它可以提交一个 WebGPU 作业，其中包括将数据从暂存缓冲区复制到 GPU 内存。我们一直在使用 `device.writeBuffer()` 将数据从 JavaScript 复制到 GPU 内存。该函数可以使用暂存缓冲区完成其任务（尽管它的实际工作方式不是 WebGPU 规范的一部分）。
+
+    ----
+
+    为了给程序增加一些趣味性，我添加了一个称为“reduce”的重要并行算法的实现。在上述讨论的计算中，数组被复制到程序的 JavaScript 端。数组在那里使用循环进行求和，这个操作对于大小为 N 的数组需要 N 步。使用 reduce，可以在 GPU 上以大约 log2(N) 步添加相同的数字。基本思想是将数组后半部分的每个数字与前半部分的伙伴相加。在伪代码中，对于长度为 N 的数组 A，
+
+    ```ts
+    for (index = 0; index < N/2; index++)
+        A[index] = A[index] + A[index+N/2]
+    ```
+
+    这个循环可以被一个简单的计算着色器替换。结果是，原始数组中数字的总和等于修改后数组中前 N/2 个元素的数字总和。现在，考虑这 N/2 个元素是一个新的、更短的数组，并应用相同的过程，以便原始总和现在集中在 N/4 个元素中。继续这样做，直到原始总和集中在单个元素 A[0] 中。在这一点上，计算着色器已经被应用了 log2(N) 次。
+
+    现在，所有这些实际上只有在数组的大小是 2 的幂时才有效。如果任何时候你必须使用长度为奇数的数组，事情就会变得更复杂一些。然而，示例程序也处理了这种情况，你可以查看源代码了解它是如何完成的。
+
+
+.. tab:: 英文
+
+    In my examples so far, the compute shaders were used to process data that was used by a render shader. But some tasks are purely computational, with no visible component. There has to be some way to retrieve the output of a computational task so that it can be used on the JavaScript side of the program.
+
+    A compute shader can output data to a storage buffer. A storage buffer is typically stored in GPU memory that is not accessible to JavaScript, so we need a way to copy the contents of the buffer into memory that JavaScript can access. The solution is to use a second buffer whose usage property includes MAP_READ and COPY_DST. Such buffers are often referred to as "staging buffers." The GPU can copy data into a staging buffer, and JavaScript can then "map" that staging buffer for reading. Once JavaScript has retrieved the data from the staging buffer, it must "unmap" the buffer, because the GPU cannot access the buffer while it is mapped.
+
+    The sample program [webgpu/map_buffer_for_read.html](../../../en/source/webgpu/map_buffer_for_read.html) performs a simple computation on the GPU that outputs an array of floating point numbers. (The specific computation is not important here.) The program uses a storage buffer and a staging buffer, which are created like this:
+
+    ```ts
+    buffer = device.createBuffer({
+    size: 4*intervals,
+    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC
+    });
+    stagingBuffer = device.createBuffer({
+    size: 4*intervals,
+    usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST
+    });
+    ```
+
+    The compute shader outputs to buffer, then the buffer is copied to stagingBuffer. You might wonder why we don't just add MAP_READ usage to the storage buffer. But MAP_READ can only be combined with COPY_DST. Storage buffers are meant to live in GPU memory; staging buffers are meant to live in shared memory. So, in general, a buffer can't be both.
+
+    After the compute job is submitted to the GPU, the output won't be available until the job has been completed. JavaScript must wait for that to happen before mapping the staging buffer. This type of synchroniztion is handled in WebGPU using promises ([Section A.4](../a1/s4.md)). A staging buffer is mapped using the method mapAsync(), which returns a promise. The promise resolves when the buffer is ready to be mapped. mapAsync() is typically called using await. For example, in the sample program,
+
+    ```ts
+    await stagingBuffer.mapAsync(GPUMapMode.READ, 0, intervals*4);
+    ```
+
+    The first parameter can be either GPUMapMode.READ or GPUMapMode.WRITE. The other two parameters specify the starting point and size, in bytes, of the region in the buffer to be mapped.
+
+    Once the mapping is ready, the staging buffer method getMappedRange() can be used to view all or part of the mapped region as an ***ArrayBuffer***. An ***ArrayBuffer*** is just a container for bytes. In the sample program, those bytes are actually an array of floats. To access the data as an array of floats, we can wrap the ***ArrayBuffer*** in a ***Float32Array***. The sample program does that and then addes up the numbers in the array to get a final answer. Both sides of the computation are done in the following function:
+
+    ```ts
+    async function compute() {
+
+    /* Run the compute shader and copy the output to the staging buffer. */
+
+    let commandEncoder = device.createCommandEncoder();
+    let passEncoder = commandEncoder.beginComputePass();
+    passEncoder.setPipeline(pipeline);
+    passEncoder.setBindGroup(0, bindGroup);
+    passEncoder.dispatchWorkgroups( Math.ceil(intervals/64) );
+    passEncoder.end();
+    commandEncoder.copyBufferToBuffer(buffer, 0, stagingBuffer, 0, intervals*4);
+    device.queue.submit([commandEncoder.finish()]);
+    
+    /* Map staging buffer, interpret it as a Float32Array, and find the sum. */
+    
+    await stagingBuffer.mapAsync(GPUMapMode.READ, 0, intervals*4);
+        
+    let data = new Float32Array(stagingBuffer.getMappedRange(0,intervals*4));
+    let sum = 0;
+    for (let i = 0; i < data.length; i++) {
+        sum = sum + data[i];
+    }
+    
+    /* Unmap the staging buffer, and return the sum. */
+    
+    stagingBuffer.unmap();
+    
+    return sum;
+    }
+    ```
+
+    Note in particular the use of `stagingBuffer.unmap()` at the end. The buffer must be unmapped before it can be reused by the GPU. If processing the data will take a nontrivial amount of time, it is a good idea to make a copy of the data and unmap the buffer before doing the processing.
+
+    It is also possible to map a buffer for writing, to provide input to the GPU. The staging buffer would be created with MAP_WRITE and COPY_DST usage. JavaScript would map the buffer for writing, copy data into the mapped buffer, and unmap the buffer. It could then submit a WebGPU job that includes copying the data from the staging buffer into GPU memory. We have been using `device.writeBuffer()` to copy data from JavaScript into GPU memory. That function could complete its task using a staging buffer (although how it actually works is not part of the WebGPU specification).
+
+    ----
+
+    To add some interest to the program, I added an implementation of an important parallel algorithm called "reduce." In the computation discussed above, an array is copied to the JavaScript side of the program. The array is added up there using a loop, an operation that takes N steps for an array of size N. The same numbers can be added in the GPU using reduce, with on the order of log2(N) steps. The basic idea is to add each number in the second half of the array to a partner in the first half. In pseudocode, for an array A of length N,
+
+    ```ts
+    for (index = 0; index < N/2; index++)
+        A[index] = A[index] + A[index+N/2]
+    ```
+
+    This loop can be replaced by one application of a simple compute shader. The result is that the sum of the numbers in the original array is equal to the sum of the numbers in the first N/2 elements of the modified array. Now, consider those N/2 elements to be a new, shorter array, and apply the same process, so that the original sum is now concentrated into N/4 elements. Continue like that until the original sum is concentrated into the single element A[0]. At that point, the compute shader has been applied just log2(N) times.
+
+    Now, all this really works as stated only if the size of the array is a power of two. Things are a little more complicated if at any point you have to work with an array whose length is an odd number. However, the sample program handles that case as well, and you can look at the source code to see how its done.
+

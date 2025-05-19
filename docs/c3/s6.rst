@@ -1,0 +1,918 @@
+.. _c3.6:
+
+3.6 使用 GLUT 和 JOGL
+=========================
+
+**Using GLUT and JOGL**
+
+.. tab:: 中文
+
+    OpenGL是一个仅用于图形的API，不支持诸如窗口或事件之类的功能。OpenGL依赖外部机制来创建绘图表面，然后在其上进行绘制。支持OpenGL的窗口API通常作为许多其他库之一，用于生成完整应用程序的一部分。我们将看两个跨平台API，使得在应用程序中使用OpenGL成为可能，一个是用于C/C++的，另一个是用于Java的。
+
+    对于用C或C++编写的简单应用程序，一个可能的窗口API是GLUT（OpenGL实用工具包）。** GLUT**是一个小型API。它用于创建作为OpenGL绘图表面简单框架的窗口。它支持处理鼠标和键盘事件，并且可以进行基本动画。它不支持按钮或输入字段等控件，但允许响应鼠标操作而弹出菜单。原始版本的GLUT已不再得到积极支持，推荐使用名为freeglut的版本（<http://freeglut.sourceforge.net/>）。例如，Linux中包含的版本实际上是freeglut。有关freeglut API的详细信息，请参阅<http://freeglut.sourceforge.net/docs/api.php>。
+
+    ** JOGL**（Java OpenGL）是一组类，使得在Java应用程序中使用OpenGL成为可能。JOGL已集成到Swing和AWT中，这是标准的Java图形用户界面API。使用JOGL，您可以创建Java GUI组件，并使用OpenGL进行绘制。这些OpenGL组件可以在任何Java应用程序中使用，类似于您使用**Canvas**或**JPanel**作为绘图表面的方式。像许多Java的东西一样，JOGL非常复杂。我们只会在相当简单的应用程序中使用它。JOGL不是Java的标准部分。它的官方网站是<http://jogamp.org/jogl/www/>。
+
+    本节包含了使用GLUT和JOGL的入门信息，假设您已经了解了使用C和Java进行编程的基础知识。它还简要讨论了*glsim.js*，这是我编写的一个JavaScript库，用于模拟本书中使用的OpenGL 1.1的子集。
+
+.. tab:: 英文
+
+    OpenGL is an API for graphics only, with no support for things like windows or events. OpenGL depends on external mechanisms to create the drawing surfaces on which it will draw. Windowing APIs that support OpenGL often do so as one library among many others that are used to produce a complete application. We will look at two cross-platform APIs that make it possible to use OpenGL in applications, one for C/C++ and one for Java.
+
+    For simple applications written in C or C++, one possible windowing API is GLUT (OpenGL Utility Toolkit). GLUT is a small API. It is used to create windows that serve as simple frames for OpenGL drawing surfaces. It has support for handling mouse and keyboard events, and it can do basic animation. It does not support controls such as buttons or input fields, but it does allow for a menu that pops up in response to a mouse action. The original version of GLUT is no longer actively supported, and a version called freeglut (<http://freeglut.sourceforge.net/>) is recommended instead. For example, the version included in Linux is actually freeglut. For details of the freeglut API, see
+
+    <http://freeglut.sourceforge.net/docs/api.php>
+
+    JOGL (Java OpenGL) is a collection of classes that make it possible to use OpenGL in Java applications. JOGL is integrated into Swing and AWT, the standard Java graphical user interface APIs. With JOGL, you can create Java GUI components on which you can draw using OpenGL. These OpenGL components can be used in any Java application, in much the same way that you would use a **Canvas** or **JPanel** as a drawing surface. Like many things Java, JOGL is immensely complicated. We will use it only in fairly simple applications. JOGL is not a standard part of Java. It's home web site is
+
+    <http://jogamp.org/jogl/www/>
+
+    This section contains information to get you started using GLUT and JOGL, assuming that you already know the basics of programming with C and Java. It also briefly discusses *glsim.js*, a JavaScript library that I have written to simulate the subset of OpenGL 1.1 that is used in this book.
+
+3.6.1 使用GLUT
+--------------------
+
+.. tab:: 中文
+
+    要使用GLUT，您需要一个C编译器以及OpenGL和GLUT（或freeglut）开发库的副本。我无法告诉您在您自己的计算机上具体是什么意思。例如，在我运行Linux Mint的计算机上，免费的C编译器gcc已经可用。为了进行OpenGL开发，我安装了几个包，包括freeglut3-dev和libgl1-mesa-dev。（Mesa是OpenGL的Linux实现。）如果glutprog.c包含一个完整的使用GLUT的C程序，我可以使用如下命令编译它：
+
+    ```c
+    gcc -o glutprog glutprog.c -lGL -lglut
+    ```
+
+    “-o glutprog”告诉编译器将“glutprog”用作其输出文件的名称，然后可以像正常的可执行文件一样运行它；如果没有此选项，则可执行文件的名称将为“a.out”。“-lglut”和“-lGL”选项告诉编译器将程序与GLUT和OpenGL库链接在一起。（“-”后的字符是小写的“L”。）如果没有这些选项，链接器将不会识别任何GLUT或OpenGL函数。如果程序还使用了GLU库，编译它将需要选项“-lGLU”，如果使用了数学库，还需要选项“-lm”。如果程序需要其他.c文件，也应该包括在内。例如，示例程序[glut/color-cube-of-spheres.c](../../../en/source/glut/color-cube-of-spheres.c)依赖于camera.c，可以使用Linux的gcc编译器使用以下命令编译：
+
+    ```c
+    gcc -o cubes color-cube-of-spheres.c camera.c -lGL -lglut -lGLU -lm
+    ```
+
+    示例程序[glut/glut-starter.c](../../../en/source/glut/glut-starter.c)可用作编写使用GLUT的程序的起点。虽然它除了打开一个窗口外什么也不做，但程序包含进行OpenGL绘制所需的框架，包括执行动画、响应鼠标和键盘事件以及设置菜单。源代码包含了告诉您如何使用它的注释。
+
+    **在Windows上**，您可以考虑安装WSL，即Windows子系统Linux（<https://docs.microsoft.com/zh-cn/windows/wsl/>），根据我写这篇文章的时间，它应该很快将包括使用图形界面程序的功能。WSL是微软的官方系统，允许您在Windows内部安装Linux的一个版本。另一个选择是较旧的开源项目Cygwin（<https://cygwin.com/>）。（使用Cygwin，我安装了gcc-core、xinit、xorg-server、libglut-devel、libGLU-devel和libGL-devel等软件包。使用startxwin命令启动X11窗口系统后，我能够在Cygwin终端窗口中使用与在Linux中相同的命令编译和运行来自本教材的OpenGL示例。）
+
+    **对于MacOS**，情况更为复杂，因为OpenGL已被苹果自家的专有API Metal所取代。然而，根据我写这篇文章的时间，仍然可以使用苹果的XCode开发工具在MacOS上使用OpenGL。本教材的示例需要进行一些修改，以便与XCode工具一起使用，因为在Mac上，OpenGL和GLUT库的加载方式与在Linux上不同。用于在MacOS上使用的修改过的程序可以在源文件夹[glut/glut-mac](../../../en/source/glut/glut-mac)中找到。有关更多信息，请参阅该文件夹中的README.txt文件。
+
+    ----
+
+    GLUT库使得在C语言中编写基本的OpenGL应用程序变得简单。GLUT使用事件处理函数。您需要编写处理事件的函数，以处理显示需要重新绘制时发生的事件，或者当用户点击鼠标或按键盘上的键时发生的事件。
+
+    要使用GLUT，您需要在任何使用它的源代码文件开头包含头文件*glut.h*（或*freeglut.h*），以及通用的OpenGL头文件*gl.h*。头文件应安装在标准位置，即名为GL的文件夹中。（但请注意，文件夹名称可能不同，或者完全省略。）因此，程序通常以以下方式开始：
+
+    ```c
+    #include <GL/gl.h>
+    #include <GL/glut.h>
+    ```
+
+    在我的计算机上，写 `#include <GL/glut.h>` 实际上包含了对应于GLUT的FreeGLUT的子集。要访问所有FreeGLUT，我会替换为 `#include <GL/freeglut.h>`。根据程序使用的功能，程序可能需要其他头文件，如 `#include <GL/glu.h>` 和 `#include <math.h>`。
+
+    程序的`main()`函数必须包含一些代码来初始化GLUT，创建和打开一个窗口，并通过注册应该在各种事件发生时调用的函数来设置事件处理。设置完成后，它必须调用一个函数来运行GLUT事件处理循环。该函数等待事件并通过调用已注册的函数来处理它们。事件循环一直运行，直到程序结束，这发生在用户关闭窗口或程序调用标准的`exit()`函数时。
+
+    为了设置事件处理函数，GLUT利用了在C语言中将函数名作为参数传递给另一个函数的事实。例如，如果`display()`是应该被调用来绘制窗口内容的函数，那么程序将使用命令
+
+    ```c
+    glutDisplayFunc(display);
+    ```
+
+    将此函数安装为显示事件的事件处理程序。显示事件发生在需要重新绘制窗口的内容时，包括窗口首次打开时。请注意，*display* 必须事先定义为一个没有参数的函数：
+
+    ```c
+    void display() {
+    .
+    .  // OpenGL绘图代码在这里！
+    .
+    }
+    ```
+
+    请记住，它并不是函数的名称使其成为一个OpenGL显示函数。它必须通过调用glutDisplayFunc(display)设置为显示函数。所有的GLUT事件处理函数都以类似的方式工作（除了其中许多确实需要参数）。
+
+    有许多可能的事件处理函数，在这里我只涵盖了其中的一些。让我们直接跳入，看一个使用大多数常见事件处理程序的GLUT程序可能的`main()`函数例程：
+
+    ```c
+    int main(int argc, char** argv) {
+        glutInit(&argc, argv);  // 必要的初始化！
+        glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
+        glutInitWindowSize(500,500);        // 显示区域的大小，以像素为单位
+        glutInitWindowPosition(100,100);    // 屏幕坐标中的位置
+        glutCreateWindow("OpenGL程序"); // 参数是窗口标题  
+
+        glutDisplayFunc(display);       // 当窗口需要重新绘制时调用
+        glutReshapeFunc(reshape);       // 当窗口大小变化时调用
+        glutKeyboardFunc(keyFunc);      // 当用户键入字符时调用
+        glutSpecialFunc(specialKeyFunc);// 当用户按下特殊键时调用
+        glutMouseFunc(mouseFunc);       // 鼠标按下和抬起事件调用
+        glutMotionFunc(mouseDragFunc);  // 当鼠标拖动时调用
+        glutIdleFunc(idleFun);          // 当没有其他事件时调用
+
+        glutMainLoop(); // 运行事件循环！这个函数永远不会返回。
+        return 0;  // （这一行实际上永远不会被执行。）
+    }
+    ```
+
+    前五行进行了一些必要的初始化，接下来的七行安装了事件处理程序，而调用*glutMainLoop()*则运行了GLUT事件循环。我将讨论此处使用的所有函数。第一个GLUT函数调用必须是glutInit，参数如所示。（请注意，argc和argv表示程序的命令行参数。将它们传递给glutInit允许它处理GLUT识别的某些命令行参数。我在这里不讨论这些参数。）函数*glutInitWindowSize*和*glutInitWindowPosition*分别做了显而易见的事情；大小以像素为单位给出，窗口位置以计算机屏幕上的像素坐标表示，左上角为(0,0)。函数*glutCreateWindow*创建窗口，但请注意，在调用*glutMainLoop*之前，该窗口中不会发生任何事情。通常，在main()中调用一个额外的用户定义函数来进行所需的全局变量和OpenGL状态的初始化。OpenGL初始化可以在调用*glutCreateWindow*之后和调用*glutMainLoop*之前进行。转向main()中使用的其他函数，
+
+    `glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH)` — 必须调用以定义OpenGL绘图上下文的一些特征。参数指定您希望OpenGL上下文具有的特征。这些特征由在参数中OR在一起的常量表示。*GLUT_DEPTH*表示应创建深度缓冲区；如果没有它，深度测试将无法工作。如果您正在进行2D图形绘制，您不会包含此选项。*GLUT_DOUBLE*请求**双缓冲**，这意味着绘图实际上是在屏幕外进行的，并且必须将屏幕外的副本复制到屏幕上才能看到。复制由`glutSwapBuffers()`执行，在显示函数的末尾必须调用它。（您可以使用GLUT_SINGLE代替*GLUT_DOUBLE*以获得单缓冲；在这种情况下，您必须在显示函数的末尾调用*glFlush()*而不是`glutSwapBuffers()`。然而，本书中的所有示例都使用*GLUT_DOUBLE*。）
+
+    `glutDisplayFunc(display)` — 显示函数应包含能够完全重绘场景的OpenGL绘制代码。这类似于Java Swing API中的*paintComponent()*。显示函数可以具有任何名称，但它必须声明为无参数的void函数：*void display()*。
+
+    `glutReshapeFunc(reshape)` — 当用户改变窗口的大小时，会调用重塑函数。它的参数告诉了绘图区域的新宽度和高度：
+
+    ```c
+    void reshape( int width, int height )
+    ```
+
+    例如，如果投影只取决于窗口大小，您可能会使用此方法来设置投影变换。不需要重塑函数，但如果提供了一个，它应该始终设置OpenGL视口，这是用于绘制的窗口的一部分。通过调用以下代码来实现：
+
+    ```c
+    glViewport(0,0,width,height);
+    ```
+
+    如果没有指定重塑函数，则会自动设置视口。
+
+    `glutKeyboardFunc(keyFunc)` — 键盘函数在用户键入字符（如'b'、'A'或空格）时调用。当按下不产生字符的特殊键（如箭头键）时，不会调用键盘函数。键盘函数有一个**unsigned char**类型的参数，表示键入的字符。它还有两个int类型的参数，表示按下键时鼠标的位置，以像素坐标表示，左上角为绘图区域的(0,0)。因此，键函数的定义必须具有以下形式：
+
+    ```c
+    void keyFunc( unsigned char ch, int x, int y )
+    ```
+
+    每当您对程序的数据进行更改需要重新绘制时，您应该调用*glutPostRedisplay()*。这类似于在Java中调用repaint()。最好调用*glutPostRedisplay()*而不是直接调用显示函数。 （我还注意到，可以在事件处理函数中直接调用OpenGL绘图命令，但这可能只有在使用单缓冲时才有意义；如果这样做，调用glFlush()确保绘图显示在屏幕上。）
+
+    `glutSpecialFunc(specialKeyFunc)` — 当用户按下某些特殊键，如箭头键或Home键时，会调用“特殊”函数。参数是按下的键的整数代码，以及按下键时的鼠标位置：
+
+    ```c
+    void specialKeyFunc( int key, int x, int y )
+    ```
+
+    GLUT有常量来表示可能的键代码，包括*GLUT_KEY_LEFT*、*GLUT_KEY_RIGHT*、*GLUT_KEY_UP*和*GLUT_KEY_DOWN*表示箭头键，以及*GLUT_KEY_HOME*表示Home键。例如，您可以通过测试是否(key == GLUT_KEY_LEFT)来检查用户是否按下了左箭头键。
+
+    `glutMouseFunc(mouseFunc)` — 当用户按下鼠标按钮和释放鼠标按钮时，都会调用鼠标函数，参数告诉发生了哪种情况。该函数通常会像这样：
+
+    ```c
+    void mouseFunc(int button, int buttonState, int x, int y) {
+        if (buttonState == GLUT_DOWN) {
+            // 处理鼠标按下事件
+        }
+        else { // buttonState is GLUT_UP
+            // 处理鼠标释放事件
+        }
+    }
+    ```
+
+    第一个参数告诉了是哪个鼠标按钮被按下或释放；它的值为常量*GLUT_LEFT_BUTTON*表示左键，*GLUT_MIDDLE_BUTTON*表示中键，*GLUT_RIGHT_BUTTON*表示右键。另外两个参数告诉了鼠标的位置。鼠标位置以像素坐标给出，左上角为(0,0)，y坐标从上到下增加。
+
+    `glutMotionFunc(mouseDragFunc)` — 当用户拖动鼠标时调用运动函数，也就是说，当鼠标按钮按下时。在用户在OpenGL窗口中按下鼠标之后，即使鼠标移出窗口，此函数也将继续被调用，并且鼠标释放事件也将发送到同一窗口。该函数有两个参数来指定新的鼠标位置：
+
+    ```c
+    void mouseDragFunc(int x, int y)
+    ```
+
+    `glutIdleFunc(idleFunction)` — 每当没有事件等待处理时，GLUT事件循环将调用空闲函数。空闲函数没有参数。它尽可能频繁地被调用，而不是以周期性间隔。GLUT还有一个定时器函数，它安排在指定延迟后调用某个函数一次。要设置定时器，调用
+
+    ```c
+    glutTimerFunc(delayInMilliseconds, timerFunction, userSelectedID)
+    ```
+
+    并将timerFunction定义为
+
+    ```c
+    void timerFunction(int timerID) { ...
+    ```
+
+    当调用timerFunction时，传递给它的参数将是与*glutTimerFunc*的第三个参数相同的整数。如果您想要使用*glutTimerFunc*进行动画，则timerFunction应该以另一个对*glutTimerFunc*的调用结束。
+
+    ----
+
+    一个GLUT窗口没有菜单栏，但可以向窗口添加一个隐藏的弹出菜单。该菜单将在鼠标单击显示区域时出现。您可以设置是由左、中还是右鼠标按钮触发菜单。
+
+    使用函数*glutCreateMenu(menuHandler)*创建菜单，其中参数是用户从菜单中选择命令时将调用的函数的名称。该函数必须使用int类型的参数定义，该参数标识用户选择的命令：
+
+    ```c
+    void menuHandler( int commandID ) { ...
+    ```
+
+    菜单创建后，通过调用函数*glutAddMenuEntry(name,commandID)*向菜单添加命令。第一个参数是菜单中显示的字符串。第二个参数是一个**int**，表示命令的标识符；当用户从菜单中选择命令时，该整数将传递给菜单处理函数。
+
+    最后，函数*glutAttachMenu(button)*将菜单附加到窗口。参数指定哪个鼠标按钮将触发菜单。可能的值包括*GLUT_LEFT_BUTTON*、*GLUT_MIDDLE_BUTTON*和*GLUT_RIGHT_BUTTON*。据我所知，如果使用鼠标单击触发弹出菜单，则相同的鼠标单击不会产生对鼠标处理程序函数的调用。
+
+    请注意，调用*glutAddMenuEntry*不提及菜单，调用*glutAttachMenu*也不提及菜单或窗口。当调用glutCreateMenu时，创建的菜单成为GLUT状态中的“当前菜单”。调用*glutAddMenuEntry*时，它会向当前菜单添加一个命令。当调用*glutAttachMenu*时，它将当前菜单附加到当前窗口，这是通过调用*glutCreateWindow*设置的。所有这些都与OpenGL“状态机”哲学一致，其中函数通过修改当前状态来执行操作。
+
+    例如，假设我们想让用户设置显示的背景颜色。我们需要一个函数来执行我们将添加到菜单中的命令。例如，我们可以定义
+
+    ```c
+    void doMenu( int commandID ) {
+        if ( commandID == 1)
+            glClearColor(0,0,0,1);  // 黑色
+        else if ( commandID == 2)
+            glClearColor(1,1,1,1);  // 白色
+        else if ( commandID == 3)
+            glClearColor(0,0,0.5,1);  // 深蓝色
+        else if (commandID == 10)
+            exit(0);  // 结束程序
+        glutPostRedisplay();  // 使用新的背景颜色重新绘制显示区域
+    }
+    ```
+
+    我们可以有另一个函数来创建菜单。此函数将在*main()*中调用，在调用*glutCreateWindow*后调用：
+
+    ```c
+    void createMenu() {
+        glutCreateMenu( doMenu );  // 对菜单命令调用doMenu()。
+        glutAddMenuEntry( "黑色背景", 1 );
+        glutAddMenuEntry( "白色背景", 2 );
+        glutAddMenuEntry( "蓝色背景", 3 );
+        glutAddMenuEntry( "退出", 10 );
+        glutAttachMenu(GLUT_RIGHT_BUTTON); // 右键单击显示菜单。
+    }
+    ```
+
+    菜单中还可以有子菜单。我不会在此处讨论该过程，但您可以查看样例程序[glut/ifs-polyhedron-viewer.c](../../../en/source/glut/ifs-polyhedron-viewer.c)，了解如何使用子菜单的示例。
+
+    ----
+
+    除了窗口和事件处理之外，GLUT还包括一些用于绘制基本三维形状的函数，例如球体、圆锥体和常规多面体。每种形状都有两个函数，一个是“实心”版本，绘制实心对象，另一个是**线框**版本，绘制看起来像是由线网构成的东西。（线框是通过仅绘制构成对象的多边形的轮廓来生成的。）例如，函数
+
+    ```c
+    void glutSolidSphere(double radius, int slices, int stacks)
+    ```
+
+    绘制具有给定半径的实心球体，其中心位于原点。请记住，这只是球体的近似表示，由多边形组成。为了进行近似，球体被经线分隔，就像橘子的切片一样，以及纬线，就像一叠圆盘一样。参数slices和stacks指定要使用的子分割数量。典型值为32和16，但为了得到球体的良好近似，您需要的数量取决于屏幕上球体的大小。函数glutWireframeSphere具有相同的参数，但仅绘制纬线和经线。圆锥体、圆柱体和**圆环体**（甜甜圈）的函数类似：
+
+    ```c
+    void glutSolidCone(double base, double height,
+                                        int slices, int stacks)
+
+    void glutSolidTorus(double innerRadius, double outerRadius,
+                                        int slices, int rings)
+                                        
+    void glutSolidCylinder(double radius, double height,
+                                        int slices, int stacks)
+    // 注意：圆柱体在FreeGLUT和Java中都可用，但在原始的GLUT库中不可用。
+    ```
+
+    对于圆环体，*innerRadius*是甜甜圈孔的大小。函数
+
+    ```c
+    void glutSolidCube(double size)
+    ```
+
+    绘制指定大小的立方体。还有一些没有参数的其他常规多面体的函数，它们以一定的固定大小绘制对象：*glutSolidTetrahedron()*, *glutSolidOctahedron()*, *glutSolidDodecahedron()*, 和 *glutSolidIcosahedron()*。还有一个*glutSolidTeapot(size)*，绘制一个经常用作示例的著名对象。这就是茶壶的样子：
+
+    ![123](../../en/c3/teapot.png)
+
+    所有形状都有线框版本。例如，glutWireTeapot(size)绘制一个线框茶壶。请注意，GLUT形状带有用于光照计算的法向量。然而，除了茶壶外，它们不带有纹理坐标，纹理坐标用于将纹理应用于对象。
+
+    GLUT还包括对在OpenGL绘图环境中绘制文本的一些有限支持。我不会在此处讨论这种可能性。如果您感兴趣，可以查阅API文档，并在示例程序[glut/color-cube-of-spheres.c](../../../en/source/glut/color-cube-of-spheres.c)中找到一个示例。
+
+.. tab:: 英文
+
+    To work with GLUT, you will need a C compiler and copies of the OpenGL and GLUT (or freeglut) development libraries. I can't tell you exactly that means on your own computer. On my computer, which runs Linux Mint, for example, the free C compiler gcc is already available. To do OpenGL development, I installed several packages, including freeglut3-dev and libgl1-mesa-dev. (Mesa is a Linux implementation of OpenGL.) If glutprog.c contains a complete C program that uses GLUT, I can compile it using a command such as
+
+    ```c
+    gcc -o glutprog glutprog.c -lGL -lglut
+    ```
+
+    The "-o glutprog" tells the compiler to use "glutprog" as the name of its output file, which can then be run as a normal executable file; without this option, the executable file would be named "a.out". The "-lglut" and "-lGL" options tell the compiler to link the program with the GLUT and OpenGL libraries. (The character after the "-" is a lower case "L".) Without these options, the linker won't recognize any GLUT or OpenGL functions. If the program also uses the GLU library, compiling it would require the option "-lGLU, and if it uses the math library, it would need the option "-lm". If a program requires additional .c files, they should be included as well. For example, the sample program [glut/color-cube-of-spheres.c](../../../en/source/glut/color-cube-of-spheres.c) depends on camera.c, and it can be compiled with the Linux gcc compiler using the command:
+
+    ```c
+    gcc -o cubes color-cube-of-spheres.c camera.c -lGL -lglut -lGLU -lm
+    ```
+
+    The sample program [glut/glut-starter.c](../../../en/source/glut/glut-starter.c) can be used as a starting point for writing programs that use GLUT. While it doesn't do anything except open a window, the program contains the framework needed to do OpenGL drawing, including doing animation, responding to mouse and keyboard events, and setting up a menu. The source code contains comments that tell you how to use it.
+
+    **On Windows**, you might consider installing the WSL, or Windows Subsystem for Linux, (<https://docs.microsoft.com/en-us/windows/wsl/>), which as I write this should soon include the ability to work with GUI programs. WSL is an official Microsoft system lets you install a version of Linux inside Windows. Another option is the older open source project, Cygwin (<https://cygwin.com/>). (Using Cygwin, I installed the packages gcc-core, xinit, xorg-server, libglut-devel, libGLU-devel, and libGL-devel. After starting the X11 window system with the startxwin command, I was able to compile and run OpenGL examples from this textbook in a Cygwin terminal window using the same commands that I would use in Linux.)
+
+    **For MacOS**, the situation is more complicated, because OpenGL has been deprecated in favor of Metal, Apple's own proprietary API. However, as I write this, OpenGL can still be used on MacOS with Apple's XCode developer tools. The examples from this textbook require some modification to work with XCode tools, since the OpenGL and GLUT libraries are not loaded in the same way on Mac as they are on Linux. Modified programs for use on MacOS can be found in the source folder [glut/glut-mac](../../../en/source/glut/glut-mac). See the README.txt file in that folder for more information.
+
+    ----
+
+    The GLUT library makes it easy to write basic OpenGL applications in C. GLUT uses event-handling functions. You write functions to handle events that occur when the display needs to be redrawn or when the user clicks the mouse or presses a key on the keyboard.
+
+    To use GLUT, you need to include the header file *glut.h* (or *freeglut.h*) at the start of any source code file that uses it, along with the general OpenGL header file, gl.h. The header files should be installed in a standard location, in a folder named GL. (But note that the folder name could be different, or omitted entirely.) So, the program usually begins with something like
+
+    ```c
+    #include <GL/gl.h>
+    #include <GL/glut.h>
+    ```
+
+    On my computer, saying `#include <GL/glut.h>` actually includes the subset of FreeGLUT that corresponds to GLUT. To get access to all of FreeGLUT, I would substitute `#include <GL/freeglut.h>`. Depending on the features that it uses, a program might need other header files, such as `#include <GL/glu.h>` and `#include <math.h>`.
+
+    The program's `main()` function must contain some code to initialize GLUT, to create and open a window, and to set up event handling by registering the functions that should be called in response to various events. After this setup, it must call a function that runs the GLUT event-handling loop. That function waits for events and processes them by calling the functions that have been registered to handle them. The event loop runs until the program ends, which happens when the user closes the window or when the program calls the standard `exit()` function.
+
+    To set up the event-handling functions, GLUT uses the fact that in C, it is possible to pass a function name as a parameter to another function. For example, if `display()` is the function that should be called to draw the content of the window, then the program would use the command
+
+    ```c
+    glutDisplayFunc(display);
+    ```
+
+    to install this function as an event handler for display events. A display event occurs when the contents of the window need to be redrawn, including when the window is first opened. Note that *display* must have been previously defined, as a function with no parameters:
+
+    ```c
+    void display() {
+    .
+    .  // OpenGL drawing code goes here!
+    .
+    }
+    ```
+
+    Keep in mind that it's not the name of this function that makes it an OpenGL display function. It has to be set as the display function by calling glutDisplayFunc(display). All of the GLUT event-handling functions work in a similar way (except many of them do need to have parameters).
+
+    There are a lot of possible event-handling functions, and I will only cover some of them here. Let's jump right in and look at a possible `main()` routine for a GLUT program that uses most of the common event handlers:
+
+    ```c
+    int main(int argc, char** argv) {
+        glutInit(&argc, argv);  // Required initialization!
+        glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
+        glutInitWindowSize(500,500);        // size of display area, in pixels
+        glutInitWindowPosition(100,100);    // location in screen coordinates
+        glutCreateWindow("OpenGL Program"); // the parameter is the window title  
+
+        glutDisplayFunc(display);       // called when window needs to be redrawn
+        glutReshapeFunc(reshape);       // called when size of the window changes
+        glutKeyboardFunc(keyFunc);      // called when user types a character
+        glutSpecialFunc(specialKeyFunc);// called when user presses a special key
+        glutMouseFunc(mouseFunc);       // called for mousedown and mouseup events
+        glutMotionFunc(mouseDragFunc);  // called when mouse is dragged
+        glutIdleFunc(idleFun);          // called when there are no other events
+
+        glutMainLoop(); // Run the event loop!  This function never returns.
+        return 0;  // (This line will never actually be reached.)
+    }
+    ```
+
+    The first five lines do some necessary initialization, the next seven lines install event handlers, and the call to *glutMainLoop()* runs the GLUT event loop. I will discuss all of the functions that are used here. The first GLUT function call must be glutInit, with the parameters as shown. (Note that argc and argv represent command-line arguments for the program. Passing them to glutInit allows it to process certain command-line arguments that are recognized by GLUT. I won't discuss those arguments here.) The functions *glutInitWindowSize* and *glutInitWindowPosition* do the obvious things; size is given in pixels, and window position is given in terms of pixel coordinates on the computer screen, with (0,0) at the upper left corner of the screen. The function *glutCreateWindow* creates the window, but note that nothing can happen in that window until *glutMainLoop* is called. Often, an additional, user-defined function is called in main() to do whatever initialization of global variables and OpenGL state is required by the program. OpenGL initialization can be done after calling *glutCreateWindow* and before calling *glutMainLoop*. Turning to the other functions used in main(),
+
+    `glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH)` — Must be called to define some characteristics of the OpenGL drawing context. The parameter specifies features that you would like the OpenGL context to have. The features are represented by constants that are OR'ed together in the parameter. *GLUT_DEPTH* says that a depth buffer should be created; without it, the depth test won't work. If you are doing 2D graphics, you wouldn't include this option. *GLUT_DOUBLE* asks for **double buffering**, which means that drawing is actually done off-screen, and the off-screen copy has to copied to the screen to be seen. The copying is done by `glutSwapBuffers()`, which must be called at the end of the display function. (You can use GLUT_SINGLE instead of *GLUT_DOUBLE* to get single buffering; in that case, you have to call *glFlush()* at the end of the display function instead of `glutSwapBuffers()`. However, all of the examples in this book use *GLUT_DOUBLE*.)
+
+    `glutDisplayFunc(display)` — The display function should contain OpenGL drawing code that can completely redraw the scene. This is similar to *paintComponent()* in the Java Swing API. The display function can have any name, but it must be declared as a void function with no parameters: *void display()*.
+
+    `glutReshapeFunc(reshape)` — The reshape function is called when the user changes the size of the window. Its parameters tell the new width and height of the drawing area:
+
+    ```c
+    void reshape( int width, int height )
+    ```
+
+    For example, you might use this method to set up the projection transform, if the projection depends only on the window size. A reshape function is not required, but if one is provided, it should always set the OpenGL viewport, which is the part of the window that is used for drawing. Do this by calling
+
+    ```c
+    glViewport(0,0,width,height);
+    ```
+
+    The viewport is set automatically if no reshape function is specified.
+
+    `glutKeyboardFunc(keyFunc)` — The keyboard function is called when the user types a character such as 'b' or 'A' or a space. It is not called for special keys such as arrow keys that do not produce characters when pressed. The keyboard function has a parameter of type **unsigned char** which represents the character that was typed. It also has two int parameters that give the location of the mouse when the key was pressed, in pixel coordinates with (0,0) at the upper left corner of the display area. So, the definition of the key function must have the form:
+
+    ```c
+    void keyFunc( unsigned char ch, int x, int y )
+    ```
+
+    Whenever you make any changes to the program's data that require the display to be redrawn, you should call *glutPostRedisplay()*. This is similar to calling repaint() in Java. It is better to call *glutPostRedisplay()* than to call the display function directly. (I also note that it's possible to call OpenGL drawing commands directly in the event-handling functions, but it probably only makes sense if you are using single buffering; if you do this, call glFlush() to make sure that the drawing appears on the screen.)
+
+    `glutSpecialFunc(specialKeyFunc)` — The "special" function is called when the user presses certain special keys, such as an arrow key or the Home key. The parameters are an integer code for the key that was pressed, plus the mouse position when the key was pressed:
+
+    ```c
+    void specialKeyFunc( int key, int x, int y )
+    ```
+
+    GLUT has constants to represent the possible key codes, including *GLUT_KEY_LEFT*, *GLUT_KEY_RIGHT*, *GLUT_KEY_UP*, and *GLUT_KEY_DOWN* for the arrow keys and *GLUT_KEY_HOME* for the Home key. For example, you can check whether the user pressed the left arrow key by testing if (key == GLUT_KEY_LEFT).
+
+    `glutMouseFunc(mouseFunc)` — The mouse function is called both when the user presses and when the user releases a button on the mouse, with a parameter to tell which of these occurred. The function will generally look like this:
+
+    ```c
+    void mouseFunc(int button, int buttonState, int x, int y) {
+    if (buttonState == GLUT_DOWN) {
+            // handle mousePressed event
+    }
+    else { // buttonState is GLUT_UP
+            // handle mouseReleased event
+    }
+    }
+    ```
+
+    The first parameter tells which mouse button was pressed or released; its value is the constant *GLUT_LEFT_BUTTON* for the left, *GLUT_MIDDLE_BUTTON* for the middle, and *GLUT_RIGHT_BUTTON* for the right mouse button. The other two parameters tell the position of the mouse. The mouse position is given in pixel coordinates with (0,0) in the top left corner of the display area and with y increasing from top to bottom.
+
+    `glutMotionFunc(mouseDragFunc)` — The motion function is called when the user moves the mouse while dragging, that is, while a mouse button is pressed. After the user presses the mouse in the OpenGL window, this function will continue to be called even if the mouse moves outside the window, and the mouse release event will also be sent to the same window. The function has two parameters to specify the new mouse position:
+
+    ```c
+    void mouseDragFunc(int x, int y)
+    ```
+
+    `glutIdleFunc(idleFunction)` — The idle function is called by the GLUT event loop whenever there are no events waiting to be processed. The idle function has no parameters. It is called as often as possible, not at periodic intervals. GLUT also has a timer function, which schedules some function to be called once, after a specified delay. To set a timer, call
+
+    ```c
+    glutTimerFunc(delayInMilliseconds, timerFunction, userSelectedID)
+    ```
+
+    and define timerFunction as
+
+    ```c
+    void timerFunction(int timerID) { ...
+    ```
+
+    The parameter to timerFunction when it is called will be the same integer that was passed as the third parameter to *glutTimerFunc*. If you want to use *glutTimerFunc* for animation, then timerFunction should end with another call to *glutTimerFunc*.
+
+    ----
+
+    A GLUT window does not have a menu bar, but it is possible to add a hidden popup menu to the window. The menu will appear in response to a mouse click on the display. You can set whether it is triggered by the left, middle, or right mouse button.
+
+    A menu is created using the function *glutCreateMenu(menuHandler)*, where the parameter is the name of a function that will be called when the user selects a command from the menu. The function must be defined with a parameter of type int that identifies the command that was selected:
+
+    ```c
+    void menuHandler( int commandID ) { ...
+    ```
+
+    Once the menu has been created, commands are added to the menu by calling the function *glutAddMenuEntry(name,commandID)*. The first parameter is the string that will appear in the menu. The second is an **int** that identifies the command; it is the integer that will be passed to the menu-handling function when the user selects the command from the menu.
+
+    Finally, the function *glutAttachMenu(button)* attaches the menu to the window. The parameter specifies which mouse button will trigger the menu. Possible values are *GLUT_LEFT_BUTTON*, *GLUT_MIDDLE_BUTTON*, and *GLUT_RIGHT_BUTTON*. As far as I can tell, if a mouse click is used to trigger the popup menu, than the same mouse click will **not** also produce a call to the mouse-handler function.
+
+    Note that a call to *glutAddMenuEntry* doesn't mention the menu, and a call to *glutAttachMenu* doesn't mention either the menu or the window. When you call glutCreateMenu, the menu that is created becomes the "current menu" in the GLUT state. When *glutAddMenuEntry* is called, it adds a command to the current menu. When *glutAttachMenu* is called, it attaches the current menu to the current window, which was set by a call to *glutCreateWindow*. All this is consistent with the OpenGL "state machine" philosophy, where functions act by modifying the current state.
+
+    As an example, suppose that we want to let the user set the background color for the display. We need a function to carry out commands that we will add to the menu. For example, we might define
+
+    ```c
+    function doMenu( int commandID ) {
+        if ( commandID == 1)
+            glClearColor(0,0,0,1);  // BLACK
+        else if ( commandID == 2)
+            glClearColor(1,1,1,1);  // WHITE
+        else if ( commandID == 3)
+            glClearColor(0,0,0.5,1);  // DARK BLUE
+        else if (commandID == 10)
+            exit(0);  // END THE PROGRAM
+        glutPostRedisplay();  // redraw the display, with the new background color
+    }
+    ```
+
+    We might have another function to create the menu. This function would be called in *main()*, after calling *glutCreateWindow*:
+
+    ```c
+    function createMenu() {
+        glutCreateMenu( doMenu );  // Call doMenu() in response to menu commands.
+        glutAddMenuEntry( "Black Background", 1 );
+        glutAddMenuEntry( "White Background", 2 );
+        glutAddMenuEntry( "Blue Background", 3 );
+        glutAddMenuEntry( "EXIT", 10 );
+        glutAttachMenu(GLUT_RIGHT_BUTTON); // Show menu on right-click.
+    }
+    ```
+
+    It's possible to have submenus in a menu. I won't discuss the procedure here, but you can look at the sample program [glut/ifs-polyhedron-viewer.c](../../../en/source/glut/ifs-polyhedron-viewer.c) for an example of using submenus.
+
+    ----
+
+    In addition to window and event handling, GLUT includes some functions for drawing basic 3D shapes such as spheres, cones, and regular polyhedra. It has two functions for each shape, a "solid" version that draws the shape as a solid object, and a **wireframe** version that draws something that looks like it's made of wire mesh. (The wireframe is produced by drawing just the outlines of the polygons that make up the object.) For example, the function
+
+    ```c
+    void glutSolidSphere(double radius, int slices, int stacks)
+    ```
+
+    draws a solid sphere with the given radius, centered at the origin. Remember that this is just an approximation of a sphere, made up of polygons. For the approximation, the sphere is divided by lines of longitude, like the slices of an orange, and by lines of latitude, like a stack of disks. The parameters slices and stacks tell how many subdivisions to use. Typical values are 32 and 16, but the number that you need to get a good approximation for a sphere depends on the size of the sphere on the screen. The function glutWireframeSphere has the same parameters but draws only the lines of latitude and longitude. Functions for a cone, a cylinder, and a **torus** (doughnut) are similar:
+
+    ```c
+    void glutSolidCone(double base, double height,
+                                        int slices, int stacks)
+
+    void glutSolidTorus(double innerRadius, double outerRadius,
+                                        int slices, int rings)
+                                        
+    void glutSolidCylinder(double radius, double height,
+                                        int slices, int stacks)
+    // NOTE: Cylinders are available in FreeGLUT and in Java,
+    // but not in the original GLUT library.
+    ```
+
+    For a torus, the *innerRadius* is the size of the doughnut hole. The function
+
+    ```c
+    void glutSolidCube(double size)
+    ```
+
+    draws a cube of a specified size. There are functions for the other regular polyhedra that have no parameters and draw the object at some fixed size: *glutSolidTetrahedron()*, *glutSolidOctahedron()*, *glutSolidDodecahedron()*, and *glutSolidIcosahedron()*. There is also *glutSolidTeapot(size)* that draws a famous object that is often used as an example. Here's what the teapot looks like:
+
+    ![123](../../en/c3/teapot.png)
+
+    Wireframe versions of all of the shapes are also available. For example, glutWireTeapot(size) draws a wireframe teapot. Note that GLUT shapes come with normal vectors that are required for lighting calculations. However, except for the teapot, they do not come with texture coordinates, which are required for applying textures to objects.
+
+    GLUT also includes some limited support for drawing text in an OpenGL drawing context. I won't discuss that possibility here. You can check the API documentation if you are interested, and you can find an example in the sample program [glut/color-cube-of-spheres.c](../../../en/source/glut/color-cube-of-spheres.c).
+
+3.6.2 使用JOGL
+--------------------
+
+.. tab:: 中文
+
+    JOGL是在Java程序中使用OpenGL的框架。它是一个庞大且复杂的API，支持所有版本的OpenGL，但对于基本的应用程序来说使用起来相当容易。您应该使用JOGL 2.4或更高版本。本书中的程序已经在版本2.4.0中进行了测试。
+
+    示例程序*[jogl/JoglStarter.java](../../../en/source/jogl/JoglStarter.java)*可用作使用JOGL编写OpenGL程序的起点。虽然它除了打开一个窗口外什么也不做，但该程序包含了进行OpenGL绘图所需的框架，包括进行动画、响应鼠标和键盘事件以及设置菜单。源代码中包含了说明如何使用它的注释。
+
+    要使用JOGL，您需要两个包含JOGL Java类的.jar文件：*jogl-all.jar*和*gluegen-rt.jar*。此外，您还需要两个本地库文件。本地库是一组可以从Java调用但不是用Java编写的例程。本地库中的例程只能在一种类型的计算机上工作；您需要为要使用程序的每种计算机类型获取不同的本地库。JOGL的本地库存储在额外的.jar文件中，针对不同计算机提供了几个版本。例如，对于Intel或AMD CPU上的64位Linux，您需要*jogl-all-natives-linux-amd64.jar*和*gluegen-rt-natives-linux-amd64.jar*。不幸的是，对于不同平台有不同版本，因为许多人不确定自己使用的是哪个版本。但是，如果您有疑问，可以获取多个版本；JOGL将确定要使用哪一个版本。
+
+    JOGL软件可以在<https://jogamp.org/>找到。您可以从最新版本中下载.jar文件，这些文件可以在以下列表的末尾附近找到：
+
+    <https://jogamp.org/deployment/archive/rc/>
+
+    点击发布名称，然后点击`jar/`链接以查看所有.jar文件的完整列表。找到并下载*jogl-all.jar*和*gluegen-rt.jar*以及相应的本地库文件。我还在自己的网站上提供了*jogl-all.jar*和*gluegen-rt.jar*，以及一些最常见平台的本地库文件，网址是：
+
+    <http://math.hws.edu/eck/cs424/jogl_2_4_support/>
+
+    JOGL是开源的，根据其许可证，文件可以自由重新分发。
+
+    要进行JOGL开发，您应该在计算机上的某个目录中创建一个目录来保存.jar文件。将两个JOGL jar文件放入该目录中，以及您平台的两个本地库jar文件。 （拥有额外的本地库jar文件并不会有什么损害，只要您拥有所需的那些。）
+
+    可以在命令行上进行JOGL开发。您必须告诉javac命令在哪里找到这两个JOGL jar文件。您可以在javac命令的类路径（"-cp"）选项中执行此操作。例如，如果您在Linux或MacOS中工作，并且如果jar文件碰巧位于您正在工作的目录中，您可以这样说：
+
+    ```shell
+    javac  -cp  jogl-all.jar:gluegen-rt.jar:.  MyOpenGLProg.java
+    ```
+
+    对于Windows，操作类似，只是类路径使用 ";" 而不是 ":" 来分隔列表中的项目：
+
+    ```shell
+    javac  -cp  jogl-all.jar;gluegen-rt.jar;.  MyOpenGLProg.java
+    ```
+
+    类路径的末尾有一个必要的句号，使Java能够在当前目录中找到 .java 文件。如果jar文件不在当前目录中，您可以使用完整路径名或相对路径名来引用文件。例如，
+
+    ```shell
+    javac  -cp  ../jogl/jogl-all.jar:../jogl/gluegen-rt.jar:.  MyOpenGLProg.java
+    ```
+
+    使用java命令运行程序完全相同。例如：
+
+    ```shell
+    java  -cp  jogl-all.jar:gluegen-rt.jar:.  MyOpenGLProg
+    ```
+
+    请注意，您不必显式引用本地库jar文件。它们只需要与JOGL jar文件位于同一个目录中即可。
+
+    ----
+
+    我大部分的Java开发都是使用Eclipse IDE（<http://eclipse.org>）。要在Eclipse中使用JOGL进行开发，您需要使用关于jar文件的信息配置Eclipse。要做到这一点，启动Eclipse。您希望创建一个“用户库”来包含jar文件：打开Eclipse首选项窗口，在左侧选择“Java” / “构建路径” / “用户库”。在右侧单击“新建”按钮。将“JOGL”（或您喜欢的任何名称）输入为用户库的名称。确保在库列表中选择了新创建的用户库，然后单击“添加外部Jars”按钮。在文件选择框中，导航到包含JOGL jar文件的目录，并选择JOGL所需的两个jar文件，即jogl-all.jar和gluegen-rt.jar。（再次强调，您不需要添加本地库；它们只需要与JOGL jar文件位于同一个目录中。）单击“打开”。所选的jar文件将添加到用户库中。（如果您不知道如何选择多个文件，您也可以逐个添加。）它应该类似于这样：
+
+    ![123](../../../en/c3/jogl-user-library.png)
+
+    单击“确定”。用户库已创建。您只需要执行此操作一次，然后就可以在所有JOGL项目中使用它。
+
+    现在，要在项目中使用OpenGL，请像通常在Eclipse中创建一个新的Java项目。（如果询问是否要为项目创建module-info.java文件，请选择“不创建”。本教材的示例程序不使用Java模块。）右键单击Project Explorer视图中的新项目，并从菜单中选择“Build Path” / “Configure Build Path”。您将看到项目属性对话框，左侧选择“Java构建路径”。（您也可以通过“项目”菜单中的“属性”命令访问此对话框。）在窗口顶部选择“库”选项卡，然后点击“库”选项卡中的“类路径”以选择它。点击右侧的“添加库”按钮。在弹出窗口中，选择“用户库”并点击“下一步”。在下一个窗口中，选择您的JOGL用户库并点击“完成”。最后，在主要属性窗口中点击“应用并关闭”。您的项目现在应该已经设置好进行JOGL开发了。您应该在Project Explorer中的项目部分中看到JOGL用户库作为项目的一部分列出。每当您想要启动一个新的JOGL项目时，您可以通过相同的设置步骤将JOGL用户库添加到项目的构建路径中。
+
+    ----
+
+    完成了所有设置，现在是时候讨论如何使用Java编写OpenGL程序了。使用JOGL，我们不必谈论鼠标和键盘处理或动画，因为这可以像在任何Java Swing程序中一样完成。您只需要了解JOGL API中的几个类。
+
+    首先，您需要一个GUI组件，用于使用OpenGL进行绘制。为此，您可以使用**GLJPanel**，它是**JPanel**的子类。（**GLJPanel**用于基于Swing API的程序；另一种选择是**GLCanvas**，它是较旧的AWT类**Canvas**的子类。）该类定义在包*com.jogamp.opengl.awt*中。我们需要用于基本OpenGL编程的所有其他类都在包*com.jogamp.opengl*中。
+
+    JOGL使用Java的事件框架来管理OpenGL绘图上下文，并定义了一个自定义的事件监听器接口**GLEventListener**来管理OpenGL事件。要使用OpenGL在**GLJPanel**上绘制，您需要创建一个实现**GLEventListener**接口的对象，并将该监听器注册到您的**GLJPanel**上。**GLEventListener**接口定义了以下方法：
+
+    ```java
+    public void init(GLAutoDrawable drawable)
+
+    public void display(GLAutoDrawable drawable)
+
+    public void dispose(GLAutoDrawable drawable)
+
+    public void reshape(GLAutoDrawable drawable,
+                            int x, int y, int width, int height)
+    ```
+
+    这些方法中的drawable参数告诉您涉及哪个OpenGL绘图表面。它将是对**GLJPanel**的引用。（**GLAutoDrawable**是由**GLJPanel**和其他OpenGL绘图表面实现的接口。）init()方法是进行OpenGL初始化的地方。（根据文档，它实际上可以被调用多次，如果需要重新创建OpenGL上下文的话。因此，init()不应用于只应该执行一次的初始化。）dispose()方法将在销毁OpenGL绘图上下文之前调用，以便您有机会在其销毁之前进行任何清理。当窗口首次打开或**GLJPanel**的大小发生变化时，将调用reshape()方法。OpenGL的glViewport()函数在调用reshape()之前自动调用，因此您不需要自己调用它。通常情况下，您不需要在dispose()或reshape()中编写任何代码，但它们必须存在以满足**GLEventListener**接口的定义。
+
+    *display()*方法是实际绘制和大部分工作的地方。它通常应清除绘图区域并完全重绘场景。花一分钟时间查看一个最小的JOGL程序大纲。它创建了一个**GLJPanel**，它也充当了**GLEventListener**：
+
+    ```java
+    import com.jogamp.opengl.*;
+    import com.jogamp.opengl.awt.GLJPanel;
+
+    import java.awt.Dimension;
+    import javax.swing.JFrame;
+
+    public class JOGLProgram extends GLJPanel implements GLEventListener {
+
+        public static void main(String[] args) {
+            JFrame window = new JFrame("JOGL Program");
+            JOGLProgram panel = new JOGLProgram();
+            window.setContentPane(panel);
+            window.pack();
+            window.setLocation(50,50);
+            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            window.setVisible(true);
+        }
+
+        public JOGLProgram() {
+            setPreferredSize( new Dimension(500,500) );
+            addGLEventListener(this);
+        }
+        
+        // ---------------  Methods of the GLEventListener interface -----------
+
+        public void init(GLAutoDrawable drawable) {
+                // called when the panel is created
+            GL2 gl = drawable.getGL().getGL2();
+            // Add initialization code here!
+        }
+
+        public void display(GLAutoDrawable drawable) {    
+                // called when the panel needs to be drawn
+            GL2 gl = drawable.getGL().getGL2();
+            // Add drawing code here!
+        }
+
+        public void reshape(GLAutoDrawable drawable,
+                                int x, int y, int width, int height) {
+            // called when user resizes the window
+        }
+
+        public void dispose(GLAutoDrawable drawable) {
+            // called when the panel is being disposed
+        }
+
+    }
+    ```
+
+    ----
+
+    此时，您需要了解的另一件事就是如何在程序中使用OpenGL函数。在JOGL中，OpenGL 1.1函数被收集到**GL2**类型的对象中。（不同版本的OpenGL有不同的类；**GL2**包含与1.1兼容的OpenGL 1.1功能以及后来的版本。）**GL2**类型的对象是一个OpenGL图形上下文，就像**Graphics2D**类型的对象是普通Java 2D绘图的图形上下文一样。在上面的程序中，
+
+    ```java
+    GL2 gl = drawable.getGL().getGL2();
+    ```
+
+    获取了**GLAutoDrawable**的绘图上下文，也就是在该程序中的**GLJPanel**的绘图上下文。变量的名称当然可以是任何名称，但gl或gl2是常规的命名。
+
+    大部分情况下，在JOGL中使用OpenGL函数与在C中相同，只是这些函数现在是对象gl中的方法。例如，调用glClearColor(r,g,b,a)变成了
+
+    ```java
+    gl.glClearColor(r,g,b,a);
+    ```
+
+    冗余的“gl.gl”有点恼人，但您会习惯的。OpenGL常量，如*GL_TRIANGLES*，是**GL2**的静态成员，因此，在JOGL中，例如，*GL_TRIANGLES*变成了**GL2**.*GL_TRIANGLES*。在大多数情况下，OpenGL函数的参数列表与C API中的参数列表相同。一个例外是对于函数（如glVertex3fv()）在C中采用数组/指针参数的函数。在JOGL中，该参数变成了普通的Java数组，并且添加了额外的整数参数来指定数组中数据的位置。例如，下面是如何在JOGL中绘制一个三角形，其中所有顶点坐标都在一个数组中：
+
+    ```java
+    float[] coords = { 0,0.5F, -0.5F,-0.5F, 0.5F,-0.5F };
+
+    gl.glBegin(GL2.GL_TRIANGLES);
+    gl.glVertex2fv(coords, 0);     // 第一个顶点数据从索引0开始
+    gl.glVertex2fv(coords, 2);     // 第二个顶点数据从索引2开始
+    gl.glVertex2fv(coords, 4);     // 第三个顶点数据从索引4开始
+    gl.glEnd();
+    ```
+
+    JOGL API中最大的变化是在诸如glVertexPointer之类的函数中使用nio缓冲区而不是数组。这在[3.4.3小节](./s4.md#343-java-中的数据缓冲区)中有所讨论。在[4.3.9小节](../c4/s3.md#439)中，我们将看到纹理图像在JOGL中也有特殊处理。
+
+    ----
+
+    JOGL API包括一个名为**GLUT**的类，该类使得GLUT的形状绘制函数在Java中可用。（因为您不需要在Java中使用GLUT的窗口或事件功能，所以只包括了形状函数。）**GLUT**类定义在包*com.jogamp.opengl.util.gl2*中。要使用此类绘制形状，您需要创建一个**GLUT**类型的对象。在程序中只需要创建一个：
+
+    ```java
+    GLUT glut = new GLUT();
+    ```
+
+    该对象中的方法包括所有来自GLUT C API的形状绘制函数，具有相同的名称和参数。例如：
+
+    ```java
+    glut.glutSolidSphere( 2, 32, 16 );
+    glut.glutWireTeapot( 5 );
+    glut.glutSolidIcosahedron();
+    ```
+
+    （我不知道为什么这些是对象中的实例方法，而不是类中的静态方法；从逻辑上讲，对象是不需要的。）
+
+    GLU库可通过类*com.jogamp.opengl.glu.GLU*使用，并且与GLUT类似地工作。也就是说，您必须创建一个**GLU**类型的对象，GLU函数将作为该对象的方法可用。我们仅在函数gluLookAt和gluPerspective中遇到过GLU，这些函数在[第3.3节](./s3.md)中进行了讨论。例如，
+
+    ```java
+    GLU glu = new GLU();
+
+    glu.gluLookAt( 5,15,7, 0,0,0, 0,1,0 );
+    ```
+
+.. tab:: 英文
+
+    JOGL is a framework for using OpenGL in Java programs. It is a large and complex API that supports all versions of OpenGL, but it is fairly easy to use for basic applications. You should use JOGL 2.4 or later. The programs in this book were tested with version 2.4.0.
+
+    The sample program *[jogl/JoglStarter.java](../../../en/source/jogl/JoglStarter.java)* can be used as a starting point for writing OpenGL programs using JOGL. While it doesn't do anything except open a window, the program contains the framework needed to do OpenGL drawing, including doing animation, responding to mouse and keyboard events, and setting up a menu. The source code contains comments that tell you how to use it.
+
+    To use JOGL, you will need two .jar files containing the Java classes for JOGL: *jogl-all.jar* and *gluegen-rt.jar*. In addition, you will need two native library files. A native library is a collection of routines that can be called from Java but are not written in Java. Routines in a native library will work on only one kind of computer; you need a different native library for each type of computer on which your program is to be used. The native libraries for JOGL are stored in additional .jar files, which are available in several versions for different computers. For example, for 64-bit Linux on Intel or AMD CPUs, you need *jogl-all-natives-linux-amd64.jar* and *gluegen-rt-natives-linux-amd64.jar*. It is unfortunate that there are different versions for different platforms, since many people don't know exactly which one they are using. However, if you are in doubt, you can get more than one version; JOGL will figure out which one to use.
+
+    JOGL software can be found at <https://jogamp.org/>. You can download the jar files from the most recent release, which can be found near the end of the list at
+
+    <https://jogamp.org/deployment/archive/rc/>
+
+    Click on the release name, then click on the `jar/` link to see the full list of jar files. Find and download *jogl-all.jar* and gluegen-rt.jar and the corresponding native library files. I have also made *jogl-all.jar* and gluegen-rt.jar available on my own web site, along with the native libraries for some of the most common platforms, at
+
+    <http://math.hws.edu/eck/cs424/jogl_2_4_support/>
+
+    JOGL is open-source, and the files are freely redistributable, according to their license.
+
+    To do JOGL development, you should create a directory somewhere on your computer to hold the jar files. Place the two JOGL jar files in that directory, along with the two native library jar files for your platform. (Having extra native library jar files doesn't hurt, as long as you have the ones that you need.)
+
+    It is possible to do JOGL development on the command line. You have to tell the javac command where to find the two JOGL jar files. You do that in the classpath ("-cp") option to the javac command. For example, if you are working in Linux or MacOS, and if the jar files happen to be in the same directory where you are working, you might say:
+
+    ```shell
+    javac  -cp  jogl-all.jar:gluegen-rt.jar:.  MyOpenGLProg.java
+    ```
+
+    It's similar for Windows, except that the classpath uses a ";" instead of a ":" to separate the items in the list:
+
+    ```shell
+    javac  -cp  jogl-all.jar;gluegen-rt.jar;.  MyOpenGLProg.java
+    ```
+
+    There is an essential period at the end of the classpath, which makes it possible for Java to find .java files in the current directory. If the jar files are not in the current directory, you can use full path names or relative path names to the files. For example,
+
+    ```shell
+    javac  -cp  ../jogl/jogl-all.jar:../jogl/gluegen-rt.jar:.  MyOpenGLProg.java
+    ```
+
+    Running a program with the java command is exactly similar. For example:
+
+    ```shell
+    java  -cp  jogl-all.jar:gluegen-rt.jar:.  MyOpenGLProg
+    ```
+
+    Note that you don't have to explicitly reference the native library jar files. They just have to be in the same directory with the JOGL jar files.
+
+    ----
+
+    I do most of my Java development using the Eclipse IDE (<http://eclipse.org>). To do development with JOGL in Eclipse, you will have to configure Eclipse with information about the jar files. To do that, start up Eclipse. You want to create a "User Library" to contain the jar files: Open the Eclipse Preferences window, and select "Java" / "Build Path" / "User Libraries" on the left. Click the "New" button on the right. Enter "JOGL" (or any name you like) as the name of the user library. Make sure that the new user library is selected in the list of libraries, then click the "Add External Jars" button. In the file selection box, navigate to the directory that contains the JOGL jar files, and select the two jar files that are needed for JOGL, jogl-all.jar and gluegen-rt.jar. (Again, you do not need to add the native libraries; they just need to be in the same directory as the JOGL jar files.) Click "Open". The selected jars will be added to the user library. (You could also add them one at a time, if you don't know how to select multiple files.) It should look something like this:
+
+    ![123](../../../en/c3/jogl-user-library.png)
+
+    Click "OK." The user library has been created. You will only have to do this once, and then you can use it in all of your JOGL projects.
+
+    Now, to use OpenGL in a project, create a new Java project as usual in Eclipse. (If you are asked whether you want to create a module-info.java file for the project, say "Don't Create". Sample programs for this textbook do not use Java modules.) Right-click the new project in the Project Explorer view, and select "Build Path" / "Configure Build Path" from the menu. You will see the project Properties dialog, with "Java Build Path" selected on the left. (You can also access this through the "Properties" command in the "Project" menu.) Select the "Libraries" tab at the top of the window, and then click on "Class Path" in the "Libraries" tab to select it. Click the "Add Library" button, on the right. In the popup window, select "User Library" and click "Next." In the next window, select your JOGL User Library and click "Finish." Finally, click "Apply and Close" in the main Properties window. Your project should now be set up to do JOGL development. You should see the JOGL User Library listed as part of the project in the Project Explorer. Any time you want to start a new JOGL project, you can go through the same setup to add the JOGL User Library to the build path in the project.
+
+    ----
+
+    With all that setup out of the way, it's time to talk about actually writing OpenGL programs with Java. With JOGL, we don't have to talk about mouse and keyboard handling or animation, since that can be done in the same way as in any Java Swing program. You will only need to know about a few classes from the JOGL API.
+
+    First, you need a GUI component on which you can draw using OpenGL. For that, you can use **GLJPanel**, which is a subclass of **JPanel**. (**GLJPanel** is for use in programs based on the Swing API; an alternative is **GLCanvas**, which is a subclass of the older AWT class **Canvas**.) The class is defined in the package *com.jogamp.opengl.awt*. All of the other classes that we will need for basic OpenGL programming are in the package *com.jogamp.opengl*.
+
+    JOGL uses Java's event framework to manage OpenGL drawing contexts, and it defines a custom event listener interface, **GLEventListener**, to manage OpenGL events. To draw on a **GLJPanel** with OpenGL, you need to create an object that implements the **GLEventListener** interface, and register that listener with your **GLJPanel**. The **GLEventListener** interface defines the following methods:
+
+    ```java
+    public void init(GLAutoDrawable drawable)
+
+    public void display(GLAutoDrawable drawable)
+
+    public void dispose(GLAutoDrawable drawable)
+
+    public void reshape(GLAutoDrawable drawable,
+                            int x, int y, int width, int height)
+    ```
+
+    The drawable parameter in these methods tells which OpenGL drawing surface is involved. It will be a reference to the **GLJPanel**. (**GLAutoDrawable** is an interface that is implemented by **GLJPanel** and other OpenGL drawing surfaces.) The init() method is a place to do OpenGL initialization. (According to the documentation, it can actually be called several times, if the OpenGL context needs to be recreated for some reason. So init() should not be used to do initialization that shouldn't be done more than once.) The dispose() method will be called to give you a chance to do any cleanup before the OpenGL drawing context is destroyed. The reshape() method is called when the window first opens and whenever the size of the **GLJPanel** changes. OpenGL's glViewport() function is called automatically before reshape() is called, so you won't need to do it yourself. Usually, you won't need to write any code in dispose() or reshape(), but they have to be there to satisfy the definition of the **GLEventListener** interface.
+
+    The *display()* method is where the actual drawing is done and where you will do most of your work. It should ordinarily clear the drawing area and completely redraw the scene. Take a minute to study an outline for a minimal JOGL program. It creates a **GLJPanel** which also serves as the **GLEventListener**:
+
+    ```java
+    import com.jogamp.opengl.*;
+    import com.jogamp.opengl.awt.GLJPanel;
+
+    import java.awt.Dimension;
+    import javax.swing.JFrame;
+
+    public class JOGLProgram extends GLJPanel implements GLEventListener {
+
+        public static void main(String[] args) {
+            JFrame window = new JFrame("JOGL Program");
+            JOGLProgram panel = new JOGLProgram();
+            window.setContentPane(panel);
+            window.pack();
+            window.setLocation(50,50);
+            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            window.setVisible(true);
+        }
+
+        public JOGLProgram() {
+            setPreferredSize( new Dimension(500,500) );
+            addGLEventListener(this);
+        }
+        
+        // ---------------  Methods of the GLEventListener interface -----------
+
+        public void init(GLAutoDrawable drawable) {
+                // called when the panel is created
+            GL2 gl = drawable.getGL().getGL2();
+            // Add initialization code here!
+        }
+
+        public void display(GLAutoDrawable drawable) {    
+                // called when the panel needs to be drawn
+            GL2 gl = drawable.getGL().getGL2();
+            // Add drawing code here!
+        }
+
+        public void reshape(GLAutoDrawable drawable,
+                                int x, int y, int width, int height) {
+            // called when user resizes the window
+        }
+
+        public void dispose(GLAutoDrawable drawable) {
+            // called when the panel is being disposed
+        }
+
+    }
+    ```
+
+    ----
+
+    At this point, the only other thing you need to know is how to use OpenGL functions in the program. In JOGL, the OpenGL 1.1 functions are collected into an object of type **GL2**. (There are different classes for different versions of OpenGL; **GL2** contains OpenGL 1.1 functionality, along with later versions that are compatible with 1.1.) An object of type **GL2** is an OpenGL graphics context, in the same way that an object of type **Graphics2D** is a graphics context for ordinary Java 2D drawing. The statement
+
+    ```java
+    GL2 gl = drawable.getGL().getGL2();
+    ```
+
+    in the above program obtains the drawing context for the **GLAutoDrawable**, that is, for the **GLJPanel** in that program. The name of the variable could, of course, be anything, but gl or gl2 is conventional.
+
+    For the most part, using OpenGL functions in JOGL is the same as in C, except that the functions are now methods in the object gl. For example, a call to glClearColor(r,g,b,a) becomes
+
+    ```java
+    gl.glClearColor(r,g,b,a);
+    ```
+
+    The redundant "gl.gl" is a little annoying, but you get used to it. OpenGL constants such as *GL_TRIANGLES* are static members of **GL2**, so that, for example, *GL_TRIANGLES* becomes **GL2**.*GL_TRIANGLES* in JOGL. Parameter lists for OpenGL functions are the same as in the C API in most cases. One exception is for functions such as glVertex3fv() that take an array/pointer parameter in C. In JOGL, the parameter becomes an ordinary Java array, and an extra integer parameter is added to give the position of the data in the array. Here, for example, is how one might draw a triangle in JOGL, with all the vertex coordinates in one array:
+
+    ```c
+    float[] coords = { 0,0.5F, -0.5F,-0.5F, 0.5F,-0.5F };
+
+    gl.glBegin(GL2.GL_TRIANGLES);
+    gl.glVertex2fv(coords, 0);     // first vertex data starts at index 0
+    gl.glVertex2fv(coords, 2);     // second vertex data starts at index 2
+    gl.glVertex2fv(coords, 4);     // third vertex data starts at index 4
+    gl.glEnd();
+    ```
+
+    The biggest change in the JOGL API is the use of nio buffers instead of arrays in functions such as glVertexPointer. This is discussed in [Subsection 3.4.3](./s4.md#343-java-中的数据缓冲区). We will see in [Subsection 4.3.9](../c4/s3.md#439) that texture images also get special treatment in JOGL.
+
+    ----
+
+    The JOGL API includes a class named **GLUT** that makes GLUT's shape-drawing functions available in Java. (Since you don't need GLUT's window or event functions in Java, only the shape functions are included.) Class **GLUT** is defined in the package *com.jogamp.opengl.util.gl2*. To draw shapes using this class, you need to create an object of type GLUT. It's only necessary to make one of these for use in a program:
+
+    ```java
+    GLUT glut = new GLUT();
+    ```
+
+    The methods in this object include all the shape-drawing functions from the GLUT C API, with the same names and parameters. For example:
+
+    ```java
+    glut.glutSolidSphere( 2, 32, 16 );
+    glut.glutWireTeapot( 5 );
+    glut.glutSolidIcosahedron();
+    ```
+
+    (I don't know why these are instance methods in an object rather than static methods in a class; logically, there is no need for the object.)
+
+    The GLU library is available through the class *com.jogamp.opengl.glu.GLU*, and it works similarly to GLUT. That is, you have to create an object of type **GLU**, and the GLU functions will be available as methods in that object. We have encountered GLU only for the functions gluLookAt and gluPerspective, which are discussed in [Section 3.3](./s3.md). For example,
+
+    ```java
+    GLU glu = new GLU();
+    
+    glu.gluLookAt( 5,15,7, 0,0,0, 0,1,0 );
+    ```
+
+3.6.3 关于 glsim.js
+--------------------
+
+.. tab:: 中文
+
+    JavaScript库glsim.js是为了配合和支持本教材而编写的。它实现了[第3章](./index.md)和[第4章](../c4/index.md)讨论的OpenGL 1.1的子集，但不包括显示列表([小节3.4.4](./s4.md#344-显示列表和vbo))。它在这些章节中出现的演示中使用。在这些章节中讨论的许多示例程序都以使用glsim.js的JavaScript版本提供。
+
+    如果您想要尝试OpenGL 1.1，但不想费力设置支持OpenGL编程的C或Java环境，您可以考虑编写使用glsim.js的网页程序。请注意，glsim仅用于实验和练习，不适用于严肃的应用程序。
+
+    glsim.js实现的OpenGL API基本上与C API相同，尽管一些语义细节有所不同。当然，创建绘图表面和OpenGL绘图上下文的技术是特定于JavaScript的，并且与GLUT或JOGL中使用的技术不同。
+
+    要使用glsim.js，您需要创建一个包含`<canvas>`元素作为绘图表面的HTML文档。HTML文件必须导入该脚本；如果glsim.js与HTML文件位于同一目录中，您可以使用以下方法导入：
+
+    ```html
+    <script src="glsim.js"></script>
+    ```
+
+    要创建OpenGL绘图上下文，请使用JavaScript命令
+
+    ```js
+    glsimUse(canvas);
+    ```
+
+    其中canvas是一个字符串，给出了`<canvas>`元素的id，或者是与`<canvas>`元素对应的JavaScript DOM对象。通过这种方式创建绘图上下文后，您给出的任何OpenGL命令都将应用于canvas。要运行程序，只需在支持WebGL 1.0的Web浏览器中打开HTML文档。
+
+    开始编程的最简单方法是修改一个已经存在的程序。来自[小节3.1.2](./s1.md#312--opengl颜色)的示例程序[glsim/first-triangle.html](../../../en/source/glsim/first-triangle.html)是使用glsim.js的一个非常简单的示例。示例网页[glsim/glsim-starter.html](../../../en/source/glsim/glsim-starter.html)可以用作编写使用glsim.js的较长程序的起点。它提供了一个用于进行OpenGL绘图的框架，支持动画以及鼠标和键盘事件。代码中包含了告诉您如何使用它的注释。glsim.js库的一些文档可以在[glsim/glsim-doc.html](../../../en/source/glsim/glsim-doc.html)中找到。
+
+.. tab:: 英文
+
+    The JavaScript library glsim.js was written to accompany and support this textbook. It implements the subset of OpenGL 1.1 that is discussed in [Chapter 3](./index.md) and [Chapter 4](../c4/index.md), except for display lists ([Subsection 3.4.4](./s4.md#344-显示列表和vbo)). It is used in the demos that appear in those chapters. Many of the sample programs that are discussed in those chapters are available in JavaScript versions that use glsim.js.
+
+    If you would like to experiment with OpenGL 1.1, but don't want to go through the trouble of setting up a C or Java environment that supports OpenGL programming, you can consider writing your programs as web pages using glsim.js. Note that glsim is meant for experimentation and practice only, not for serious applications.
+
+    The OpenGL API that is implemented by glsim.js is essentially the same as the C API, although some of the details of semantics are different. Of course the techniques for creating a drawing surface and an OpenGL drawing context are specific to JavaScript and differ from those used in GLUT or JOGL.
+
+    To use glsim.js, you need to create an HTML document with a `<canvas>` element to serve as the drawing surface. The HTML file has to import the script; if glsim.js is in the same directory as the HTML file, you can do that with
+
+    ```html
+    <script src="glsim.js"></script>
+    ```
+
+    To create the OpenGL drawing context, use the JavaScript command
+
+    ```js
+    glsimUse(canvas);
+    ```
+
+    where canvas is either a string giving the id of the `<canvas>` element or is the JavaScript DOM object corresponding to the `<canvas>` element. Once you have created the drawing context in this way, any OpenGL commands that you give will apply to the canvas. To run the program, you just need to open the HTML document in a web browser that supports WebGL 1.0.
+
+    The easiest way to get started programming is to modify a program that already exists. The sample program [glsim/first-triangle.html](../../../en/source/glsim/first-triangle.html), from [Subsection 3.1.2](./s1.md#312--opengl颜色) is a very minimal example of using glsim.js. The sample web page [glsim/glsim-starter.html](../../../en/source/glsim/glsim-starter.html) can be used as a starting point for writing longer programs that use glsim.js. It provides a framework for doing OpenGL drawing, with support for animation and mouse and keyboard events. The code contains comments that tell you how to use it. Some documentation for the glsim.js library can be found in [glsim/glsim-doc.html](../../../en/source/glsim/glsim-doc.html).

@@ -1,6 +1,6 @@
 .. _c2.5:
 
-第5节: Java 绘制2D
+2.5 Java 绘制2D
 ====================
 
 **Java Graphics2D**
@@ -37,7 +37,8 @@
 
     Java's original graphics did not support things like real-number coordinates, transforms, antialiasing, or gradients. Just a few years after Java was first introduced, a new graphics API was added that does support all of these. It is that more advanced API that we will look at here.
 
-## 2.5.1  绘制2D
+2.5.1  绘制2D
+--------------------
 
 **Graphics2D**
 
@@ -91,7 +92,8 @@
 
     For simple examples of graphics in complete Java programs, you can look at the sample programs [java2d/GraphicsStarter.java](../../../en/source/java2d/GraphicsStarter.java) and [java2d/AnimationStarter.java](../../en/source/java2d/AnimationStarter.java). They provide very minimal frameworks for drawing static and animated images, respectively, using {++Graphics2D++}. The program [java2d/EventsStarter.java](../../../en/source/java2d/EventsStarter.java) is a similar framework for working with mouse and key events in a graphics program. You can use these programs as the basis for some experimentation if you want to explore Java graphics.
 
-## 2.5.2  形状
+2.5.2  形状
+--------------------
 
 **Shapes**
 
@@ -279,7 +281,8 @@
         ![pixel-coordinates](../../en/c2/RotatedStringAndImage.jpg)
     </figure>
 
-## 2.5.3  描边和填充
+2.5.3  描边和填充
+--------------------
 
 **Stroke and Fill**
 
@@ -461,7 +464,8 @@
 
     The sample Java program [java2d/PaintDemo.java](../../../en/source/java2d/PaintDemo.java) displays a polygon filled with a **GradientPaint** or a **TexturePaint** and lets you adjust their properties. The image files [java2d/QueenOfHearts.png](../../../en/source/java2d/QueenOfHearts.png) and [java2d/TinySmiley.png](../../../en/source/java2d/TinySmiley.png) are part of that program, and they must be in the same location as the compiled class files that make up that program when it is run.
 
-## 2.5.4  变换
+2.5.4  变换
+--------------------
 
 **Transforms**
 
@@ -595,7 +599,8 @@
 
     (A final note: The older drawing methods from **Graphics**, such as drawLine, use integer coordinates. It's important to note that any shapes drawn using these older methods are subject to the same transformation as shapes such as Line2D that are specified with real number coordinates. For example, drawing a line with g.drawLine(1,2,5,7) will have the same effect as drawing a Line2D that has endpoints (1.0,2.0) and (5.0,7.0). In fact, all drawing is affected by the transformation of coordinates.)
 
-## 2.5.5  BufferedImage 和 Pixels
+2.5.5  BufferedImage 和 Pixels
+---------------------------------
 
 **BufferedImage and Pixels**
 

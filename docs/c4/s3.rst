@@ -1,0 +1,860 @@
+.. _c4.3:
+
+4.3 图像纹理
+=========================
+
+**Image Textures**
+
+.. tab:: 中文
+
+    统一颜色的3D对象看起来足够好，但它们有点单调。它们的统一颜色没有像砖墙或格子沙发那样的视觉吸引力。通过在表面添加**纹理**，可以使三维对象看起来更有趣、更逼真。一般来说，纹理是在单个原素内部像素与像素之间的变化。我们只考虑一种纹理：**图像纹理**。图像纹理可以应用于表面，使表面的色泽从点到点变化，有点像将图像复制到表面上。以下是展示了六个具有不同图像纹理的对象的图片：
+
+    ![TextureDemo](../../en/c4/TextureDemo.png)
+
+    （地球地形图像，由 [NASA/JPL-Caltech](http://maps.jpl.nasa.gov/) 提供。砖块和金属是免费纹理（从已不存在的网站下载）。地球夜景图像拍摄自 [每日天文图片](http://apod.nasa.gov/apod/ap001127.html) 网站；它也是 NASA/JPL 的图像。可以在网站下载源文件夹中的 jogl 或 glut 文件夹内的 [textures](../../../en/source/glut/textures) 文件夹中找到图像副本。本书中的几个示例将使用该文件夹中的图像。）
+
+    纹理可能是 OpenGL 最复杂的部分，并且它们是自 OpenGL 1.1 以来一直存在并变得更加复杂的部分，因为它们对于有效创建逼真图像至关重要。本节只涵盖了 OpenGL 1.1 纹理 API 的部分内容。我们将在后续章节中看到更多的纹理。
+
+    请注意，用作纹理的图像应具有为二的幂的宽度和高度，例如 128、256 或 512。这是 OpenGL 1.1 的要求。在某些版本中放宽了这一要求，但使用**二的幂纹理**仍然是一个好主意。本节讨论的一些事情如果不使用二的幂纹理，即使在现代系统中也不会起作用。
+
+    当图像纹理应用于表面时，默认行为是将表面的像素的 RGBA 颜色分量与图像中的颜色分量相乘。如果启用了照明，表面颜色将被照明效果修改，然后与纹理颜色相乘。通常使用白色作为表面颜色。如果表面使用不同的颜色，它将为纹理图像的颜色添加一种“色彩倾向”。
+
+.. tab:: 英文
+
+    Uniformly colored 3D objects look nice enough, but they are a little bland. Their uniform colors don't have the visual appeal of, say, a brick wall or a plaid couch. Three-dimensional objects can be made to look more interesting and more realistic by adding a **texture** to their surfaces. A texture, in general, is some sort of variation from pixel to pixel within a single primitive. We will consider only one kind of texture: **image textures**. An image texture can be applied to a surface to make the color of the surface vary from point to point, something like painting a copy of the image onto the surface. Here is a picture that shows six objects with various image textures:
+
+    ![123](../../en/c4/TextureDemo.png)
+
+    (Topographical Earth image, courtesy [NASA/JPL-Caltech](http://maps.jpl.nasa.gov/). The brick and metal are free textures (which were downloaded from a web site that no longer exists). EarthAtNight image taken from the [Astronomy Picture of the Day](http://apod.nasa.gov/apod/ap001127.html) web site; it is also a NASA/JPL image. Copies of the images can be found in the folder named [textures](../../../en/source/glut/textures) in either the jogl or glut folder inside the source folder of the web site download. Images from that folder will be used in several examples in this book.)
+
+    Textures might be the most complicated part of OpenGL, and they are a part that has survived, and become more complicated, in the most modern versions since they are so vital for the efficient creation of realistic images. This section covers only part of the OpenGL 1.1 texture API. We will see more of textures in later chapters.
+
+    Note that an image that is used as a texture should have a width and a height that are powers of two, such as 128, 256, or 512. This is a requirement in OpenGL 1.1. The requirement is relaxed in some versions, but it's still a good idea to use **power-of-two textures** Some of the things discussed in this section will not work with non-power-of-two textures, even on modern systems.
+
+    When an image texture is applied to a surface, the default behavior is to multiply the RGBA color components of pixels on the surface by the color components from the image. The surface color will be modified by light effects, if lighting is turned on, before it is multiplied by the texture color. It is common to use white as the surface color. If a different color is used on the surface, it will add a "tint" to the color from the texture image.
+
+4.3.1 纹理坐标
+--------------------
+
+**Texture Coordinates**
+
+.. tab:: 中文
+
+    当一个纹理应用于表面时，表面上的每个点必须对应于纹理中的一个点。必须有一种方法来确定如何计算这种映射。为此，对象需要**纹理坐标**。正如在 OpenGL 中通常的情况一样，为一个原素的每个顶点指定**纹理坐标**。原素内部点的纹理坐标通过插值顶点的值来计算。
+
+    纹理图像带有它自己的二维坐标系统。传统上，s 用于图像的水平坐标，t 用于垂直坐标。s 坐标是一个实数，从图像左侧的 0 到右侧的 1，而 t 从底部的 0 到顶部的 1。s 或 t 的值在 0 到 1 范围之外不处于图像内部，但这样的值作为纹理坐标仍然有效。请注意，纹理坐标不是基于像素的。无论图像大小如何，s 和 t 的值在 0 和 1 之间覆盖整个图像。
+
+    要绘制一个带纹理的原素，我们需要为每个顶点提供一对数字 (s,t)。这些是该顶点的纹理坐标。它们指示图像中的哪个点映射到顶点。例如，假设我们想要将 EarthAtNight 图像的一部分应用于一个三角形原素。假设将要映射到原素的图像区域是这里用粗橙色轮廓显示的三角形：
+
+    ![TexCoords](../../en/c4/texCoords.png)
+
+    这个区域的顶点具有 (s,t) 坐标 (0.3,0.1)，(0.45,0.6) 和 (0.25,0.7)。这些来自图像的坐标应该用作三角形原素顶点的纹理坐标。
+
+    顶点的纹理坐标是顶点的属性，就像颜色、法向量和材质属性一样。纹理坐标由 *glTexCoord** 系列函数指定，包括函数 *glTexCoord2f(s,t)*，*glTexCoord2d(s,t)*，*glTexCoord2fv(array)* 和 *glTexCoord2dv(array)*。OpenGL 状态包括由这些函数指定的当前纹理坐标集。当您使用 *glVertex** 指定一个顶点时，当前纹理坐标被复制并成为一个与顶点关联的属性。像往常一样，这意味着顶点的纹理坐标必须在调用 *glVertex** 之前指定。一个原素的每个顶点都需要不同的纹理坐标集。
+
+    例如，要将上图中的三角形区域应用于 xy 平面上顶点位于 (0,0)，(0,1) 和 (1,0) 的三角形，我们可以这样写：
+
+    ```c
+    glNormal3d(0,0,1);       // 这个法向适用于所有三个顶点。
+    glBegin(GL_TRIANGLES);
+    glTexCoord2d(0.3,0.1);   // 顶点 (0,0) 的纹理坐标
+    glVertex2d(0,0);
+    glTexCoord2d(0.45,0.6);  // 顶点 (0,1) 的纹理坐标
+    glVertex2d(0,1);
+    glTexCoord2d(0.25,0.7);  // 顶点 (1,0) 的纹理坐标
+    glVertex2d(1,0);
+    glEnd();
+    ```
+
+    请注意，顶点的 (x,y) 坐标（给出其在空间中的位置）与顶点关联的 (s,t) 纹理坐标之间没有特定的关系。事实上，在这种情况下，我绘制的三角形与图像中的三角形区域形状不同，那部分图像将不得不被拉伸和扭曲以适应。在大多数纹理图像的使用中都会发生这种扭曲。
+
+    有时，很难决定使用什么纹理坐标。一个容易决定的案例是将完整纹理应用于矩形。以下是一个代码片段，它绘制 xy 平面上的一个正方形，带有适当的纹理坐标，将整个图像映射到正方形上：
+
+    ```c
+    glBegin(GL_TRIANGLE_FAN);
+    glNormal3f(0,0,1);
+    glTexCoord2d(0,0);     // 左下角的纹理坐标
+    glVertex2d(-0.5,-0.5);
+    glTexCoord2d(1,0);     // 右下角的纹理坐标
+    glVertex2d(0.5,-0.5);
+    glTexCoord2d(1,1);     // 右上角的纹理坐标
+    glVertex2d(0.5,0.5);
+    glTexCoord2d(0,1);     // 左上角的纹理坐标
+    glVertex2d(-0.5,0.5);
+    glEnd();
+    ```
+
+    遗憾的是，GLUT 库中的标准形状没有附带纹理坐标（茶壶除外）。我编写了一组函数，用于绘制带有纹理坐标的类似形状。这些函数可以在 JOGL 的 [jogl/TexturedShapes.java](../../../en/source/jogl/TexturedShapes.java) 或 C 的 [glut/textured-shapes.c](../../../en/source/glut/textured-shapes.c)（以及相应的头文件 [glut/textured-shapes.h](../../../en/source/glut/textured-shapes.h)）中找到。当然，将纹理应用于给定对象有很多方法。如果您使用我的函数，您将受限于我关于如何做到这一点的决定。
+
+    示例程序 [jogl/TextureDemo.java](../../../en/source/jogl/TextureDemo.java) 或 [glut/texture-demo.c](../../../en/source/glut/texture-demo.c) 让您可以在我的带纹理形状上查看几种不同的纹理图像。
+
+    最后一个问题：如果您提供不在 0 到 1 范围内的纹理坐标会发生什么？结果表明这样的值是合法的。默认情况下，在 OpenGL 1.1 中，它们的行为就好像整个 st 平面充满了图像的副本。例如，如果一个正方形的纹理坐标在两个方向上都从 0 到 3，而不是 0 到 1，那么您将在正方形上得到图像的九个副本（水平三个副本乘以垂直三个副本）。
+
+    ----
+
+    要使用 glDrawArrays 或 glDrawElements 绘制带纹理的原素，您需要在顶点数组中提供纹理坐标，就像您提供顶点坐标、颜色和法向量一样。（见 [小节3.4.2](../c3/s4.md#342-gldrawarrays和gldrawelements)。）细节是类似的：您必须通过调用
+
+    ```c
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    ```
+
+    启用使用纹理坐标数组，并使用函数
+
+    ```c
+    void glTexCoordPointer(int size, int dataType, int stride, void* array)
+    ```
+
+    告诉 OpenGL 数据的位置。对我们来说，size 总是 2。（OpenGL 还允许 3 或 4 个纹理坐标，但我们用不到它们。）dataType 可以是 GL_FLOAT、GL_DOUBLE 或 GL_INT。stride 通常是零，表示数组中的纹理坐标之间没有额外的数据。最后一个参数是数组或指向数据的指针，必须是 dataType 指示的类型。在 JOGL 中，像往常一样，您会使用 nio 缓冲区而不是数组。
+
+.. tab:: 英文
+
+    When a texture is applied to a surface, each point on the surface has to correspond to a point in the texture. There has to be a way to determine how this mapping is computed. For that, the object needs texture coordinates. As is generally the case in OpenGL, **texture coordinates** are specified for each vertex of a primitive. Texture coordinates for points inside the primitive are calculated by interpolating the values from the vertices of the primitive.
+
+    A texture image comes with its own 2D coordinate system. Traditionally, s is used for the horizontal coordinate on the image and t is used for the vertical coordinate. The s coordinate is a real number that ranges from 0 on the left of the image to 1 on the right, while t ranges from 0 at the bottom to 1 at the top. Values of s or t outside of the range 0 to 1 are not inside the image, but such values are still valid as texture coordinates. Note that texture coordinates are not based on pixels. No matter what size the image is, values of s and t between 0 and 1 cover the entire image.
+
+    To draw a textured primitive, we need a pair of numbers (s,t) for each vertex. These are the texture coordinates for that vertex. They tell which point in the image is mapped to the vertex. For example, suppose that we want to apply part of an EarthAtNight image to a triangular primitive. Let's say that the area in the image that is to be mapped onto the primitive is the triangle shown here outlined in thick orange:
+
+    ![123](../../en/c4/texCoords.png)
+
+    The vertices of this area have (s,t) coordinates (0.3,0.1), (0.45,0.6), and (0.25,0.7). These coordinates from the image should be used as the texture coordinates for the vertices of the triangular primitive.
+
+    The texture coordinates of a vertex are an attribute of the vertex, just like color, normal vectors, and material properties. Texture coordinates are specified by the family of functions *glTexCoord\**, including the functions *glTexCoord2f(s,t)*, *glTexCoord2d(s,t)*, *glTexCoord2fv(array)*, and *glTexCoord2dv(array)*. The OpenGL state includes a current set of texture coordinates, as specified by these functions. When you specify a vertex with *glVertex\**, the current texture coordinates are copied and become an attribute that is associated with the vertex. As usual, this means that the texture coordinates for a vertex must be specified before *glVertex\** is called. Each vertex of a primitive will need a different set of texture coordinates.
+
+    For example, to apply the triangular region in the image shown above to the triangle in the xy-plane with vertices at (0,0), (0,1), and (1,0), we can say:
+
+    ```c
+    glNormal3d(0,0,1);       // This normal works for all three vertices.
+    glBegin(GL_TRIANGLES);
+    glTexCoord2d(0.3,0.1);   // Texture coords for vertex (0,0)
+    glVertex2d(0,0);
+    glTexCoord2d(0.45,0.6);  // Texture coords for vertex (0,1)
+    glVertex2d(0,1);
+    glTexCoord2d(0.25,0.7);  // Texture coords for vertex (1,0)
+    glVertex2d(1,0);
+    glEnd();
+    ```
+
+    Note that there is no particular relationship between the (x,y) coordinates of a vertex, which give its position in space, and the (s,t) texture coordinates associated with the vertex. In fact, in this case, the triangle that I am drawing has a different shape from the triangular area in the image, and that piece of the image will have to be stretched and distorted to fit. Such distortion occurs in most uses of texture images.
+
+    Sometimes, it's difficult to decide what texture coordinates to use. One case where it's easy is applying the complete texture to a rectangle. Here is a code segment that draws a square in the xy-plane, with appropriate texture coordinates to map the entire image onto the square:
+
+    ```c
+    glBegin(GL_TRIANGLE_FAN);
+    glNormal3f(0,0,1);
+    glTexCoord2d(0,0);     // Texture coords for lower left corner
+    glVertex2d(-0.5,-0.5);
+    glTexCoord2d(1,0);     // Texture coords for lower right corner
+    glVertex2d(0.5,-0.5);
+    glTexCoord2d(1,1);     // Texture coords for upper right corner
+    glVertex2d(0.5,0.5);
+    glTexCoord2d(0,1);     // Texture coords for upper left corner
+    glVertex2d(-0.5,0.5);
+    glEnd();
+    ```
+
+    Unfortunately, the standard shapes in the GLUT library do not come with texture coordinates (except for the teapot, which does). I have written a set of functions for drawing similar shapes that do come with texture coordinates. The functions can be found in [jogl/TexturedShapes.java](../../../en/source/jogl/TexturedShapes.java) for JOGL or in [glut/textured-shapes.c](../../../en/source/glut/textured-shapes.c) (plus the corresponding header file [glut/textured-shapes.h](../../../en/source/glut/textured-shapes.h)) for C. Of course, there are many ways of applying a texture to a given object. If you use my functions, you are stuck with my decision about how to do so.
+
+    The sample program [jogl/TextureDemo.java](../../../en/source/jogl/TextureDemo.java) or [glut/texture-demo.c](../../../en/source/glut/texture-demo.c) lets you view several different texture images on my textured shapes.
+
+    One last question: What happens if you supply texture coordinates that are not in the range from 0 to 1? It turns out that such values are legal. By default, in OpenGL 1.1, they behave as though the entire st-plane is filled with copies of the image. For example, if the texture coordinates for a square range from 0 to 3 in both directions, instead of 0 to 1, then you get nine copies of the image on the square (three copies horizontally by three copies vertically).
+
+    ----
+
+    To draw a textured primitive using glDrawArrays or glDrawElements, you will need to supply the texture coordinates in a vertex array, in the same way that you supply vertex coordinates, colors, and normal vectors. (See [Subsection 3.4.2](../c3/s4.md#342-gldrawarrays和gldrawelements).) The details are similar: You have to enable the use of a texture coordinate array by calling
+
+    ```c
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    ```
+
+    and you have to tell OpenGL the location of the data using the function
+
+    ```c
+    void glTexCoordPointer( int size, int dataType, int stride, void* array)
+    ```
+
+    The size, for us, will always be 2. (OpenGL also allows 3 or 4 texture coordinates, but we have no use for them.) The *dataType* can be *GL_FLOAT*, *GL_DOUBLE*, or *GL_INT*. The *stride* will ordinarily be zero, to indicate that there is no extra data between texture coordinates in the array. The last parameter is an array or pointer to the data, which must be of the type indicated by the *dataType*. In JOGL, as usual, you would use an nio buffer instead of an array.
+
+4.3.2 MipMap 和过滤
+--------------------
+
+**MipMaps and Filtering**
+
+.. tab:: 中文
+
+    当一个纹理应用于表面时，纹理中的像素通常不会与表面的像素一一对应，在通常情况下，纹理在映射到表面时必须被拉伸或缩小。有时，纹理中的几个像素会被映射到表面的同一个像素上。在这种情况下，应用到表面像素的颜色必须从映射到它的所有纹理像素的颜色中计算得出。这是“过滤”的一个例子；具体来说，它使用了一个**缩放过滤**，因为纹理正在被缩小。当纹理中的一个像素覆盖了表面的多个像素时，纹理必须被放大，我们需要一个**放大过滤**。
+
+    在我们继续之前，有一个术语：**纹理**中的像素被称为texels（“texture pixel”或“texture element”的缩写），从现在开始我将使用这个术语。
+
+    在决定如何将纹理应用到表面的一个像素上时，OpenGL 必须处理这样一个事实，即那个像素实际上包含无限多点，每个点都有自己的纹理坐标。那么，应该如何计算像素的纹理颜色呢？最简单的方法是从一个像素中选择一个点，比如说像素中心的点。OpenGL 知道那个点的纹理坐标。这些纹理坐标对应于纹理中的一个点，那个点位于纹理的一个texels 中。那个texel 的颜色可以被用作像素的纹理颜色。这被称为“最近像素过滤”。它非常快，但通常不会给出好的结果。它没有考虑到表面像素和图像中texels 大小的差异。最近像素过滤的改进是“线性过滤”，它可以通过计算几个texels 颜色的平均值来得出应用到表面的颜色。
+
+    线性过滤的问题在于，当一个大纹理应用到一个更小的表面积时，它会变得非常低效。在这种情况下，许多texels 映射到一个像素，计算这么多texels 的平均值变得非常低效。这里有一个巧妙的解决方案：**Mipmaps**。
+
+    纹理的mipmap 是纹理的缩小版本。一套完整的mipmaps 包括全尺寸纹理、每个维度都除以二的半尺寸版本、四分之一尺寸版本、八分之一尺寸版本，等等。如果一个维度缩小到一个像素，它就不再进一步缩小，但另一个维度会继续减半，直到它也达到一个像素。无论如何，最终的mipmap 由一个像素组成。以下是一组砖纹理的mipmaps 的前几张图像：
+
+    ![Mipmaps](../../en/c4/mipmaps.png)
+
+    你会注意到mipmaps 很快就变小了。一套mipmaps 所使用的总内存只比原始纹理多大约三分之一，所以使用mipmaps 时额外的内存需求并不是一个大问题。
+
+    Mipmaps 仅用于缩放过滤。它们本质上是在缩小纹理以适应表面时预先计算所需的大部分平均值的一种方式。要纹理化一个像素，OpenGL 首先可以选择texels 大小最接近像素大小的mipmap。然后它可以在那个mipmap 上进行线性过滤来计算颜色，并且它最多只需要平均几个texels 就可以做到这一点。
+
+    在 OpenGL 的更新版本中，你可以让 OpenGL 自动生成 mipmaps。在 OpenGL 1.1 中，如果你想使用 mipmaps，你必须逐个加载每个 mipmap，或者你必须自己生成它们。（GLU 库有一个方法 *gluBuild2DMipmaps*，可以用来为 2D 纹理生成一组 mipmaps。）然而，我的示例程序不使用 mipmaps。
+
+.. tab:: 英文
+
+    When a texture is applied to a surface, the pixels in the texture do not usually match up one-to-one with pixels on the surface, and in general, the texture must be stretched or shrunk as it is being mapped onto the surface. Sometimes, several pixels in the texture will be mapped to the same pixel on the surface. In this case, the color that is applied to the surface pixel must somehow be computed from the colors of all the texture pixels that map to it. This is an example of "filtering"; in particular, it uses a **minification filter** because the texture is being shrunk. When one pixel from the texture covers more than one pixel on the surface, the texture has to be magnified, and we need a **magnification filter**.
+
+    One bit of terminology before we proceed: The pixels in a **texture** are referred to as texels, short for "texture pixel" or "texture element", and I will use that term from now on.
+
+    When deciding how to apply a texture to a pixel on a surface, OpenGL must deal with the fact that that pixel actually contains an infinite number of points, and each point has its own texture coordinates. So, how should a texture color for the pixel be computed? The easiest thing to do is to select one point from the pixel, say the point at the center of the pixel. OpenGL knows the texture coordinates for that point. Those texture coordinates correspond to one point in the texture, and that point lies in one of the texture's texels. The color of that texel could be used as the texture color for the pixel. This is called "nearest texel filtering." It is very fast, but it does not usually give good results. It doesn't take into account the difference in size between the pixels on the surface and the texels in the image. An improvement on nearest texel filtering is "linear filtering," which can take an average of several texel colors to compute the color that will be applied to the surface.
+
+    The problem with linear filtering is that it will be very inefficient when a large texture is applied to a much smaller surface area. In this case, many texels map to one pixel, and computing the average of so many texels becomes very inefficient. There is a neat solution for this: **mipmaps**.
+
+    A mipmap for a texture is a scaled-down version of that texture. A complete set of mipmaps consists of the full-size texture, a half-size version in which each dimension is divided by two, a quarter-sized version, a one-eighth-sized version, and so on. If one dimension shrinks to a single pixel, it is not reduced further, but the other dimension will continue to be cut in half until it too reaches one pixel. In any case, the final mipmap consists of a single pixel. Here are the first few images in the set of mipmaps for a brick texture:
+
+    ![123](../../en/c4/mipmaps.png)
+
+    You'll notice that the mipmaps become small very quickly. The total memory used by a set of mipmaps is only about one-third more than the memory used for the original texture, so the additional memory requirement is not a big issue when using mipmaps.
+
+    Mipmaps are used only for minification filtering. They are essentially a way of pre-computing the bulk of the averaging that is required when shrinking a texture to fit a surface. To texture a pixel, OpenGL can first select the mipmap whose texels most closely match the size of the pixel. It can then do linear filtering on that mipmap to compute a color, and it will have to average at most a few texels in order to do so.
+
+    In newer versions of OpenGL, you can get OpenGL to generate mipmaps automatically. In OpenGL 1.1, if you want to use mipmaps, you must either load each mipmap individually, or you must generate them yourself. (The GLU library has a method, *gluBuild2DMipmaps* that can be used to generate a set of mipmaps for a 2D texture.) However, my sample programs do not use mipmaps.
+
+4.3.3 纹理目标和纹理参数
+-----------------------
+
+**Texture Target and Texture Parameters**
+
+.. tab:: 中文
+
+    OpenGL 可以使用一维和三维纹理，以及二维纹理。因此，许多处理纹理的 OpenGL 函数接受一个 **纹理目标** 作为参数，以告诉函数应用于一维、二维或三维纹理。对我们来说，唯一的纹理目标将是 *GL_TEXTURE_2D*。
+
+    有一些选项适用于纹理，以控制纹理如何应用到表面上的细节。一些选项可以使用 *glTexParameteri()* 函数设置，包括两个与过滤有关的选项。OpenGL 支持多种不同的缩放和放大过滤技术。可以使用 *glTexParameteri()* 设置过滤器：
+
+    ```c
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
+    ```
+
+    *magFilter* 和 *minFilter* 的值是指定过滤算法的常量。对于 *magFilter*，唯一的选项是 *GL_NEAREST* 和 *GL_LINEAR*，分别提供最近像素和线性过滤。MAG 过滤器的默认值是 GL_LINEAR，很少需要更改它。对于 *minFilter*，除了 *GL_NEAREST* 和 *GL_LINEAR*，还有四个选项使用 mipmaps 进行更有效的过滤。MIN 过滤器的默认值是 *GL_NEAREST_MIPMAP_LINEAR*，它在每个 mipmap 内进行 mipmap 之间和最近像素过滤的平均处理。为了获得更好的结果，尽管效率较低，您可以使用 *GL_LINEAR_MIPMAP_LINEAR*，它在 mipmap 之间和内部都进行平均处理。另外两个选项是 *GL_NEAREST_MIPMAP_NEAREST* 和 *GL_LINEAR_MIPMAP_NEAREST*。
+
+    **非常重要的一点**：如果您不为纹理使用 mipmaps，那么必须将该纹理的缩放过滤器更改为 *GL_LINEAR*，或者较少可能的是 *GL_NEAREST*。默认的 MIN 过滤器 **需要** mipmaps，如果 mipmaps 不可用，则纹理被认为未正确形成，OpenGL 会忽略它！请记住，如果您不创建 mipmaps 并且不更改缩放过滤器，那么您的纹理将被 OpenGL 简单地忽略。
+
+    还有另一对纹理参数来控制范围在 0 到 1 之外的纹理坐标如何处理。如上所述，默认行为是重复纹理。另一种选择是“夹”纹理。这意味着当指定范围在 0 到 1 之外的纹理坐标时，这些值会被强制进入该范围：小于 0 的值被替换为 0，大于 1 的值被替换为 1。可以使用以下方式分别在 *s* 和 *t* 方向上夹住值：
+
+    ```c
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    ```
+
+    将 *GL_REPEAT* 作为最后一个参数传入可以恢复默认行为。当启用夹取时，范围在 0 到 1 之外的纹理坐标将返回与位于图像外边缘的像素相同的颜色。这是两个带纹理的正方形上效果的样子：
+
+    ![Repeat vs. Clamp Texture](../../en/c4/repeat-vs-clamp-texture.png)
+
+    这张图片中的两个正方形的 s 和 t 纹理坐标范围从 -1 到 2。原始图像位于正方形的中心。左侧的正方形，纹理是重复的。右侧的正方形，纹理是夹取的。
+
+.. tab:: 英文
+
+    OpenGL can actually use one-dimensional and three-dimensional textures, as well as two-dimensional. Because of this, many OpenGL functions dealing with textures take a **texture target** as a parameter, to tell whether the function should be applied to one, two, or three dimensional textures. For us, the only texture target will be *GL_TEXTURE_2D*.
+
+    There are a number of options that apply to textures, to control the details of how textures are applied to surfaces. Some of the options can be set using the *glTexParameteri()* function, including two that have to do with filtering. OpenGL supports several different filtering techniques for minification and magnification. The filters can be set using *glTexParameteri()*:
+
+    ```c
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
+    ```
+
+    The values of *magFilter* and minFilter are constants that specify the filtering algorithm. For the *magFilter*, the only options are *GL_NEAREST* and *GL_LINEAR*, giving nearest texel and linear filtering. The default for the MAG filter is GL_LINEAR, and there is rarely any need to change it. For *minFilter*, in addition to *GL_NEAREST* and *GL_LINEAR*, there are four options that use mipmaps for more efficient filtering. The default MIN filter is *GL_NEAREST_MIPMAP_LINEAR*, which does averaging between mipmaps and nearest texel filtering within each mipmap. For even better results, at the cost of greater inefficiency, you can use *GL_LINEAR_MIPMAP_LINEAR*, which does averaging both between and within mipmaps. The other two options are *GL_NEAREST_MIPMAP_NEAREST* and *GL_LINEAR_MIPMAP_NEAREST*.
+
+    **One very important note**: If you are **not** using mipmaps for a texture, it is imperative that you change the minification filter for that texture to *GL_LINEAR* or, less likely, *GL_NEAREST*. The default MIN filter **requires** mipmaps, and if mipmaps are not available, then the texture is considered to be improperly formed, and OpenGL ignores it! Remember that if you don't create mipmaps and if you don't change the minification filter, then your texture will simply be ignored by OpenGL.
+
+    There is another pair of texture parameters to control how texture coordinates outside the range 0 to 1 are treated. As mentioned above, the default is to repeat the texture. The alternative is to "clamp" the texture. This means that when texture coordinates outside the range 0 to 1 are specified, those values are forced into that range: Values less than 0 are replaced by 0, and values greater than 1 are replaced by 1. Values can be clamped separately in the *s* and *t* directions using
+
+    ```c
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    ```
+
+    Passing *GL_REPEAT* as the last parameter restores the default behavior. When clamping is in effect, texture coordinates outside the range 0 to 1 return the same color as a texel that lies along the outer edge of the image. Here is what the effect looks like on two textured squares:
+
+    ![123](../../en/c4/repeat-vs-clamp-texture.png)
+
+    The two squares in this image have s and t texture coordinates that range from −1 to 2. The original image lies in the center of the square. For the square on the left, the texture is repeated. On the right, the texture is clamped.
+
+4.3.4 纹理变换
+--------------------
+
+**Texture Transformation**
+
+.. tab:: 中文
+
+    当一个纹理应用于一个原素时，顶点的纹理坐标决定了纹理中哪个点映射到该顶点。纹理图像是二维的，但 OpenGL 也支持一维纹理和三维纹理。这意味着纹理坐标不能仅限于两个坐标。实际上，OpenGL 内部以齐次坐标的形式表示一组纹理坐标，称为 (*s*,*t*,*r*,*q*)。我们使用 *glTexCoord2** 来指定纹理的 s 和 t 坐标，但例如调用 *glTexCoord2f(s,t)* 实际上只是 *glTexCoord4f(s,t,0,1)* 的简写。
+
+    由于纹理坐标与顶点坐标没有区别，它们可以以完全相同的方式进行变换。OpenGL 将其状态中的**纹理变换**作为模型视图和投影变换的一部分来维护。三种变换的当前值都存储为矩阵。当一个纹理应用于一个对象时，为其顶点指定的纹理坐标会通过纹理矩阵进行变换。然后使用变换后的纹理坐标来确定纹理中的一个点。当然，默认的纹理变换是恒等变换，不会改变坐标。
+
+    纹理矩阵可以表示缩放、旋转、平移以及这些基本变换的组合。要指定纹理变换，您必须使用 *glMatrixMode()* 将矩阵模式设置为 *GL_TEXTURE*。在这种模式下，调用如 *glRotate**、*glScale** 和 *glLoadIdentity* 等方法将应用于纹理矩阵。例如，要安装一个在每个方向上将纹理坐标缩放两倍的纹理变换，您可以这样做：
+
+    ```c
+    glMatrixMode(GL_TEXTURE);
+    glLoadIdentity(); // 确保我们从恒等矩阵开始。
+    glScalef(2,2,1);
+    glMatrixMode(GL_MODELVIEW); // 将矩阵模式设置回 GL_MODELVIEW。
+    ```
+
+    由于图像位于 st 平面上，因此 *glScalef* 的前两个参数才重要。对于旋转，您将使用 (0,0,1) 作为旋转轴，这将在 st 平面上旋转图像。
+
+    现在，这对纹理在表面上的外观实际上意味着什么？在示例中，缩放变换将每个纹理坐标乘以 2。例如，如果一个顶点被分配了二维纹理坐标 (0.4,0.1)，那么在应用纹理变换后，该顶点将映射到纹理中的点 (s,t) = (0.8,0.2)。纹理坐标在表面上的变化速度是不带缩放变换时的两倍。一个在没有变换时会映射到纹理图像中 1x1 平方区域的表面上的区域，将改为映射到图像中的 2x2 平方区域——因此，在该区域内将看到图像的更大一部分。换句话说，纹理图像在表面上将被*缩小*两倍！更一般地说，纹理变换对纹理外观的影响是其对纹理坐标影响的**逆**。（这与视图变换和建模变换之间的逆关系完全类似。）如果纹理变换是向右平移，那么纹理就会在表面上向左移动。如果纹理变换是逆时针旋转，那么纹理就会在表面上顺时针旋转。
+
+    我在这里提到纹理变换主要是为了展示 OpenGL 如何在另一个上下文中使用变换。但有时变换纹理以使其更好地适应表面是有用的。并且为了获得不寻常的效果，您甚至可以动画化纹理变换，使纹理图像在表面上移动。这里有一个演示，让您尝试纹理变换并查看效果。在左侧，您可以看到 st 平面上 s 和 t 介于 -1 和 2 之间的区域。一个框勾勒出映射到具有纹理坐标范围在 0 到 1 的 3D 对象区域的纹理区域。您可以通过拖动滑块来应用纹理变换，看看变换如何影响框以及如何影响对象上的纹理。有关更多信息，请查看演示中的帮助文本。
+
+    <iframe src="../../../en/demos/c4/texture-transform.html" width="675" height="550"></iframe>
+
+.. tab:: 英文
+
+    When a texture is applied to a primitive, the texture coordinates for a vertex determine which point in the texture is mapped to that vertex. Texture images are 2D, but OpenGL also supports one-dimensional textures and three-dimensional textures. This means that texture coordinates cannot be restricted to two coordinates. In fact, a set of texture coordinates in OpenGL is represented internally in the form of homogeneous coordinates, which are referred to as (*s*,*t*,*r*,*q*). We have used *glTexCoord2\** to specify texture s and t coordinates, but a call to *glTexCoord2f(s,t)*, for example, is really just shorthand for *glTexCoord4f(s,t,0,1)*.
+
+    Since texture coordinates are no different from vertex coordinates, they can be transformed in exactly the same way. OpenGL maintains a **texture transformation** as part of its state, along with the modelview and projection transformations. The current value of each of the three transformations is stored as a matrix. When a texture is applied to an object, the texture coordinates that were specified for its vertices are transformed by the texture matrix. The transformed texture coordinates are then used to pick out a point in the texture. Of course, the default texture transform is the identity transform, which doesn't change the coordinates.
+
+    The texture matrix can represent scaling, rotation, translation and combinations of these basic transforms. To specify a texture transform, you have to use *glMatrixMode()* to set the matrix mode to *GL_TEXTURE*. With this mode in effect, calls to methods such as *glRotate\**, *glScale\**, and *glLoadIdentity* are applied to the texture matrix. For example to install a texture transform that scales texture coordinates by a factor of two in each direction, you could say:
+
+    ```c
+    glMatrixMode(GL_TEXTURE);
+    glLoadIdentity(); // Make sure we are starting from the identity matrix.
+    glScalef(2,2,1);
+    glMatrixMode(GL_MODELVIEW); // Leave matrix mode set to GL_MODELVIEW.
+    ```
+
+    Since the image lies in the st-plane, only the first two parameters of *glScalef* matter. For rotations, you would use (0,0,1) as the axis of rotation, which will rotate the image within the st-plane.
+
+    Now, what does this actually mean for the appearance of the texture on a surface? In the example, the scaling transform multiplies each texture coordinate by 2. For example, if a vertex was assigned 2D texture coordinates (0.4,0.1), then after the texture transform is applied, that vertex will be mapped to the point (s,t) = (0.8,0.2) in the texture. The texture coordinates vary twice as fast on the surface as they would without the scaling transform. A region on the surface that would map to a 1-by-1 square in the texture image without the transform will instead map to a 2-by-2 square in the image—so that a larger piece of the image will be seen inside the region. In other words, the texture image will be *shrunk* by a factor of two on the surface! More generally, the effect of a texture transformation on the appearance of the texture is the **inverse** of its effect on the texture coordinates. (This is exactly analogous to the inverse relationship between a viewing transformation and a modeling transformation.) If the texture transform is translation to the right, then the texture moves to the left on the surface. If the texture transform is a counterclockwise rotation, then the texture rotates clockwise on the surface.
+
+    I mention texture transforms here mostly to show how OpenGL can use transformations in another context. But it is sometimes useful to transform a texture to make it fit better on a surface. And for an unusual effect, you might even animate the texture transform to make the texture image move on the surface. Here is a demo that lets you experiment with texture transforms and see the effect. On the left, you see the region in the st-plane for s and t between −1 and 2. A box outlines the region in the texture that maps to a region on the 3D object with texture coordinates in the range 0 to 1. You can drag the sliders to apply texture transforms to see how the transforms affect the box and how they affect the texture on the object. See the help text in the demo for more information.
+
+    <iframe src="../../../en/demos/c4/texture-transform.html" width="675" height="550"></iframe>
+
+4.3.5 从内存加载纹理
+--------------------
+
+**Loading a Texture from Memory**
+
+.. tab:: 中文
+
+    OpenGL 中将图像用作纹理的过程通常开始于文件中的图像。OpenGL 本身没有从文件加载图像的函数。目前，我们假设图像已经从文件加载到计算机的内存中。本节稍后，我将解释如何在 C 和 Java 中完成这一过程。
+
+    OpenGL 从计算机内存中加载图像数据到 2D 纹理的函数是 *glTexImage2D()*，其形式如下：
+
+    ```c
+    glTexImage2D(target, mipmapLevel, internalFormat, width, height, border,
+                format, dataType, pixels);
+    ```
+
+    target 应该是 *GL_TEXTURE_2D*。mipmapLevel 通常应该是 0。值 0 用于加载主纹理；更大的值用于加载单独的 mipmap。internalFormat 告诉 OpenGL 您希望纹理数据在 OpenGL 纹理内存中的存储方式。它可以是 *GL_RGB*，用于为每个像素存储 8 位的红色/绿色/蓝色分量。另一种可能性是 *GL_RGBA*，它增加了一个 alpha 分量。width 和 height 提供了图像的大小；这些值应该是 2 的幂。border 的值应该是 0；另一种可能性是 1，这表明已经在图像数据周围添加了一像素的边界，我将不讨论其原因。最后三个参数描述了图像数据。format 告诉如何在计算机的内存中表示原始图像数据，例如 *GL_RGB* 或 *GL_RGBA*。dataType 通常是 *GL_UNSIGNED_BYTE*，表示每个颜色分量被表示为范围在 0 到 255 的一字节值。而 pixels 是指向像素实际颜色数据的起始点的指针。像素数据必须在特定的格式中，但这在这里并不需要我们关心，因为通常由用于从文件中读取图像的函数来处理。（对于 JOGL，指针将被缓冲区替换。）
+
+    这看起来相当复杂，但实际上，对 glTexImage2D 的调用通常采取以下形式，只是可能用 *GL_RGBA* 替换 *GL_RGB*。
+
+    ```c
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
+                GL_RGB, GL_UNSIGNED_BYTE, pixels);
+    ```
+
+    调用这个函数将把图像加载到纹理中，但它不会导致纹理被使用。为此，您还必须调用
+
+    ```c
+    glEnable(GL_TEXTURE_2D);
+    ```
+
+    如果您希望在某些对象上使用纹理而在其他对象上不使用，您可以在绘制希望有纹理的对象之前启用 *GL_TEXTURE_2D*，在绘制无纹理的对象之前将其禁用。您也可以随时通过调用 *glTexImage2D* 更改正在使用的纹理。
+
+.. tab:: 英文
+
+    It's about time that we looked at the process of getting an image into OpenGL so that it can be used as a texture. Usually, the image starts out in a file. OpenGL does not have functions for loading images from a file. For now, we assume that the file has already been loaded from the file into the computer's memory. Later in this section, I will explain how that's done in C and in Java.
+
+    The OpenGL function for loading image data from the computer's memory into a 2D texture is *glTexImage2D()*, which takes the form:
+
+    ```c
+    glTexImage2D(target, mipmapLevel, internalFormat, width, height, border,
+                                format, dataType, pixels);
+    ```
+
+    The target should be *GL_TEXTURE_2D*. The mipmapLevel should ordinarily be 0. The value 0 is for loading the main texture; a larger value is used to load an individual mipmap. The internalFormat tells OpenGL how you want the texture data to be stored in OpenGL texture memory. It can be *GL_RGB* to store an 8-bit red/green/blue component for each pixel. Another possibility is *GL_RGBA*, which adds an alpha component. The width and height give the size of the image; the values should be powers of two. The value of *border* should be 0; the only other possibility is 1, which indicates that a one-pixel border has been added around the image data for reasons that I will not discuss. The last three parameters describe the image data. The format tells how the original image data is represented in the computer's memory, such as *GL_RGB* or *GL_RGBA*. The *dataType* is usually *GL_UNSIGNED_BYTE*, indicating that each color component is represented as a one-byte value in the range 0 to 255. And pixels is a pointer to the start of the actual color data for the pixels. The pixel data has to be in a certain format, but that need not concern us here, since it is usually taken care of by the functions that are used to read the image from a file. (For JOGL, the pointer would be replaced by a buffer.)
+
+    This all looks rather complicated, but in practice, a call to glTexImage2D generally takes the following form, except possibly with *GL_RGB* replaced with *GL_RGBA*.
+
+    ```c
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
+                        GL_RGB, GL_UNSIGNED_BYTE, pixels);
+    ```
+
+    Calling this function will load the image into the texture, but it does not cause the texture to be used. For that, you also have to call
+
+    ```c
+    glEnable(GL_TEXTURE_2D);
+    ```
+
+    If you want to use the texture on some objects but not others, you can enable *GL_TEXTURE_2D* before drawing objects that you want to be textured and disable it before drawing untextured objects. You can also change the texture that is being used at any time by calling *glTexImage2D*.
+
+4.3.6 来自颜色缓冲区的纹理
+------------------------
+
+**Texture from Color Buffer**
+
+.. tab:: 中文
+
+    OpenGL 程序中使用的纹理图像通常来自外部来源，最常见的是图像文件。然而，OpenGL 本身是一个强大的图像创建引擎。有时，与其加载一个图像文件，不如让 OpenGL 内部创建图像更方便，通过渲染来实现。这是可能的，因为 OpenGL 可以从它自己的颜色缓冲区读取纹理数据，它在那里进行绘图。要使用 OpenGL 创建纹理图像，您只需使用标准的 OpenGL 绘图命令绘制图像，然后使用以下方法将该图像加载为纹理：
+
+    ```c
+    glCopyTexImage2D(目标, mipmap级别, 内部格式,
+                                        x, y, 宽度, 高度, 边框 );
+    ```
+
+    在这个方法中，目标将是 *GL_TEXTURE_2D*；*mipmap级别* 应该是零；*内部格式* 通常是 *GL_RGB* 或 *GL_RGBA*；x 和 y 指定从颜色缓冲区读取纹理的矩形的左下角；*width* 和 *height* 是该矩形的大小；边框应该是 0。像往常一样，纹理的宽度和高度应该是 2 的幂。对 *glCopyTexImage2D* 的调用通常看起来像这样：
+
+    ```c
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 宽度, 高度, 0);
+    ```
+
+    最终结果是，颜色缓冲区中指定的矩形将被复制到纹理内存，并成为当前的 2D 纹理。这与对 *glTexImage2D()* 的调用的工作方式相同，只是图像数据的来源不同。
+
+    一个示例可以在 JOGL 程序 [jogl/TextureFromColorBuffer.java](../../../en/source/jogl/TextureFromColorBuffer.java) 或 C 版本 [glut/texture-from-color-buffer.c](../../../en/source/glut/texture-from-color-buffer.c) 中找到。这个程序绘制了 [2.4.1 小节](../c2/s4.md#241--构建复杂对象) 中的风车和推车场景，并随后将该绘图作为纹理应用于 3D 对象。这是一个程序的演示版本。
+
+    <iframe src="../../../en/demos/c4/texture-from-color-buffer.html" width="440" height="460"></iframe>
+
+    纹理可以被动画化！对于动画，每个帧都会绘制一个新的纹理。所有工作都在程序的显示函数中完成。在该函数中，首先将风车和推车场景的当前帧作为禁用照明的 2D 场景绘制。这幅画不会显示在电脑屏幕上；绘图是在屏幕外完成的，图像将在显示在屏幕上之前被擦除并替换为 3D 图像。然后调用 *glCopyTexImage2D()* 函数将场景复制到当前纹理中。然后，清除颜色缓冲区，启用照明，并设置 3D 投影，最后绘制在电脑屏幕上看到的 3D 对象。
+
+.. tab:: 英文
+
+    Texture images for use in an OpenGL program usually come from an external source, most often an image file. However, OpenGL is itself a powerful engine for creating images. Sometimes, instead of loading an image file, it's convenient to have OpenGL create the image internally, by rendering it. This is possible because OpenGL can read texture data from its own color buffer, where it does its drawing. To create a texture image using OpenGL, you just have to draw the image using standard OpenGL drawing commands and then load that image as a texture using the method
+
+    ```c
+    glCopyTexImage2D( target, mipmapLevel, internalFormat,
+                                        x, y, width, height, border );
+    ```
+
+    In this method, target will be *GL_TEXTURE_2D*; *mipmapLevel* should be zero; the *internalFormat* will ordinarily be *GL_RGB* or *GL_RGBA*; x and y specify the lower left corner of the rectangle from which the texture will be read; *width* and *height* are the size of that rectangle; and border should be 0. As usual with textures, the width and height should ordinarily be powers of two. A call to *glCopyTexImage2D* will typically look like
+
+    ```c
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, width, height, 0);
+    ```
+
+    The end result is that the specified rectangle from the color buffer will be copied to texture memory and will become the current 2D texture. This works in the same way as a call to *glTexImage2D()*, except for the source of the image data.
+
+    An example can be found in the JOGL program [jogl/TextureFromColorBuffer.java](../../../en/source/jogl/TextureFromColorBuffer.java) or in the C version [glut/texture-from-color-buffer.c](../../../en/source/glut/texture-from-color-buffer.c). This program draws the windmill-and-cart scene from [Subsection 2.4.1](../c2/s4.md#241--构建复杂对象) and then uses that drawing as a texture on 3D objects. Here is a demo version of the program.
+
+    <iframe src="../../../en/demos/c4/texture-from-color-buffer.html" width="440" height="460"></iframe>
+
+    The texture can be animated! For the animation, a new texture is drawn for each frame. All the work is done in the program's display function. In that function, the current frame of the windmill-and-cart scene is first drawn as a 2D scene with lighting disabled. This picture is not shown on the computer screen; the drawing is done off-screen and the image will be erased and replaced with the 3D image before it's ever shown on screen. The *glCopyTexImage2D()* function is then called to copy the scene into the current texture. Then, the color buffer is cleared, lighting is enabled, and a 3D projection is set up, before finally drawing the 3D object that is seen on the computer screen.
+
+4.3.7 纹理对象
+--------------------
+
+**Texture Objects**
+
+.. tab:: 中文
+
+    OpenGL 1.0 中关于纹理的所有内容在 OpenGL 1.1 中仍然适用。OpenGL 1.1 引入了一个名为纹理对象的新特性，以使纹理处理更加高效。**纹理对象**用于当你需要在同一个程序中使用多个纹理图像时。加载纹理图像的常用方法 *glTexImage2D*，将数据从你的程序传输到显卡。这是一个昂贵的操作，使用这种方法在多个纹理之间切换可能会严重降低程序的性能。纹理对象提供了在显卡上存储多个纹理数据的可能性。有了纹理对象，你可以使用一个单一的、快速的 OpenGL 命令在不同的纹理对象之间切换：你只需要告诉 OpenGL 你想要使用哪个纹理对象。（当然，显卡只有有限的内存用于存储纹理，你不能保证所有的纹理对象都会被实际存储在显卡上。不适合放在显卡内存中的纹理对象并不比普通纹理更高效。）
+
+    纹理对象由 OpenGL 和图形硬件管理。一个纹理对象由一个整数 ID 号标识。要使用一个纹理对象，你需要从 OpenGL 获取一个 ID 号。这是通过 *glGenTextures* 函数完成的：
+
+    ```c
+    void glGenTextures( int textureCount, int* array )
+    ```
+
+    这个函数可以一次调用生成多个纹理 ID。第一个参数指定你想要多少个 ID。第二个参数说明生成的 ID 将被存储在哪里。它应该是一个至少为 textureCount 长度的数组。例如，如果你计划使用三个纹理对象，你可以说：
+
+    ```c
+    int idList[3];
+    glGenTextures( 3, idList );
+    ```
+
+    然后，你可以使用 *idList[0]*、*idList[1]* 和 *idList[2]* 来引用纹理。由于 C 中指针的工作方式，如果你想要获取一个单一的纹理 ID，你可以将一个整型变量的指针作为第二个参数传递给 *glGenTextures()*。例如：
+
+    ```c
+    int texID;
+    glGenTextures( 1, &texID );
+    ```
+
+    新的纹理 ID 将被存储在变量 *texID* 中。
+
+    每个纹理对象都有自己的状态，其中包括纹理参数的值，如 GL_TEXTURE_MIN_FILTER，以及纹理图像本身。要使用特定的纹理对象，你必须首先调用
+
+    ```c
+    glBindTexture( GL_TEXTURE_2D, texID )
+    ```
+
+    其中 texID 是由 *glGenTextures* 返回的纹理 ID。在此调用之后，任何对 *glTexParameteri*、*glTexImage2D* 或 *glCopyTexImage2D* 的使用都将应用于 ID 为 texID 的纹理对象。
+
+    类似地，当渲染一个带纹理的原素时，所使用的纹理是最近一次使用 *glBindTexture* 绑定的那个。一个典型的模式是在程序初始化期间加载和配置多个纹理：
+
+    ```c
+    glGenTextures( n, textureIdList );
+    for (i = 0; i < n; i++) {
+        glBindTexture( textureIDList[i] );
+        .
+        .  // 加载第 i 个纹理图像
+        .  // 配置第 i 个纹理图像
+        .
+    }
+    ```
+
+    然后，在渲染场景时，每次你想要从一个纹理图像切换到另一个纹理图像时，你会调用 *glBindTexture*。这将比每次想要切换纹理时调用 *glTexImage2D* 更高效。
+
+    OpenGL 1.1 将纹理 ID 零保留为默认纹理对象，最初是绑定的。这是如果你从未调用 *glBindTexture* 就会使用的纹理对象。这意味着你可以编写使用纹理而不提及 *glBindTexture* 的程序。（然而，我应该指出，当我们到达 WebGL 时，情况将不再如此。）
+
+    小型示例程序 [glut/texture-objects.c](../../../en/source/glut/texture-objects.c) 展示了如何在 C 中使用纹理对象。它仅在 C 中可用，因为正如我们将看到的，JOGL 有它自己的处理纹理对象的方式。
+
+.. tab:: 英文
+
+    Everything that I've said so far about textures was already true for OpenGL 1.0. OpenGL 1.1 introduced a new feature called texture objects to make texture handling more efficient. **Texture objects** are used when you need to work with several texture images in the same program. The usual method for loading texture images, *glTexImage2D*, transfers data from your program into the graphics card. This is an expensive operation, and switching among multiple textures by using this method can seriously degrade a program's performance. Texture objects offer the possibility of storing texture data for multiple textures on the graphics card. With texture objects, you can switch from one texture object to another with a single, fast OpenGL command: You just have to tell OpenGL which texture object you want to use. (Of course, the graphics card has only a limited amount of memory for storing textures, and you aren't guaranteed that all of your texture objects will actually be stored on the graphics card. Texture objects that don't fit in the graphics card's memory are no more efficient than ordinary textures.)
+
+    Texture objects are managed by OpenGL and the graphics hardware. A texture object is identified by an integer ID number. To use a texture object, you need to obtain an ID number from OpenGL. This is done with the *glGenTextures* function:
+
+    ```c
+    void glGenTextures( int textureCount, int* array )
+    ```
+
+    This function can generate multiple texture IDs with a single call. The first parameter specifies how many IDs you want. The second parameter says where the generated IDs will be stored. It should be an array whose length is at least textureCount. For example, if you plan to use three texture objects, you can say
+
+    ```c
+    int idList[3];
+    glGenTextures( 3, idList );
+    ```
+
+    You can then use *idList[0]*, *idList[1]*, and *idList[2]* to refer to the textures. Because of the way pointers work in C, if you want to get a single texture ID, you can pass a pointer to an integer variable as the second parameter to *glGenTextures()*. For example,
+
+    ```c
+    int texID;
+    glGenTextures( 1, &texID );
+    ```
+
+    The new texture ID will be stored in the variable *texID*.
+
+    Every texture object has its own state, which includes the values of texture parameters such as GL_TEXTURE_MIN_FILTER as well as the texture image itself. To work with a specific texture object, you must first call
+
+    ```c
+    glBindTexture( GL_TEXTURE_2D, texID )
+    ```
+
+    where texID is the texture ID returned by *glGenTextures*. After this call, any use of *glTexParameteri*, *glTexImage2D*, or *glCopyTexImage2D* will be applied to the texture object with ID texID.
+
+    Similarly, when a textured primitive is rendered, the texture that is used is the one that was most recently bound using *glBindTexture*. A typical pattern would be to load and configure a number of textures during program initialization:
+
+    ```c
+    glGenTextures( n, textureIdList );
+    for (i = 0; i < n; i++) {
+        glBindTexture( textureIDList[i] );
+        .
+        .  // Load texture image number i
+        .  // Configure texture image number i
+        .
+    }
+    ```
+
+    Then, while rendering a scene, you would call *glBindTexture* every time you want to switch from one texture image to another texture image. This would be much more efficient than calling *glTexImage2D* every time you want to switch textures.
+
+    OpenGL 1.1 reserves texture ID zero as the default texture object, which is bound initially. It is the texture object that you are using if you never call *glBindTexture*. This means that you can write programs that use textures without ever mentioning *glBindTexture*. (However, I should note that when we get to WebGL, that will no longer be true.)
+
+    The small sample program [glut/texture-objects.c](../../../en/source/glut/texture-objects.c) shows how to use texture objects in C. In is available only in C since, as we will see, JOGL has its own way of working with texture objects.
+
+4.3.8 在 C 中加载纹理
+--------------------
+
+**Loading Textures in C**
+
+.. tab:: 中文
+
+    我们已经看到了如何将纹理图像数据从内存加载到 OpenGL 中。剩下的问题是，在调用 `glTexImage2D` 之前如何将图像数据加载到内存中。一种可能性是计算数据——实际上，你的程序可以即时生成纹理数据。然而，更有可能的是，你想要从文件中加载它。本节将探讨如何在 C 语言中完成这项工作。你可能想要使用一个图像处理函数库。有几个免费的图像处理库可用。我将讨论其中之一，FreeImage，它可以与许多图像文件格式一起工作。FreeImage 可以从 <http://freeimage.sourceforge.net/> 获取，但我在 Linux 上简单地通过安装包 *libfreeimage-dev* 来使用它。为了使我的程序可以使用它，我在 C 程序的顶部添加了 `#include "FreeImage.h"`，并在 gcc 命令中添加了选项 -lfreeimage 以使库对编译器可用。（有关使用此库的示例程序，请参见 [glut/texture-demo.c](../../../en/source/glut/texture-demo.c)。）与其详细讨论 FreeImage，我提供了一个使用它从文件加载图像数据的注释良好的函数：
+
+    ```c
+    void* imgPixels; // 指向内存中纹理的原始 RGB 数据的指针。
+    int imgWidth;    // 纹理图像的宽度。
+    int imgHeight;   // 纹理图像的高度。
+
+    void loadTexture( char* fileName ) {
+        // 使用 FreeImage 库加载纹理图像，并将所需的信息存储在全局变量
+        // imgPixels, imgWidth, imgHeight 中。参数 fileName 是一个字符串，
+        // 包含要从中加载图像的图像文件的名称。如果无法加载图像，
+        // 则 imgPixels 将被设置为 null 指针。
+        
+        imgPixels = 0; // 空指针，表示尚未读取数据。
+        
+        FREE_IMAGE_FORMAT format = FreeImage_GetFIFFromFilename(fileName);
+        // FREE_IMAGE_FORMAT 是 FreeImage 库定义的类型。
+        // 在这里，格式是从文件名中的文件扩展名（如 .png, .jpg 或 .gif）确定的，
+        // 支持许多格式。
+        
+        if (format == FIF_UNKNOWN) {
+            printf("Unknown file type for texture image file %s\n", fileName);
+            return;
+        }
+        
+        FIBITMAP* bitmap = FreeImage_Load(format, fileName, 0);
+        // FIBITMAP 是 FreeImage 库定义的类型，表示原始图像数据加上一些元数据，
+        // 如宽度、高度以及图像数据的格式。这实际上尝试从指定的文件中读取数据。
+        
+        if (!bitmap) {
+            printf("Failed to load image %s\n", fileName);
+            return;
+        }
+        
+        FIBITMAP* bitmap2 = FreeImage_ConvertTo24Bits(bitmap);
+        // 这会创建图像的副本，数据以标准 RGB（或 BGR）格式表示，供 OpenGL 使用。
+        
+        FreeImage_Unload(bitmap);
+        // 使用完位图后，应该释放它。
+        // 我们已经完成了 bitmap 的使用，但还没有完成 bitmap2 的使用，因为
+        // 我们将会继续使用 bitmap2 的数据。
+        
+        imgPixels = FreeImage_GetBits(bitmap2);  // 获取我们所需的数据！
+        imgWidth = FreeImage_GetWidth(bitmap2);
+        imgHeight = FreeImage_GetHeight(bitmap2);
+        
+        if (imgPixels) {
+            printf("Texture image loaded from file %s, size %dx%d\n",
+                fileName, imgWidth, imgHeight);
+        }
+        else {
+            printf("Failed to get texture data from %s\n", fileName);
+        }
+        
+    } // end loadTexture
+    ```
+
+    这个函数被调用后，我们需要的 `glTexImage2D()` 数据就在全局变量 `imgWidth`、`imgHeight` 和 `imgPixels` 中（或者 `imgPixels` 为 0，表示加载图像的尝试失败）。有一个复杂性：FreeImage 会在某些平台上以红/绿/蓝的顺序存储像素的颜色分量，但在其他平台上以蓝/绿/红的顺序存储。第二种数据格式在 OpenGL 中被称为 *GL_BGR*。如果你在 `glTexImage2D()` 中使用了错误的格式，那么颜色的红色和蓝色分量将会颠倒。为了区分，你可以使用 FreeImage 常量 FI_RGBA_RED，它告诉像素数据中红色分量的位置。如果格式是 *GL_RGB*，这个常量将是 0；如果格式是 *GL_BGR*，这个常量将是 2。所以，要在 OpenGL 中使用纹理，你可能会说：
+
+    ```c
+    if ( imgPixels ) { // 图像数据存在
+        int format; // 内存中颜色数据的格式
+        if ( FI_RGBA_RED == 0 )
+            format = GL_RGB;
+        else
+            format = GL_BGR;
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgWidth, imgHeight, 0, format,
+                            GL_UNSIGNED_BYTE, imgPixels);
+        glEnable(GL_TEXTURE_2D);
+    }
+    else { // 没有加载图像数据，所以不要尝试使用纹理。
+        glDisable(GL_TEXTURE_2D);
+    }
+    ```
+
+    为了更加小心，你可以检查图像的宽度和高度是否为 2 的幂。如果不是，你可以使用 FreeImage 库中的 `FreeImage_Rescale()` 函数来调整大小。
+
+    ----
+
+    FreeImage 是一个庞大且复杂的系统，可能不容易在你的计算机上提供。为了让你更容易地在 C 中尝试纹理，我还包括了一个小型的 C 实用程序，用于从 .rgb 文件中读取纹理。rgb 文件格式相当简单，但 rgb 文件通常比相应的 .png 或 .jpeg 文件大得多。该格式不被广泛支持，但我在 [glut/textures-rgb](../../../en/source/glut/textures-rgb) 文件夹中包含了我的示例纹理图像的 .rgb 版本。加载它们的小型库是 [glut/textures-rgb/readrgb.c](../../../en/source/glut/textures-rgb/readrgb.c) 及其头文件 [glut/textures-rgb/readrgb.h](../../../en/source/glut/textures-rgb/readrgb.h)。（该库来自 <http://paulbourke.net/dataformats/sgirgb/>。）使用该库的示例程序是 [glut/texture-objects-rgb.c](../../../en/source/glut/texture-objects-rgb.c) 和 [glut/texture-demo-rgb.c](../../../en/source/glut/texture-demo-rgb.c)。
+
+.. tab:: 英文
+
+    We have seen how to load texture image data from memory into OpenGL. The problem that remains is how to get the image data into memory before calling *glTexImage2D*. One possibility is to compute the data—you can actually have your program generate texture data on the fly. More likely, however, you want to load it from a file. This section looks at how that might be done in C. You will probably want to use a library of image-manipulation functions. Several free image processing libraries are available. I will discuss one of them, FreeImage, which can work with many image file formats. *FreeImage* can be obtained from <http://freeimage.sourceforge.net/>, but I was able to use it in Linux simply by installing the package *libfreeimage-dev*. To make it available to my program, I added `#include "FreeImage.h"` to the top of my C program, and I added the option -lfreeimage to the gcc command to make the library available to the compiler. (See the sample program [glut/texture-demo.c](../../../en/source/glut/texture-demo.c) for an example that uses this library.) Instead of discussing FreeImage in detail, I present a well-commented function that uses it to load image data from a file:
+
+    ```c
+    void* imgPixels; // Pointer to raw RGB data for texture in memory.
+    int imgWidth;    // Width of the texture image.
+    int imgHeight;   // Height of the texture image.
+
+    void loadTexture( char* fileName ) {
+            // Loads a texture image using the FreeImage library, and stores the
+            // required info in global variables imgPixels, imgWidth, imgHeight.
+            // The parameter fileName is a string that contains the name of the
+            // image file from which the image is to be loaded.  If the image
+            // can't be loaded, then imgPixels will be set to be a null pointer.
+            
+        imgPixels = 0; // Null pointer to signal that data has not been read.
+        
+        FREE_IMAGE_FORMAT format = FreeImage_GetFIFFromFilename(fileName);
+            // FREE_IMAGE_FORMAT is a type defined by the FreeImage library.
+            // Here, the format is determined from the file extension in
+            // the file name, such as .png, .jpg, or .gif.  Many formats
+            // are supported.
+        
+        if (format == FIF_UNKNOWN) {
+            printf("Unknown file type for texture image file %s\n", fileName);
+            return;
+        }
+        
+        FIBITMAP* bitmap = FreeImage_Load(format, fileName, 0);
+            // FIBITMAP is a type defined by the FreeImage library, representing
+            // the raw image data plus some metadata such as width, height,
+            // and the format of the image data.  This actually tries to
+            // read the data from the specified file.
+            
+        if (!bitmap) {
+            printf("Failed to load image %s\n", fileName);
+            return;
+        }
+        
+        FIBITMAP* bitmap2 = FreeImage_ConvertTo24Bits(bitmap);
+            // This creates a copy of the image, with the data represented
+            // in standard RGB (or BGR) format, for use with OpenGL.
+        
+        FreeImage_Unload(bitmap);
+            // After finishing with a bitmap, it should be disposed.
+            // We are finished with bitmap, but not with bitmap2, since
+            // we will continue to use the data from bitmap2.
+            
+        imgPixels = FreeImage_GetBits(bitmap2);  // Get the data we need!
+        imgWidth = FreeImage_GetWidth(bitmap2);
+        imgHeight = FreeImage_GetHeight(bitmap2);
+        
+        if (imgPixels) {
+            printf("Texture image loaded from file %s, size %dx%d\n", 
+                            fileName, imgWidth, imgHeight);
+        }
+        else {
+            printf("Failed to get texture data from %s\n", fileName);
+        }
+        
+    } // end loadTexture
+    ```
+
+    After this function has been called, the data that we need for *glTexImage2D()* is in the global variables *imgWidth*, *imgHeight*, and *imgPixels* (or imgPixels is 0 to indicate that the attempt to load the image failed). There is one complication: FreeImage will store the color components for a pixel in the order red/green/blue on some platforms but in the order blue/green/red on other platforms. The second data format is called *GL_BGR* in OpenGL. If you use the wrong format in *glTextImage2D()*, then the red and blue components of the color will be reversed. To tell the difference, you can use the FreeImage constant FI_RGBA_RED, which tells the position of the red color component in pixel data. This constant will be 0 if the format is *GL_RGB* and will be 2 if the format is *GL_BGR*. So, to use the texture in OpenGL, you might say:
+
+    ```c
+    if ( imgPixels ) { // The image data exists
+        int format; // The format of the color data in memory
+        if ( FI_RGBA_RED == 0 )
+        format = GL_RGB;
+        else
+        format = GL_BGR;
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgWidth, imgHeight, 0, format,
+                            GL_UNSIGNED_BYTE, imgPixels);
+        glEnable(GL_TEXTURE_2D);
+    }
+    else { // The image data was not loaded, so don't attempt to use the texture.
+        glDisable(GL_TEXTURE_2D);
+    }
+    ```
+
+    To be even more careful, you could check that the width and the height of the image are powers of two. If not, you can resize it using the function *FreeImage_Rescale()* from the FreeImage library.
+
+    ----
+
+    FreeImage is a large, complicated system that might not be easily made available on your computer. To make it easier for you to experiment with textures in C, I have also included a small C utility for reading textures from .rgb files. The rgb file format is fairly simple, but rgb files are generally much larger than the corresponding .png or .jpeg files. The format is not widely supported, but I have included .rgb versions of my sample texture images in the folder [glut/textures-rgb](../../../en/source/glut/textures-rgb). The small library for loading them into textures is [glut/textures-rgb/readrgb.c](../../../en/source/glut/textures-rgb/readrgb.c) and its header file [glut/textures-rgb/readrgb.h](../../../en/source/glut/textures-rgb/readrgb.h). (The library is from <http://paulbourke.net/dataformats/sgirgb/>.) Sample programs that use the library are [glut/texture-objects-rgb.c](../../../en/source/glut/texture-objects-rgb.c) and [glut/texture-demo-rgb.c](../../../en/source/glut/texture-demo-rgb.c).
+
+4.3.9 通过 JOGL 使用纹理
+----------------------------
+
+**Using Textures with JOGL**
+
+.. tab:: 中文
+
+    我们终于转向在 Java 中使用纹理图像。JOGL 带有多个类，使得在 Java 中使用纹理相对容易，特别是包 *com.jogamp.opengl.util.texture* 中的 **Texture** 和 **TextureIO** 类，以及包 *com.jogamp.opengl.util.texture.awt* 中的 **AWTTextureIO** 类。有关使用 JOGL 纹理的示例，请参见示例程序 [jogl/TextureDemo.java](../../../en/source/jogl/TextureDemo.java)。
+
+    一个 **Texture** 类型的对象代表一个已经被加载到 OpenGL 中的纹理。在内部，它使用一个纹理对象来存储纹理及其配置数据。如果 tex 是一个 **Texture** 类型的对象，你可以调用
+
+    ```java
+    tex.bind(gl);
+    ```
+
+    在渲染对象时使用纹理图像。参数 gl 像往常一样，是一个表示 OpenGL 绘图上下文的 **GL2** 类型的变量。这个函数等价于调用 OpenGL 纹理对象的 glBindTexture。你仍然需要通过调用 *gl.glEnable(GL2.GL_TEXTURE_2D)* 或等价地，
+
+    ```java
+    tex.enable(gl);
+    ```
+
+    来启用 *GL_TEXTURE_2D*。
+
+    你可以按照通常的方式设置纹理参数，通过在绑定纹理时调用 gl.glTexParameteri()，但最好使用 Texture 类中的方法来设置参数：
+
+    ```java
+    tex.setTexParameteri(gl, parameterName, value);
+    ```
+
+    这将在设置纹理参数之前自动绑定纹理对象。例如，
+
+    ```java
+    tex.setTexParameteri(gl, GL2.GL_TEXTURE_MIN_FILTER, GL2.LINEAR_MIPMAP_LINEAR);
+    ```
+
+    所以，一旦你有了 **Texture**，使用起来就相当容易了。但仍然存在创建 **Texture** 对象的问题。为此，你可以使用 **TextureIO** 和 **AWTTextureIO** 类中的静态方法。例如，如果 fileName 是一个图像文件（或指向该文件的路径）的名称，那么你可以这样说
+
+    ```java
+    tex = TextureIO.newTexture(new File(fileName), true);
+    ```
+
+    将文件中的纹理加载到 **Texture** 对象 tex 中。这里的 *boolean* 参数，以及我们将要查看的所有方法中的参数，告诉 JOGL 是否为纹理创建 mipmaps；通过传递 true，我们自动获得一组完整的 mipmaps！
+
+    **一个重要的注意事项**：Java 的纹理创建函数只有在 OpenGL 上下文是“当前的”时才会工作。这将在 **GLEventListener** 的事件处理方法中成立，包括 *init()* 和 *display()* 方法。然而，在普通方法和构造函数中，这将不成立。
+
+    当然，在 Java 中，你更有可能将图像作为程序中的资源存储，而不是作为一个单独的文件。如果 *resourceName* 是指向图像资源的路径，你可以使用
+
+    ```java
+    URL textureURL;
+    textureURL = getClass().getClassLoader().getResource(resourceName);
+    texture = TextureIO.newTexture(textureURL, true, null);
+    ```
+
+    将图像加载到纹理中。
+
+    这个版本的 *newTexture* 的第三个参数指定了图像类型，可以作为一个包含文件后缀如 "png" 或 "jpg" 的字符串给出；null 值告诉 OpenGL 自动检测图像类型，这通常应该可以工作。（顺便说一下，我在这里讨论的所有纹理加载代码都可能抛出异常，你必须以某种方式捕获或处理它们。）
+
+    所有这些的一个问题是，以这种方式加载的纹理将会是上下颠倒的！这是因为 Java 从图像的顶行存储图像数据到底部，而 OpenGL 期望图像数据从底行开始存储。如果这对你有影响，你可以在创建纹理之前翻转图像。为此，你必须将图像加载到 **BufferedImage** 中，然后使用 **AWTTextureIO** 类将其加载到纹理中。例如，假设 resourceName 是程序中图像资源的路径：
+
+    ```java
+    URL textureURL;
+    textureURL = getClass().getClassLoader().getResource(resourceName);
+    BufferedImage img = ImageIO.read(textureURL);
+    ImageUtil.flipImageVertically(img);
+    texture = AWTTextureIO.newTexture(GLProfile.getDefault(), img, true);
+    ```
+
+    **ImageUtil** 类在包 *com.jogamp.opengl.util.awt* 中定义。在这里，我通过从资源中读取来获取一个 **BufferedImage**。你也可以从文件中读取它——甚至使用 Java 2D 图形绘制它。
+
+.. tab:: 英文
+
+    We turn finally to using texture images in Java. JOGL comes with several classes that make it fairly easy to use textures in Java, notably the classes **Texture** and **TextureIO** in package *com.jogamp.opengl.util.texture* and **AWTTextureIO** in package *com.jogamp.opengl.util.texture.awt*. For an example of using textures with JOGL, see the sample program [jogl/TextureDemo.java](../../../en/source/jogl/TextureDemo.java).
+
+    An object of type **Texture** represents a texture that has already been loaded into OpenGL. Internally, it uses a texture object to store the texture and its configuration data. If tex is an object of type **Texture**, you can call
+
+    ```java
+    tex.bind(gl);
+    ```
+
+    to use the texture image while rendering objects. The parameter, gl, as usual, is a variable of type **GL2** the represents the OpenGL drawing context. This function is equivalent to calling glBindTexture for the OpenGL texture object that is used by the Java **Texture**. You still need to enable *GL_TEXTURE_2D* by calling *gl.glEnable(GL2.GL_TEXTURE_2D)* or, equivalently,
+
+    ```java
+    tex.enable(gl);
+    ```
+
+    You can set texture parameters in the usual way, by calling gl.glTexParameteri() while the texture is bound, but it is preferable to use a method from the Texture class to set the parameters:
+
+    ```java
+    tex.setTexParameteri( gl, parameterName, value );
+    ```
+
+    This will automatically bind the texture object before setting the texture parameter. For example,
+
+    ```java
+    tex.setTexParameteri(gl, GL2.GL_TEXTURE_MIN_FILTER, GL2.LINEAR_MIPMAP_LINEAR);
+    ```
+
+    So, once you have a **Texture**, it's pretty easy to use. But there remains the problem of creating **Texture** objects. For that, you can use static methods in the **TextureIO** and **AWTTextureIO** classes. For example, if fileName is the name of an image file (or a path to such a file), then you can say
+
+    ```java
+    tex = TextureIO.newTexture( new File(fileName), true );
+    ```
+
+    to load a texture from the file into a **Texture** object, *tex*. The *boolean* parameter here, and in all the methods we will look at, tells JOGL whether or not to create mipmaps for the texture; by passing *true*, we automatically get a full set of mipmaps!
+
+    **One important note**: Java's texture creation functions will only work when an OpenGL context is "current." This will be true in the event-handling methods of a **GLEventListener**, including the *init()* and *display()* methods. However, it will **not** be true in ordinary methods and constructors.
+
+    Of course, in Java, you are more likely to store the image as a resource in the program than as a separate file. If *resourceName* is a path to the image resource, you can load the image into a texture with
+
+    ```java
+    URL textureURL;
+    textureURL = getClass().getClassLoader().getResource( resourceName );
+    texture = TextureIO.newTexture(textureURL, true, null);
+    ```
+
+    The third parameter to this version of *newTexture* specifies the image type and can be given as a string containing a file suffix such as "png" or "jpg"; the value null tells OpenGL to autodetect the image type, which should work in general. (By the way, all the texture-loading code that I discuss here can throw exceptions, which you will have to catch or otherwise handle in some way.)
+
+    One problem with all this is that textures loaded in this way will be upside down! This happens because Java stores image data from the top row of the image to the bottom, whereas OpenGL expects image data to be stored starting with the bottom row. If this is a problem for you, you can flip the image before using it to create a texture. To do that, you have to load the image into a **BufferedImage** and then load that into a texture using the **AWTTextureIO** class. For example, assuming resourceName is a path to an image resource in the program:
+
+    ```java
+    URL textureURL;
+    textureURL = getClass().getClassLoader().getResource( resourceName );
+    BufferedImage img = ImageIO.read( textureURL );
+    ImageUtil.flipImageVertically( img );
+    texture = AWTTextureIO.newTexture(GLProfile.getDefault(), img, true);
+    ```
+
+    The **ImageUtil** class is defined in package *com.jogamp.opengl.util.awt*. Here, I obtained a **BufferedImage** by reading it from a resource. You could also read it from a file—or even draw it using Java 2D graphics.

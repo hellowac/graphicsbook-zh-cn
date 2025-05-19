@@ -1,6 +1,6 @@
 .. _c2.4:
 
-第4节: 分层建模
+2.4 分层建模
 ================
 
 **Hierarchical Modeling**
@@ -210,7 +210,8 @@
 
     The file [java2d/HierarchicalModeling2D.java](../../../en/source/java2d/HierarchicalModeling2D.java) contains the complete source code for a Java version of this example. The [next section](./s5.md) of this book covers graphics programming in Java. Once you are familiar with that, you should take a look at the source code, especially the paintComponent() method, which draws the entire scene. The same example, using the same scene graph API, is implemented in JavaScript in [canvas2d/HierarchicalModel2D.html](../../../en/source/canvas2d/HierarchicalModel2D.html).
 
-## 2.4.2  场景图
+2.4.2  场景图
+--------------------
 
 **Scene Graphs**
 
@@ -294,7 +295,8 @@
 
     For those who are familiar with data structures, I will note that a scene graph is actually an example of a "directed acyclic graph" or "dag." The process of drawing the scene involves a traversal of this dag. The term "acyclic" means that there can't be cycles in the graph. For a scene graph, this is the obvious requirement that an object cannot be a sub-object, either directly or indirectly, of itself.
 
-## 2.4.3  变换堆栈
+2.4.3  变换堆栈
+--------------------
 
 **The Transform Stack**
 

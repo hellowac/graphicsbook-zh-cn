@@ -1,0 +1,660 @@
+.. _c9.2:
+
+9.2 例和索引
+=========================
+
+**Instances and Indices**
+
+.. tab:: 中文
+
+    上一节展示了如何在WebGPU中绘制一个图元。在这一节中，我们将看到如何在同一个图像中绘制多个图元，并且我们将介绍一些新的绘制选项：实例化绘制和索引绘制。
+
+    在本节的大部分时间里，我们将关注一个示例的变化：一个应用程序，展示了在画布上随机颜色的圆盘在移动。最后一个变化将使用一种称为多重采样的技术为示例添加抗锯齿效果。这里有一个演示，让您可以在基本版本和多重采样版本之间切换。基本版本中的圆盘边缘更加锯齿状。如果您放大网页，效果将更容易看到。
+
+
+    <iframe src="../../../en/demos/c9/multisampling-demo.html" width="390" height="450"></iframe>
+
+.. tab:: 英文
+
+    The previous section showed how to draw one primitive in WebGPU. In this section we will see how to draw more than one primitive in the same image, and we will cover some new options for drawing them: instanced drawing and indexed drawing.
+
+    For most of this section, we will be looking at variations on one example: an app that shows randomly colored disks moving around in a canvas. The last variation will add antialiasing to the example using a technique called multisampling. Here is a demo that lets you switch between the basic version and the multisampling version. The edges of the disks in the basic version are more jagged. The effect will be easier to see if you magnify the web page.
+
+    <iframe src="../../../en/demos/c9/multisampling-demo.html" width="390" height="450"></iframe>
+
+9.2.1 实例绘图
+-------------------------
+
+**Instanced Drawing**
+
+.. tab:: 中文
+
+    实例化绘制使得能够通过单个函数调用绘制同一个图元的多个副本或“实例”。WebGL 2.0 中的实例化绘制在 [6.1.8小节](../c6/s1.md#618-webgl-20实例化绘图) 中有所介绍。示例程序 [webgpu/instanced_draw.html](../../../en/source/webgpu/instanced_draw.html) 展示了如何在 WebGPU 中实现它。（再次强调，我建议您阅读所有示例程序的源代码注释！）
+
+    图元的不同实例在渲染图像中可以看起来不同，只要它们对某些属性有不同的值即可。例如，实例可以有不同的颜色。颜色将是“实例属性”。
+
+    我们使用了渲染通道编码器方法 `draw(N)` 来绘制具有 N 个顶点的图元。对于每个顶点，系统将从顶点缓冲区中提取该顶点的属性值，并将它们作为参数传递给顶点着色器入口点。实例属性的工作方式相同，只是实例属性的值在给定实例中的每个顶点都是相同的。
+
+    实例化绘制使用与常规绘制相同的 `draw()` 方法，但有一个第二个参数。调用 `draw(N, M)` 将绘制具有 N 个顶点的图元的 M 个实例。效果类似于以下伪代码：
+
+    ```js
+    for (i = 0; i < M; i++)
+        获取实例 i 的实例属性值
+    for (v = 0; v < N; v++)
+        获取顶点 v 的顶点属性值
+        调用顶点着色器函数，传入所有属性值
+    ```
+
+    （`draw()` 方法还可以接受另外两个可选参数，指定顶点和实例的起始索引。）
+
+    顶点属性值来自顶点缓冲区。实例属性值也是如此。唯一的区别是顶点缓冲区布局规范中的一个小变化。是时候看一个例子了。示例程序使用单个 `draw()` 调用绘制了五十个彩色圆盘。基本图元是中心在 (0,0) 的圆盘。圆盘顶点的坐标作为一个顶点属性给出。每个彩色圆盘是一个实例。圆盘的颜色是实例属性。另一个实例属性 offset 指定了应用于图元的平移变换。在着色器源代码中，顶点坐标、颜色和偏移量是顶点着色器函数的参数：
+
+    ```js
+    @vertex
+    fn vertexMain( 
+            @location(0) coords : vec2f,
+            @location(1) offset : vec2f,
+            @location(2) color : vec3f
+        ) -> VertexOutput {
+        var output : VertexOutput; // (带 position 和 color 字段的结构体。)
+        output.position = vec4f( coords + offset, 0, 1 );
+        output.color = vec4f(color,1);
+        return output;
+    }
+    ```
+
+    回想一下，参数列表中的 `@location` 属性用于将参数与来自程序 JavaScript 端的值关联起来。关联是通过 JavaScript 端顶点缓冲区布局中的 shaderLocation 属性进行的。这里是示例程序中的布局，它指定了每个参数的来源：
+
+    ```js
+    let vertexBufferLayout = [
+        { // 第一个顶点缓冲区，用于顶点坐标。
+            attributes: [ 
+                { shaderLocation:0, offset:0, format: "float32x2" }
+            ],
+            arrayStride: 8,
+            stepMode: "vertex"   // 这是一个顶点属性。
+        },
+        { // 第二个顶点缓冲区，用于实例偏移。
+            attributes: [ 
+                { shaderLocation:1, offset:0, format: "float32x2" }
+            ],
+            arrayStride: 8,
+            stepMode: "instance"  // 这是一个实例属性。
+        },
+        { // 第三个顶点缓冲区，用于实例颜色。
+            attributes: [ 
+                { shaderLocation:2, offset:0, format: "float32x3" }
+            ],
+            arrayStride: 12,
+            stepMode: "instance"  // 这是一个实例属性。
+        }
+    ];
+    ```
+
+    如您所见，顶点属性和实例属性之间唯一的区别在于 stepMode 属性的值。步进模式 "vertex" 告诉系统为图元中的每个顶点从顶点缓冲区中提取一个值。步进模式 "instance" 意味着为每个实例提取一个值。
+
+    示例程序中的圆盘可以被动画化。要绘制动画的下一帧，程序只需计算每个圆盘的偏移属性的新值，将新值写入 GPU 端保存偏移量的顶点缓冲区，然后重新渲染图像。关于动画的一个技术要点可能会困扰您：程序的 JavaScript 端简单地排队了将在 GPU 端稍后执行的命令。不知何故，双方必须同步，以确保我们在旧图像已在网页上计算并显示出来之前，不要开始绘制新图像。那个同步由用于实现动画的 requestAnimationFrame() 方法来处理。该方法在前一帧完成之前不会启动新帧。
+
+    ----
+
+    尽管与实例化绘制无关，但示例程序的另一个有趣之处在于它如何绘制圆盘。圆盘被近似为多边形。在 WebGL 中，我会将圆盘作为 *TRIANGLE_FAN* 来绘制，但 WebGPU 缺少这种图元类型。这里，圆盘是使用三角形条带图元绘制的，这需要仔细排序顶点：
+
+    ![如何将圆盘绘制为三角形条带](../../en/c9/triangle-strip-disk.png)
+
+
+.. tab:: 英文
+
+    Instanced drawing makes it possible to draw multiple copies, or "instances," of the same primitive with a single function call. Instanced drawing in WebGL 2.0 was covered in [Subsection 6.1.8](../c6/s1.md#618-webgl-20实例化绘图). The sample program [webgpu/instanced_draw.html](../../../en/source/webgpu/instanced_draw.html) shows how to do it in WebGPU. (Again, I urge you to read the comments in the source code for all sample programs!)
+
+    The various instances of the primitive can look different in the rendered image, provided that they have different values for some attributes. For example, the instances can have different colors. The color would be an "instance attribute."
+
+    We have used the render pass encoder method draw(N) to draw a primitive that has N vertices. For each vertex, the system will pull attribute values from vertex buffers for that vertex and will pass them as parameters to the vertex shader entry point. Instance properties work the same way, except that the value for an instance attribute is the same for every vertex in a given instance.
+
+    Instanced drawing uses the same draw() method as regular drawing, but with a second parameter. A call to draw(N,M) will draw M instances of a primitive that has N vertices. The effect is similar to the following pseudocode:
+
+    ```js
+    for (i = 0; i < M; i++)
+        get instance attribute values for instance i
+        for (v = 0; v < N; v++)
+        get vertex attribute values for vertex v
+        call vertex shader function, passing in all attribute values
+    ```
+
+    (The draw() method can also take two more optional parameters specifying the start index for the vertices and the start index for the instances.)
+
+    Vertex attribute values come from vertex buffers. So do instance attribute values. The only difference is a small change in the vertex buffer layout specification. It's time to look at an example. The sample program draws fifty colored disks which a single call to draw(). The basic primitive is a disk centered at (0,0). The coordinates for the vertices of the disk are given as a vertex attribute. Each colored disk is an instance. The color of the disk is an instance attribute. Another instance attribute, offset, specifies a translation transformation that is applied to the primitive. In the shader source code, the vertex coordinates, color, and offset are parameters to the vertex shader function:
+
+    ```js
+    @vertex
+    fn vertexMain( 
+            @location(0) coords : vec2f,
+            @location(1) offset : vec2f,
+            @location(2) color : vec3f
+        ) -> VertexOutput {
+    var output : VertexOutput; // (A struct with position and color fields.)
+    output.position = vec4f( coords + offset, 0, 1 );
+    output.color = vec4f(color,1);
+    return output;
+    }
+    ```
+
+    Recall that the @location attributes in the parameter list are used to associate the parameters with values coming from the JavaScript side of the program. The association is made by the shaderLocation properties in the vertex buffer layout on the JavaScript side. Here is the layout from the sample program, which specifies the source for each parameter:
+
+    ```js
+    let vertexBufferLayout = [
+    { // First vertex buffer, for vertex coord.
+        attributes: [ 
+            { shaderLocation:0, offset:0, format: "float32x2" }
+        ],
+        arrayStride: 8,
+        stepMode: "vertex"   // This is a vertex attribute.
+    },
+    { // Second vertex buffer, for instance offsets.
+        attributes: [ 
+            { shaderLocation:1, offset:0, format: "float32x2" }
+        ],
+        arrayStride: 8,
+        stepMode: "instance"  // This is an instance attribute.
+    },
+    { // Third vertex buffer, for instance colors.
+        attributes: [ 
+            { shaderLocation:2, offset:0, format: "float32x3" }
+        ],
+        arrayStride: 12,
+        stepMode: "instance"  // This is an instance attribute.
+    }
+    ];
+    ```
+
+    As you can see, the only difference between vertex and instance attributes is the value of the stepMode property. Step mode "vertex" tells the system to pull a value from the vertex buffer for each vertex in the primitive. Step mode "instance" means to pull out a value for each instance.
+
+    The disks in the sample program can be animated. To draw the next frame in the animation, the program simply computes a new value for the offset attribute of each disk, writes the new values to the vertex buffer that holds the offsets on the GPU side, and then re-renders the image. One technical point about animation might be bothering you: The JavaScript side of the program simply enqueues commands that will be executed later on the GPU side. Somehow, the two sides have to be synchronized, to make sure that we don't start drawing a new image until the old image has been computed and displayed on the web page. That synchronization is taken care of by the requestAnimationFrame() method that is used to implement the animation. That method will not start a new frame until the previous frame is complete.
+
+    ----
+
+    Although it is not related to instanced drawing, another interesting point from the sample program is how it draws a disk. The disk is approximated as a polygon. In WebGL, I would draw the disk as a *TRIANGLE_FAN*, but WebGPU lacks that primitive type. Here, the disk is drawn using a triangle-strip primitive, which requires a careful ordering of the vertices:
+
+    ![How to draw a disk as a triangle strip](../../en/c9/triangle-strip-disk.png)
+
+9.2.2 索引绘图
+-------------------------
+
+**Indexed Drawing**
+
+.. tab:: 中文
+
+    另一种绘制圆盘的方法是将其作为三角形列表图元，将圆盘像馅饼的切片一样分割。一个三角形的顶点将是圆盘中心加上圆周上的两个连续顶点。注意，一个给定的顶点可以在几个不同的三角形中使用。这意味着圆盘可以最有效地实现为索引面集。索引面集的数据包括顶点坐标列表（如果需要，还可以包括其他顶点属性值的相应列表）和顶点索引列表。（有关更多详细信息，请参阅 [3.4.1小节](../c3/s4.md#341-索引面集)。）
+
+    WebGPU 渲染通道编码器有一个 `drawIndexed(N)` 方法，用于实现这种类型的绘制。除了顶点缓冲区，此方法还需要一个索引缓冲区来保存顶点索引。**索引缓冲区**中的值必须是16位无符号整数或32位无符号整数。`drawIndexed(N)` 的效果是：
+
+    ```js
+    for (i = 0; i < N; i++)
+        Let v be index number i from the index buffer
+        get attribute values for vertex v from the vertex buffers
+        call the vertex shader function, passing in the attribute values
+    ```
+
+    示例程序 [webgpu/indexed_draw.html](../../../en/source/webgpu/indexed_draw.html) 使用 `drawIndexed()` 将单个圆盘作为三角形列表图元绘制。为了增加一些趣味性，它还使用基本的 `draw()` 方法将圆盘的圆周作为线带图元绘制。因此，同一个程序还展示了如何在同一个渲染通道中渲染两个图元。
+
+    在程序中，VERTEX_COUNT 是用来近似圆盘的多边形的顶点数。顶点按逆时针顺序编号在圆盘周围，顶点编号0在末尾重复。然后，VERTEX_COUNT+1 个顶点可以按顺序用来绘制圆盘轮廓作为线带。为了绘制圆盘的内部，我们还需要将圆盘的中心（0,0）列入列表。中心作为顶点编号 VERTEX_COUNT+1 添加。要渲染内部，我们需要绘制 3*VERTEX_COUNT 个顶点——每个三角形三个顶点。索引缓冲区的数据加载到 JavaScript 的长度为 3*VERTEX_COUNT 的 `Uint16Array`：
+
+    ```js
+    /* Fill diskIndices with the vertex indices for the VERTEX_COUNT
+    * triangles that make up the disk.  Each triangle uses the center
+    * of the disk and two consecutive vertices on the outline. */
+
+    for (let i = 0; i < VERTEX_COUNT; i++) {
+        diskIndices[3*i] = VERTEX_COUNT+1;  // center of disk
+        diskIndices[3*i+1] = i;             // vertex number i
+        diskIndices[3*i+2] = i+1;           // vertex number i+1
+    }
+    ```
+
+    创建一个缓冲区来在 GPU 端保存索引，并将 diskIndices 中的值写入该缓冲区：
+
+    ```js
+    indexBuffer = device.createBuffer({
+        size: diskIndices.byteLength,
+        usage: GPUBufferUsage.INDEX | GPUBufferUsage.COPY_DST
+    });
+    ```
+
+    ```
+    device.queue.writeBuffer(indexBuffer, 0, diskIndices);
+    ```
+
+    `GPUBufferUsage.INDEX` 表示缓冲区将用作索引缓冲区。除此之外，这与创建顶点缓冲区相同。但与顶点缓冲区不同，索引缓冲区不附加到管线。相反，它在创建渲染通道时指定：
+
+    ```js
+    passEncoder.setIndexBuffer(indexBuffer, "uint16");
+    ```
+
+    第二个参数表示索引是16位无符号整数；另一种选择是 "uint32"，用于32位整数。
+
+    查看渲染圆盘内部和轮廓的完整代码将是值得的。内部和轮廓使用不同的图元拓扑。由于图元拓扑是渲染管线的属性，我们需要为内部和轮廓使用单独的管线。由于管线是渲染通道的一个方面，我们需要对内部和轮廓编码两个渲染通道：
+
+    ```js
+    function draw() {
+    let commandEncoder = device.createCommandEncoder();
+    let renderPassDescriptor = {
+        colorAttachments: [{
+            clearValue: { r: 1, g: 1, b: 1, a: 1 }, // White background.
+            loadOp: "", // To be assigned later!
+            storeOp: "store",
+            view: context.getCurrentTexture().createView()
+        }]
+    };
+
+    /* First render pass draws the disk, using a "triangle-list" topology. */
+
+    renderPassDescriptor.colorAttachments[0].loadOp = "clear";
+    let passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+    passEncoder.setPipeline(pipelineForDisk); // uses "triangle-list"
+    passEncoder.setVertexBuffer(0,vertexBuffer);
+    passEncoder.setIndexBuffer(indexBuffer, "uint16");
+    passEncoder.drawIndexed( 3*VERTEX_COUNT ); // 3 vertices per triangle.
+    passEncoder.end();
+
+    /* Second render pass draws the outline, using a "line-strip" topology. */
+
+    renderPassDescriptor.colorAttachments[0].loadOp = "load"; // DON'T clear!
+    passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+    passEncoder.setPipeline(pipelineForOutline); // uses "line-strip"
+    passEncoder.setVertexBuffer(0,vertexBuffer);
+    passEncoder.draw(VERTEX_COUNT+1);
+    passEncoder.end();
+
+    let commandBuffer = commandEncoder.finish();
+    device.queue.submit([commandBuffer]);
+    }
+    ```
+
+    请注意，对于第一次渲染通道，loadOp 是 "clear"，因为我们希望在渲染圆盘之前用背景颜色填充图像。对于第二次渲染通道，我们希望在现有图像上绘制轮廓，所以 loadOp 必须是 "load"。同一个 renderPassDescriptor 可以用于两个通道，只需更改 loadOp 属性即可。
+
+
+.. tab:: 英文
+
+    Another way to draw a disk is as a triangle-list primitive, with the disk divided up like the slices of a pie. The vertices for one of the triangles would be the center of the disk plus two consecutive vertices on the circumference. Note that a given vertex can be used in several different triangles. This means that the disk can be implemented most efficiently as an indexed face set. The data for an indexed face set consists of a list of vertex coordinates (plus corresponding lists of values for other vertex attributes if needed) and a list of vertex indices. (See [Subsection 3.4.1](../c3/s4.md#341-索引面集) for the more details.)
+
+    A WebGPU render pass encoder has a drawIndexed(N) method that implements this type of drawing. In addition to vertex buffers, this method requires an index buffer to hold the vertex indices. The values in the **index buffer** must be either 16-bit unsigned integers or 32-bit unsigned integers. The effect of drawIndexed(N) is
+
+    ```js
+    for (i = 0; i < N; i++)
+        Let v be index number i from the index buffer
+        get attribute values for vertex v from the vertex buffers
+        call the vertex shader function, passing in the attribute values
+    ```
+
+    The sample program [webgpu/indexed_draw.html](../../../en/source/webgpu/indexed_draw.html) draws a single disk as a triangle-list primitive using *drawIndexed()*. To add a little interest, it also draws the circumference of the disk as a line-strip primitive, using the basic *draw()* method. So the same program also shows how to render two primitives in the same render pass.
+
+    In the program, VERTEX_COUNT is the number of vertices of the polygon that is used to approximate the disk. The vertices are numbered in counterclockwise order around the disk, with vertex number 0 repeated at the end. The VERTEX_COUNT+1 vertices can then be used in order to draw the outline of the disk as a line-strip. For drawing the interior of disk, we will also need to have the center of the disk, (0,0), in the list. The center is added as vertex number VERTEX_COUNT+1. To render the interior, we need to draw 3\*VERTEX_COUNT vertices—three vertices for each triangle. The data for the index buffer is loaded into a JavaScript ***Uint16Array*** of length 3\*VERTEX_COUNT:
+
+    ```js
+    /* Fill diskIndices with the vertex indices for the VERTEX_COUNT
+
+    * triangles that make up the disk.  Each triangle uses the center
+    * of the disk and two consecutive vertices on the outline. */
+
+    for (let i = 0; i < VERTEX_COUNT; i++) {
+        diskIndices[3*i] = VERTEX_COUNT+1;  // center of disk
+        diskIndices[3*i+1] = i;             // vertex number i
+        diskIndices[3*i+2] = i+1;           // vertex number i+1
+    }
+    ```
+
+    A buffer is created to hold the indices on the GPU side, and the values in diskIndices are written to that buffer:
+
+    ```js
+    indexBuffer = device.createBuffer({
+        size: diskIndices.byteLength,
+        usage: GPUBufferUsage.INDEX | GPUBufferUsage.COPY_DST
+    });
+    ```
+
+    device.queue.writeBuffer(indexBuffer, 0, diskIndices);
+    The GPUBufferUsage.INDEX indicates that the buffer will be used as an index buffer. Otherwise, this is the same as creating a vertex buffer. But unlike vertex buffers, an index buffer is not attached to a pipeline. Instead, it is specified when creating the render pass:
+
+    ```js
+    passEncoder.setIndexBuffer(indexBuffer, "uint16");
+    ```
+
+    The second parameter says that the indices are 16-bit unsigned integers; the alternative is "uint32" for 32-bit integers.
+
+    It will be worthwhile to look at the full code for rendering the disk interior and outline. The interior and the outline use different primitive topologies. Since the primitive topology is a property of the render pipeline, we need to use separate pipelines for the interior and for the outline. Since the pipeline is an aspect of a rendering pass, we need to encode two render passes:
+
+    ```js
+    function draw() {
+    let commandEncoder = device.createCommandEncoder();
+    let renderPassDescriptor = {
+        colorAttachments: [{
+            clearValue: { r: 1, g: 1, b: 1, a: 1 }, // White background.
+            loadOp: "", // To be assigned later!
+            storeOp: "store",
+            view: context.getCurrentTexture().createView()
+        }]
+    };
+
+    /*First render pass draws the disk, using a "triangle-list" topology.*/
+
+    renderPassDescriptor.colorAttachments[0].loadOp = "clear";
+    let passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+    passEncoder.setPipeline(pipelineForDisk); // uses "triangle-list"
+    passEncoder.setVertexBuffer(0,vertexBuffer);
+    passEncoder.setIndexBuffer(indexBuffer, "uint16");
+    passEncoder.drawIndexed( 3*VERTEX_COUNT ); // 3 vertices per triangle.
+    passEncoder.end();
+
+    /*Second render pass draws the outline, using a "line-strip" topology.*/
+
+    renderPassDescriptor.colorAttachments[0].loadOp = "load"; // DON'T clear!
+    passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
+    passEncoder.setPipeline(pipelineForOutline); // uses "line-strip"
+    passEncoder.setVertexBuffer(0,vertexBuffer);
+    passEncoder.draw(VERTEX_COUNT+1);
+    passEncoder.end();
+
+    let commandBuffer = commandEncoder.finish();
+    device.queue.submit([commandBuffer]);
+    }
+    ```
+
+    Note that for the first render pass, the loadOp is "clear", since we want to fill the image with the background color before rendering the disk. For the second render pass, we want to draw the outline on top of the existing image, so the loadOp must be "load". The same renderPassDescriptor can be used for both passes, with just the loadOp property changed.
+
+9.2.3 绘制多个基元
+-------------------------
+
+**Drawing Multiple Primitives**
+
+.. tab:: 中文
+
+    我想在我的移动圆盘示例中绘制彩色圆盘的轮廓。然而，我不能简单地使用实例化绘制来绘制所有圆盘，然后再用它来绘制轮廓，因为这将显示每个圆盘的完整轮廓，甚至是应该被其他圆盘遮挡的轮廓部分。（实际上，如果我在程序中添加深度测试，我可以做到这一点，见 [9.4.1小节](../c9/s4.md#941-深度测试)。）一个解决方案是放弃实例化绘制，分别绘制每个圆盘。这就是我在示例程序 [webgpu/draw_multiple.html](../../../en/source/webgpu/draw_multiple.html) 中所做的。该程序还引入了一些新的 WebGPU 特性。
+
+    新程序中的每个圆盘的绘制方式与 [webgpu/indexed_draw.html](../../../en/source/webgpu/indexed_draw.html) 中的单个圆盘相同。问题是圆盘有不同的颜色和偏移量。在 [webgpu/instanced_draw.html](../../../en/source/webgpu/instanced_draw.html) 中，颜色和偏移量是来自顶点缓冲区的实例属性，它们的值作为参数传递给顶点着色器函数。在新程序中，它们被移动到着色器程序中的一个 uniform 变量中：
+
+    ```js
+    struct DiskInfo {
+        color : vec3f,  // 圆盘的内部颜色
+        offset : vec2f  // 应用于圆盘的平移
+    }
+
+    @group(0) @binding(0) var<uniform> diskInfo : DiskInfo;
+    ```
+
+    uniform 变量的值存储在 uniform 缓冲区中。在绘制每个圆盘之前，必须将该圆盘的颜色和偏移量复制到 uniform 缓冲区中。基本思想很简单：
+
+    ```js
+    对于每个圆盘：
+        将该圆盘的偏移量和颜色复制到 uniform 缓冲区
+        执行一个渲染通道来绘制圆盘内部
+        执行一个渲染通道来绘制圆盘轮廓
+    ```
+
+    以前，我们使用 device.queue.writeBuffer() 将数据从 JavaScript 端复制到 GPU 上的缓冲区。只要我们为循环的每次迭代使用一个新的命令编码器，这就可以了。（实际上，这就是我在程序的替代版本 [webgpu/draw_multiple_2.html](../../../en/source/webgpu/draw_multiple_2.html) 中所做的。有关更多信息，请参见该程序中的注释。）
+
+    然而，我决定使事情复杂化——并希望使程序更有效一些——通过使用单一命令编码器完成所有的绘制。但这使得无法使用 writeBuffer()。让我们看看为什么。命令编码器不执行命令，它只是制作一个命令列表，这些命令将在命令列表完成后批量提交到设备队列。类似地，当调用 writeBuffer() 时，它不会立即写入缓冲区。但它确实立即添加一个命令到设备队列来执行写入。如果我们在收集命令编码器中的绘制命令的过程中调用 writeBuffer()，那么当我们在末尾批量提交绘制命令时，所有的写入命令已经都在队列中了。因此，所有的写入命令实际上会在任何绘制命令之前执行。只有最终的写入对绘制有**任何**影响！
+
+    解决方案是用一个可以编码并添加到命令编码器产生的命令列表中的复制命令替换 *writeBuffer()*。然后，当命令列表在 GPU 上执行时，每个复制将在使用它的绘制命令之前完成。但由于复制将在 GPU 上完成，正在复制的数据必须已经在 GPU 缓冲区中。我们想要的命令是
+
+    ```js
+    commandEncoder.copyBufferToBuffer( destinationBuffer, destinationStartByte,
+            sourceBuffer, sourceStartByte, byteCount );
+    ```
+
+    为了实现这一点，程序将所有圆盘的颜色值复制到 GPU 缓冲区，并将偏移值复制到另一个 GPU 缓冲区。这些值的缓冲区与我们为实例化绘制所做的类似，但这些缓冲区在这种情况下不是顶点缓冲区。相反，它们是 **存储缓冲区**，一种通用 GPU 缓冲区。它们可以像 uniform 缓冲区一样使用，但限制较少，可能效率稍低。以下是如何创建存储缓冲区以及在程序初始化时用数据填充磁盘颜色的方式：
+
+    ```js
+    diskColorBuffer =  device.createBuffer({
+        size: diskColors.byteLength, 
+        usage: GPUBufferUsage.STORAGE | 
+                    GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST
+    });   
+    device.queue.writeBuffer(diskColorBuffer, 0, diskColors);
+    ```
+
+    使用属性包括 STORAGE，因为缓冲区是存储缓冲区；它包括 COPY_SRC，以便缓冲区可以作为 copyBufferToBuffer() 中的源缓冲区；它包括 COPY_DST，以便缓冲区可以作为 writeBuffer() 中的目标缓冲区。
+
+    当存储缓冲区在着色器程序中使用时，它必须是绑定组的一部分。然而，在这个程序中，存储缓冲区不在着色器中使用，绑定组中唯一的内容是一次只持有一个圆盘的颜色和偏移的小型 uniform 缓冲区。
+
+    将第 i 个圆盘的颜色从存储缓冲区复制到 uniform 缓冲区的命令变为
+
+    ```js
+    commandEncoder.copyBufferToBuffer( diskColorBuffer, 12*i,
+                                                uniformBuffer, 0, 12 );
+    ```
+
+    diskColorBuffer 中每个圆盘的颜色数据占用 12 个字节（三个 32 位浮点数），所以第 i 个圆盘的颜色的起始字节是 12*i。在 uniformBuffer 中，颜色从字节号 0 开始。并且字节计数，12，是要复制的字节数。
+
+    圆盘偏移的处理方式类似，但有一个更多的问题需要处理：WGSL 中的 **对齐** 规则。对齐指的是对值可以在内存中的位置的限制。这些限制可以使内存访问更有效。例如，vec2f 的对齐规则说它的内存地址必须是 8 字节的倍数。uniform 变量 diskInfo 是一个包含 vec3f 用于颜色后面跟着 vec2f 用于偏移的结构体。vec3f 在内存中占用 12 个字节。但是 vec2f 的对齐规则说它必须从 8 字节的倍数开始。因此，在颜色后面添加了一个字节的填充，将偏移的起始字节号移动到 16。当偏移从存储缓冲区复制到 uniform 缓冲区时，起始字节是 16，而不是您可能预期的 12：
+
+    ```js
+    commandEncoder.copyBufferToBuffer( diskOffsetBuffer, 8*i,
+                                                uniformBuffer, 16, 8 );
+    ```
+
+    我将在 [9.3.1小节](../c9/s3.md#931-地址空间和对齐) 中更多地讨论对齐。您应该能够理解 [程序源代码](../../../en/source/webgpu/draw_multiple.html) 的其余部分。像往常一样，阅读注释。
+
+
+.. tab:: 英文
+
+    I would like to draw the outlines of the colored disks in my moving disk example. However I can't simply use instanced drawing to draw all the disks, then use it again to draw the outlines, since that would show the complete outline of every disk, even parts of the outline that should be hidden by other disks. (Actually, I can do that if I add a depth test to the program (see [Subsection 9.4.1](../c9/s4.md#941-深度测试)).) A solution is to abandon instanced drawing and draw each disk separately. That's what I do in the sample program [webgpu/draw_multiple.html](../../../en/source/webgpu/draw_multiple.html). That program also introduces a few new WebGPU features.
+
+    Each disk in the new program is drawn in the same way as the single disk in [webgpu/indexed_draw.html](../../../en/source/webgpu/indexed_draw.html). The problem is that the disks have different colors and offsets. In [webgpu/instanced_draw.html](../../../en/source/webgpu/instanced_draw.html), the color and offset were instance properties that came from vertex buffers, and their values were passed as parameters into the vertex shader function. In the new program, they are moved into a uniform variable in the shader program:
+
+    ```js
+    struct DiskInfo {
+        color : vec3f,  // interior color for the disk
+        offset : vec2f  // translation applied to the disk
+    }
+
+    @group(0) @binding(0) var<uniform> diskInfo : DiskInfo;
+    ```
+
+    The values for the uniform variable are stored in a uniform buffer. Before drawing each disk, the color and offset for that disk must be copied into the uniform buffer. The basic idea is simple:
+
+    ```js
+    for each disk:
+        copy offset and color for that disk to the uniform buffer
+        do a render pass to draw the disk interior
+        do a render pass to draw the disk outline
+    ```
+
+    Previously, we have used device.queue.writeBuffer() to copy data from the JavaScript side into a buffer on the GPU. That would work, provided that we use a new command encoder for each iteration of the loop. (In fact, that's what I do in an alternative version of the program, [webgpu/draw_multiple_2.html](../../../en/source/webgpu/draw_multiple_2.html). See the comments in that program for more information.)
+
+    However, I decided to complicate things—and hopefully make the program a little more efficient—by using a single command encoder to do all the drawing. But that makes it impossible to use writeBuffer(). Let's see why. A command encoder doesn't execute commands, it just makes a list of commands that will be submitted to the device queue in a batch after the list is complete. Similarly, when writeBuffer() is called, it doesn't immediately write to the buffer. But it does immediately add a command to the device queue to do the writing. If we do the calls to writeBuffer() in the middle of collecting the draw commands in a command encoder, then when we submit the draw commands in a batch at the end, all the write commands will already be in the queue. So, all of the write commands will actually be executed before **any** the draw commands. Only the final write will have **any** effect on the drawing!
+
+    The solution is to replace *writeBuffer()* with a copy command that can be encoded and added to the list of commands produced by a command encoder. Then, when the list of commands is executed on the GPU, each copy will be done just before the draw command that uses it. But since the copying will be done on the GPU, the data that is being copied must already be in a GPU buffer. The command that we want is
+
+    ```js
+    commandEncoder.copyBufferToBuffer( destinationBuffer, destinationStartByte,
+            sourceBuffer, sourceStartByte, byteCount );
+    ```
+
+    To implement this, the program copies the color values for all the disks into a GPU buffer, and copies the offset values into another GPU buffer. Using buffers for these values is similar to what we did for instanced drawing, but the buffers in this case are not vertex buffers. Instead, they are **storage buffers**, a kind of general purpose GPU buffer. They can be used much like uniform buffers but have fewer restrictions and might be a little less efficient. Here is how the storage buffer for the disk colors is created and filled with data as part of program initialization:
+
+    ```js
+    diskColorBuffer =  device.createBuffer({
+        size: diskColors.byteLength, 
+        usage: GPUBufferUsage.STORAGE | 
+                    GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST
+    });   
+    device.queue.writeBuffer(diskColorBuffer, 0, diskColors);
+    ```
+
+    The usage property includes STORAGE because the buffer is a storage buffer; it includes COPY_SRC so that the buffer can be used as the source buffer in copyBufferToBuffer(); and it includes COPY_DST so that the buffer can be used as the destination buffer in writeBuffer().
+
+    When a storage buffer is used in a shader program, it must be part of a bind group. In this program, however, the storage buffers are not used in the shaders, and the only thing in the bind group is the small uniform buffer that holds the color and offset for one disk at a time.
+
+    The command for copying the color for disk number i from the storage buffer to the uniform buffer then becomes
+
+    ```js
+    commandEncoder.copyBufferToBuffer( diskColorBuffer, 12*i,
+                                                uniformBuffer, 0, 12 );
+    ```
+
+    The color data in diskColorBuffer for each disk takes up 12 bytes (three 32-bit floats), so the starting byte for the color for disk number i is 12\*i. In uniformBuffer, the color starts at byte number 0. And the byte count, 12, is the number of bytes to be copied.
+
+    The disk offset is handled in a similar way, but there is one more issue to deal with: **alignment** rules in WGSL. Alignment refers to restrictions on where a value can be located in memory. The restrictions can make memory access more efficient. For example, the alignment rule for a vec2f says that its address in memory must be multiple of 8 bytes. The uniform variable, diskInfo, is a struct that contains a vec3f for the color followed by a vec2f for the offset. The vec3f takes up 12 bytes in memory. But the alignment rule for the vec2f says that it must start at a multiple of 8 bytes. So, an extra byte of padding is added after the color, moving the starting byte number for the offset to 16. When the offset is copied from the storage buffer to the uniform buffer, the starting byte is 16, rather than the 12 that you might have expected:
+
+    ```js
+    commandEncoder.copyBufferToBuffer( diskOffsetBuffer, 8*i,
+                                                uniformBuffer, 16, 8 );
+    ```
+
+    I will have more to say about alignment in [Subsection 9.3.1](../c9/s3.md#931-地址空间和对齐). You should be able to understand the rest of the [program source](../../../en/source/webgpu/draw_multiple.html). As always, read the comments.
+
+9.2.4 在着色器中使用索引
+-------------------------
+
+**Using Indices in Shaders**
+
+.. tab:: 中文
+
+    在WebGL中，类型为POINTS的图元中的每个点都可以有一个大小。该点被渲染为一个具有给定大小的正方形，并且正方形带有纹理坐标。（见[6.2.5小节](../c6/s2.md#625-points原语)。）在WebGPU中，对于具有点列表拓扑的图元，没有类似的概念来指定点的大小；这些点只是单个像素，这限制了它们的用途。
+
+    现在，在WebGPU中，我们可以很容易地使用实例化绘制来渲染多个正方形的副本，并做一些非常类似于WebGL POINTS图元的事情。然而，我想采用一种不同的方法，以说明WebGPU的一个新特性：在着色器中使用顶点和实例索引。我在示例程序 [webgpu/indices_in_shader.html](../../../en/source/webgpu/indices_in_shader.html) 中这样做，它展示了与本节第一个示例相同的移动圆盘，但是以一种非常不同的方式。
+
+    我们已经看到，顶点着色器函数的参数值可以从顶点缓冲区中获取。但也有一些“内置”值可以用作参数。这包括正在处理的顶点的顶点索引和实例索引。例如，示例程序中顶点着色器函数的定义是：
+
+    ```js
+    @vertex
+    fn vertMain(
+        @builtin(vertex_index) vertexNumInPoint: u32,
+        @builtin(instance_index) pointNum: u32
+    ) -> VertexOutput { . . .
+    ```
+
+    如果这个函数通过在渲染通道编码器中调用 draw(vertexCt,instanceCt) 被调用，效果类似于以下伪代码：
+
+    ```js
+    for (instance_index = 0; instance_index < instanceCt; instance_index++)
+        for (vertex_index = 0; vertex_index < vertexCt; vertex_index++)
+            vertMain( instance_index, vertex_index )
+    ```
+
+    请注意，在这个示例中，没有来自顶点缓冲区的参数输入。但该函数的工作仍然是为实例号 instance_index 中的顶点号 vertex_index 输出坐标和其他可能的数据。它需要以某种方式创建该输出！
+
+    着色器仍然可以访问来自其他来源的数据，例如作为绑定组一部分的缓冲区。在这个示例中，我提供了两个存储缓冲区中的必要数据。一个存储缓冲区包含每个正方形的颜色，另一个包含每个正方形中心点的坐标。正方形的大小是着色器程序中的常量。一个顶点的输出由坐标、纹理坐标和颜色组成。每个实例是一个正方形，它被生成为一个由两个三角形组成的三角形列表图元，因此实例中的顶点数量是六个。每个顶点的坐标和纹理坐标可以从中心点和正方形的大小计算出来：
+
+    ![从中心点和大小计算正方形顶点的坐标和纹理坐标](../../en/c9/square-as-triangle-list.png)
+
+    对于每个实例，顶点着色器函数被调用六次，顶点索引从0到5。在每次调用中，着色器函数计算并输出只有一个顶点的适当值。我不会在这里详细介绍编码细节；你可以在[示例程序](../../../en/source/webgpu/indices_in_shader.html)源代码中阅读它们。
+
+    程序中还有一个有趣的点：我真的想绘制圆盘，而不是正方形，我还想为正方形上的纹理坐标找到一些用途。因此，片段着色器函数使用像素的纹理坐标来丢弃位于圆盘外部的像素。（这类似于在WebGL中为[6.4.2小节](../c6/s4.md#642-处理图像)中的[演示](../../../en/demos/c6/textured-points.html)所做的。）
+
+
+.. tab:: 英文
+
+    In WebGL, each point in a primitive of type POINTS can have a size. The point is rendered as a square with the given size, and the square comes with texture coordinates. (See [Subsection 6.2.5](../c6/s2.md#625-points原语).) In WebGPU, there is no similar idea of point size for primitives with the point-list topology; the points are just individual pixels, which limits their usefulness.
+
+    Now, in WebGPU, we could easily use instanced drawing to render multiple copies of a square and do something very similar to the WebGL POINTS primitive. However, I would like to use a different approach, to illustrate a new WebGPU feature: using vertex and instance indices in shaders. I do that in the sample program [webgpu/indices_in_shader.html](../../../en/source/webgpu/indices_in_shader.html), which shows the same moving disks as the first example in this section but does so in a very different way.
+
+    We have seen how parameter values for a vertex shader function can come from vertex buffers. But there are also certain "builtin" values that can be used as parameters. This includes the vertex index and the instance index of the vertex that is being processed. For example, the definition of the vertex shader function in the sample program is
+
+    ```js
+    @vertex
+    fn vertMain(
+        @builtin(vertex_index) vertexNumInPoint: u32,
+        @builtin(instance_index) pointNum: u32
+    ) -> VertexOutput { . . .
+    ```
+
+    If this function is invoked by a call to draw(vertexCt,instanceCt) in a render pass encoder, the effect is similar to this pseudocode:
+
+    ```js
+    for (instance_index = 0; instance_index < instanceCt; instance_index++)
+        for (vertex_index = 0; vertex_index < vertexCt; vertex_index++)
+            vertMain( instance_index, vertex_index )
+    ```
+
+    Note that in this example there are no parameter inputs from vertex buffers. But the job of the function is still to output coordinates and possibly other data for vertex number vertex_index in instance number instance_index. It needs to create that output somehow!
+
+    The shader still has access to data from other sources, such as buffers that are part of bind groups. In this example, I provide the necessary data in two storage buffers. One storage buffer contains a color for each square, and one contains the coordinates of the center point for each square. The size of the square is a constant in the shader program. The output for a vertex consists of coordinates, texture coordinates, and color for that vertex. Each instance is a square, generated as a triangle-list primitive with two triangles, so that the number of vertices in an instance is six. The coordinates and texture coordinates for each vertex can be computed from the center point and the size of the square:
+
+    ![The coords and texture coords of vertices of a square computed from center point and size](../../en/c9/square-as-triangle-list.png)
+
+    For each instance, the vertex shader function is invoked six times, with a vertex index ranging from 0 to 5. In each invocation, the shader function computes and outputs the appropriate values for just one vertex. I won't go into the coding details here; you can read them in the [sample program](../../../en/source/webgpu/indices_in_shader.html) source code.
+
+    There is one more point of interest in the program: I really wanted to draw disks, not squares, and I wanted to have some use for the texture coordinates on the square. So the fragment shader function uses the texture coordinates for a pixel to discard that pixel if it lies outside the disk. (This is similar to what was done in WebGL for the [demo](../../../en/demos/c6/textured-points.html) in [Subsection 6.4.2](../c6/s4.md#642-处理图像).)
+
+9.2.5 多重采样
+-------------------------
+
+**Multisampling**
+
+.. tab:: 中文
+
+    在WebGL中，类型为POINTS的图元中的每个点都可以有一个大小。该点被渲染为一个具有给定大小的正方形，并且正方形带有纹理坐标。（见[6.2.5小节](../c6/s2.md#625-points原语)。）在WebGPU中，对于具有点列表拓扑的图元，没有类似的概念来指定点的大小；这些点只是单个像素，这限制了它们的用途。
+
+    现在，在WebGPU中，我们可以很容易地使用实例化绘制来渲染多个正方形的副本，并做一些非常类似于WebGL POINTS图元的事情。然而，我想采用一种不同的方法，以说明WebGPU的一个新特性：在着色器中使用顶点和实例索引。我在示例程序 [webgpu/indices_in_shader.html](../../../en/source/webgpu/indices_in_shader.html) 中这样做，它展示了与本节第一个示例相同的移动圆盘，但是以一种非常不同的方式。
+
+    我们已经看到，顶点着色器函数的参数值可以从顶点缓冲区中获取。但也有一些“内置”值可以用作参数。这包括正在处理的顶点的顶点索引和实例索引。例如，示例程序中顶点着色器函数的定义是：
+
+    ```js
+    @vertex
+    fn vertMain(
+        @builtin(vertex_index) vertexNumInPoint: u32,
+        @builtin(instance_index) pointNum: u32
+    ) -> VertexOutput { . . .
+    ```
+
+    如果这个函数通过在渲染通道编码器中调用 draw(vertexCt,instanceCt) 被调用，效果类似于以下伪代码：
+
+    ```js
+    for (instance_index = 0; instance_index < instanceCt; instance_index++)
+        for (vertex_index = 0; vertex_index < vertexCt; vertex_index++)
+            vertMain( instance_index, vertex_index )
+    ```
+
+    请注意，在这个示例中，没有来自顶点缓冲区的参数输入。但该函数的工作仍然是为实例号 instance_index 中的顶点号 vertex_index 输出坐标和其他可能的数据。它需要以某种方式创建该输出！
+
+    着色器仍然可以访问来自其他来源的数据，例如作为绑定组一部分的缓冲区。在这个示例中，我提供了两个存储缓冲区中的必要数据。一个存储缓冲区包含每个正方形的颜色，另一个包含每个正方形中心点的坐标。正方形的大小是着色器程序中的常量。一个顶点的输出由坐标、纹理坐标和颜色组成。每个实例是一个正方形，它被生成为一个由两个三角形组成的三角形列表图元，因此实例中的顶点数量是六个。每个顶点的坐标和纹理坐标可以从中心点和正方形的大小计算出来：
+
+    ![从中心点和大小计算正方形顶点的坐标和纹理坐标](../../en/c9/square-as-triangle-list.png)
+
+    对于每个实例，顶点着色器函数被调用六次，顶点索引从0到5。在每次调用中，着色器函数计算并输出只有一个顶点的适当值。我不会在这里详细介绍编码细节；你可以在[示例程序](../../../en/source/webgpu/indices_in_shader.html)源代码中阅读它们。
+
+    程序中还有一个有趣的点：我真的想绘制圆盘，而不是正方形，我还想为正方形上的纹理坐标找到一些用途。因此，片段着色器函数使用像素的纹理坐标来丢弃位于圆盘外部的像素。（这类似于在WebGL中为[6.4.2小节](../c6/s4.md#642-处理图像)中的[演示](../../../en/demos/c6/textured-points.html)所做的。）
+
+
+.. tab:: 英文
+
+    The final example for this section is [webgpu/multisampling.html](../../../en/source/webgpu/multisampling.html), which adds multisampling to the basic moving disks example. Ordinarily, the fragment shader entry point function is evaluated once per pixel, at the center point of the pixel. With multisampling, it is evaluated at several points within each pixel, and the color for that pixel is obtained by averaging the colors from each of those samples. This is a kind of antialiasing. For example, when the geometric edge of a primitive cuts through a pixel, some sampled points might lie inside the primitive and some outside. The color of the pixel will then be a blend of the primitive color and the background color. Or, when a texture is applied, the texture color for the pixel will be a blend of the texture colors at the sampled points.
+
+    WebGL will do antialiasing automatically, but in WebGPU, you have to do some work. Fortunately, it's not very hard. There are just a few changes from a non-multisampled program. First, you need a texture for multisampling, and a view of that texture. (I will admit that I don't understand why this is needed.) The code for that is a preview of creating textures and texture views:
+
+    ```js
+    textureForMultisampling = device.createTexture({
+        size: [context.canvas.width, context.canvas.height],
+        sampleCount: 4,  // (1 and 4 are currently the only possible values.)
+        format: navigator.gpu.getPreferredCanvasFormat(),
+        usage: GPUTextureUsage.RENDER_ATTACHMENT,
+    });
+    textureViewForMultisampling = textureForMultisampling.createView();
+    ```
+
+    When drawing the image, the multisampling texture view is used as the view property in the color attachment of the render pass descriptor. And the usual value of that view property, which represents the final image, is moved to a new resolveTarget property:
+
+    ```js
+    renderPassDescriptor = {
+    colorAttachments: [{
+        clearValue: { r: 0.9, g: 0.9, b: 0.9, a: 1 }, 
+        loadOp: "clear", 
+        storeOp: "store", 
+        view: textureViewForMultisampling, // Render to multisampling texture.
+        resolveTarget: context.getCurrentTexture().createView() // Final image.
+    }]
+    };
+    ```
+
+    And finally, a new multisample property must be added to the render pipeline descriptor, to specify that the pipeline does multisampled rendering:
+
+    ```js
+    pipelineDescriptor = {
+            . . .
+        multisample: {  // Sets number of samples for multisampling.
+        count: 4,     //  (1 and 4 are currently the only possible values).
+        },
+        . . .
+    ```
+
+    And that's it! (Later, we'll see that when multisampling is applied to a program that uses the depth test, one more small change in necessary, in the depth buffer configuration.)

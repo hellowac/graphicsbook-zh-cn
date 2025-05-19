@@ -1,4 +1,7 @@
-# A.4  [JavaScript Promise 和异步函数](./a1/s4.md)
+.. _a.4:
+
+A.4 JavaScript Promise和异步函数
+====================================
 
 **Section A.4  JavaScript Promises and Async Functions**
 
@@ -35,7 +38,8 @@
 
     Typical programmers are more likely to use promises created by some API than to create them directly. And they are more likely to use those promises with the await operator in async functions than to use them directly, so we will cover that case first.
 
-## A.4.1  异步函数和等待
+A.4.1  异步函数和等待
+-------------------------
 
 **A.4.1  Async Functions and await**
 
@@ -172,7 +176,8 @@
 
 
 
-## A.4.2  直接使用 Promise
+A.4.2  直接使用 Promise
+-------------------------
 
 **A.4.2  Using Promises Directly**
 

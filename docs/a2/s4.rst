@@ -1,5 +1,7 @@
+.. _b.4:
 
-# B.4 节  [有关光和材料的更多信息](./a2/s4.md)
+B.4 有关光和材料的更多信息
+====================================
 
 **Section B.4  More on Light and Material**
 
@@ -11,7 +13,8 @@
 
     Blender has extensive support for light and materials, and we only scratched the surface in [Subsection B.1.4](s1.md#b14--光源材质和纹理). In this section, we will go into a little more depth, but of course this is still only an introduction. In particular, we will look at the Shader Editor, which offers complete control over the design of materials.
 
-## B.4.1  光线
+B.4.1 光照
+-------------------------
 
 **B.4.1  Lighting**
 
@@ -66,7 +69,8 @@
 
 
 
-## B.4.2  Eevee 与 Cycles 
+B.4.2 Eevee与Cycles 
+-------------------------
 
 **B.4.2  Eevee versus Cycles**
 
@@ -91,7 +95,8 @@
 
     Note, however, that there are some things that will work in one of the renderers but not in the other.
 
-## B.4.3  着色器编辑器
+B.4.3 着色器编辑器
+-------------------------
 
 **B.4.3  The Shader Editor**
 

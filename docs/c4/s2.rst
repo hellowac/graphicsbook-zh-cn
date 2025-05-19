@@ -1,0 +1,717 @@
+.. _c4.2:
+
+4.2 OpenGL 1.1 中的光和材质
+=========================
+
+**Light and Material in OpenGL 1.1**
+
+.. tab:: 中文
+
+    在本节中，我们将看到如何在OpenGL中使用光线和材质。本节讨论的函数特定于OpenGL的旧版本，并且不会直接应用到其他图形API。（但是它们实现的一般思想，如[上一节](./s1.md)所涵盖的，更具有普遍适用性。）
+
+    在OpenGL 1.1中，必须通过调用*glEnable(GL_LIGHTING)*来启用光线和材质的使用。当照明被禁用时，顶点的颜色仅仅是由*glColor**设置的当前颜色。当照明被启用时，顶点的颜色是使用一个数学公式计算得出的，该公式考虑了场景的照明和之前讨论过的分配给顶点的材质属性。现在，是时候学习用于配置照明并将材质分配给对象的OpenGL命令了。
+
+    通常，照明在渲染场景的某些部分时被打开，而在渲染其他部分时被关闭。我们将说一些对象是“被照亮的”，而其他对象则不是。例如，即使它们是被照亮的实体对象场景的一部分，线框对象通常也是在照明被禁用的情况下绘制的。但请注意，在调用glBegin和glEnd之间调用*glEnable**或*glDisable*是非法的，因此不可能让同一原素的一部分被照亮，而另一部分*同一原素*不被照亮。（我应该注意，当照明被启用时，它也会应用于点和线原素以及多边形，尽管这样做很少有意义。）照明可以通过使用参数*GL_LIGHTING*调用*glEnable*和*glDisable*来启用和禁用。当照明被关闭时，其他光线和材质设置不需要修改，因为它们在照明被禁用时会被简单地忽略。
+
+    要照亮一个场景，除了启用*GL_LIGHTING*，你还需要配置至少一个光源。对于非常基础的照明，通常只需要调用
+
+    ```c
+    glEnable(GL_LIGHT0);
+    ```
+
+    这个命令会打开一个从观察者方向射入场景的方向光。（注意*GL_LIGHT0*中的最后一个字符是零。）由于它是从观察者的方向照射的，它会照亮用户能看到的所有东西。光线是白色的，没有镜面成分；也就是说，你将看到物体的散射颜色，没有任何镜面高光。我们将在本节后面看到如何改变这个光源的特性以及如何配置其他光源。但首先，我们将考虑材质和法向量。
+
+.. tab:: 英文
+
+    In this section, we will see how to use light and material in OpenGL. The functions that are discussed in this section are specific to older versions of OpenGL, and will not carry over directly to other graphics APIs. (But the general ideas that they implement, which were covered in the [previous section](./s1.md) are more generally applicable.)
+
+    In OpenGL 1.1, the use of light and material must be enabled by calling *glEnable(GL_LIGHTING)*. When lighting is disabled, the color of a vertex is simply the current color as set by *glColor\**. When lighting is enabled, the color of a vertex is computed using a mathematical formula that takes into account the lighting of the scene and the material properties that have been assigned to the vertex, as discussed in the previous section. Now it's time to learn about the OpenGL commands that are used to configure lighting and to assign materials to objects.
+
+    It is common for lighting to be turned on for rendering some parts of a scene, but turned off for other parts. We will say that some objects are "lit" while others aren't. For example, wireframe objects are usually drawn with lighting disabled, even if they are part of a scene in which solid objects are lit. But note that it is illegal to call *glEnable* or *glDisable* between calls to glBegin and glEnd, so it is not possible for part of a primitive to be lit while another part *of the same primitive* is unlit. (I should note that when lighting is enabled, it is applied to point and line primitives as well as to polygons, even though it rarely makes sense to do so.) Lighting can be enabled and disabled by calling *glEnable* and *glDisable* with parameter *GL_LIGHTING*. Other light and material settings don't have to be modified when lighting is turned off, since they are simply ignored when lighting is disabled.
+
+    To light a scene, in addition to enabling *GL_LIGHTING*, you must configure at least one source of light. For very basic lighting, it often suffices to call
+
+    ```c
+    glEnable(GL_LIGHT0);
+    ```
+
+    This command turns on a directional light that shines from the direction of the viewer into the scene. (Note that the last character in *GL_LIGHT0* is a zero.) Since it shines from the direction of the viewer, it will illuminate everything that the user can see. The light is white, with no specular component; that is, you will see the diffuse color of objects, without any specular highlights. We will see later in this section how to change the characteristics of this light source and how to configure additional sources. But first, we will consider materials and normal vectors.
+
+4.2.1 应用材料
+--------------------
+
+**Working with Material**
+
+.. tab:: 中文
+
+    材质属性是顶点属性，就像颜色是顶点属性一样。也就是说，OpenGL状态包括每个材质属性的当前值。当顶点通过调用glVertex*函数生成时，会存储当前材质属性的每个副本，以及顶点坐标。当包含该顶点的原素被渲染时，与顶点关联的材质属性将与有关照明的信息一起使用，以计算顶点的颜色。
+
+    这被多边形是双面的事实复杂化了，多边形的前表面和后表面可以有不同的材质。这意味着，实际上，为每个顶点存储了两套材质属性值：前材质和后材质。（除非启用双面照明，否则实际上不会使用后材质，双面照明将在下面讨论。）
+
+    考虑到所有这些，我们将查看设置材质属性当前值的函数。对于设置环境、散射、镜面和自发光材质颜色，函数是：
+
+    ```c
+    void glMaterialfv(int side, int property, float* valueArray)
+    ```
+
+    第一个参数可以是GL_FRONT_AND_BACK、GL_FRONT或GL_BACK。它告诉您是为前表面、后表面还是两者设置材质属性值。第二个参数告诉您正在设置哪个材质属性。它可以是GL_AMBIENT、GL_DIFFUSE、GL_SPECULAR、GL_EMISSION或GL_AMBIENT_AND_DIFFUSE。请注意，可以通过使用GL_AMBIENT_AND_DIFFUSE作为属性名称，用一次调用glMaterialfv来将环境和散射颜色设置为相同的值；这是最常见的情况。glMaterialfv的最后一个参数是一个包含四个浮点数的数组。这些数字给出RGBA颜色分量，作为0.0到1.0范围内的值；实际上允许超出此范围的值，并将用于照明计算，但这样的值是不寻常的。请注意，需要一个alpha分量，但仅在散射颜色的情况下使用：当计算顶点颜色时，其alpha分量设置为散射材质颜色的alpha分量。
+
+    光泽度材质属性是一个单一数字，而不是数组，并且有一个不同的函数来设置它的值（函数名末尾没有"v"）：
+
+    ```c
+    void glMaterialf(int side, int property, float value)
+    ```
+
+    再次，side可以是GL_FRONT_AND_BACK、GL_FRONT或GL_BACK。property**必须是**GL_SHININESS。值是一个在0.0到128.0范围内的浮点数。
+
+    与glColor*和glVertex*的大量版本相比，设置材质的选项是有限的。特别是，不可能在没有定义数组来包含颜色分量值的情况下设置材质颜色。假设，例如，我们想要将环境和散射颜色设置为蓝绿色。在C语言中，这可能通过以下方式完成：
+
+    ```c
+    float bgcolor[4] = {0.0, 0.7, 0.5, 1.0};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, bgcolor);
+    ```
+
+    使用我的JavaScript OpenGL模拟器，这看起来像：
+
+    ```c
+    let bgcolor = [0.0, 0.7, 0.5, 1.0];
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, bgcolor);
+    ```
+
+    在Java的JOGL API中，其中具有数组参数的方法有一个额外的参数，用于给出数组中数据的起始索引，它变成：
+
+    ```c
+    float[] bgcolor = {0.0F, 0.7F, 0.5F, 1.0F};
+    gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT_AND_DIFFUSE, bgcolor, 0);
+    ```
+
+    在C语言中，第三个参数实际上是一个指向浮点数的指针，这允许将多个材质属性的值存储在一个数组中的灵活性。假设，例如，我们有一个C数组：
+
+    ```c
+    float gold[13] = {0.24725, 0.1995, 0.0745, 1.0,      /* 环境 */
+                    0.75164, 0.60648, 0.22648, 1.0,    /* 散射 */
+                    0.628281, 0.555802, 0.366065, 1.0, /* 镜面 */
+                    50.0                               /* 光泽度 */
+        };
+    ```
+
+    其中数组中前四个数字指定一个环境颜色；接下来的四个，一个散射颜色；再接下来的四个，一个镜面颜色；最后一个数字，一个光泽度指数。这个数组可以用来设置所有材质属性：
+
+    ```c
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, gold);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, &gold[4]);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, &gold[8]);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, gold[12]);
+    ```
+
+    请注意，最后一个函数是glMaterialf而不是glMaterialfv，它的第三个参数是一个数字而不是一个指针。在Java中也可以做类似的事情：
+
+    ```c
+    float[] gold = {0.24725F, 0.1995F, 0.0745F, 1.0F,      /* 环境 */
+                    0.75164F, 0.60648F, 0.22648F, 1.0F,    /* 散射 */
+                    0.628281F, 0.555802F, 0.366065F, 1.0F, /* 镜面 */
+                    50.0F                                  /* 光泽度 */
+        };
+        
+    gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, gold, 0);
+    gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, gold, 4);
+    gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, gold, 8);
+    gl.glMaterialf(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, gold[12]);
+    ```
+
+    glMaterialfv和glMaterialf函数可以在任何时候调用，包括在glBegin和glEnd调用之间。这意味着原素的不同顶点可以有不同的材质属性。
+
+    ----
+
+    所以，也许你更喜欢glColor*而不是glMaterialfv？如果是这样，你可以使用它来处理材质以及普通颜色。如果你调用：
+
+    ```c
+    glEnable(GL_COLOR_MATERIAL);
+    ```
+
+    那么一些材质颜色属性将跟踪颜色。默认情况下，设置颜色也将设置当前的前表面和后表面、环境和散射材质属性。也就是说，例如，调用：
+
+    ```c
+    glColor3f(1, 0, 0);
+    ```
+
+    如果照明被启用，将具有与调用相同的效果：
+
+    ```c
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, array);
+    where array contains the values 1, 0, 0, 1. You can change the material property that tracks the color using
+
+    ```c
+    void glColorMaterial(side, property);
+    ```
+
+    其中side可以是GL_FRONT_AND_BACK、GL_FRONT或GL_BACK，property可以是GL_AMBIENT、GL_DIFFUSE、GL_SPECULAR、GL_EMISSION或GL_AMBIENT_AND_DIFFUSE。既不能在glBegin和glEnd调用之间调用glEnable，也不能调用glColorMaterial，因此原素的所有顶点必须使用相同的设置。
+
+    回想一下，当使用glDrawArrays或glDrawElements绘制原素时，原素的顶点的颜色值可以从颜色数组中获取，使用glColorPointer指定。（见[3.4.2小节](../c3/s4.md#342-gldrawarrays和gldrawelements)。）没有类似的数组用于材质属性。然而，如果在使用glDrawArrays或glDrawElements时启用了照明，并且也启用了GL_COLOR_MATERIAL，那么颜色数组将被用作跟踪颜色的材质属性值的来源。
+
+.. tab:: 英文
+
+    Material properties are vertex attributes in that same way that color is a vertex attribute. That is, the OpenGL state includes a current value for each of the material properties. When a vertex is generated by a call to one of the glVertex* functions, a copy of each of the current material properties is stored, along with the vertex coordinates. When a primitive that contains the vertex is rendered, the material properties that are associated with the vertex are used, along with information about lighting, to compute a color for the vertex.
+
+    This is complicated by the fact that polygons are two-sided, and the front face and back face of a polygon can have different materials. This means that, in fact, two sets of material property values are stored for each vertex: the front material and the back material. (The back material isn't actually used unless you turn on two-sided lighting, which will be discussed below.)
+
+    With all that in mind, we will look at functions for setting the current values of material properties. For setting the ambient, diffuse, specular, and emission material colors, the function is
+
+    ```c
+    void glMaterialfv( int side, int property, float* valueArray )
+    ```
+
+    The first parameter can be *GL_FRONT_AND_BACK*, *GL_FRONT*, or *GL_BACK*. It tells whether you are setting a material property value for the front face, the back face, or both. The second parameter tells which material property is being set. It can be *GL_AMBIENT*, *GL_DIFFUSE*, *GL_SPECULAR*, *GL_EMISSION*, or *GL_AMBIENT_AND_DIFFUSE*. Note that it is possible to set the ambient and diffuse colors to the same value with one call to *glMaterialfv* by using *GL_AMBIENT_AND_DIFFUSE* as the property name; this is the most common case. The last parameter to *glMaterialfv* is an array containing four float numbers. The numbers give the RGBA color components as values in the range from 0.0 to 1.0; values outside this range are actually allowed, and will be used in lighting computations, but such values are unusual. Note that an alpha component is required, but it is used only in the case of diffuse color: When the vertex color is computed, its alpha component is set equal to the alpha component of the diffuse material color.
+
+    The shininess material property is a single number rather than an array, and there is a different function for setting its value (without the "v" at the end of the name):
+
+    ```c
+    void glMaterialf( int side, int property, float value )
+    ```
+
+    Again, the *side* can be *GL_FRONT_AND_BACK*, *GL_FRONT*, or *GL_BACK*. The *property* **must** be *GL_SHININESS*. And the value is a float in the range 0.0 to 128.0.
+
+    Compared to the large number of versions of glColor* and glVertex*, the options for setting material are limited. In particular, it is not possible to set a material color without defining an array to contain the color component values. Suppose for example that we want to set the ambient and diffuse colors to a bluish green. In C, that might be done with
+
+    ```c
+    float bgcolor[4] = { 0.0, 0.7, 0.5, 1.0 };
+    glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, bgcolor );
+    ```
+
+    With my JavaScript simulator for OpenGL, this would look like
+
+    ```c
+    let bgcolor = [ 0.0, 0.7, 0.5, 1.0 ];
+    glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, bgcolor );
+    ```
+
+    And in the JOGL API for Java, where methods with array parameters have an additional parameter to give the starting index of the data in the array, it becomes
+
+    ```c
+    float[] bgcolor = { 0.0F, 0.7F, 0.5F, 1.0F };
+    gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT_AND_DIFFUSE, bgcolor, 0);
+    ```
+
+    In C, the third parameter is actually a pointer to float, which allows the flexibility of storing the values for several material properties in one array. Suppose, for example, that we have a C array
+
+    ```c
+    float gold[13] = { 0.24725, 0.1995, 0.0745, 1.0,      /* ambient */
+                    0.75164, 0.60648, 0.22648, 1.0,    /* diffuse */
+                    0.628281, 0.555802, 0.366065, 1.0, /* specular */
+                    50.0                               /* shininess */
+        };
+    ```
+
+    where the first four numbers in the array specify an ambient color; the next four, a diffuse color; the next four, a specular color; and the last number, a shininess exponent. This array can be used to set all the material properties:
+
+    ```c
+    glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT, gold );
+    glMaterialfv( GL_FRONT_AND_BACK, GL_DIFFUSE, &gold[4] );
+    glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, &gold[8] );
+    glMaterialf( GL_FRONT_AND_BACK, GL_SHININESS, gold[12] );
+    ```
+
+    Note that the last function is glMaterialf rather than glMaterialfv, and that its third parameter is a number rather than a pointer. Something similar can be done in Java with
+
+    ```c
+    float[] gold = { 0.24725F, 0.1995F, 0.0745F, 1.0F,      /* ambient */
+                    0.75164F, 0.60648F, 0.22648F, 1.0F,    /* diffuse */
+                    0.628281F, 0.555802F, 0.366065F, 1.0F, /* specular */
+                    50.0F                                  /* shininess */
+        };
+        
+    gl.glMaterialfv( GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, gold, 0 );
+    gl.glMaterialfv( GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, gold, 4 );
+    gl.glMaterialfv( GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, gold, 8 );
+    gl.glMaterialf( GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, gold[12] );
+    ```
+
+    The functions *glMaterialfv* and *glMaterialf* can be called at any time, including between calls to glBegin and glEnd. This means that different vertices of a primitive can have different material properties.
+
+    ----
+
+    So, maybe you like glColor* better than glMaterialfv? If so, you can use it to work with material as well as regular color. If you call
+
+    ```c
+    glEnable( GL_COLOR_MATERIAL );
+    ```
+
+    then some of the material color properties will track the color. By default, setting the color will also set the current front and back, ambient and diffuse material properties. That is, for example, calling
+
+    ```c
+    glColor3f( 1, 0, 0 );
+    ```
+
+    will, if lighting is enabled, have the same effect as calling
+
+    ```c
+    glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, array );
+    where array contains the values 1, 0, 0, 1. You can change the material property that tracks the color using
+
+    ```c
+    void glColorMaterial( side, property );
+    ```
+
+    where *side* can be *GL_FRONT_AND_BACK*, *GL_FRONT*, or *GL_BACK*, and *property* can be *GL_AMBIENT*, *GL_DIFFUSE*, *GL_SPECULAR*, *GL_EMISSION*, or *GL_AMBIENT_AND_DIFFUSE*. Neither glEnable nor glColorMaterial can be called between calls to *glBegin* and *glEnd*, so all of the vertices of a primitive must use the same setting.
+
+    Recall that when *glDrawArrays* or *glDrawElements* is used to draw a primitive, the color values for the vertices of the primitive can be taken from a color array, as specified using *glColorPointer*. (See [Subsection 3.4.2](../c3/s4.md#342-gldrawarrays和gldrawelements).) There are no similar arrays for material properties. However, if a color array is used while lighting is enabled, and if GL_COLOR_MATERIAL is also enabled, then the color array will be used as the source for the values of the material properties that are tracking the color.
+
+4.2.2 定义法向量
+--------------------
+
+**Defining Normal Vectors**
+
+.. tab:: 中文
+
+    法向量对照明计算至关重要。（见[小节4.1.3](./s1.md#413-法向量)）。像颜色和材质一样，法向量也是顶点的属性。OpenGL状态包括一个当前法向量，该法向量是通过glNormal*系列函数设置的。当使用*glVertex**指定顶点时，会保存当前法向量的副本作为顶点的属性，并且在通过照明方程计算顶点颜色时，将其用作该顶点的法向量。请注意，顶点的法向量必须在调用该顶点的*glVertex**之前指定。
+
+    glNormal**系列函数包括glNormal3f、glNormal3d、glNormal3fv和glNormal3dv。像往常一样，“v”表示值在数组中，“f”表示值是**浮点数**，“d”表示值是**双精度浮点数**。（所有法向量都有三个分量）。一些示例：
+
+    ```c
+    glNormal3f(0, 0, 1);  //（这是默认值。）
+    glNormal3d(0.707, 0.707, 0.0);
+    float normalArray[3] = {0.577, 0.577, 0.577};
+    glNormal3fv(normalArray);
+    ```
+
+    对于应该看起来是平面的多边形，所有顶点都使用相同的法向量。例如，要绘制一个面向正y轴方向的立方体的“顶部”面：
+
+    ```c
+    glNormal3f(0, 1, 0); // 指向正y轴方向
+    glBegin(GL_QUADS);
+    glVertex3fv(1,1,1);  
+    glVertex3fv(1,1,-1);
+    glVertex3fv(-1,1,-1);
+    glVertex3fv(-1,1,1);
+    glEnd();
+    ```
+
+    记住，法向量应该指向多边形的前表面，并且前表面是由生成顶点的顺序决定的。（您可能认为前表面应该由法向量指向的方向决定，但实际上并非如此。如果顶点的法向量指向错误的方向，那么照明计算将无法为该顶点给出正确的颜色。）
+
+    当建模平滑表面时，法向量应垂直于表面，而不是垂直于近似表面的多边形。（见[小节4.1.3](./s1.md#413-法向量)）。假设我们想绘制一个半径为1，高度为2的圆柱体的侧面，其中圆柱体的中心位于(0,0,0)，轴沿着z轴。我们可以使用单个三角形条带来近似表面。圆柱体侧面的顶部和底部边缘是圆形。沿着上边缘的顶点将具有坐标(cos(a),sin(a),1)，沿着下边缘的顶点将具有坐标(cos(a),sin(a),-1)，其中a是某个角度。法向量指向与半径相同的方向，但由于它直接从圆柱体侧面伸出，其z坐标为零。因此，在这两个点上，圆柱体侧面的法向量将是(cos(a),sin(a),0)。从z轴顶部向下看圆柱体，它看起来像这样：
+
+    ![123](../../en/c4/normal-to-cylinder.png)
+
+    当我们将圆柱体的侧面作为三角形条带绘制时，我们必须在交替的边缘上生成顶点对。法向量对于这对顶点是相同的，但对于不同的对是不同的。这是代码：
+
+    ```c
+    glBegin(GL_TRIANGLE_STRIP);
+    for (i = 0; i <= 16; i++) {
+        double angle = 2*3.14159/16 * i;  // i是圆周的16分之一
+        double x = cos(angle);
+        double y = sin(angle);
+        glNormal3f(x, y, 0);  // 这个角度的两个顶点的法向量。
+        glVertex3f(x, y, 1);  // 在上边缘的顶点。
+        glVertex3f(x, y, -1); // 在下边缘的顶点。
+    }
+    glEnd();
+    ```
+
+    另一方面，当我们绘制圆柱体的顶部和底部时，我们希望是一个平面多边形，顶部的法向量指向(0,0,1)方向，底部的法向量指向(0,0,-1)方向：
+
+    ```c
+    glNormal3f(0, 0, 1);
+    glBegin(GL_TRIANGLE_FAN);  // 绘制顶部，在z = 1平面上。
+    for (i = 0; i <= 16; i++) {
+        double angle = 2*3.14159/16 * i;
+        double x = cos(angle);
+        double y = sin(angle);
+        glVertex3f(x, y, 1);
+    }
+    glEnd();
+
+    glNormal3f(0, 0, -1);
+    glBegin(GL_TRIANGLE_FAN);  // 绘制底部，在z = -1平面上。
+    for (i = 16; i >= 0; i--) {
+        double angle = 2*3.14159/16 * i;
+        double x = cos(angle);
+        double y = sin(angle);
+        glVertex3f(x, y, -1);
+    }
+    glEnd();
+    ```
+
+    注意，底部的顶点是按与顶部顶点相反的顺序生成的，以考虑顶部和底部面向相反方向的事实。像往常一样，顶点需要按从前往看的逆时针顺序枚举。
+
+    ----
+
+    当使用*glDrawArrays*或*glDrawElements*绘制原语时，可以通过使用法向量数组来为每个顶点提供不同的法向量。法向量数组的工作原理与颜色数组和顶点数组相同。要使用它，您需要通过调用以下命令来启用法向量数组的使用：
+
+    ```c
+    glEnableClientState(GL_NORMAL_ARRAY);
+    ```
+
+    法向量的坐标必须存储在数组中（或JOGL中的nio缓冲区中），并且必须通过调用以下命令来指定数据的位置：
+
+    ```c
+    glNormalPointer(type, stride, data);
+    ```
+
+    *type*指定数组中值的类型。它可以是*GL_INT*、*GL_FLOAT*或*GL_DOUBLE*。步长是一个整数，通常为0，意味着法向量之间没有额外的数据在数组中。data是包含法向量的数组（或缓冲区），每个法向量有三个数字。
+
+    有了这样的设置，当使用*glDrawArrays*或*glDrawElements*绘制原语时，原语的法向量将从数组中获取。请注意，如果未启用*GL_NORMAL_ARRAY*，则原语的所有法向量将相同，并将等于由*glNormal**设置的当前法向量。
+
+    ----
+
+    照明方程假定法向量是单位法向量，即它们的长度等于一。OpenGL的默认设置是使用提供的法向量，即使它们的长度不是一，这将给出错误的结果。然而，如果您调用：
+
+    ```c
+    glEnable(GL_NORMALIZE);
+    ```
+
+    那么OpenGL将自动将每个法向量转换为指向同一方向的单位法向量。
+
+    请注意，当应用几何变换时，法向量会与顶点一起变换；这是必要的，因为变换可以改变表面朝向的方向。缩放变换可以改变法向量的长度，所以即使您提供了单位法向量，在缩放变换后它们也不会是单位法向量。然而，如果您启用了*GL_NORMALIZE*，变换后的法向量将自动转换回单位法向量。我的建议是**始终**在OpenGL初始化过程中启用*GL_NORMALIZE*。唯一的例外是您提供的所有法向量的长度都是一，并且您不应用任何缩放变换。（平移和旋转是可以的，因为它们不修改长度。）
+
+.. tab:: 英文
+
+    Normal vectors are essential to lighting calculations. (See [Subsection 4.1.3](./s1.md#413-法向量).) Like color and material, normal vectors are attributes of vertices. The OpenGL state includes a current normal vector, which is set using functions in the family glNormal*. When a vertex is specified with *glVertex\**, a copy of the current normal vector is saved as an attribute of the vertex, and it is used as the normal vector for that vertex when the color of the vertex is computed by the lighting equation. Note that the normal vector for a vertex must be specified **before** *glVertex\** is called for that vertex.
+
+    Functions in the family *glNormal\** include *glNormal3f*, *glNormal3d*, *glNormal3fv*, and *glNormal3dv*. As usual, a "v" means that the values are in an array, "f" means that the values are **floats**, and "d" means that the values are **doubles**. (All normal vectors have three components). Some examples:
+
+    ```c
+    glNormal3f( 0, 0, 1 );  // (This is the default value.)
+    glNormal3d( 0.707, 0.707, 0.0 );
+    float normalArray[3] = { 0.577, 0.577, 0.577 };
+    glNormal3fv( normalArray );
+    ```
+
+    For a polygon that is supposed to look flat, the same normal vector is used for all of the vertices of the polygon. For example, to draw one side of a cube, say the "top" side, facing in the direction of the positive y-axis:
+
+    ```c
+    glNormal3f( 0, 1, 0 ); // Points along positive y-axis
+    glBegin(GL_QUADS);
+    glVertex3fv(1,1,1);  
+    glVertex3fv(1,1,-1);
+    glVertex3fv(-1,1,-1);
+    glVertex3fv(-1,1,1);
+    glEnd();
+    ```
+
+    Remember that the normal vector should point out of the front face of the polygon, and that the front face is determined by the order in which the vertices are generated. (You might think that the front face should be determined by the direction in which the normal vector points, but that is not how its done. If a normal vector for a vertex points in the wrong direction, then lighting calculations will not give the correct color for that vertex.)
+
+    When modeling a smooth surface, normal vectors should be chosen perpendicular to the surface, rather than to the polygons that approximate the surface. (See [Subsection 4.1.3](./s1.md#413-法向量).) Suppose that we want to draw the side of a cylinder with radius 1 and height 2, where the center of the cylinder is at (0,0,0) and the axis lies along the z-axis. We can approximate the surface using a single triangle strip. The top and bottom edges of the side of a cylinder are circles. Vertices along the top edge will have coordinates (cos(a),sin(a),1) and vertices along the bottom edge will have coordinates (cos(a),sin(a),−1), where a is some angle. The normal vector points in the same direction as the radius, but its z-coordinate is zero since it points directly out from the side of the cylinder. So, the normal vector to the side of the cylinder at both of these points will be (cos(a),sin(a),0). Looking down the z-axis at the top of the cylinder, it looks like this:
+
+    ![123](../../en/c4/normal-to-cylinder.png)
+
+    When we draw the side of the cylinder as a triangle strip, we have to generate pairs of vertices on alternating edges. The normal vector is the same for the two vertices in the pair, but it is different for different pairs. Here is the code:
+
+    ```c
+    glBegin(GL_TRIANGLE_STRIP);
+    for (i = 0; i <= 16; i++) {
+        double angle = 2*3.14159/16 * i;  // i 16-ths of a full circle
+        double x = cos(angle);
+        double y = sin(angle);
+        glNormal3f( x, y, 0 );  // Normal for both vertices at this angle.
+        glVertex3f( x, y, 1 );  // Vertex on the top edge.
+        glVertex3f( x, y, -1 ); // Vertex on the bottom edge.
+    }
+    glEnd();
+    ```
+
+    When we draw the top and bottom of the cylinder, on the other hand, we want a flat polygon, with the normal vector pointing in the direction (0,0,1) for the top and in the direction (0,0,−1) for the bottom:
+
+    ```c
+    glNormal3f( 0, 0, 1);
+    glBegin(GL_TRIANGLE_FAN);  // Draw the top, in the plane z = 1.
+    for (i = 0; i <= 16; i++) {
+        double angle = 2*3.14159/16 * i;
+        double x = cos(angle);
+        double y = sin(angle);
+        glVertex3f( x, y, 1 );
+    }
+    glEnd();
+
+    glNormal3f( 0, 0, -1 );
+    glBegin(GL_TRIANGLE_FAN);  // Draw the bottom, in the plane z = -1
+    for (i = 16; i >= 0; i--) {
+        double angle = 2*3.14159/16 * i;
+        double x = cos(angle);
+        double y = sin(angle);
+        glVertex3f( x, y, -1 );
+    }
+    glEnd();
+    ```
+
+    Note that the vertices for the bottom are generated in the opposite order from the vertices for the top, to account for the fact that the top and bottom face in opposite directions. As always, vertices need to be enumerated in counterclockwise order, as seen from the front.
+
+    ----
+
+    When drawing a primitive with *glDrawArrays* or *glDrawElements*, it is possible to provide a different normal for each vertex by using a normal array to hold the normal vectors. The normal array works in the same way as the color array and the vertex array. To use one, you need to enable the use of a normal array by calling
+
+    ```c
+    glEnableClientState(GL_NORMAL_ARRAY);
+    ```
+
+    The coordinates for the normal vectors must be stored in an array (or in an nio buffer for JOGL), and the location of the data must be specified by calling
+
+    ```c
+    glNormalPointer( type, stride, data );
+    ```
+
+    The *type* specifies the type of values in the array. It can be *GL_INT*, *GL_FLOAT*, or *GL_DOUBLE*. The stride is an integer, which is usually 0, meaning that there is no extra data in the array between the normal vectors. And data is the array (or buffer) that holds the normal vectors, with three numbers for each normal.
+
+    With this setup, when *glDrawArrays* or *glDrawElements* is used to draw a primitive, the normal vectors for the primitive will be pulled from the array. Note that if *GL_NORMAL_ARRAY* is not enabled, then all of the normal vectors for the primitive will be the same, and will be equal to the current normal vector as set by *glNormal\**.
+
+    ----
+
+    The lighting equation assumes that normal vectors are unit normals, that is, that they have length equal to one. The default in OpenGL is to use normal vectors as provided, even if they don't have length one, which will give incorrect results. However, if you call
+
+    ```c
+    glEnable(GL_NORMALIZE);
+    ```
+
+    then OpenGL will automatically convert every normal vector into a unit normal that points in the same direction.
+
+    Note that when a geometric transform is applied, normal vectors are transformed along with vertices; this is necessary because a transformation can change the direction in which a surface is facing. A scaling transformation can change the length of a normal vector, so even if you provided unit normal vectors, they will not be unit normals after a scaling transformation. However, if you have enabled *GL_NORMALIZE*, the transformed normals will automatically be converted back to unit normals. My recommendation is to **always** enable *GL_NORMALIZE* as part of your OpenGL initialization. The only exception would be if all of the normal vectors that you provide are of length one and you do not apply any scaling transformations. (Translations and rotations are OK, because they do not modify lengths.)
+
+4.2.3 应用灯光
+--------------------
+
+**Working with Lights**
+
+.. tab:: 中文
+
+    OpenGL 1.1 至少支持八个光源，它们由常量 *GL_LIGHT0*, *GL_LIGHT1*, ..., *GL_LIGHT7* 标识。（OpenGL 实现可能允许额外的光源。）每个光源可以配置为方向光或点光源，每个光源可以有自己的散射、镜面和环境光强度。（见[小节4.1.2](./s1.md#412-光属性)。）
+
+    默认情况下，所有光源都是禁用的。要启用一个光源，调用 *glEnable(light)*，其中 light 是 *GL_LIGHT0*, *GL_LIGHT1*, ... 等常量之一。然而，仅仅启用一个光源并不会产生任何照明，除了 *GL_LIGHT0* 的情况，因为所有光强度默认都为零，唯一的例外是第0号光的散射颜色。要从其他光源获得光，您需要更改它们的一些属性。使用以下函数设置光源属性：
+
+    ```c
+    void glLightfv(int light, int property, float* valueArray);
+    ```
+
+    第一个参数是 *GL_LIGHT0*, *GL_LIGHT1*, ..., *GL_LIGHT7* 中的一个常量。它指定了正在配置的光源。第二个参数指明了正在设置的光源属性，可以是 *GL_DIFFUSE*, *GL_SPECULAR*, *GL_AMBIENT*, 或 *GL_POSITION*。最后一个参数是一个数组，至少包含四个浮点数，给出属性的值。
+
+    对于颜色属性，数组中的四个数字指定了颜色的红色、绿色、蓝色和透明度分量。（透明度分量实际上没有用。）值通常在0.0到1.0的范围内，但也可以超出这个范围；事实上，大于1.0的值有时是有用的。请记住，光源的散射和镜面颜色告诉了光如何与散射和镜面材质颜色互动，环境颜色在启用光源时简单地添加到全局环境光中。例如，要将第0号光设置为带有蓝色镜面高光的蓝色光，并在打开时向环境光中添加一点蓝色，您可能会使用：
+
+    ```c
+    float blue1[4] = {0.4, 0.4, 0.6, 1};
+    float blue2[4] = {0, 0, 0.8, 1};
+    float blue3[4] = {0, 0, 0.15, 1};
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, blue1);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, blue2);
+    glLightfv(GL_LIGHT1, GL_AMBIENT, blue3);
+    ```
+
+    可能需要一些实验才能准确地找出数组中要使用的值，以获得您想要的效果。
+
+    ----
+
+    光源的 *GL_POSITION* 属性有很大的不同。它既用于设置光源是点光源还是方向光，也用于设置其位置或方向。*GL_POSITION* 的属性值是一个包含四个数字（x,y,z,w）的数组，其中至少一个必须非零。当第四个数字，w，为零时，光源是方向光，点 (x,y,z) 指定了光源的方向：光线沿着从点 (x,y,z) **到** 原点的线的方向照射。这与齐次坐标有关：光源的源头可以被认为是在 (x,y,z) 方向上无限远的点。
+
+    另一方面，如果第四个数字，w，非零，那么光源是点光源，它位于点 (x/w, y/w, z/w)。通常，w 是 1。值 (x,y,z,1) 给出了位于 (x,y,z) 的点光源。同样，这确实是齐次坐标。
+
+    所有光源的默认位置是 (0,0,1,0)，表示从 z 轴正方向照射到 z 轴负方向的方向光。
+
+    关于光源的一个重要且可能令人困惑的事实是，为光源指定的位置会通过使用 glLightfv 设置位置时有效的模型视图变换进行变换。换句话说，位置是以眼睛坐标设置的，而不是世界坐标。用属性设置为 GL_POSITION 调用 glLightfv 非常类似于调用 *glVertex**。光源位置的变换方式与顶点坐标的变换方式相同。例如，
+
+    ```c
+    float position[4] = {1,2,3,1};
+    glLightfv(GL_LIGHT1, GL_POSITION, position);
+    ```
+
+    将光源放置在与
+
+    ```c
+    glTranslatef(1,2,3);
+    float position[4] = {0,0,0,1};
+    glLightfv(GL_LIGHT1, GL_POSITION, position);
+    ```
+
+    相同的地方。对于方向光，光源的方向会通过模型视图变换的旋转部分进行变换。
+
+    使用光源位置有三种基本方法。最容易的思考方式是考虑可能的动画场景。
+
+    **第一种**，如果在应用任何模型视图变换之前设置位置，那么光源相对于观察者是固定的。例如，默认的光源位置在模型视图变换为单位矩阵时有效地设置为 (0,0,1,0)。这意味着它沿着观察者坐标系中 z 轴的负方向照射，其中 z 轴负方向指向屏幕内。另一种说法是，光源总是从观察者方向照射进场景。就像光源附着在观察者上。如果观察者在世界中移动，光源也会随着观察者移动。
+
+    **第二种**，如果在应用了观察变换并且在应用任何建模变换之前设置位置，那么光源的位置固定在世界坐标中。它不会随着观察者移动，也不会随着场景中的对象移动。就像光源附着在世界上。
+
+    **第三种**，如果在应用了建模变换之后设置位置，那么光源会受到该建模变换的影响。这可以用来制作一个随着建模变换改变而在场景中移动的光源。如果光源受到与对象相同的建模变换的影响，那么光源将随着对象移动，就好像它附着在对象上。
+
+    示例程序 [glut/four-lights.c](../../../en/source/glut/four-lights.c) 或 [jogl/FourLights.java](../../../en/source/jogl/FourLights.java) 使用了多个移动的彩色光源，并允许您打开和关闭它们以查看效果。下面的演示是同一个程序的 JavaScript 版本。该程序让您可以看到来自不同来源的光如何结合产生对象的可见颜色。源代码提供了配置光源和使用材质属性的示例。
+
+    <iframe src="../../../en/demos/c4/four-lights-demo.html" width="620" height="470"></iframe>
+
+.. tab:: 英文
+
+    OpenGL 1.1 supports at least eight light sources, which are identified by the constants *GL_LIGHT0*, *GL_LIGHT1*, ..., *GL_LIGHT7*. (An OpenGL implementation might allow additional lights.) Each light source can be configured to be either a directional light or a point light, and each light can have its own diffuse, specular, and ambient intensities. (See [Subsection 4.1.2](./s1.md#412-光属性).)
+
+    By default, all of the light sources are disabled. To enable a light, call *glEnable(light)*, where light is one of the constants *GL_LIGHT0*, *GL_LIGHT1*, .... However, just enabling a light does not give any illumination, except in the case of *GL_LIGHT0*, since all light intensities are zero by default, with the single exception of the diffuse color of light number 0. To get any light from the other light sources, you need to change some of their properties. Light properties can be set using the functions
+
+    ```c
+    void glLightfv( int light, int property, float* valueArray );
+    ```
+
+    The first parameter is one of the constants *GL_LIGHT0*, *GL_LIGHT1*, ..., *GL_LIGHT7*. It specifies which light is being configured. The second parameter says which property of the light is being set. It can be *GL_DIFFUSE*, *GL_SPECULAR*, *GL_AMBIENT*, or *GL_POSITION*. The last parameter is an array that contains at least four float numbers, giving the value of the property.
+
+    For the color properties, the four numbers in the array specify the red, green, blue, and alpha components of the color. (The alpha component is not actually used for anything.) The values generally lie in the range 0.0 to 1.0, but can lie outside that range; in fact, values larger than 1.0 are occasionally useful. Remember that the diffuse and specular colors of a light tell how the light interacts with the diffuse and specular material colors, and the ambient color is simply added to the global ambient light when the light is enabled. For example, to set up light zero as a bluish light, with blue specular highlights, that adds a bit of blue to the ambient light when it is turned on, you might use:
+
+    ```c
+    float blue1[4] = { 0.4, 0.4, 0.6, 1 };
+    float blue2[4] = { 0, 0, 0.8, 1 };
+    float blue3[4] = { 0, 0, 0.15, 1 };
+    glLightfv( GL_LIGHT1, GL_DIFFUSE, blue1 );
+    glLightfv( GL_LIGHT1, GL_SPECULAR, blue2 );
+    glLightfv( GL_LIGHT1, GL_AMBIENT, blue3 );
+    ```
+
+    It would likely take some experimentation to figure out exactly what values to use in the arrays to get the effect that you want.
+
+    ----
+
+    The *GL_POSITION* property of a light is quite a bit different. It is used both to set whether the light is a point light or a directional light, and to set its position or direction. The property value for *GL_POSITION* is an array of four numbers (x,y,z,w), of which at least one must be non-zero. When the fourth number, w, is zero, then the light is directional and the point (x,y,z) specifies the direction of the light: The light rays shine in the direction of the line **from** the point (x,y,z) **towards** the origin. This is related to homogeneous coordinates: The source of the light can be considered to be a point at infinity in the direction of (x,y,z).
+
+    On the other hand, if the fourth number, w, is non-zero, then the light is a point light, and it is located at the point (x/w, y/w, z/w). Usually, w is 1. The value (x,y,z,1) gives a point light at (x,y,z). Again, this is really homogeneous coordinates.
+
+    The default position for all lights is (0,0,1,0), representing a directional light shining from the positive direction of the z-axis, towards the negative direction of the z-axis.
+
+    One important and potentially confusing fact about lights is that the position that is specified for a light is transformed by the modelview transformation that is in effect **at the time the position is set** using glLightfv. Another way of saying this is that the position is set in eye coordinates, not in world coordinates. Calling glLightfv with the property set to GL_POSITION is very much like calling *glVertex\**. The light position is transformed in the same way that the vertex coordinates would be transformed. For example,
+
+    ```c
+    float position[4] = { 1,2,3,1 }
+    glLightfv(GL_LIGHT1, GL_POSITION, position);
+    ```
+    
+    puts the light in the same place as
+
+    ```c
+    glTranslatef(1,2,3);
+    float position[4] = { 0,0,0,1 }
+    glLightfv(GL_LIGHT1, GL_POSITION, position);
+    ```
+    
+    For a directional light, the direction of the light is transformed by the rotational part of the modelview transformation.
+
+    There are three basic ways to use light position. It is easiest to think in terms of potentially animated scenes.
+
+    **First**, if the position is set before any modelview transformation is applied, then the light is fixed with respect to the viewer. For example, the default light position is effectively set to (0,0,1,0) while the modelview transform is the identity. This means that it shines in the direction of the negative z-axis, in the coordinate system of the viewer, where the negative z-axis points into the screen. Another way of saying this is that the light always shines from the direction of the viewer into the scene. It's like the light is attached to the viewer. If the viewer moves about in the world, the light moves with the viewer.
+
+    **Second**, if the position is set after the viewing transform has been applied and before any modeling transform is applied, then the position of the light is fixed in world coordinates. It will not move with the viewer, and it will not move with objects in the scene. It's like the light is attached to the world.
+
+    **Third**, if the position is set after a modeling transform has been applied, then the light is subject to that modeling transformation. This can be used to make a light that moves around in the scene as the modeling transformation changes. If the light is subject to the same modeling transformation as an object, then the light will move around with that object, as if it is attached to the object.
+
+    The sample program [glut/four-lights.c](../../../en/source/glut/four-lights.c) or [jogl/FourLights.java](../../../en/source/jogl/FourLights.java) uses multiple moving, colored lights and lets you turn them on and off to see the effect. The demo below is a JavaScript version of the same program. The program lets you see how light from various sources combines to produce the visible color of an object. The source code provides examples of configuring lights and using material properties.
+
+    <iframe src="../../../en/demos/c4/four-lights-demo.html" width="620" height="470"></iframe>
+
+4.2.4 全局光照属性
+--------------------
+
+**Global Lighting Properties**
+
+.. tab:: 中文
+
+    OpenGL 1.1 中的照明系统除了单个光源的属性外，还使用了几个全局属性。在 OpenGL 1.1 中，只有三个这样的属性。其中之一是全局环境光，它不来自任何光源的环境颜色属性。即使所有 *GL_LIGHT0*, *GL_LIGHT1*, ... 都被禁用，全局环境光也会存在于环境中。默认情况下，全局环境光是黑色的（即其 RGB 分量都是零）。可以使用以下函数更改其值：
+
+    ```c
+    void glLightModelfv(int property, float* value)
+    ```
+
+    其中 *property* 必须是 *GL_LIGHT_MODEL_AMBIENT*，value 是一个包含四个数字的数组，给出全局环境光的 RGBA 颜色分量，范围在 0.0 到 1.0 之间。通常，全局环境光的级别应该相当低。例如，在 C 语言中：
+
+    ```c
+    float ambientLevel[] = {0.15, 0.15, 0.15, 1};
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLevel);
+    ```
+
+    颜色的 alpha 分量通常设置为 1，但不被用于任何目的。对于 JOGL，像往常一样，有一个额外的参数来指定数组中数据的起始索引，示例变成：
+
+    ```c
+    float[] ambientLevel = {0.15F, 0.15F, 0.15F, 0};
+    gl.glLightModelfv(GL2.GL_LIGHT_MODEL_AMBIENT, ambientLevel, 0);
+    ```
+
+    另外两个光模型属性是选项，可以关闭或开启。这些属性是 *GL_LIGHT_MODEL_TWO_SIDE* 和 *GL_LIGHT_MODEL_LOCAL_VIEWER*。它们可以使用以下函数设置：
+
+    ```c
+    void glLightModeli(int property, int value)
+    ```
+
+    value 的值为 0 或 1，表示选项是否关闭或开启。您可以使用符号常量 GL_FALSE 和 GL_TRUE 作为 value，但这些只是 0 和 1 的名称。
+
+    *GL_LIGHT_MODEL_TWO_SIDE* 用于开启双面照明。回想一下，多边形可以有两套材质属性，前材质和后材质。当双面照明关闭时（这是默认设置），只使用前材质；它既用于多边形的前表面，也用于后表面。此外，相同的法向量用于两个表面。由于这些向量指向——或者至少应该是指向——多边形前表面的外部，它们对于后表面没有给出正确的结果。实际上，后表面看起来像是被多边形前面的光源照亮的，但后表面应该被位于多边形后面的光源照亮。
+
+    另一方面，当双面照明开启时，后表面使用后材质，并且在照明计算中使用后表面时法向量的方向会被反转。
+
+    每当场景中可能有可见的后表面时，您都应该使用双面照明。（当您的场景由“实体”对象组成，后表面隐藏在实体内部时，就不会有这种情况。）使用双面照明，您可以选择在两个表面上使用相同的材质，或为两个表面指定不同的材质。例如，在前表面放置有光泽的紫色材质，在后表面放置较暗的黄色材质：
+
+    ```c
+    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, 1); // 开启双面照明。
+
+    float purple[] = {0.6, 0, 0.6, 1};
+    float yellow[] = {0.6, 0.6, 0, 1};
+    float white[] = {0.4, 0.4, 0.4, 1}; // 用于镜面高光。
+    float black[] = {0, 0, 0, 1};
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, purple);  // 前材质
+    glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+    glMaterialf(GL_FRONT, GL_SHININESS, 64);
+
+    glMaterialfv(GL_BACK, GL_AMBIENT_AND_DIFFUSE, yellow);  // 后材质
+    glMaterialfv(GL_BACK, GL_SPECULAR, black);  // 没有镜面高光
+    ```
+
+    这个小演示展示了这些材质在一个没有顶部的圆柱体上的外观，因此您可以在内表面看到后表面：
+
+    <iframe src="../../../en/demos/c4/two-sided-lighting.html" width="380" height="450"></iframe>
+
+    第三个材质属性，*GL_LIGHT_MODEL_LOCAL_VIEWER*，重要性小得多。它与照明方程中从表面到观察者的方向有关。默认情况下，这个方向总是直接指向屏幕外，这对于正交投影是正确的，但对于透视投影则不准确。如果您开启本地观察者选项，将使用真实的观察者方向。在实践中，差异通常不是很明显。
+
+.. tab:: 英文
+
+    In addition to the properties of individual light sources, the OpenGL lighting system uses several global properties. There are only three such properties in OpenGL 1.1. One of them is the global ambient light, which is ambient light that doesn't come from the ambient color property of any light source. Global ambient light will be present in the environment even if all of *GL_LIGHT0*, *GL_LIGHT1*, ... are disabled. By default, the global ambient light is black (that is, its RGB components are all zero). The value can be changed using the function
+
+    ```c
+    void glLightModelfv( int property, float* value )
+    ```
+
+    where the *property* must be *GL_LIGHT_MODEL_AMBIENT* and the value is an array containing four numbers giving the RGBA color components of the global ambient light as numbers in the range 0.0 to 1.0. In general, the global ambient light level should be quite low. For example, in C:
+
+    ```c
+    float ambientLevel[] = { 0.15, 0.15, 0.15, 1 };
+    glLightModelfv( GL_LIGHT_MODEL_AMBIENT, ambientLevel );
+    ```
+
+    The alpha component of the color is usually set to 1, but it is not used for anything. For JOGL, as usual, there is an extra parameter to specify the starting index of the data in the array, and the example becomes:
+
+    ```c
+    float[] ambientLevel = { 0.15F, 0.15F, 0.15F, 0 };
+    gl.glLightModelfv( GL2.GL_LIGHT_MODEL_AMBIENT, ambientLevel, 0 );
+    ```
+
+    The other two light model properties are options that can be either off or on. The properties are *GL_LIGHT_MODEL_TWO_SIDE* and *GL_LIGHT_MODEL_LOCAL_VIEWER*. They can be set using the function
+
+    ```c
+    void glLightModeli( int property, int value )
+    ```
+
+    with a value equal to 0 or 1 to indicate whether the option should be off or on. You can use the symbolic constants GL_FALSE and GL_TRUE for the value, but these are just names for 0 and 1.
+
+    *GL_LIGHT_MODEL_TWO_SIDE* is used to turn on two-sided lighting. Recall that a polygon can have two sets of material properties, a front material and a back material. When two-sided lighting is off, which is the default, only the front material is used; it is used for both the front face and the back face of the polygon. Furthermore, the same normal vector is used for both faces. Since those vectors point—or at least are supposed to point—out of the front face, they don't give the correct result for the back face. In effect, the back face looks like it is illuminated by light sources that lie in front of the polygon, but the back face should be illuminated by the lights that lie behind the polygon.
+
+    On the other hand, when two-sided lighting is on, the back material is used on the back face and the direction of the normal vector is reversed when it is used in lighting calculations for the back face.
+
+    You should use two-sided lighting whenever there are back faces that might be visible in your scene. (This will not be the case when your scene consists of "solid" objects, where the back faces are hidden inside the solid.) With two-sided lighting, you have the option of using the same material on both faces or specifying different materials for the two faces. For example, to put a shiny purple material on front faces and a duller yellow material on back faces:
+
+    ```c
+    glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, 1 ); // Turn on two-sided lighting.
+
+    float purple[] = { 0.6, 0, 0.6, 1 };
+    float yellow[] = { 0.6, 0.6, 0, 1 };
+    float white[] = { 0.4, 0.4, 0.4, 1 }; // For specular highlights.
+    float black[] = { 0, 0, 0, 1 };
+
+
+    glMaterialfv( GL_FRONT, GL_AMBIENT_AND_DIFFUSE, purple );  // front material
+    glMaterialfv( GL_FRONT, GL_SPECULAR, white );
+    glMaterialf( GL_FRONT, GL_SHININESS, 64 );
+
+    glMaterialfv( GL_BACK, GL_AMBIENT_AND_DIFFUSE, yellow );  // back material
+    glMaterialfv( GL_BACK, GL_SPECULAR, black );  // no specular highlights
+    ```
+
+    This little demo shows what these materials look like on a cylinder that has no top, so that you can see the back faces on the inside surface:
+
+    <iframe src="../../../en/demos/c4/two-sided-lighting.html" width="380" height="450"></iframe>
+
+    The third material property, *GL_LIGHT_MODEL_LOCAL_VIEWER*, is much less important. It has to do with the direction from a surface to the viewer in the lighting equation. By default, this direction is always taken to point directly out of the screen, which is true for an orthographic projection but is not accurate for a perspective projection. If you turn on the local viewer option, the true direction to the viewer is used. In practice, the difference is usually not very noticeable.

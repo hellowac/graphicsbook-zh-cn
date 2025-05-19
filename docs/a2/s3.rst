@@ -1,5 +1,7 @@
+.. _b.3:
 
-# B.3 节  [Blender 动画](./a2/s3.md)
+B.3 Blender 动画
+====================================
 
 **Section B.3  Blender Animation**
 
@@ -11,7 +13,8 @@
 
     Blender can be used to create animations and videos. We will look at basic keyframe animation in Blender as well as a couple kinds of animation that can't be done with simple keyframes. At the end of the section, I will explain how to render an animation in Blender.
 
-## B.3.1  关键帧动画和函数曲线
+B.3.1 关键帧动画和函数曲线
+-------------------------
 
 **B.3.1  Keyframe Animation and F-Curves**
 
@@ -113,7 +116,8 @@
 
     You should have perpetual rotation at a constant speed. Admittedly, this is more complicated than it should be. But hopefully if you work through this exercise, it will give you some idea of how F-curves can be used.
 
-## B.3.2  追踪
+B.3.2 追踪
+-------------------------
 
 **B.3.2  Tracking**
 
@@ -134,7 +138,8 @@
 
     Tracking works especially well for cameras and spotlights. You can make them track moving objects, so that the camera or light is always pointed at the object. This is a place where using an "Empty" object can make sense: You can point the camera or spotlight at a location without having an actual object there, by making it track an Empty. You can move the Empty to direct the spotlight, and by animating the Empty, you can make the camera or spotlight pan across the scene. Or if the camera or light is animated, you can set it to track a stationary Empty to keep it pointed at the same location even as it moves around.
 
-## B.3.3  路径动画
+B.3.3 路径动画
+-------------------------
 
 **B.3.3  Path Animation**
 
@@ -187,7 +192,8 @@
 
     Note that path animation is not just for visible objects! You can move a Camera or Light along a path. You can combine path animation with tracking. For example, set up a spotlight to track an Empty and move the Empty along a path to tell the spotlight where to point. Or do the same thing with a camera.
 
-## B.3.4  渲染动画
+B.3.4 渲染动画
+-------------------------
 
 **B.3.4  Rendering an Animation**
 

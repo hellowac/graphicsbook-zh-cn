@@ -1,6 +1,6 @@
 :hide-toc:
 
-第 1 节 绘画与绘图
+1.1 绘画与绘图
 ==================
 
 **Painting and Drawing**

@@ -1,0 +1,755 @@
+.. _c7.1:
+
+7.1 3D变换
+=========================
+
+**Transformations in 3D**
+
+.. tab:: 中文
+
+    我们已经在[第六章](../c6/index.md)中看到了如何使用WebGL绘制基本图形，以及如何实现2D变换。在3D中绘制基本图形与2D相同，唯一的区别是每个顶点有三个坐标而不是两个。3D中的变换与2D类似，但随着第三维度的增加，复杂性有了显著的提升。本节将涵盖WebGL中3D图形的几何方面。在[下一节](./s2.md)中，我们将转向照明和材质的问题。
+
+.. tab:: 英文
+
+    We have already seen in [Chapter 6](../c6/index.md) how to draw primitives using WebGL, and how to implement 2D transformations. Drawing primitives is the same in 3D, except that there are three coordinates per vertex instead of two. Transformations in 3D are also similar to 2D, but for transformations the increase in complexity that comes with the third dimension is substantial. This section covers the geometric side of 3D graphics with WebGL. In the [next section](./s2.md), we will move on to the question of lighting and materials.
+
+7.1.1 关于着色器脚本
+-------------------------
+
+**About Shader Scripts**
+
+.. tab:: 中文
+
+    但在我们开始更认真地使用WebGL之前，有一个更好的方法来在网页上包含着色器源代码会很不错。到目前为止，我通过连接一堆JavaScript字符串字面量来创建源代码字符串，每个代码行一个。那种格式很难阅读，也很难编辑。至少还有两种常用的技术。一种是将GLSL着色器源代码放在`<script>`元素内。以下是一个顶点着色器的示例：
+
+    ```html
+    <script type="x-shader/x-vertex" id="vshader">
+        attribute vec3 a_coords;
+        uniform mat4 modelviewProjection;
+        void main() {
+            vec4 coords = vec4(a_coords,1.0);
+            gl_Position = modelviewProjection * coords;
+        }
+    </script>
+    ```
+
+    这依赖于一个事实，即网络浏览器不会识别`<script>`元素中列出的类型，因此它不会尝试执行脚本。然而，它确实会将`<script>`元素的内容存储在表示网页的DOM数据结构中。内容可以使用标准DOM API作为字符串检索。我不会解释使用的API函数，但以下是一个函数，它以脚本元素的*id*作为参数，并返回一个包含元素内部文本的字符串：
+
+    ```js
+    function getTextContent( elementID ) {
+        let element = document.getElementById(elementID);
+        let node = element.firstChild;
+        let str = "";
+        while (node) {
+            if (node.nodeType == 3) // 这是一个文本节点
+                str += node.textContent;
+            node = node.nextSibling;
+        }
+        return str;
+    }
+    ```
+
+    示例程序[webgl/glmatrix-cube-unlit.html](../../../en/source/webgl/glmatrix-cube-unlit.html)使用了这种技术。另一个想法是将源代码定义为JavaScript模板字符串。（见[小节A.3.1](../a3/s3.md)）。模板字符串被包含在单引号字符之间，并且可以跨越多行。（"引号"也被称为"反引号"）。模板字符串只是在ES6中作为JavaScript的一部分引入的。它们可以包含JavaScript表达式的值，但这里我们不需要那种能力。以下是如何将上述着色器定义为模板字符串的方式：
+
+    ```js
+    const vertexShaderSource = `
+    attribute vec3 a_coords;
+    uniform mat4 modelviewProjection;
+    void main() {
+        vec4 coords = vec4(a_coords,1.0);
+        gl_Position = modelviewProjection * coords;
+    }`;
+    ```
+
+    这种技术在本章的许多示例程序中使用。请注意，如果你将GLSL ES 3.00着色器定义为模板字符串，你应该确保在打开引号后立即包括所需的第一行，#version 3.00 es，因为那行不能由空行前导。
+
+.. tab:: 英文
+
+    But before we begin working more seriously with WebGL, it will be nice to have a better way to include shader source code on a web page. Up until now, I have created the source code strings by concatenating a bunch of JavaScript string literals, one for each line of code. That format is hard to read and very hard to edit. There are at least two other techniques that are often used. One is to put the GLSL shader source code inside `<script>` elements. Here is an example for a vertex shader:
+
+    ```html
+    <script type="x-shader/x-vertex" id="vshader">
+        attribute vec3 a_coords;
+        uniform mat4 modelviewProjection;
+        void main() {
+            vec4 coords = vec4(a_coords,1.0);
+            gl_Position = modelviewProjection * coords;
+        }
+    </script>
+    ```
+
+    This relies on the fact that a web browser will not recognize the type listed in the `<script>` element, so it will not try to execute the script. However, it does store the content of the `<script>` element in the DOM data structure that represents the web page. The content can be retrieved as a string using the standard DOM API. I won't explain the API functions that are used, but here is a function that takes the *id* of the script element as its parameter and returns a string containing the text from inside the element:
+
+    ```js
+    function getTextContent( elementID ) {
+        let element = document.getElementById(elementID);
+        let node = element.firstChild;
+        let str = "";
+        while (node) {
+            if (node.nodeType == 3) // this is a text node
+                str += node.textContent;
+            node = node.nextSibling;
+        }
+        return str;
+    }
+    ```
+
+    The sample program [webgl/glmatrix-cube-unlit.html](../../../en/source/webgl/glmatrix-cube-unlit.html) uses this technique. The other idea is to define the source code as a JavaScript template string. (See [Subsection A.3.1](../a3/s3.md)). A template string is enclosed between single backquote characters and can span multiple lines. (The "backquote" is also called a "backtick.") Template strings were only introduced into JavaScript as part of ES6. They can include the values of JavaScript expressions, but we don't need that capability here. Here is how the above shader could be defined as a template string:
+
+    ```js
+    const vertexShaderSource = `
+    attribute vec3 a_coords;
+    uniform mat4 modelviewProjection;
+    void main() {
+        vec4 coords = vec4(a_coords,1.0);
+        gl_Position = modelviewProjection * coords;
+    }`;
+    ```
+
+    This technique is used in many of the sample programs in this chapter. Note that if you define a GLSL ES 3.00 shader as a template string, you should be sure to include the required first line, #version 3.00 es, immediately after the opening backquote, since that line cannot be preceded by a blank line.
+
+## 7.1.2 glMatrix简介
+
+**Introducing glMatrix**
+
+.. tab:: 中文
+
+    变换对于计算机图形学至关重要。WebGL API没有提供任何用于处理变换的函数。在[第6.5节](../c6/s5.md)中，我们使用了一个简单的JavaScript类来表示2D的建模变换。在三维空间中，情况会变得更加复杂。对于使用WebGL的3D图形，JavaScript端通常需要创建模型视图变换和投影变换，并且必须在没有WebGL帮助的情况下对模型视图矩阵应用旋转、缩放和平移。如果有JavaScript库来完成这项工作，那么事情会容易得多。一个常用的库是***glMatrix***，这是由Brandon Jones和Colin MacKenzie IV编写的用于向量和矩阵数学的免费JavaScript库。它可在<https://glmatrix.net>获取。这本教科书使用的是2015年的2.3版本，尽管有更新的版本可用。根据其许可证，此文件可以自由使用和分发。我的程序使用脚本gl-matrix-min.js。你可以在这本书的网站下载的源文件夹中找到一份副本。这个文件是一个“压缩”的JavaScript文件，不打算供人类阅读。（你也可以阅读2.2版本的完整源代码，包括注释，以人类可读的形式，在文件[webgl/gl-matrix.js](../../../en/source/webgl/gl-matrix.js)中找到，更多信息可以在glmatrix网站上找到。）
+
+    glMatrix API可以通过像下面这样的脚本元素在网页上使用：
+
+    ```html
+    <script src="gl-matrix-min.js"></script>
+    ```
+
+    这假定*gl-matrix-min.js*与网页在同一目录中。
+
+    glMatrix库定义了它所谓的“类”***vec2***、***vec3***和***vec4***，用于处理2、3和4个数字的向量。它定义了***mat3***用于处理3x3矩阵，以及***mat4***用于4x4矩阵。这些名称不应与同名的GLSL类型混淆；*glMatrix*完全在JavaScript端。然而，*glMatrix*的***mat4***可以传递给着色器程序以指定GLSL *mat4*的值，其他向量和矩阵类型也是如此。
+
+    每个*glMatrix*类定义了一组用于处理向量和矩阵的函数。实际上，尽管文档使用“类”这个术语，*glMatrix*并不是面向对象的。它的类实际上只是JavaScript对象，它类中的函数在Java中将被称为静态方法。在*glMatrix*中，向量和矩阵被表示为数组，类如***vec4***和***mat4***中的函数仅操作这些数组。没有类型为***vec4***或***mat4***的对象，只有长度分别为4或16的数组。数组可以是普通的JavaScript数组，也可以是类型为***Float32Array***的类型化数组。如果让*glMatrix*为你创建数组，它们将是Float32Arrays，但所有*glMatrix*函数将与这两种数组一起工作。例如，如果*glMatrix*文档说一个参数应该是***vec3***类型，那么传递一个***Float32Array***或一个包含三个数字的常规JavaScript数组作为该参数的值是可以的。
+
+    请注意，任何一种数组也可以在诸如*gl.uniform3fv()*和*gl.uniformMatrix4fv()*等WebGL函数中使用。*glMatrix*旨在与这些函数一起工作。例如，在*glMatrix*中的一个***mat4***是一个长度为16的数组，以列主序格式保存4x4矩阵的元素，这与*gl.uniformMatrix4fv*使用的格式相同。
+
+    ----
+
+    每个*glMatrix*类都有一个*create()*函数，用于创建一个具有适当长度的数组，并用默认值填充。例如，
+
+    ```js
+    transform = mat4.create();
+    ```
+
+    将*transform*设置为一个新的长度为16的***Float32Array***，初始化为表示单位矩阵。类似地，
+
+    ```js
+    vector = vec3.create();
+    ```
+
+    创建一个长度为3、填充了零的***Float32Array***。每个类还有一个*clone(x)*函数，用于创建其参数x的副本。例如：
+
+    ```js
+    saveTransform = mat4.clone(modelview);
+    ```
+
+    大多数其他函数不创建新数组。相反，它们修改它们第一个参数的内容。例如，*mat4.multiply(A,B,C)*将修改A，使其包含B和C的矩阵乘积。每个参数必须是已经存在的***mat4***（即长度为16的数组）。一些数组可以是相同的。例如，*mat4.multiply(A,A,B)*的作用是将A乘以B，并将A修改为包含答案。
+
+    有函数用于将矩阵乘以标准变换，如缩放和旋转。例如，如果A和B是***mat4s***，v是一个***vec3***，那么*mat4.translate(A,B,v)*使A等于B和表示由向量*v*平移的矩阵的乘积。在实践中，我们将主要在表示*modelview*变换的矩阵上使用这样的操作。所以，假设我们有一个名为*modelview*的***mat4***，它保存当前的*modelview*变换。要通过向量*[dx,dy,dz]*应用平移，我们可以这样说
+
+    ```js
+    mat4.translate( modelview, modelview, [dx,dy,dz] );
+    ```
+
+    这等同于在OpenGL中调用*glTranslatef(dx,dy,dz)*。也就是说，如果我们在这个语句之后绘制一些几何体，使用modelview作为*modelview*变换，那么几何体首先会被平移[dx,dy,dz]，然后会被*modelview*的先前值变换。注意在这个命令中使用向量来指定平移，而不是三个单独的参数；这是glMatrix的典型用法。要应用缩放变换，缩放因子为*sx*、*sy*和*sz*，使用
+
+    ```js
+    mat4.scale( modelview, modelview, [sx,sy,sz] );
+    ```
+
+    对于旋转，*glMatrix*有四个函数，包括三个用于围绕*x*、*y*或*z*轴旋转的常见情况。第四个旋转函数指定旋转轴为从(0,0,0)到点*(dx,dy,dz)*的线。这等同于*glRotatef(angle,dx,dy,dz)*。不幸的是，这些函数中的旋转角度是以弧度而不是度指定的：
+
+    ```js
+    mat4.rotateX( modelview, modelview, radians );
+    mat4.rotateY( modelview, modelview, radians );
+    mat4.rotateZ( modelview, modelview, radians );
+    mat4.rotate( modelview, modelview, radians, [dx,dy,dz] );
+    ```
+
+    这些函数允许我们进行所有基本的建模和查看变换，这对3D图形是必需的。为了进行层次化图形，我们还需要在遍历场景图时保存和恢复变换。为此，我们需要一个栈。我们可以使用一个常规的JavaScript数组，它已经有*push*和*pop*操作。所以，我们可以创建一个空数组作为栈：
+
+    ```js
+    const matrixStack = [];
+    ```
+
+    然后，我们可以通过说
+
+    ```js
+    matrixStack.push( mat4.clone(modelview) );
+    ```
+
+    将当前modelview矩阵的副本推到栈上，并且我们可以用
+
+    ```js
+    modelview = matrixStack.pop();
+    ```
+
+    从栈中移除一个矩阵，并将其设置为当前的modelview矩阵。
+
+    这些操作等同于OpenGL中的*glPushMatrix()*和*glPopMatrix()*。
+
+    ----
+
+    模型视图变换的起点通常是观察变换。在OpenGL中，经常使用函数*gluLookAt*来设置观察变换（见[3.3.4小节](../c3/s3.md#334-模型视图转换)）。glMatrix库有一个“lookAt”函数来做同样的事情：
+
+    ```js
+    mat4.lookAt( modelview, [eyex,eyey,eyez], [refx,refy,refz], [upx,upy,upz] );
+    ```
+
+    注意，这个函数使用三个***vec3's***代替*gluLookAt*中的九个独立参数，并且它将结果放在它的第一个参数中，而不是全局变量中。这个函数调用实际上等同于两个OpenGL命令：
+
+    ```js
+    glLoadIdentity();
+    gluLookAt( eyex,eyey,eyez,refx,refy,refz,upx,upy,upz );
+    ```
+
+    所以，你不需要在调用*mat4.lookAt*之前将*modelview*设置为单位矩阵，就像你通常在OpenGL中做的那样。然而，你必须在使用*mat4.lookAt*之前创建*modelview*矩阵，比如通过调用
+
+    ```js
+    let modelview = mat4.create();
+    ```
+
+    如果你想将现有的***mat4***设置为单位矩阵，你可以使用*mat4.identity*函数。例如，
+
+    ```js
+    mat4.identity( modelview );
+    ```
+
+    如果你想从基本的缩放、旋转和平移变换中组合出视图变换，你可以使用这个作为起点。
+
+    类似地，*glMatrix*有设置投影变换的函数。它有等同于*glOrtho*、*glFrustum*和*gluPerspective*的函数（见3.3.3小节），只是*mat4.perspective*中的视场角度是以弧度而不是度给出的：
+
+    ```js
+    mat4.ortho( projection, left, right, bottom, top, near, far );
+
+    mat4.frustum( projection, left, right, bottom, top, near, far );
+
+    mat4.perspective( projection, fovyInRadians, aspect, near, far );
+    ```
+
+    和模型视图变换一样，你不需要在调用这些函数之前用单位矩阵加载*projection*，但你必须将*projection*创建为一个***mat4***（或长度为16的数组）。
+
+.. tab:: 英文
+
+    Transformations are essential to computer graphics. The WebGL API does not provide any functions for working with transformations. In [Section 6.5](../c6/s5.md), we used a simple JavaScript class to represent modeling transformations in 2D. Things get more complex in three dimensions. For 3D graphics with WebGL, the JavaScript side will usually have to create both a modelview transform and a projection transform, and it will have to apply rotation, scaling, and translation to the modelview matrix, all without help from WebGL. Doing so is much easier if you have a JavaScript library to do the work. One commonly used library is ***glMatrix***, a free JavaScript library for vector and matrix math written by Brandon Jones and Colin MacKenzie IV. It is available from <https://glmatrix.net>. This textbook uses Version 2.3 of the library, from 2015, although newer versions are available. According to its license, this file can be freely used and distributed. My programs use the script gl-matrix-min.js. You can find a copy in the source folder in the web site download of this book. This file is a "minified" JavaScript file, which is not meant to be human-readable. (You can also read the full source for version 2.2, in human-readable form including comments, in the file [webgl/gl-matrix.js](../../../en/source/webgl/gl-matrix.js), and more information can be found on the glmatrix web site.)
+
+    The glMatrix API can be made available for use on a web page with a script element such as
+
+    ```html
+    <script src="gl-matrix-min.js"></script>
+    ```
+
+    This assumes that *gl-matrix-min.js* is in the same directory as the web page.
+
+    The *glMatrix* library defines what it calls "classes" named ***vec2***, ***vec3***, and ***vec4*** for working with vectors of 2, 3, and 4 numbers. It defines ***mat3*** for working with 3-by-3 matrices and ***mat4*** for 4-by-4 matrices. The names should not be confused with the GLSL types of the same names; *glMatrix* in entirely on the JavaScript side. However, a *glMatrix* ***mat4*** can be passed to a shader program to specify the value of a GLSL *mat4*, and similarly for the other vector and matrix types.
+
+    Each *glMatrix* class defines a set of functions for working with vectors and matrices. In fact, however, although the documentation uses the term "class," *glMatrix* is not object-oriented. Its classes are really just JavaScript objects, and the functions in its classes are what would be called static methods in Java. Vectors and matrices are represented in *glMatrix* as arrays, and the functions in classes like ***vec4*** and ***mat4*** simply operate on those arrays. There are no objects of type ***vec4*** or ***mat4*** as such, just arrays of length 4 or 16 respectively. The arrays can be either ordinary JavaScript arrays or typed arrays of type ***Float32Array***. If you let *glMatrix* create the arrays for you, they will be Float32Arrays, but all *glMatrix* functions will work with either kind of array. For example, if the *glMatrix* documentation says that a parameter should be of type ***vec3***, it is OK to pass either a ***Float32Array*** or a regular JavaScript array of three numbers as the value of that parameter.
+
+    Note that it is also the case that either kind of array can be used in WebGL functions such as *gl.uniform3fv()* and *gl.uniformMatrix4fv()*. *glMatrix* is designed to work with those functions. For example, a ***mat4*** in *glMatrix* is an array of length 16 that holds the elements of a 4-by-4 array in column-major order, the same format that is used by *gl.uniformMatrix4fv*.
+
+    ----
+
+    Each *glMatrix* class has a *create()* function which creates an array of the appropriate length and fills it with default values. For example,
+
+    ```js
+    transform = mat4.create();
+    ```
+
+    sets *transform* to be a new ***Float32Array*** of length 16, initialized to represent the identity matrix. Similarly,
+
+    ```js
+    vector = vec3.create();
+    ```
+
+    creates a ***Float32Array*** of length 3, filled with zeros. Each class also has a function *clone(x)* that creates a copy of its parameter x. For example:
+
+    ```js
+    saveTransform = mat4.clone(modelview);
+    ```
+
+    Most other functions do **not** create new arrays. Instead, they modify the contents of their first parameter. For example, *mat4.multiply(A,B,C)* will modify A so that it holds the matrix product of B and C. Each parameter must be a ***mat4*** (that is, an array of length 16) that already exists. It is OK for some of the arrays to be the same. For example, *mat4.multiply(A,A,B)* has the effect of multiplying A times B and modifying A so that it contains the answer.
+
+    There are functions for multiplying a matrix by standard transformations such as scaling and rotation. For example if A and B are ***mat4s*** and v is a ***vec3***, then *mat4.translate(A,B,v)* makes A equal to the product of B and the matrix that represents translation by the vector *v*. In practice, we will use such operations mostly on a matrix that represents the *modelview* transformation. So, suppose that we have a ***mat4*** named *modelview* that holds the current *modelview* transform. To apply a translation by a vector *[dx,dy,dz]*, we can say
+
+    ```js
+    mat4.translate( modelview, modelview, [dx,dy,dz] );
+    ```
+
+    This is equivalent to calling *glTranslatef(dx,dy,dz)* in OpenGL. That is, if we draw some geometry after this statement, using modelview as the *modelview* transformation, then the geometry will first be translated by [dx,dy,dz] and then will be transformed by whatever was the previous value of *modelview*. Note the use of a vector to specify the translation in this command, rather than three separate parameters; this is typical of glMatrix. To apply a scaling transformation with scale factors *sx*, *sy*, and *sz*, use
+
+    ```js
+    mat4.scale( modelview, modelview, [sx,sy,sz] );
+    ```
+
+    For rotation, *glMatrix* has four functions, including three for the common cases of rotation about the *x*, *y*, or *z* axis. The fourth rotation function specifies the axis of rotation as the line from (0,0,0) to a point *(dx,dy,dz)*. This is equivalent to *glRotatef(angle,dx,dy,dz)* Unfortunately, the angle of rotation in these functions is specified in radians rather than in degrees:
+
+    ```js
+    mat4.rotateX( modelview, modelview, radians );
+    mat4.rotateY( modelview, modelview, radians );
+    mat4.rotateZ( modelview, modelview, radians );
+    mat4.rotate( modelview, modelview, radians, [dx,dy,dz] );
+    ```
+
+    These functions allow us to do all the basic modeling and viewing transformations that we need for 3D graphics. To do hierarchical graphics, we also need to save and restore the transformation as we traverse the scene graph. For that, we need a stack. We can use a regular JavaScript array, which already has *push* and *pop* operations. So, we can create the stack as an empty array:
+
+    ```js
+    const matrixStack = [];
+    ```
+
+    We can then push a copy of the current modelview matrix onto the stack by saying
+
+    ```js
+    matrixStack.push( mat4.clone(modelview) );
+    ```
+
+    and we can remove a matrix from the stack and set it to be the current modelview matrix with
+
+    ```js
+    modelview = matrixStack.pop();
+    ```
+
+    These operations are equivalent to *glPushMatrix()* and *glPopMatrix()* in OpenGL.
+
+    ----
+
+    The starting point for the modelview transform is usually a viewing transform. In OpenGL, the function *gluLookAt* is often used to set up the viewing transformation ([Subsection 3.3.4](../c3/s3.md#334-模型视图转换)). The glMatrix library has a "lookAt" function to do the same thing:
+
+    ```js
+    mat4.lookAt( modelview, [eyex,eyey,eyez], [refx,refy,refz], [upx,upy,upz] );
+    ```
+
+    Note that this function uses three ***vec3's*** in place of the nine separate parameters in *gluLookAt*, and it places the result in its first parameter instead of in a global variable. This function call is actually equivalent to the two OpenGL commands
+
+    ```js
+    glLoadIdentity();
+    gluLookAt( eyex,eyey,eyez,refx,refy,refz,upx,upy,upz );
+    ```
+
+    So, you don't have to set *modelview* equal to the identity matrix before calling *mat4.lookAt*, as you would usually do in OpenGL. However, you do have to create the *modelview* matrix at some point before using *mat4.lookAt*, such as by calling
+
+    ```js
+    let modelview = mat4.create();
+    ```
+
+    If you do want to set an existing ***mat4*** to the identity matrix, you can do so with the *mat4.identity* function. For example,
+
+    ```js
+    mat4.identity( modelview );
+    ```
+
+    You could use this as a starting point if you wanted to compose the view transformation out of basic scale, rotate, and translate transformations.
+
+    Similarly, *glMatrix* has functions for setting up projection transformations. It has functions equivalent to *glOrtho*, *glFrustum*, and *gluPerspective* ([Subsection 3.3.3](../c3/s3.md#333-投影变换)), except that the field-of-view angle in *mat4.perspective* is given in radians rather than degrees:
+
+    ```js
+    mat4.ortho( projection, left, right, bottom, top, near, far );
+
+    mat4.frustum( projection, left, right, bottom, top, near, far );
+
+    mat4.perspective( projection, fovyInRadians, aspect, near, far );
+    ```
+
+    As with the modelview transformation, you do not need to load *projection* with the identity before calling one of these functions, but you must create *projection* as a ***mat4*** (or an array of length 16).
+
+7.1.3 变换坐标
+-------------------------
+
+**Transforming Coordinates**
+
+.. tab:: 中文
+
+    当然，创建投影和模型视图变换的目的是为了在绘制基本图形时使用它们来变换坐标。在WebGL中，变换通常在顶点着色器中完成。一个基本图形的坐标以对象坐标指定。它们乘以模型视图变换以将它们转换为眼睛坐标，然后乘以投影矩阵以将它们转换为实际用于绘制基本图形的最终裁剪坐标。或者，模型视图和投影矩阵可以相乘，得到一个表示组合变换的矩阵；然后可以直接将对象坐标乘以该矩阵，直接转换为裁剪坐标。
+
+    在着色器程序中，坐标变换通常表示为GLSL uniform变量，类型为***mat4***。着色器程序可以使用单独的投影和模型视图矩阵或组合矩阵（或两者兼有）。有时，由于某些光照计算是在眼睛坐标中完成的，因此可能需要单独的模型视图变换矩阵，但这里有一个使用组合矩阵的最小GLSL ES 1.00顶点着色器：
+
+    ```js
+    attribute vec3 a_coords;           // 顶点的(x,y,z)对象坐标。
+    uniform mat4 modelviewProjection;  // 组合变换矩阵。
+    void main() {
+        vec4 coords = vec4(a_coords,1.0);   // 为w坐标添加1.0。
+        gl_Position = modelviewProjection * coords;  // 变换坐标。
+    }
+    ```
+
+    这个着色器来自示例程序[webgl/glmatrix-cube-unlit.html](../../../en/source/webgl/glmatrix-cube-unlit.html)。该程序允许用户查看一个彩色立方体，只使用基本颜色而不应用光照。用户可以选择正交投影或透视投影，并可以使用键盘旋转立方体。旋转是作为围绕x、y和z轴的单独旋转组成的建模变换应用的。在JavaScript方面的变换矩阵，程序使用glMatrix库中的***mat4***类来表示投影、模型视图和组合变换矩阵：
+
+    ```js
+    const projection = mat4.create();  // 投影矩阵
+    const modelview = mat4.create();   // 模型视图矩阵
+    const modelviewProjection = mat4.create();  // 组合矩阵
+    ```
+
+    （这些变量可以是*const*，因为相同的矩阵对象将在整个程序中使用，尽管对象中的数字会改变。）只有*modelviewProjection*对应于着色器变量。在初始化期间使用
+
+    ```js
+    u_modelviewProjection = gl.getUniformLocation(prog, "modelviewProjection");
+    ```
+
+    获取该变量在着色器程序中的位置。变换矩阵在*draw()*函数中计算，使用*glMatrix* ***mat4***类的函数。在绘制组成立方体的基本图形之前，使用*gl.uniformMatrix4fv*将*modelviewProjection*的值发送到着色器程序。这里是执行此操作的代码：
+
+    ```js
+    /* 设置投影以表示投影变换 */
+
+    if (document.getElementById("persproj").checked) {
+        mat4.perspective(projection, Math.PI/5, 1, 4, 8);
+    }
+    else {
+        mat4.ortho(projection, -2, 2, -2, 2, 4, 8);
+    }
+
+    /* 设置modelview以表示观察变换。 */
+
+    mat4.lookAt(modelview, [2,2,6], [0,0,0], [0,1,0]);
+
+    /* 将建模变换应用于modelview。 */
+
+    mat4.rotateX(modelview, modelview, rotateX);
+    mat4.rotateY(modelview, modelview, rotateY);
+    mat4.rotateZ(modelview, modelview, rotateZ);
+
+    /* 将投影矩阵乘以模型视图矩阵得到组合变换矩阵，并将该矩阵发送到着色器程序。 */
+
+    mat4.multiply( modelviewProjection, projection, modelview );
+    gl.uniformMatrix4fv(u_modelviewProjection, false, modelviewProjection );
+    ```
+
+    如果着色器程序中使用了单独的模型视图和投影矩阵，那么模型视图矩阵可以应用于将对象坐标转换为眼睛坐标，然后投影可以应用于眼睛坐标来计算*gl_Position*。这里有一个执行此操作的最小顶点着色器：
+
+    ```js
+    attribute vec3 a_coords;  // 顶点的(x,y,z)对象坐标。
+    uniform mat4 modelview;   // 模型视图变换。
+    uniform mat4 projection;  // 投影变换。
+    void main() {
+        vec4 coords = vec4(a_coords,1.0);      // 为w坐标添加1.0。
+        vec4 eyeCoords = modelview * coords;   // 应用模型视图变换。
+        gl_Position = projection * eyeCoords;  // 应用投影变换。
+    }
+    ```
+
+.. tab:: 英文
+
+    Of course, the point of making a projection and a modelview transformation is to use them to transform coordinates while drawing primitives. In WebGL, the transformation is usually done in the vertex shader. The coordinates for a primitive are specified in object coordinates. They are multiplied by the modelview transformation to covert them into eye coordinates and then by the projection matrix to covert them to the final clip coordinates that are actually used for drawing the primitive. Alternatively, the modelview and projection matrices can be multiplied together to get a matrix that represents the combined transformation; object coordinates can then be multiplied by that matrix to transform them directly into clip coordinates.
+
+    In the shader program, coordinate transforms are usually represented as GLSL uniform variables of type ***mat4***. The shader program can use either separate projection and modelview matrices or a combined matrix (or both). Sometimes, a separate modelview transform matrix is required, because certain lighting calculations are done in eye coordinates, but here is a minimal GLSL ES 1.00 vertex shader that uses a combined matrix:
+
+    ```js
+    attribute vec3 a_coords;           // (x,y,z) object coordinates of vertex.
+    uniform mat4 modelviewProjection;  // Combined transformation matrix.
+    void main() {
+        vec4 coords = vec4(a_coords,1.0);   // Add 1.0 for the w-coordinate.
+        gl_Position = modelviewProjection * coords;  // Transform the coordinates.
+    }
+    ```
+
+    This shader is from the sample program [webgl/glmatrix-cube-unlit.html](../../../en/source/webgl/glmatrix-cube-unlit.html). That program lets the user view a colored cube, using just basic color with no lighting applied. The user can select either an orthographic or a perspective projection and can rotate the cube using the keyboard. The rotation is applied as a modeling transformation consisting of separate rotations about the x-, y-, and z-axes. For transformation matrices on the JavaScript side, the program uses the ***mat4*** class from the glMatrix library to represent the projection, modelview, and combined transformation matrices:
+
+    ```js
+    const projection = mat4.create();  // projection matrix
+    const modelview = mat4.create();   // modelview matrix
+    const modelviewProjection = mat4.create();  // combined matrix
+    ```
+
+    (These variables can be *const* since the same matrix objects will be used throughout the program, even though the numbers in the objects will change.) Only *modelviewProjection* corresponds to a shader variable. The location of that variable in the shader program is obtained during initialization using
+
+    ```js
+    u_modelviewProjection = gl.getUniformLocation(prog, "modelviewProjection");
+    ```
+
+    The transformation matrices are computed in the *draw()* function, using functions from the *glMatrix* ***mat4*** class. The value for *modelviewProjection* is sent to the shader program using *gl.uniformMatrix4fv* before the primitives that make up the cube are drawn. Here is the code that does it:
+
+    ```js
+    /* Set the value of projection to represent the projection transformation */
+
+    if (document.getElementById("persproj").checked) {
+        mat4.perspective(projection, Math.PI/5, 1, 4, 8);
+    }
+    else {
+        mat4.ortho(projection, -2, 2, -2, 2, 4, 8);
+    }
+
+    /* Set the value of modelview to represent the viewing transform. */
+
+    mat4.lookAt(modelview, [2,2,6], [0,0,0], [0,1,0]);
+
+    /* Apply the modeling transformation to modelview. */
+
+    mat4.rotateX(modelview, modelview, rotateX);
+    mat4.rotateY(modelview, modelview, rotateY);
+    mat4.rotateZ(modelview, modelview, rotateZ);
+
+    /* Multiply the projection matrix times the modelview matrix to give the
+    combined transformation matrix, and send that to the shader program. */
+    
+    mat4.multiply( modelviewProjection, projection, modelview );
+    gl.uniformMatrix4fv(u_modelviewProjection, false, modelviewProjection );
+    ```
+
+    If separate modelview and projection matrices are used in the shader program, then the modelview matrix can be applied to transform object coordinates to eye coordinates, and the projection can then be applied to the eye coordinates to compute *gl_Position*. Here is a minimal vertex shader that does that:
+
+    ```js
+    attribute vec3 a_coords;  // (x,y,z) object coordinates of vertex.
+    uniform mat4 modelview;   // Modelview transformation.
+    uniform mat4 projection;  // Projection transformation
+    void main() {
+        vec4 coords = vec4(a_coords,1.0);      // Add 1.0 for w-coordinate.
+        vec4 eyeCoords = modelview * coords;   // Apply modelview transform.
+        gl_Position = projection * eyeCoords;  // Apply projection transform.
+    }
+    ```
+
+7.1.4 变换法线
+-------------------------
+
+**Transforming Normals**
+
+.. tab:: 中文
+
+    法向量对于光照计算至关重要（见[4.1.3小节](../c4/s1.md#413-法向量)）。当一个表面以某种方式变换时，似乎该表面的法向量也会改变。然而，如果变换是平移，情况并非如此。法向量指示表面朝向的方向。平移表面不会改变表面朝向的方向，因此法向量保持不变。记住，向量没有位置，只有长度和方向。所以甚至谈论移动或平移向量都没有意义。
+
+    你的第一个猜测可能是法向量应该通过变换的旋转/缩放部分来变换。猜测正确的变换由3x3矩阵表示，该矩阵是通过从4x4坐标变换矩阵中丢弃右列和底行获得的。（右列表示变换的平移部分，底行之所以存在，是因为在矩阵中实现平移需要使用齐次坐标来表示向量。法向量在不考虑平移的情况下不使用齐次坐标。）但这在所有情况下都不可能是正确的。例如，考虑一个剪切变换。正如这个插图所示，如果对象的法向量与对象一样经受相同的剪切变换，得到的向量将不会与对象垂直：
+
+    ![123](../../en/c7/normal-transform.png)
+
+    尽管如此，仍然可以从坐标变换矩阵中获得法向量的正确变换矩阵。事实证明，你需要丢弃第四行和第四列，然后取一个叫做“逆转置”的东西，这个3x3矩阵的结果是已知的。你不需要知道这意味着什么或为什么它有效。glMatrix库会为你计算它。你需要的函数是*normalFromMat4*，它在***mat3***类中定义：
+
+    ```js
+    mat3.normalFromMat4( normalMatrix, coordinateMatrix );
+    ```
+
+    在这个函数调用中，*coordinateMatrix*是表示应用于坐标的变换的***mat4***，normalMatrix是一个已经存在的***mat3***。这个函数计算*coordinateMatrix*的旋转/缩放部分的逆转置，并将答案放在*normalMatrix*中。由于我们需要法向量进行光照计算，而光照计算是在眼睛坐标中完成的，我们通常感兴趣的坐标变换是模型视图变换。
+
+    法向量应该发送到着色器程序中，在那里需要它来变换法向量，以便在光照计算中使用。光照需要单位法向量，即长度为一的法向量。法向量矩阵通常不保留它应用的向量的长度，因此将需要规范化变换后的向量。GLSL有内置函数用于规范化向量。实现光照的顶点着色器可能采用以下形式：
+
+    ```js
+    attribute vec3 a_coords;   // 未变换的对象坐标。
+    attribute vec3 normal;     // 法向量。
+    uniform mat4 projection;   // 投影变换矩阵。
+    uniform mat4 modelview;    // 模型视图变换矩阵。
+    uniform mat3 normalMatrix; // 法向量的变换矩阵。
+    .
+    .  // 定义光和材质属性的变量。
+    .
+    void main() {
+        vec4 coords = vec4(a_coords,1.0);  // 为w坐标添加1.0。
+        vec4 eyeCoords = modelview * coords;  // 变换到眼睛坐标。
+        gl_Position = projection * eyeCoords;  // 变换到裁剪坐标。
+        vec3 transformedNormal = normalMatrix*normal;  // 变换法向量。
+        vec3 unitNormal = normalize(transformedNormal);  // 规范化。
+        .
+        .  // 使用eyeCoords, unitNormal和光和材质属性
+        .  // 计算顶点的颜色。
+        .
+    }
+    ```
+
+    我们将在[下一节](./s2.md)中看几个具体的例子。
+
+    我会注意到GLSL ES 3.00（但不是GLSL ES 1.00）有内置函数用于计算矩阵的逆和转置，这使得在着色器中计算法向量矩阵相对容易。然而，在JavaScript方面一次性计算矩阵可能仍然比在每个顶点着色器的执行中计算它更有效率。
+
+.. tab:: 英文
+
+    Normal vectors are essential for lighting calculations ([Subsection 4.1.3](../c4/s1.md#413-法向量)). When a surface is transformed in some way, it seems that the normal vectors to that surface will also change. However, that is not true if the transformation is a translation. A normal vector tells what direction a surface is facing. Translating the surface does not change the direction in which the surface is facing, so the normal vector remains the same. Remember that a vector doesn't have a position, just a length and a direction. So it doesn't even make sense to talk about moving or translating a vector.
+
+    Your first guess might be that the normal vector should be transformed by just the rotation/scaling part of the transformation. The guess is that the correct transformation is represented by the 3-by-3 matrix that is obtained by dropping the right column and the bottom row from the 4-by-4 coordinate transformation matrix. (The right column represents the translation part of the transformation, and the bottom row is only there because implementing translation in a matrix requires the use of homogeneous coordinates to represent vectors. Normal vectors, where translation is not an issue, do not use homogeneous coordinates.) But that can't be correct in all cases. Consider, for example, a shear transform. As this illustration shows, if the normal vectors to an object are subjected to the same shear transformation as the object, the resulting vectors will not be perpendicular to the object:
+
+    ![123](../../en/c7/normal-transform.png)
+
+    Nevertheless, it is possible to get the correct transformation matrix for normal vectors from the coordinate transformation matrix. It turns out that you need to drop the fourth row and the fourth column and then take something called the "inverse transpose" of the resulting 3-by-3 matrix. You don't need to know what that means or why it works. The *glMatrix* library will compute it for you. The function that you need is *normalFromMat4*, and it is defined in the ***mat3*** class:
+
+    ```js
+    mat3.normalFromMat4( normalMatrix, coordinateMatrix );
+    ```
+
+    In this function call, *coordinateMatrix* is the ***mat4*** that represents the transformation that is applied to coordinates, and normalMatrix is a ***mat3*** that already exists. This function computes the inverse transpose of the rotation/scale part of *coordinateMatrix* and places the answer in *normalMatrix*. Since we need normal vectors for lighting calculations, and lighting calculations are done in eye coordinates, the coordinate transformation that we are interested in is usually the modelview transform.
+
+    The normal matrix should be sent to the shader program, where it is needed to transform normal vectors for use in lighting calculations. Lighting requires unit normal vectors, that is, normal vectors of length one. The normal matrix does not in general preserve the length of a vector to which it is applied, so it will be necessary to normalize the transformed vector. GLSL has a built-in function for normalizing vectors. A vertex shader that implements lighting might take the form:
+
+    ```js
+    attribute vec3 a_coords;   // Untransformed object coordinates.
+    attribute vec3 normal;     // Normal vector.
+    uniform mat4 projection;   // Projection transformation matrix.
+    uniform mat4 modelview;    // Modelview transformation matrix.
+    uniform mat3 normalMatrix; // Transform matrix for normal vectors.
+    .
+    .  // Variables to define light and material properties.
+    .
+    void main() {
+        vec4 coords = vec4(a_coords,1.0);  // Add a 1.0 for the w-coordinate.
+        vec4 eyeCoords = modelview * coords;  // Transform to eye coordinates.
+        gl_Position = projection * eyeCoords;  // Transform to clip coordinates.
+        vec3 transformedNormal = normalMatrix*normal;  // Transform normal vector.
+        vec3 unitNormal = normalize(transformedNormal);  // Normalize.
+        .
+        .  // Use eyeCoords, unitNormal, and light and material
+        .  // properties to compute a color for the vertex.
+        .
+    }
+    ```
+
+    We will look at several specific examples in the [next section](./s2.md).
+
+    I will note that GLSL ES 3.00 (but not GLSL ES 1.00) has built-in functions for computing the inverse and the transpose of a matrix, making it fairly easy to compute the normal matrix in the shader. However, it might still be more efficient to compute the matrix once on the JavaScript side, rather than computing it in every execution of the vertex shader.
+
+7.1.5 鼠标旋转
+-------------------------
+
+**Rotation by Mouse**
+
+.. tab:: 中文
+
+    计算机图形学在有用户交互时变得更有趣。通过让用户旋转场景，从不同方向查看，3D体验得到了极大的增强。[未照明的立方体](../../../en/source/webgl/glmatrix-cube-unlit.html)示例允许用户使用键盘旋转场景。但是使用鼠标进行旋转可以给用户提供更好的控制。我编写了两个JavaScript类，***SimpleRotator***和***TrackballRotator***，来实现两种不同的鼠标旋转风格。
+
+    ***SimpleRotator***类在文件[webgl/simple-rotator.js](../../../en/source/webgl/simple-rotator.js)中定义。要在网页上使用它，你需要在一个`<script>`标签中包含该文件，并且你需要创建一个类型为***SimpleRotator***的对象：
+
+    ```js
+    rotator = new SimpleRotator( canvas, callback, viewDistance );
+    ```
+
+    第一个参数必须是一个DOM `<canvas>`元素。它应该是WebGL渲染场景的画布。***SimpleRotator***构造函数为画布添加了一个鼠标事件的监听器；它还处理触摸屏上的触摸事件。构造函数的第二个参数是可选的。如果它被定义，它必须是一个函数。每次旋转变化时，都会调用该函数，不带任何参数。通常，回调函数是渲染画布中图像的函数。第三个参数也是可选的。如果定义了，它必须是一个非负数。它给出了观察者从旋转中心的距离。默认值是零，这对于正交投影可能没问题，但通常不正确。
+
+    ***SimpleRotator***跟踪一个随着用户旋转场景而变化的观察变换。最重要的函数是*rotator.getViewMatrix()*。这个函数返回一个包含16个数字的数组，代表列主序的观察变换矩阵。这个矩阵可以直接使用*gl.uniformMatrix4fv*发送到着色器程序，或者可以作为模型视图矩阵的初始值与*glMatrix*库的函数一起使用。
+
+    示例程序[webgl/cube-with-simple-rotator.html](../../../en/source/webgl/cube-with-simple-rotator.html)是使用***SimpleRotator***的一个例子。该程序使用由glMatrix函数定义的透视投影
+
+    ```js
+    mat4.perspective(projection, Math.PI/8, 1, 8, 12);
+    ```
+
+    旋转器的*viewDistance*必须在投影中的*near*和*far*距离之间。这里，*near*是8，*far*是12，*viewDistance*可以设置为10。旋转器是在初始化期间使用语句创建的
+
+    ```js
+    rotator = new SimpleRotator(canvas, draw, 10);
+    ```
+
+    在*draw()*函数中，在绘制场景之前，从旋转器获取观察变换。这个程序中没有建模变换，所以视图矩阵也是模型视图矩阵。使用glMatrix函数将该矩阵与投影矩阵相乘，并将组合变换矩阵发送到着色器程序：
+
+    ```js
+    let modelview = rotator.getViewMatrix();
+
+    mat4.multiply( modelviewProjection, projection, modelview );
+    gl.uniformMatrix4fv(u_modelviewProjection, false, modelviewProjection );
+    ```
+
+    如果你只是想在自己的程序中使用***SimpleRotator***，你只需要知道这些。我还编写了一个替代的旋转器类***TrackballRotator***，它在JavaScript文件[webgl/trackball-rotator.js](../../../en/source/webgl/trackball-rotator.js)中定义。***TrackballRotator***可以像***SimpleRotator***一样使用。主要的区别在于***TrackballRotator***允许完全自由的旋转，而***SimpleRotator***有一个约束，即y轴在图像中始终保持垂直。
+
+    示例程序[webgl/cube-with-trackball-rotator.html](../../../en/source/webgl/cube-with-trackball-rotator.html)使用了一个TrackballRotator，但除此之外与***SimpleRotator***示例相同。以下演示让你尝试两种类型的旋转器。左侧的立方体使用了***SimpleRotator***，右侧使用了TrackballRotator：
+
+    <iframe src="../../../en/demos/c7/rotators.html" width="660" height="380"></iframe>
+
+    默认情况下，无论原点是否在图像中心，任何类型的旋转器的旋转中心都是原点。然而，你可以通过调用*rotation.setRotationCenter([a,b,c])*来改变旋转中心为点*(a,b,c)*。参数必须是一个包含三个数字的数组。通常，*(a,b,c)*将是图像中心显示的点（在*gluLookAt*中将是视图参考点）。
+
+    ----
+
+    你不需要理解实现旋转器所使用的数学。实际上，***TrackballRotator*** 使用了一些我在这里不想解释的高级技术。然而，***SimpleRotator*** 比较简单，了解它的工作原理是很好的。所以，我将解释***SimpleRotator*** 的视图变换是如何计算的。实际上，考虑整体场景上的相应建模变换会更容易（回想一下建模和视图的等价性[3.3.4小节](../c3/s3.md#334-模型视图转换)）。
+
+    建模变换包括绕y轴的旋转，然后是绕x轴的旋转。旋转的大小随着用户拖动鼠标而变化。左右移动控制绕y轴的旋转，而上下移动控制绕x轴的旋转。绕x轴的旋转被限制在-85到85度的范围内。注意，绕y轴的旋转，然后绕x轴的旋转，在投影到屏幕上时，总是使y轴指向垂直方向。
+
+    假设旋转中心是*(tx,ty,tz)*而不是(0,0,0)。为了实现这一点，在进行旋转之前，我们需要平移场景，将点*(tx,ty,tz)*移动到原点。我们可以通过*(-tx,-ty,-tz)*进行平移来实现。然后，在进行旋转之后，我们需要将原点平移回点*(tx,ty,tz)*。
+
+    最后，如果*viewDistance*不为零，我们需要将场景推离观察者*viewDistance*单位。我们可以通过*(0,0,-viewDistance)*进行平移来实现。如果*d*是视图距离，*ry*是绕y轴的旋转，rx是绕x轴的旋转，那么我们需要对场景应用的建模变换序列如下：
+
+    1. 将视图中心移动到原点：平移*(-tx,-ty,-tz)*。
+    2. 绕y轴旋转ry弧度的场景。
+    3. 绕x轴旋转rx弧度的场景。
+    4. 将原点移回视图中心：平移*(tx,ty,tz)*。
+    5. 将场景远离观察者：平移*(0,0,-d)*。
+
+    请记住，建模变换是按照与代码中发生的顺序相反的顺序应用于对象的，视图矩阵可以通过以下*glMatrix*命令创建：
+
+    ```js
+    viewmatrix = mat4.create();
+    mat4.translate(viewmatrix, viewmatrix, [0,0,-d]);
+    mat4.translate(viewmatrix, viewmatrix, [tx,ty,tz]);
+    mat4.rotateX(viewmatrix, viewmatrix, rx);
+    mat4.rotateY(viewmatrix, viewmatrix, ry);
+    mat4.translate(viewmatrix, viewmatrix, [-tx,-ty,-tz]);
+    ```
+
+    实际上，在我的代码中，我直接根据各个变换的矩阵创建视图矩阵。旋转和平移的4x4矩阵在[3.5.2小节](../c3/s5.md#352-矩阵和变换)中给出。一个***SimpleRotator***的视图矩阵是五个平移和旋转矩阵的矩阵乘积：
+
+    ![123](../../en/c7/matrices-for-simple-rotator.png)
+
+    实际上，实现乘法并不太难。如果你好奇，可以看看JavaScript文件[webgl/simple-rotator.js](../../../en/source/webgl/simple-rotator.js)。
+
+.. tab:: 英文
+
+    Computer graphics is a lot more interesting when there is user interaction. The 3D experience is enhanced considerably just by letting the user rotate the scene, to view it from various directions. The [unlit cube](../../../en/source/webgl/glmatrix-cube-unlit.html) example lets the user rotate the scene using the keyboard. But using the mouse for rotation gives the user much better control. I have written two JavaScript classes, ***SimpleRotator*** and ***TrackballRotator***, to implement two different styles of rotation-by-mouse.
+
+    The ***SimpleRotator*** class is defined in the file [webgl/simple-rotator.js](../../../en/source/webgl/simple-rotator.js). To use it on a web page, you need to include that file in a `<script>` tag, and you need to create an object of type ***SimpleRotator***:
+
+    ```js
+    rotator = new SimpleRotator( canvas, callback, viewDistance );
+    ```
+
+    The first parameter must be a DOM `<canvas>` element. It should be the canvas where WebGL renders the scene. The ***SimpleRotator*** constructor adds a listener for mouse events to the canvas; it also handles touch events on a touchscreen. The second parameter to the constructor is optional. If it is defined, it must be a function. The function is called, with no parameters, each time the rotation changes. Typically, the callback function is the function that renders the image in the canvas. The third parameter is also optional. If defined, it must be a non-negative number. It gives the distance of the viewer from the center of rotation. The default value is zero, which can be OK for an orthographic projection but is usually not correct.
+
+    A ***SimpleRotator*** keeps track of a viewing transformation that changes as the user rotates the scene. The most important function is *rotator.getViewMatrix()*. This function returns an array of 16 numbers representing the matrix for the viewing transformation in column-major order. The matrix can be sent directly to the shader program using *gl.uniformMatrix4fv*, or it can be used with functions from the *glMatrix* library as the initial value of the modelview matrix.
+
+    The sample program [webgl/cube-with-simple-rotator.html](../../../en/source/webgl/cube-with-simple-rotator.html) is an example of using a ***SimpleRotator***. The program uses a perspective projection defined by the glMatrix function
+
+    ```js
+    mat4.perspective(projection, Math.PI/8, 1, 8, 12);
+    ```
+
+    The *viewDistance* for the rotator has to be between the *near* and *far* distances in the projection. Here, *near* is 8 and *far* is 12, and the *viewDistance* can be set to 10. The rotator is created during initialization using the statement
+
+    ```js
+    rotator = new SimpleRotator(canvas, draw, 10);
+    ```
+
+    In the *draw()* function, the viewing transformation is obtained from the rotator before drawing the scene. There is no modeling transformation in this program, so the view matrix is also the modelview matrix. That matrix is multiplied by the projection matrix using a glMatrix function, and the combined transformation matrix is sent to the shader program:
+
+    ```js
+    let modelview = rotator.getViewMatrix();
+
+    mat4.multiply( modelviewProjection, projection, modelview );
+    gl.uniformMatrix4fv(u_modelviewProjection, false, modelviewProjection );
+    ```
+
+    That's really all that you need to know if you just want to use ***SimpleRotator*** in your own programs. I have also written an alternative rotator class, ***TrackballRotator***, which is defined in the JavaScript file [webgl/trackball-rotator.js](../../../en/source/webgl/trackball-rotator.js). A ***TrackballRotator*** can be used in the same way as a ***SimpleRotator***. The main difference is that a ***TrackballRotator*** allows completely free rotation while a ***SimpleRotator*** has the constraint that the y-axis will always remain vertical in the image.
+
+    The sample program [webgl/cube-with-trackball-rotator.html](../../../en/source/webgl/cube-with-trackball-rotator.html) uses a TrackballRotator, but is otherwise identical to the ***SimpleRotator*** example. The following demo lets you try out both types of rotator. A ***SimpleRotator*** is used for the cube on the left, and a TrackballRotator is used on the right:
+
+    <iframe src="../../../en/demos/c7/rotators.html" width="660" height="380"></iframe>
+
+    By default, the center of rotation for either type of rotator is the origin, even if the origin is not at the center of the image. However, you can change the center of rotation to be the point *(a,b,c)* by calling *rotation.setRotationCenter([a,b,c])*. The parameter must be an array of three numbers. Typically, *(a,b,c)* would be the point displayed at the center of the image (the point that would be the view reference point in *gluLookAt*).
+
+    ----
+
+    You don't need to understand the mathematics that is used to implement a rotator. In fact, ***TrackballRotator*** uses some advanced techniques that I don't want to explain here. However, ***SimpleRotator*** is, well, more simple, and it's nice to know how it works. So, I will explain how the view transformation is computed for a ***SimpleRotator***. Actually, it will be easier to think in terms of the corresponding modeling transformation on the scene as a whole. (Recall the equivalence between modeling and viewing ([Subsection 3.3.4](../c3/s3.md#334-模型视图转换)).)
+
+    The modeling transformation includes a rotation about the y-axis followed by a rotation about the x-axis. The sizes of the rotations change as the user drags the mouse. Left/right motion controls the rotation about the y-axis, while up/down motion controls the rotation about the x-axis. The rotation about the x-axis is restricted to lie in the range −85 to 85 degrees. Note that a rotation about the y-axis followed by a rotation about the x-axis always leaves the y-axis pointing in a vertical direction when projected onto the screen.
+
+    Suppose the center of rotation is *(tx,ty,tz)* instead of (0,0,0). To implement that, before doing the rotations, we need to translate the scene to move the point *(tx,ty,tz)* to the origin. We can do that with a translation by *(-tx,-ty,-tz)*. Then, after doing the rotation, we need to translate the origin back to the point *(tx,ty,tz)*.
+
+    Finally, if the *viewDistance* is not zero, we need to push the scene *viewDistance* units away from the viewer. We can do that with a translation by *(0,0,-viewDistance)*. If *d* is the view distance, *ry* is the rotation about the y-axis, and rx is the rotation about the x-axis, then the sequence of modeling transformations that we need to apply to the scene is as follows:
+
+    1. Move the view center to the origin: Translate by (-tx,-ty,-tz).
+    2. Rotate the scene by ry radians about the y-axis.
+    3. Rotate the scene by rx radians about the x-axis.
+    4. Move the origin back to view center: Translate by (tx,ty,tz).
+    5. Move the scene away from the viewer: Translate by (0,0,-d).
+
+    Keeping in mind that modeling transformations are applied to objects in the opposite of the order in which they occur in the code, the view matrix could be created by the following *glMatrix* commands:
+
+    ```js
+    viewmatrix = mat4.create();
+    mat4.translate(viewmatrix, viewmatrix, [0,0,-d]);
+    mat4.translate(viewmatrix, viewmatrix, [tx,ty,tz]);
+    mat4.rotateX(viewmatrix, viewmatrix, rx);
+    mat4.rotateY(viewmatrix, viewmatrix, ry);
+    mat4.translate(viewmatrix, viewmatrix, [-tx,-ty,-tz]);
+    ```
+
+    In fact, in my code, I create the view matrix directly, based on the matrices for the individual transformations. The 4-by-4 matrices for rotation and translation are given in [Subsection 3.5.2](../c3/s5.md#352-矩阵和变换). The view matrix for a ***SimpleRotator*** is the matrix product of five translation and rotation matrices:
+
+    ![123](../../en/c7/matrices-for-simple-rotator.png)
+
+    It's actually not too difficult to implement the multiplication. See the JavaScript file, [webgl/simple-rotator.js](../../../en/source/webgl/simple-rotator.js), if you are curious.

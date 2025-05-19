@@ -1,6 +1,6 @@
 .. _c6:
 
-第 6 章： WebGL 简介
+第 6 章 WebGL 简介
 =====================
 
 **Introduction to WebGL**
@@ -18,6 +18,16 @@
     任何WebGL程序都有两个方面。程序的一部分是用JavaScript编写的，这是网络的编程语言。第二部分是用GLSL编写的，这是一种用于编写在GPU上运行的“着色器”程序的语言。WebGL 1.0使用GLSL ES 1.00（嵌入式系统的OpenGL着色器语言，版本1.00）。WebGL 2.0可以使用GLSL ES 1.00编写的着色器程序，但它也可以使用GLSL ES 3.00，后者有一些重大差异以及新特性。我会尽量清楚地说明我正在讨论的语言。
 
     对于这本关于WebGL的介绍性章节，我们将坚持基本的2D图形。你将了解WebGL程序的结构。你将学到API的JavaScript方面的大部分内容，你将学会如何编写和使用简单的着色器。在[下一章](../c7/index.md)中，我们将转向3D图形，你将了解更多关于GLSL的知识。
+
+    .. toctree::
+       :maxdepth: 1
+       :caption: 第 6 章内容
+
+       s1.rst
+       s2.rst
+       s3.rst
+       s4.rst
+       s5.rst
 
 .. tab:: 英文
 

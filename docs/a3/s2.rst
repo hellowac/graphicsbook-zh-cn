@@ -1,4 +1,7 @@
-# C.2 节  [Inkscape：2D 绘图程序](./a3/s2.md)
+.. _c.2:
+
+C.2 Inkscape 2D绘图程序
+====================================
 
 **Inkscape: A 2D Drawing Program**
 
