@@ -36,57 +36,59 @@
 
 .. tab:: 中文
 
-    要使用WebGL，你需要一个WebGL图形上下文。图形上下文是一个JavaScript对象，其方法实现了WebGL API的JavaScript部分。WebGL在HTML画布中绘制图像，这是与[第2.6节](../c2/s6.md)中介绍的2D API相同的`<canvas>`元素。图形上下文与特定画布相关联。WebGL 1.0的图形上下文可以通过调用函数*canvas.getContext("webgl")*获得，其中*canvas*是表示画布的DOM对象。对于WebGL 2.0，你只需简单地使用*canvas.getContext("webgl2")*。如果无法创建上下文，*getContext()*的返回值将为*null*。因此，获取WebGL图形上下文通常看起来像这样：
+    要使用WebGL，你需要一个WebGL图形上下文。图形上下文是一个JavaScript对象，其方法实现了WebGL API的JavaScript部分。WebGL在HTML画布中绘制图像，这是与 :ref:`c2.6` 中介绍的2D API相同的 `<canvas>` 元素。图形上下文与特定画布相关联。WebGL 1.0的图形上下文可以通过调用函数 *canvas.getContext("webgl")* 获得，其中 *canvas* 是表示画布的DOM对象。对于WebGL 2.0，你只需简单地使用 *canvas.getContext("webgl2")* 。如果无法创建上下文， *getContext()* 的返回值将为 *null* 。因此，获取WebGL图形上下文通常看起来像这样：
 
-    ```js
-    canvas = document.getElementById("webglcanvas");
-    gl = canvas.getContext("webgl");  // 或许是 canvas.getContext("webgl2")
-    if ( ! gl ) {
-        throw new Error("WebGL not supported; can't create graphics context.");
-    }
-    ```
+    .. code-block:: js
 
-    在这里，第一行获取HTML画布的引用，WebGL将在整个程序中用于绘图。变量名*gl*由你决定，但在我的讨论中，我将始终使用gl来表示WebGL图形上下文。此代码假定网页的HTML源包含一个id="webglcanvas"的画布元素，例如：
+        canvas = document.getElementById("webglcanvas");
+        gl = canvas.getContext("webgl");  // 或许是 canvas.getContext("webgl2")
+        if ( ! gl ) {
+            throw new Error("WebGL not supported; can't create graphics context.");
+        }
 
-    ```html
-    <canvas width="800" height="600" id="webglcanvas"></canvas>
-    ```
+    在这里，第一行获取HTML画布的引用，WebGL将在整个程序中用于绘图。变量名 *gl* 由你决定，但在我的讨论中，我将始终使用gl来表示WebGL图形上下文。此代码假定网页的HTML源包含一个id="webglcanvas"的画布元素，例如：
 
-    在上面的代码第二行中，如果网络浏览器不支持*getContext*的"webgl"参数，*canvas.getContext("webgl")*将返回*null*。由于在JavaScript中，*null*在布尔上下文中被视为*false*，第三行测试返回值是否为*null*。在这种情况下，代码抛出一个错误，这可以在其他地方处理，可能是通过向用户显示错误消息。此外，如果浏览器根本没有对`<canvas>`的支持，代码将抛出异常。我的程序通常使用以下形式的初始化函数：
+    .. code-block:: html
 
-    ```js
-    function init() {
-        try {
-            canvas = document.getElementById("webglcanvas");
-            gl = canvas.getContext("webgl");  // 或 "webgl2"
-            if ( ! gl ) {
-                throw new Error("WebGL not supported.");
+        <canvas width="800" height="600" id="webglcanvas"></canvas>
+    
+
+    在上面的代码第二行中，如果网络浏览器不支持 *getContext* 的"webgl"参数， *canvas.getContext("webgl")* 将返回 *null* 。由于在JavaScript中， *null* 在布尔上下文中被视为 *false* ，第三行测试返回值是否为 *null* 。在这种情况下，代码抛出一个错误，这可以在其他地方处理，可能是通过向用户显示错误消息。此外，如果浏览器根本没有对 `<canvas>` 的支持，代码将抛出异常。我的程序通常使用以下形式的初始化函数：
+
+    .. code-block:: js
+
+        function init() {
+            try {
+                canvas = document.getElementById("webglcanvas");
+                gl = canvas.getContext("webgl");  // 或 "webgl2"
+                if ( ! gl ) {
+                    throw new Error("WebGL not supported.");
+                }
             }
-        }
-        catch (e) {
+            catch (e) {
+                .
+                .  // 报告错误
+                .
+                return;
+            }
+            initGL();  // 一个初始化WebGL图形上下文的函数
             .
-            .  // 报告错误
+            .  // 其他JavaScript初始化
             .
-            return;
         }
-        initGL();  // 一个初始化WebGL图形上下文的函数
-        .
-        .  // 其他JavaScript初始化
-        .
-    }
-    ```
 
-    在这个函数中，*canvas*和*gl*是全局变量。*initGL()*是在脚本中其他地方定义的函数，用于初始化图形上下文，包括创建和安装着色器程序。*init()*函数应在页面加载时调用。例如，你可以通过在脚本中分配"window.onload = init;"来安排。
+    在这个函数中， *canvas* 和 *gl* 是全局变量。 *initGL()* 是在脚本中其他地方定义的函数，用于初始化图形上下文，包括创建和安装着色器程序。 *init()* 函数应在页面加载时调用。例如，你可以通过在脚本中分配"window.onload = init;"来安排。
 
-    一旦创建了图形上下文*gl*，就可以使用它来调用WebGL API中的函数。例如，启用深度测试的命令，在OpenGL中写为*glEnable(GL_DEPTH_TEST)*，变成了：
+    一旦创建了图形上下文 *gl* ，就可以使用它来调用WebGL API中的函数。例如，启用深度测试的命令，在OpenGL中写为 *glEnable(GL_DEPTH_TEST)* ，变成了：
 
-    ```js
-    gl.enable( gl.DEPTH_TEST );
-    ```
+
+    .. code-block:: js
+
+        gl.enable( gl.DEPTH_TEST );
 
     请注意，API中的函数和常量都是通过图形上下文引用的。图形上下文的名称"gl"是约定俗成的，但请记住，它只是一个普通的JavaScript变量，其名称由程序员决定。
 
-    （一些非常旧的浏览器需要*canvas.getContext("experimental-webgl")*来创建WebGL 1.0上下文。这包括Internet Explorer 11，但到现在为止，没有人应该使用Internet Explorer。）
+    （一些非常旧的浏览器需要 *canvas.getContext("experimental-webgl")* 来创建WebGL 1.0上下文。这包括Internet Explorer 11，但到现在为止，没有人应该使用Internet Explorer。）
 
 .. tab:: 英文
 
@@ -151,7 +153,7 @@
 
     使用WebGL绘图需要一个着色器程序，它由顶点着色器和片段着色器组成。着色器是用GLSL编程语言的某个版本编写的。WebGL 1.0使用GLSL ES 1.00，而WebGL 2.0可以使用GLSL ES 1.00或GLSL ES 3.00。这里的讨论是关于GLSL ES 1.00的；我稍后会解释3.00版本中的一些变化。
 
-    GLSL基于C编程语言。顶点着色器和片段着色器是分开的程序，每个程序都有自己的*main()*函数。这两个着色器分别编译，然后“链接”以产生完整的着色器程序。WebGL的JavaScript API包括用于编译着色器然后链接它们的函数。要使用这些函数，着色器的源代码必须是JavaScript字符串。让我们看看它是如何工作的。创建顶点着色器需要三个步骤。
+    GLSL基于C编程语言。顶点着色器和片段着色器是分开的程序，每个程序都有自己的 *main()* 函数。这两个着色器分别编译，然后“链接”以产生完整的着色器程序。WebGL的JavaScript API包括用于编译着色器然后链接它们的函数。要使用这些函数，着色器的源代码必须是JavaScript字符串。让我们看看它是如何工作的。创建顶点着色器需要三个步骤。
 
     ```js
     let vertexShader = gl.createShader( gl.VERTEX_SHADER );
@@ -159,7 +161,7 @@
     gl.compileShader( vertexShader );
     ```
 
-    这里使用的函数是WebGL图形上下文gl的一部分，参数*vertexShaderSource*是包含着色器源代码的字符串。源代码中的错误会导致编译失败，但不会产生任何提示。你需要通过调用函数
+    这里使用的函数是WebGL图形上下文gl的一部分，参数 *vertexShaderSource* 是包含着色器源代码的字符串。源代码中的错误会导致编译失败，但不会产生任何提示。你需要通过调用函数
 
     ```js
     gl.getShaderParameter( vertexShader, gl.COMPILE_STATUS )
@@ -217,7 +219,7 @@
     }
     ```
 
-    还有一个步骤：你必须告诉WebGL上下文使用程序。如果*prog*是由上述函数返回的程序标识符，这是通过调用
+    还有一个步骤：你必须告诉WebGL上下文使用程序。如果 *prog* 是由上述函数返回的程序标识符，这是通过调用
 
     ```js
     gl.useProgram( prog );
@@ -225,11 +227,11 @@
 
     完成的。
 
-    可以创建多个着色器程序。然后，你可以随时通过调用*gl.useProgram*在不同程序之间切换，甚至在渲染图像的过程中。（例如，*Three.js*为每种类型的***Material***使用不同的程序。）
+    可以创建多个着色器程序。然后，你可以随时通过调用 *gl.useProgram* 在不同程序之间切换，甚至在渲染图像的过程中。（例如， *Three.js* 为每种类型的 **Material** 使用不同的程序。）
 
-    建议在初始化过程中创建所需的任何着色器程序。虽然*gl.useProgram*是一个快速操作，但编译和链接相当慢，所以最好避免在绘制图像的过程中创建新程序。
+    建议在初始化过程中创建所需的任何着色器程序。虽然 *gl.useProgram* 是一个快速操作，但编译和链接相当慢，所以最好避免在绘制图像的过程中创建新程序。
 
-    不再需要的着色器和程序可以被删除以释放它们消耗的资源。使用函数*gl.deleteShader(shader)*和*gl.deleteProgram(program)*。
+    不再需要的着色器和程序可以被删除以释放它们消耗的资源。使用函数 *gl.deleteShader(shader)* 和 *gl.deleteProgram(program)* 。
 
 .. tab:: 英文
 
@@ -307,7 +309,7 @@
     gl.useProgram( prog );
     ```
 
-    It is possible to create several shader programs. You can then switch from one program to another at any time by calling *gl.useProgram*, even in the middle of rendering an image. (*Three.js*, for example, uses a different program for each type of ***Material***.)
+    It is possible to create several shader programs. You can then switch from one program to another at any time by calling *gl.useProgram*, even in the middle of rendering an image. (*Three.js*, for example, uses a different program for each type of **Material**.)
 
     It is advisable to create any shader programs that you need as part of initialization. Although *gl.useProgram* is a fast operation, compiling and linking are rather slow, so it's better to avoid creating new programs while in the process of drawing an image.
 
@@ -322,9 +324,9 @@
 
     WebGL图形管线渲染图像。定义图像的数据来自JavaScript。当它通过管线时，它会被当前的顶点着色器和片段着色器以及管线的固定功能阶段处理。你需要了解如何将数据通过JavaScript放置到管线中，以及数据在通过管线时是如何被处理的。
 
-    WebGL中的基本操作是绘制一个几何原语。WebGL只使用在[3.1.1小节](../c3/s1.md#311--opengl基元)中介绍的OpenGL原语中的七个。用于绘制四边形和多边形的原语已被移除。剩余的原语绘制点、线段和三角形。在WebGL中，七种类型的原语由常量*gl.POINTS*、*gl.LINES*、*gl.LINE_STRIP*、*gl.LINE_LOOP*、*gl.TRIANGLES*、*gl.TRIANGLE_STRIP*和*gl.TRIANGLE_FAN*标识，其中*gl*是WebGL图形上下文。
+    WebGL中的基本操作是绘制一个几何原语。WebGL只使用在[3.1.1小节](../c3/s1.md#311--opengl基元)中介绍的OpenGL原语中的七个。用于绘制四边形和多边形的原语已被移除。剩余的原语绘制点、线段和三角形。在WebGL中，七种类型的原语由常量 *gl.POINTS* 、 *gl.LINES* 、 *gl.LINE_STRIP* 、 *gl.LINE_LOOP* 、 *gl.TRIANGLES* 、 *gl.TRIANGLE_STRIP* 和 *gl.TRIANGLE_FAN* 标识，其中 *gl* 是WebGL图形上下文。
 
-    当WebGL用于绘制一个原语时，可以为原语提供两类数据。这两种数据分别称为**属性变量**（或简称“属性”）和**统一变量**（或简称“统一”）。一个原语由其类型和顶点列表定义。属性和统一的区别在于，统一变量有一个单一的值，对整个原语都是相同的，而属性变量的值可以对不同的顶点不同。
+    当WebGL用于绘制一个原语时，可以为原语提供两类数据。这两种数据分别称为 **属性变量** （或简称“属性”）和 **统一变量** （或简称“统一”）。一个原语由其类型和顶点列表定义。属性和统一的区别在于，统一变量有一个单一的值，对整个原语都是相同的，而属性变量的值可以对不同的顶点不同。
 
     应该始终指定的一个属性是顶点的坐标。顶点坐标必须是属性，因为原语中的每个顶点都有自己的坐标集。另一个可能的属性是颜色。我们已经看到，OpenGL允许你为原语的每个顶点指定不同的颜色。在WebGL中，你也可以这样做，这种情况下颜色将是一个属性。另一方面，如果你希望整个原语具有相同的“统一”颜色，在这种情况下，颜色可以是统一变量。其他可能根据需要是属性或统一的数量包括法向量和材质属性。如果使用，纹理坐标几乎肯定是属性，因为让原语中的所有顶点具有相同的纹理坐标没有多大意义。如果对原语应用几何变换，它很自然地被表示为统一变量。
 
@@ -332,9 +334,9 @@
 
     为了理解这一点，我们需要更详细地看看管线中发生了什么。在绘制原语时，JavaScript程序会为着色器程序中的任何属性和统一指定值。对于每个属性，它将指定一个值数组，每个顶点一个。对于每个统一，它将指定一个单一的值。它必须在绘制原语之前将这些值发送到GPU。然后，可以通过调用单个JavaScript函数来绘制原语。在这一点上，GPU接管并执行着色器程序。在绘制原语时，GPU会为每个顶点调用一次顶点着色器。要处理的顶点的属性值被作为输入传递到顶点着色器。统一变量的值也会传递到顶点着色器。这是通过将属性和统一表示为顶点着色器程序中的全局变量来实现的。在调用给定顶点的着色器之前，GPU会适当地设置这些变量的值。
 
-    作为其输出之一，顶点着色器必须指定顶点在裁剪坐标系中的坐标（见[3.3.1小节](../c3/s3.md#331-多种坐标系)）。它通过给一个名为*gl_Position*的特殊变量赋值来实现。位置通常通过对表示对象坐标系中坐标的属性应用变换来计算，但位置的计算方式完全取决于程序员。
+    作为其输出之一，顶点着色器必须指定顶点在裁剪坐标系中的坐标（见[3.3.1小节](../c3/s3.md#331-多种坐标系)）。它通过给一个名为 *gl_Position* 的特殊变量赋值来实现。位置通常通过对表示对象坐标系中坐标的属性应用变换来计算，但位置的计算方式完全取决于程序员。
 
-    在计算了原语中所有顶点的位置之后，管线中的一个固定功能阶段会裁剪掉坐标超出有效裁剪坐标范围（每个坐标轴上的-1到1）的原语部分。然后，原语被光栅化；也就是说，确定哪些像素位于原语内部。然后，GPU会为原语中的每个像素调用一次片段着色器。片段着色器可以访问统一变量（但不能访问属性）。它还可以使用一个名为*gl_FragCoord*的特殊变量，其中包含像素的裁剪坐标。像素坐标是通过插值顶点着色器指定的*gl_Position*值来计算的。插值是由位于顶点着色器和片段着色器之间的另一个固定功能阶段完成的。
+    在计算了原语中所有顶点的位置之后，管线中的一个固定功能阶段会裁剪掉坐标超出有效裁剪坐标范围（每个坐标轴上的-1到1）的原语部分。然后，原语被光栅化；也就是说，确定哪些像素位于原语内部。然后，GPU会为原语中的每个像素调用一次片段着色器。片段着色器可以访问统一变量（但不能访问属性）。它还可以使用一个名为 *gl_FragCoord* 的特殊变量，其中包含像素的裁剪坐标。像素坐标是通过插值顶点着色器指定的 *gl_Position* 值来计算的。插值是由位于顶点着色器和片段着色器之间的另一个固定功能阶段完成的。
 
     除了坐标之外，其他数量也可以以类似的方式工作。也就是说，顶点着色器为原语的每个顶点计算数量的值。插值器采用在顶点着色器中为原语的每个顶点生成的值，并计算原语中每个像素的值。当片段着色器被调用以处理给定像素时，变化变量的值就是该像素的插值值。片段着色器可以在自己的计算中使用该值。
 
@@ -342,9 +344,9 @@
 
     变化变量的存在是为了从顶点着色器向片段着色器通信数据。它们在着色器源代码中定义。它们不在使用API的JavaScript方面使用或引用。请注意，决定定义哪些变化变量以及如何处理它们完全取决于程序员。
 
-    我们几乎已经到了管线的末尾。在所有这些之后，片段着色器的工作仅仅是为像素指定一种颜色。它通过给一个名为*gl_FragColor*的特殊变量赋值来实现。然后，该值将被用在管线的剩余固定功能阶段中。
+    我们几乎已经到了管线的末尾。在所有这些之后，片段着色器的工作仅仅是为像素指定一种颜色。它通过给一个名为 *gl_FragColor* 的特殊变量赋值来实现。然后，该值将被用在管线的剩余固定功能阶段中。
 
-    总结：程序的JavaScript方面将属性和统一变量的值发送到GPU，然后发出绘制原语的命令。GPU为每个顶点执行一次顶点着色器。顶点着色器可以使用属性和统一的值。它给*gl_Position*和着色器中的任何变化变量赋值。在裁剪、光栅化和插值之后，GPU为原语中的每个像素执行一次片段着色器。片段着色器可以使用变化变量、统一和*gl_FragCoord*的值。它计算*gl_FragColor*的值。这张图总结了数据的流向：
+    总结：程序的JavaScript方面将属性和统一变量的值发送到GPU，然后发出绘制原语的命令。GPU为每个顶点执行一次顶点着色器。顶点着色器可以使用属性和统一的值。它给 *gl_Position* 和着色器中的任何变化变量赋值。在裁剪、光栅化和插值之后，GPU为原语中的每个像素执行一次片段着色器。片段着色器可以使用变化变量、统一和 *gl_FragCoord* 的值。它计算 *gl_FragColor* 的值。这张图总结了数据的流向：
 
     ![123](../../en/c6/webgl-dataflow.png)
 
@@ -352,7 +354,7 @@
 
     ---
 
-    **对于GLSL ES 3.00**，相同的图适用，只是没有特殊的变量*gl_FragColor*。相反，片段着色器必须定义自己的输出变量来表示颜色。在GLSL ES 1.00中，声明实际着色器程序源代码中的变量时使用“attribute”和“varying”。在3.00版本的源代码中，属性变量变为“in”变量，因为它们是顶点着色器的输入，而变化变量在顶点着色器中变为“out”变量，在片段着色器中变为“in”变量。变量*gl_FragColor*被片段着色器中的“out”变量替换。实际上，“in”和“out”的使用更适合具有附加管线阶段的系统，其中一个阶段的“out”变量可以成为下一个阶段的“in”变量。无论如何，在讨论WebGL时，即使使用GLSL ES 3.00，人们仍然使用属性和变化这些术语。
+    **对于GLSL ES 3.00** ，相同的图适用，只是没有特殊的变量 *gl_FragColor* 。相反，片段着色器必须定义自己的输出变量来表示颜色。在GLSL ES 1.00中，声明实际着色器程序源代码中的变量时使用“attribute”和“varying”。在3.00版本的源代码中，属性变量变为“in”变量，因为它们是顶点着色器的输入，而变化变量在顶点着色器中变为“out”变量，在片段着色器中变为“in”变量。变量 *gl_FragColor* 被片段着色器中的“out”变量替换。实际上，“in”和“out”的使用更适合具有附加管线阶段的系统，其中一个阶段的“out”变量可以成为下一个阶段的“in”变量。无论如何，在讨论WebGL时，即使使用GLSL ES 3.00，人们仍然使用属性和变化这些术语。
 
 .. tab:: 英文
 
@@ -397,23 +399,23 @@
 
 .. tab:: 中文
 
-    是时候开始看一些实际的WebGL代码了。我们将首先关注JavaScript方面，但你还需要了解一些GLSL的基本知识。GLSL有一些熟悉的基本数据类型：***float***、***int***和***bool***。但它也有一些新的预定义数据类型来表示向量和矩阵。例如，数据类型*vec3*表示3D中的向量。*vec3*变量的值是三个浮点数的列表。类似地，还有数据类型*vec2*和*vec4*来表示2D和4D向量。
+    是时候开始看一些实际的WebGL代码了。我们将首先关注JavaScript方面，但你还需要了解一些GLSL的基本知识。GLSL有一些熟悉的基本数据类型： **float** 、 **int** 和 **bool** 。但它也有一些新的预定义数据类型来表示向量和矩阵。例如，数据类型 *vec3* 表示3D中的向量。 *vec3* 变量的值是三个浮点数的列表。类似地，还有数据类型 *vec2* 和 *vec4* 来表示2D和4D向量。
 
-    在顶点着色器中的全局变量声明可以标记为*attribute*、*varying*或*uniform*（或者在GLSL ES 3.00中作为*in*、*out*或*uniform*，但再说一次，我们将暂时坚持使用1.00版本）。没有任何这些修饰符的变量声明定义了一个局部于顶点着色器的变量。片段着色器中的全局变量可以是*uniform*或*varying*，也可以不加修饰符声明。应在两个着色器中声明变化变量，使用相同的名称和类型。这允许GLSL编译器确定在着色器程序中使用了哪些属性、统一和变化变量。
+    在顶点着色器中的全局变量声明可以标记为 *attribute* 、 *varying* 或 *uniform* （或者在GLSL ES 3.00中作为 *in* 、 *out* 或 *uniform* ，但再说一次，我们将暂时坚持使用1.00版本）。没有任何这些修饰符的变量声明定义了一个局部于顶点着色器的变量。片段着色器中的全局变量可以是 *uniform* 或 *varying* ，也可以不加修饰符声明。应在两个着色器中声明变化变量，使用相同的名称和类型。这允许GLSL编译器确定在着色器程序中使用了哪些属性、统一和变化变量。
 
-    程序的JavaScript方面需要一种方法来引用特定的属性和统一变量。函数*gl.getUniformLocation*可以用来获取着色器程序中统一变量的引用，其中*gl*指的是WebGL图形上下文。它接受两个参数：由*gl.createProgram*返回的编译程序的标识符，以及着色器源代码中统一变量的名称。例如，如果prog标识了一个具有名为*color*的统一变量的着色器程序，那么可以使用以下JavaScript语句获取*color*变量的位置：
+    程序的JavaScript方面需要一种方法来引用特定的属性和统一变量。函数 *gl.getUniformLocation* 可以用来获取着色器程序中统一变量的引用，其中 *gl* 指的是WebGL图形上下文。它接受两个参数：由 *gl.createProgram* 返回的编译程序的标识符，以及着色器源代码中统一变量的名称。例如，如果prog标识了一个具有名为 *color* 的统一变量的着色器程序，那么可以使用以下JavaScript语句获取 *color* 变量的位置：
 
     ```js
     colorUniformLoc = gl.getUniformLocation( prog, "color" );
     ```
 
-    然后可以使用位置*colorUniformLoc*来设置统一变量的值。例如：
+    然后可以使用位置 *colorUniformLoc* 来设置统一变量的值。例如：
 
     ```js
     gl.uniform3f( colorUniformLoc, 1, 0, 0 );
     ```
 
-    函数*gl.uniform3f*是一系列可以作为*gl.uniform**组的函数之一。这类似于OpenGL 1.1中的*glVertex**系列。*代表一个后缀，表示为变量提供的值的数量和类型。在这种情况下，*gl.uniform3f*接受三个浮点值，适用于设置类型为vec3的统一变量的值。值的数量可以是1、2、3或4。类型可以是“f”表示浮点数或“i”表示整数。（对于布尔统一变量，应使用*gl.uniform1i*并将0传递以表示*false*或1以表示*true*。）如果在后缀中添加“v”，则值以数组的形式传递。例如，
+    函数 *gl.uniform3f* 是一系列可以作为 *gl.uniform\** 组的函数之一。这类似于OpenGL 1.1中的 *glVertex\** 系列。 \*代表一个后缀，表示为变量提供的值的数量和类型。在这种情况下，*gl.uniform3f* 接受三个浮点值，适用于设置类型为vec3的统一变量的值。值的数量可以是1、2、3或4。类型可以是“f”表示浮点数或“i”表示整数。（对于布尔统一变量，应使用 *gl.uniform1i* 并将0传递以表示 *false* 或1以表示 *true* 。）如果在后缀中添加“v”，则值以数组的形式传递。例如，
 
     ```js
     gl.uniform3fv( colorUniformLoc, [ 1, 0, 0 ] );
@@ -421,13 +423,13 @@
 
     还有另一组函数用于设置统一矩阵变量的值。我们稍后会讲到。
 
-    统一变量的值可以在着色器程序编译后的任何时间设置，并且该值一直有效，直到通过另一次调用*gl.uniform**来更改。
+    统一变量的值可以在着色器程序编译后的任何时间设置，并且该值一直有效，直到通过另一次调用 *gl.uniform\** 来更改。
 
-    如果传递给*gl.getUniformLocation*作为第二个参数的字符串不是着色器程序中的统一变量名称，那么返回值将是*null*。如果统一变量在着色器源代码中声明但不在程序中“活跃”，则返回值也可能是*null*。一个声明但没有实际使用的变量不是活跃的，它在编译程序中不会获得位置。这偶尔给我带来了问题，当我为了调试目的注释掉着色器程序的一部分时，并不小心通过这样做使一个变量变为非活跃状态。
+    如果传递给 *gl.getUniformLocation* 作为第二个参数的字符串不是着色器程序中的统一变量名称，那么返回值将是 *null* 。如果统一变量在着色器源代码中声明但不在程序中“活跃”，则返回值也可能是 *null* 。一个声明但没有实际使用的变量不是活跃的，它在编译程序中不会获得位置。这偶尔给我带来了问题，当我为了调试目的注释掉着色器程序的一部分时，并不小心通过这样做使一个变量变为非活跃状态。
 
 .. tab:: 英文
 
-    It's time to start looking at some actual WebGL code. We will concentrate on the JavaScript side first, but you need to know a little about GLSL. GLSL has some familiar basic data types: ***float***, ***int***, and ***bool***. But it also has some new predefined data types to represent vectors and matrices. For example, the data type *vec3* represents a vector in 3D. The value of a *vec3* variable is a list of three floating-point numbers. Similarly, there are data types *vec2* and *vec4* to represent 2D and 4D vectors.
+    It's time to start looking at some actual WebGL code. We will concentrate on the JavaScript side first, but you need to know a little about GLSL. GLSL has some familiar basic data types: **float**, **int**, and **bool**. But it also has some new predefined data types to represent vectors and matrices. For example, the data type *vec3* represents a vector in 3D. The value of a *vec3* variable is a list of three floating-point numbers. Similarly, there are data types *vec2* and *vec4* to represent 2D and 4D vectors.
 
     Global variable declarations in a vertex shader can be marked as *attribute*, *varying*, or *uniform* (or as *in*, out, or *uniform* in GLSL ES 3.00, but again, we will stick to the 1.00 version for the time being). A variable declaration with none of these modifiers defines a variable that is local to the vertex shader. Global variables in a fragment can optionally be *uniform* or *varying*, or they can be declared without a modifier. A varying variable should be declared in both shaders, with the same name and type. This allows the GLSL compiler to determine what attribute, uniform, and varying variables are used in a shader program.
 
@@ -462,23 +464,23 @@
 
 .. tab:: 中文
 
-    现在让我们来看看一些实际的WebGL代码。我们将首先关注JavaScript方面，但你还需要了解一些GLSL的基本知识。GLSL有一些熟悉的基本数据类型：***float***、***int***和***bool***。但它也有一些新的预定义数据类型来表示向量和矩阵。例如，数据类型*vec3*表示3D中的向量。*vec3*变量的值是三个浮点数的列表。类似地，还有数据类型*vec2*和*vec4*来表示2D和4D向量。
+    现在让我们来看看一些实际的WebGL代码。我们将首先关注JavaScript方面，但你还需要了解一些GLSL的基本知识。GLSL有一些熟悉的基本数据类型： **float** 、 **int** 和 **bool** 。但它也有一些新的预定义数据类型来表示向量和矩阵。例如，数据类型 *vec3* 表示3D中的向量。 *vec3* 变量的值是三个浮点数的列表。类似地，还有数据类型 *vec2* 和 *vec4* 来表示2D和4D向量。
 
-    在顶点着色器中的全局变量声明可以标记为*attribute*、*varying*或*uniform*（或者在GLSL ES 3.00中作为*in*、*out*或*uniform*，但再说一次，我们将暂时坚持使用1.00版本）。没有任何这些修饰符的变量声明定义了一个局部于顶点着色器的变量。片段着色器中的全局变量可以是*uniform*或*varying*，也可以不加修饰符声明。应在两个着色器中声明变化变量，使用相同的名称和类型。这允许GLSL编译器确定在着色器程序中使用了哪些属性、统一和变化变量。
+    在顶点着色器中的全局变量声明可以标记为 *attribute* 、 *varying* 或 *uniform* （或者在GLSL ES 3.00中作为 *in* 、 *out* 或 *uniform* ，但再说一次，我们将暂时坚持使用1.00版本）。没有任何这些修饰符的变量声明定义了一个局部于顶点着色器的变量。片段着色器中的全局变量可以是 *uniform* 或 *varying* ，也可以不加修饰符声明。应在两个着色器中声明变化变量，使用相同的名称和类型。这允许GLSL编译器确定在着色器程序中使用了哪些属性、统一和变化变量。
 
-    程序的JavaScript方面需要一种方法来引用特定的属性和统一变量。函数*gl.getUniformLocation*可以用来获取着色器程序中统一变量的引用，其中*gl*指的是WebGL图形上下文。它接受两个参数：由*gl.createProgram*返回的编译程序的标识符，以及着色器源代码中统一变量的名称。例如，如果prog标识了一个具有名为*color*的统一变量的着色器程序，那么可以使用以下JavaScript语句获取*color*变量的位置：
+    程序的JavaScript方面需要一种方法来引用特定的属性和统一变量。函数 *gl.getUniformLocation* 可以用来获取着色器程序中统一变量的引用，其中 *gl* 指的是WebGL图形上下文。它接受两个参数：由 *gl.createProgram* 返回的编译程序的标识符，以及着色器源代码中统一变量的名称。例如，如果prog标识了一个具有名为 *color* 的统一变量的着色器程序，那么可以使用以下JavaScript语句获取 *color* 变量的位置：
 
     ```js
     colorUniformLoc = gl.getUniformLocation( prog, "color" );
     ```
 
-    然后可以使用位置*colorUniformLoc*来设置统一变量的值。例如：
+    然后可以使用位置 *colorUniformLoc* 来设置统一变量的值。例如：
 
     ```js
     gl.uniform3f( colorUniformLoc, 1, 0, 0 );
     ```
 
-    函数*gl.uniform3f*是一系列可以作为*gl.uniform**组的函数之一。这类似于OpenGL 1.1中的*glVertex**系列。*代表一个后缀，表示为变量提供的值的数量和类型。在这种情况下，*gl.uniform3f*接受三个浮点值，适用于设置类型为vec3的统一变量的值。值的数量可以是1、2、3或4。类型可以是“f”表示浮点数或“i”表示整数。（对于布尔统一变量，应使用*gl.uniform1i*并将0传递以表示*false*或1以表示*true*。）如果在后缀中添加“v”，则值以数组的形式传递。例如，
+    函数 *gl.uniform3f* 是一系列可以作为 *gl.uniform\** 组的函数之一。这类似于OpenGL 1.1中的 *glVertex\** 系列。\*代表一个后缀，表示为变量提供的值的数量和类型。在这种情况下， *gl.uniform3f* 接受三个浮点值，适用于设置类型为vec3的统一变量的值。值的数量可以是1、2、3或4。类型可以是“f”表示浮点数或“i”表示整数。（对于布尔统一变量，应使用 *gl.uniform1i* 并将0传递以表示 *false* 或1以表示 *true* 。）如果在后缀中添加“v”，则值以数组的形式传递。例如，
 
     ```js
     gl.uniform3fv( colorUniformLoc, [ 1, 0, 0 ] );
@@ -486,19 +488,19 @@
 
     还有另一组函数用于设置统一矩阵变量的值。我们稍后会讲到。
 
-    统一变量的值可以在着色器程序编译后的任何时间设置，并且该值一直有效，直到通过另一次调用*gl.uniform**来更改。
+    统一变量的值可以在着色器程序编译后的任何时间设置，并且该值一直有效，直到通过另一次调用 *gl.uniform\** 来更改。
 
-    如果传递给*gl.getUniformLocation*作为第二个参数的字符串不是着色器程序中的统一变量名称，那么返回值将是*null*。如果统一变量在着色器源代码中声明但不在程序中“活跃”，则返回值也可能是*null*。一个声明但没有实际使用的变量不是活跃的，它在编译程序中不会获得位置。这偶尔给我带来了问题，当我为了调试目的注释掉着色器程序的一部分时，并不小心通过这样做使一个变量变为非活跃状态。
+    如果传递给 *gl.getUniformLocation* 作为第二个参数的字符串不是着色器程序中的统一变量名称，那么返回值将是 *null* 。如果统一变量在着色器源代码中声明但不在程序中“活跃”，则返回值也可能是 *null* 。一个声明但没有实际使用的变量不是活跃的，它在编译程序中不会获得位置。这偶尔给我带来了问题，当我为了调试目的注释掉着色器程序的一部分时，并不小心通过这样做使一个变量变为非活跃状态。
 
     现在让我们来看看属性，情况就更加复杂了，因为属性在原语中的每个顶点可以取不同的值。基本思想是在单个操作中将属性的完整数据集从JavaScript数组复制到GPU可以访问的内存中。不幸的是，设置使该操作成为可能的过程并不简单。
 
-    首先，普通的JavaScript数组不适合这个目的。为了效率，我们需要数据存储在连续内存位置的数值块中，而常规的JavaScript数组没有这种形式。为了解决这个问题，JavaScript引入了一种新型数组，称为类型化数组。我们在[第5章](../c5/index.md)中使用three.js时遇到了类型化数组。在[5.1.4小节](../c5/s1.md#514-物体几何形状材料)中有类型化数组的简短介绍。类型化数组有固定长度，在创建时分配，并且只能保存指定类型的数字。不同类型的类型化数组用于不同类型的数值数据。现在我们将使用***Float32Array***，它保存32位浮点数。一旦你有了类型化数组，你可以像使用常规数组一样使用它，但是当你给***Float32Array***的元素分配任何值时，该值会被转换为32位浮点数。如果值不能被解释为数字，它将被转换为NaN，即“不是一个数字”的值。
+    首先，普通的JavaScript数组不适合这个目的。为了效率，我们需要数据存储在连续内存位置的数值块中，而常规的JavaScript数组没有这种形式。为了解决这个问题，JavaScript引入了一种新型数组，称为类型化数组。我们在[第5章](../c5/index.md)中使用three.js时遇到了类型化数组。在[5.1.4小节](../c5/s1.md#514-物体几何形状材料)中有类型化数组的简短介绍。类型化数组有固定长度，在创建时分配，并且只能保存指定类型的数字。不同类型的类型化数组用于不同类型的数值数据。现在我们将使用 **Float32Array** ，它保存32位浮点数。一旦你有了类型化数组，你可以像使用常规数组一样使用它，但是当你给 **Float32Array** 的元素分配任何值时，该值会被转换为32位浮点数。如果值不能被解释为数字，它将被转换为NaN，即“不是一个数字”的值。
 
     在数据可以从JavaScript传输到属性变量之前，它必须被放置到类型化数组中。如果可能的话，为了效率，你应该直接使用类型化数组，而不是使用常规的JavaScript数组，然后复制数据到类型化数组中。
 
     ---
 
-    在WebGL中使用属性数据，必须将其传输到VBO（顶点缓冲对象）。VBO在OpenGL 1.5中引入，并在[3.4.4小节](../c3/s4.md#344-显示列表和vbo)中简要讨论过。VBO是GPU可以访问的内存块。要使用VBO，你必须首先调用函数*gl.createBuffer()*来创建它。例如，
+    在WebGL中使用属性数据，必须将其传输到VBO（顶点缓冲对象）。VBO在OpenGL 1.5中引入，并在[3.4.4小节](../c3/s4.md#344-显示列表和vbo)中简要讨论过。VBO是GPU可以访问的内存块。要使用VBO，你必须首先调用函数 *gl.createBuffer()* 来创建它。例如，
 
     ```js
     colorBuffer = gl.createBuffer();
@@ -510,9 +512,9 @@
     gl.bindBuffer( gl.ARRAY_BUFFER, colorBuffer );
     ```
 
-    *gl.bindBuffer*的第一个参数称为“目标”。它指定了VBO的用途。目标*gl.ARRAY_BUFFER*用于存储属性的值。一次只能将一个VBO绑定到给定目标。
+     *gl.bindBuffer* 的第一个参数称为“目标”。它指定了VBO的用途。目标 *gl.ARRAY_BUFFER* 用于存储属性的值。一次只能将一个VBO绑定到给定目标。
 
-    传输数据到VBO的函数没有提到VBO——而是使用当前绑定的VBO。要将数据复制到该缓冲区，使用*gl.bufferData()*。例如：
+    传输数据到VBO的函数没有提到VBO——而是使用当前绑定的VBO。要将数据复制到该缓冲区，使用 *gl.bufferData()* 。例如：
 
     ```js
     gl.bufferData(gl.ARRAY_BUFFER, colorArray, gl.STATIC_DRAW);
@@ -520,42 +522,42 @@
 
     第一个参数再次是目标。数据被传输到绑定到该目标的VBO。第二个参数是在JavaScript方面持有数据的类型化数组。数组中的所有元素都被复制到缓冲区，数组的大小决定了缓冲区的大小。注意，这是原始数据字节的直接传输；WebGL不记得数据是否表示浮点数或整数或其他类型的数据。
 
-    *gl.bufferData*的第三个参数是常量*gl.STATIC_DRAW*、*gl.STREAM_DRAW*或*gl.DYNAMIC_DRAW*之一。它是对WebGL的提示，说明数据将如何使用，它帮助WebGL以最有效的方式管理数据。值*gl.STATIC_DRAW*意味着您打算多次使用数据而不更改它。例如，如果您将在整个程序中使用相同的数据，您可以在初始化期间使用*gl.STATIC_DRAW*将其加载到缓冲区一次。WebGL可能会将数据存储在图形卡本身上，以便图形硬件可以最快速地访问。第二个值gl.STEAM_DRAW用于仅使用一次或最多几次的数据。（当需要时，它可以“流式传输”到卡上。）值*gl.DYNAMIC_DRAW*介于其他两个值之间；它适用于将多次使用但会修改的数据。
+    *gl.bufferData* 的第三个参数是常量 *gl.STATIC_DRAW* 、 *gl.STREAM_DRAW* 或 *gl.DYNAMIC_DRAW* 之一。它是对WebGL的提示，说明数据将如何使用，它帮助WebGL以最有效的方式管理数据。值 *gl.STATIC_DRAW* 意味着您打算多次使用数据而不更改它。例如，如果您将在整个程序中使用相同的数据，您可以在初始化期间使用 *gl.STATIC_DRAW* 将其加载到缓冲区一次。WebGL可能会将数据存储在图形卡本身上，以便图形硬件可以最快速地访问。第二个值gl.STEAM_DRAW用于仅使用一次或最多几次的数据。（当需要时，它可以“流式传输”到卡上。）值 *gl.DYNAMIC_DRAW* 介于其他两个值之间；它适用于将多次使用但会修改的数据。
 
     ---
 
-    将属性数据放入VBO只是故事的一部分。您还必须告诉WebGL将VBO用作属性的值源。首先，您需要知道属性在着色器程序中的位置。您可以使用*gl.getAttribLocation*来确定。例如，
+    将属性数据放入VBO只是故事的一部分。您还必须告诉WebGL将VBO用作属性的值源。首先，您需要知道属性在着色器程序中的位置。您可以使用 *gl.getAttribLocation* 来确定。例如，
 
     ```js
     colorAttribLoc = gl.getAttribLocation(prog, "a_color");
     ```
 
-    这假设*prog*是着色器程序，“a_color”是顶点着色器中的属性变量的名称。这与*gl.getUniformLocation*完全类似（除了返回值是整数，如果请求的属性不存在或不活跃，则为-1）。
+    这假设 *prog* 是着色器程序，“a_color”是顶点着色器中的属性变量的名称。这与 *gl.getUniformLocation* 完全类似（除了返回值是整数，如果请求的属性不存在或不活跃，则为-1）。
 
-    尽管属性通常在不同顶点处取不同的值，但有可能在每个顶点处使用相同的值。事实上，这是默认行为。可以通过*gl.vertexAttrib**系列函数为所有顶点设置单一属性值，它们的工作方式类似于*gl.uniform**。在更常见的情况下，您想要从VBO中获取属性的值，您必须启用该属性的VBO使用。这可以通过调用
+    尽管属性通常在不同顶点处取不同的值，但有可能在每个顶点处使用相同的值。事实上，这是默认行为。可以通过 *gl.vertexAttrib\** 系列函数为所有顶点设置单一属性值，它们的工作方式类似于 *gl.uniform\** 。在更常见的情况下，您想要从VBO中获取属性的值，您必须启用该属性的VBO使用。这可以通过调用
 
     ```js
     gl.enableVertexAttribArray( colorAttribLoc );
     ```
 
-    来完成，参数是属性在着色器程序中的位置，由*gl.getAttribLocation()*调用返回。此命令与任何特定的VBO无关。它只是打开了指定属性的缓冲区使用。通常，在初始化期间只调用这个方法一次是合理的。可以通过调用
+    来完成，参数是属性在着色器程序中的位置，由 *gl.getAttribLocation()* 调用返回。此命令与任何特定的VBO无关。它只是打开了指定属性的缓冲区使用。通常，在初始化期间只调用这个方法一次是合理的。可以通过调用
 
     ```js
     gl.disableVertexAttribArray( colorAttribLoc );
     ```
 
-    来关闭VBO数据的使用。最后，在您绘制使用VBO属性数据的原语之前，您必须告诉WebGL哪个缓冲区包含数据以及如何解释该缓冲区中的位。这可以通过*gl.vertexAttribPointer()*来完成。调用此函数时，VBO必须绑定到*ARRAY_BUFFER*目标。例如，
+    来关闭VBO数据的使用。最后，在您绘制使用VBO属性数据的原语之前，您必须告诉WebGL哪个缓冲区包含数据以及如何解释该缓冲区中的位。这可以通过 *gl.vertexAttribPointer()* 来完成。调用此函数时，VBO必须绑定到 *ARRAY_BUFFER* 目标。例如，
 
     ```js
     gl.bindBuffer( gl.ARRAY_BUFFER, colorBuffer );
     gl.vertexAttribPointer( colorAttribLoc, 3, gl.FLOAT, false, 0, 0 );
     ```
 
-    假设*colorBuffer*指代VBO，而*colorAttribLoc*是属性的位置，这告诉WebGL从该缓冲区获取属性的值。通常，你会在调用*gl.vertexAttribPointer()*之前调用*gl.bindBuffer()*，但如果所需的缓冲区已经被绑定，那就不必了。
+    假设 *colorBuffer* 指代VBO，而 *colorAttribLoc* 是属性的位置，这告诉WebGL从该缓冲区获取属性的值。通常，你会在调用 *gl.vertexAttribPointer()* 之前调用 *gl.bindBuffer()* ，但如果所需的缓冲区已经被绑定，那就不必了。
 
-    *gl.vertexAttribPointer*的第一个参数是属性位置。第二个是每个顶点的值的数量。例如，如果你为*vec2*提供值，第二个参数将是2，你将为每个顶点提供两个数字；对于*vec3*，第二个参数将是3；对于*float*，它将是1。第三个参数指定了每个值的类型。在这里，*gl.FLOAT*表示每个值是一个32位浮点数。其他值包括*gl.BYTE*、*gl.UNSIGNED_BYTE*、*gl.UNSIGNED_SHORT*和*gl.SHORT*，用于整数值。请注意，在WebGL 1.0中，所有属性都是浮点值；如果你为属性提供整数值，它们将被转换为浮点数。参数值应与缓冲区中的数据类型相匹配。例如，如果数据来自***Float32Array***，那么参数应该是*gl.FLOAT*。在调用*gl.vertexAttribPointer*时，我总是会使用*false*、0和0作为最后三个参数。这些参数增加了我不需要的灵活性；如果你感兴趣，可以在文档中查找它们。（*false*参数与整数值如何转换为浮点值有关。）
+    *gl.vertexAttribPointer* 的第一个参数是属性位置。第二个是每个顶点的值的数量。例如，如果你为 *vec2* 提供值，第二个参数将是2，你将为每个顶点提供两个数字；对于 *vec3* ，第二个参数将是3；对于 *float* ，它将是1。第三个参数指定了每个值的类型。在这里， *gl.FLOAT* 表示每个值是一个32位浮点数。其他值包括 *gl.BYTE* 、 *gl.UNSIGNED_BYTE* 、 *gl.UNSIGNED_SHORT* 和 *gl.SHORT* ，用于整数值。请注意，在WebGL 1.0中，所有属性都是浮点值；如果你为属性提供整数值，它们将被转换为浮点数。参数值应与缓冲区中的数据类型相匹配。例如，如果数据来自 **Float32Array** ，那么参数应该是 *gl.FLOAT* 。在调用 *gl.vertexAttribPointer* 时，我总是会使用 *false* 、0和0作为最后三个参数。这些参数增加了我不需要的灵活性；如果你感兴趣，可以在文档中查找它们。（ *false* 参数与整数值如何转换为浮点值有关。）
 
-    **在WebGL 2.0**中，属性变量可以是整型。当使用*gl.vertexAttribPointer()*配置属性时，为属性提供的值总是被转换为浮点数，所以它不适合整型属性。对于整型属性的使用，WebGL 2.0引入了一个新函数*gl.vertexAttribIPointer()*，它正确地处理整型数据。
+    **在WebGL 2.0** 中，属性变量可以是整型。当使用 *gl.vertexAttribPointer()* 配置属性时，为属性提供的值总是被转换为浮点数，所以它不适合整型属性。对于整型属性的使用，WebGL 2.0引入了一个新函数 *gl.vertexAttribIPointer()* ，它正确地处理整型数据。
 
     这里有很多东西需要理解。使用VBO为属性提供值需要六个单独的命令，这是在生成数据并将其放入类型化数组之外的。这里是全部的命令集：
 
@@ -569,13 +571,13 @@
     gl.bufferData( gl.ARRAY_BUFFER, colorArray, gl.STATIC_DRAW );
     ```
 
-    然而，这六个命令并不总是在JavaScript代码的同一点出现。前三个命令通常作为初始化的一部分完成。*gl.bufferData*将在需要更改属性数据时调用；它可能只在初始化期间使用一次，或者在需要修改数据时使用。*gl.bindBuffer*必须在调用*gl.vertexAttribPointer*或*gl.bufferData*之前调用，因为它建立了这两个命令使用的VBO。记住，所有这些都必须为着色器程序中使用的每个属性完成。
+    然而，这六个命令并不总是在JavaScript代码的同一点出现。前三个命令通常作为初始化的一部分完成。 *gl.bufferData* 将在需要更改属性数据时调用；它可能只在初始化期间使用一次，或者在需要修改数据时使用。 *gl.bindBuffer* 必须在调用 *gl.vertexAttribPointer* 或 *gl.bufferData* 之前调用，因为它建立了这两个命令使用的VBO。记住，所有这些都必须为着色器程序中使用的每个属性完成。
 
 .. tab:: 英文
 
     Turning now to attributes, the situation is more complicated, because an attribute can take a different value for each vertex in a primitive. The basic idea is that the complete set of data for the attribute is copied in a single operation from a JavaScript array into memory that is accessible to the GPU. Unfortunately, setting things up to make that operation possible is nontrivial.
 
-    First of all, a regular JavaScript array is not suitable for this purpose. For efficiency, we need the data to be in a block of memory holding numerical values in successive memory locations, and regular JavaScript arrays don't have that form. To fix this problem, a new kind of array, called typed arrays, was introduced into JavaScript. We encountered typed arrays when working with three.js in the [Chapter 5](../c5/index.md). There is a short introduction to typed arrays in [Subsection 5.1.4](../c5/s1.md#514-物体几何形状材料). A typed array has a fixed length, which is assigned when it is created, and it can only hold numbers of a specified type. There are different kinds of typed array for different kinds of numerical data. For now we will use ***Float32Array***, which holds 32-bit floating point numbers. Once you have a typed array, you can use it much like a regular array, but when you assign any value to an element of a ***Float32Array***, the value is converted into a 32-bit floating point number. If the value cannot be interpreted as a number, it will be converted to NaN, the "not-a-number" value.
+    First of all, a regular JavaScript array is not suitable for this purpose. For efficiency, we need the data to be in a block of memory holding numerical values in successive memory locations, and regular JavaScript arrays don't have that form. To fix this problem, a new kind of array, called typed arrays, was introduced into JavaScript. We encountered typed arrays when working with three.js in the [Chapter 5](../c5/index.md). There is a short introduction to typed arrays in [Subsection 5.1.4](../c5/s1.md#514-物体几何形状材料). A typed array has a fixed length, which is assigned when it is created, and it can only hold numbers of a specified type. There are different kinds of typed array for different kinds of numerical data. For now we will use **Float32Array**, which holds 32-bit floating point numbers. Once you have a typed array, you can use it much like a regular array, but when you assign any value to an element of a **Float32Array**, the value is converted into a 32-bit floating point number. If the value cannot be interpreted as a number, it will be converted to NaN, the "not-a-number" value.
 
     Before data can be transferred from JavaScript into an attribute variable, it must be placed into a typed array. When possible, for efficiency, you should work with typed arrays directly, rather than working with regular JavaScript arrays and then copying the data into typed arrays.
 
@@ -636,7 +638,7 @@
 
     Assuming that *colorBuffer* refers to the VBO and *colorAttribLoc* is the location of the attribute, this tells WebGL to take values for the attribute from that buffer. Often, you will call *gl.bindBuffer()* just before calling *gl.vertexAttribPointer()*, but that is not necessary if the desired buffer is already bound.
 
-    The first parameter to *gl.vertexAttribPointer* is the attribute location. The second is the number of values per vertex. For example, if you are providing values for a *vec2*, the second parameter will be 2 and you will provide two numbers per vertex; for a *vec3*, the second parameter would be 3; for a *float*, it would be 1. The third parameter specifies the type of each value. Here, *gl.FLOAT* indicates that each value is a 32-bit floating point number. Other values include *gl.BYTE*, *gl.UNSIGNED_BYTE*, *gl.UNSIGNED_SHORT*, and *gl.SHORT* for integer values. Note that in WebGL 1.0, all attributes are floating point values; if you provide integer values for an attribute, they will be converted to floating point. The parameter value should match the data type in the buffer. For example, if the data came from a ***Float32Array***, then the parameter should be *gl.FLOAT*. For the last three parameters in a call to *gl.vertexAttribPointer*, I will always use *false*, 0, and 0. These parameters add flexibility that I won't need; you can look them up in the documentation if you are interested. (The *false* parameter has to do with how integer values are converted into floating point values.)
+    The first parameter to *gl.vertexAttribPointer* is the attribute location. The second is the number of values per vertex. For example, if you are providing values for a *vec2*, the second parameter will be 2 and you will provide two numbers per vertex; for a *vec3*, the second parameter would be 3; for a *float*, it would be 1. The third parameter specifies the type of each value. Here, *gl.FLOAT* indicates that each value is a 32-bit floating point number. Other values include *gl.BYTE*, *gl.UNSIGNED_BYTE*, *gl.UNSIGNED_SHORT*, and *gl.SHORT* for integer values. Note that in WebGL 1.0, all attributes are floating point values; if you provide integer values for an attribute, they will be converted to floating point. The parameter value should match the data type in the buffer. For example, if the data came from a **Float32Array**, then the parameter should be *gl.FLOAT*. For the last three parameters in a call to *gl.vertexAttribPointer*, I will always use *false*, 0, and 0. These parameters add flexibility that I won't need; you can look them up in the documentation if you are interested. (The *false* parameter has to do with how integer values are converted into floating point values.)
 
     **In WebGL 2.0**, attribute variables can have integer type. When *gl.vertexAttribPointer()* is used to configure an attribute, the values provided for the attribute will always be converted to floating point, so it is inappropriate for integer-valued attributes. For use with integer-valued attributes, WebGL 2.0 introduces a new function, *gl.vertexAttribIPointer()* that works correctly with integer data.
 
@@ -661,23 +663,23 @@
 
 .. tab:: 中文
 
-    在着色器程序被创建并且为统一变量和属性设置了值之后，绘制一个原语只需要再一个命令。一种方法是使用函数*gl.drawArrays*：
+    在着色器程序被创建并且为统一变量和属性设置了值之后，绘制一个原语只需要再一个命令。一种方法是使用函数 *gl.drawArrays* ：
 
     ```js
     gl.drawArrays(primitiveType, startVertex, vertexCount);
     ```
 
-    第一个参数是七个常量之一，用于标识WebGL原语类型，例如*gl.TRIANGLES*、*gl.LINE_LOOP*和*gl_POINTS*。第二个和第三个参数是整数，用于确定用于原语的顶点的子集。在调用*gl.drawArrays*之前，你会将一些顶点的属性值放入一个或多个VBO中。当原语被渲染时，启用的属性的属性值会从VBO中获取。*startVertex*是在VBO中数据的起始顶点号，*vertexCount*是原语中的顶点数。通常，*startVertex*是零，*vertexCount*是可用数据的顶点总数。例如，绘制一个单独三角形的命令可能是：
+    第一个参数是七个常量之一，用于标识WebGL原语类型，例如 *gl.TRIANGLES* 、 *gl.LINE_LOOP* 和 *gl_POINTS* 。第二个和第三个参数是整数，用于确定用于原语的顶点的子集。在调用 *gl.drawArrays* 之前，你会将一些顶点的属性值放入一个或多个VBO中。当原语被渲染时，启用的属性的属性值会从VBO中获取。 *startVertex* 是在VBO中数据的起始顶点号， *vertexCount* 是原语中的顶点数。通常， *startVertex* 是零， *vertexCount* 是可用数据的顶点总数。例如，绘制一个单独三角形的命令可能是：
 
     ```js
     gl.drawArrays(gl.TRIANGLES, 0, 3);
     ```
 
-    *gl.drawArrays*和*gl.ARRAY_BUFFER*中“array”这个词可能有点令人困惑，因为数据存储在顶点缓冲对象中，而不是JavaScript数组中。当*glDrawArrays*最初在OpenGL 1.1中引入时，它使用的是普通数组，而不是VBO。从OpenGL 1.5开始，*glDrawArrays*可以与普通数组或VBO一起使用。在WebGL中，放弃了对普通数组的支持，*gl.drawArrays*只能与VBO一起工作，即使名称仍然提到数组。
+    *gl.drawArrays* 和 *gl.ARRAY_BUFFER* 中“array”这个词可能有点令人困惑，因为数据存储在顶点缓冲对象中，而不是JavaScript数组中。当 *glDrawArrays* 最初在OpenGL 1.1中引入时，它使用的是普通数组，而不是VBO。从OpenGL 1.5开始， *glDrawArrays* 可以与普通数组或VBO一起使用。在WebGL中，放弃了对普通数组的支持， *gl.drawArrays* 只能与VBO一起工作，即使名称仍然提到数组。
 
-    我们在[3.4.2小节](../c3/s4.md#342-gldrawarrays和gldrawelements)中遇到了*glDrawArrays*的原始版本。该部分还介绍了用于绘制原语的另一种函数*glDrawElements*，它可以用于绘制索引面集。在WebGL中也可用*gl.drawElements*函数。使用*gl.drawElements*时，属性数据不是按照在VBO中的顺序使用的。相反，有一个单独的索引列表，确定访问数据的顺序。
+    我们在[3.4.2小节](../c3/s4.md#342-gldrawarrays和gldrawelements)中遇到了 *glDrawArrays* 的原始版本。该部分还介绍了用于绘制原语的另一种函数 *glDrawElements* ，它可以用于绘制索引面集。在WebGL中也可用 *gl.drawElements* 函数。使用 *gl.drawElements* 时，属性数据不是按照在VBO中的顺序使用的。相反，有一个单独的索引列表，确定访问数据的顺序。
 
-    要使用*gl.drawElements*，需要一个额外的VBO来保存索引列表。当用于此目的时，VBO必须绑定到目标*gl.ELEMENT_ARRAY_BUFFER*而不是*gl.ARRAY_BUFFER*。VBO将保存整数值，可以是*gl.UNSIGNED_BYTE*或*gl.UNSIGNED_SHORT*类型（或者对于WebGL 2.0，是*gl.UNSIGNED_INT*）。值可以从JavaScript类型化数组加载，对于*gl.UNSIGNED_BYTE*使用***Uint8Array***，对于*gl.UNSIGNED_SHORT*使用***Uint16Array***。创建VBO并用数据填充它是一个多步骤过程。例如：
+    要使用 *gl.drawElements* ，需要一个额外的VBO来保存索引列表。当用于此目的时，VBO必须绑定到目标 *gl.ELEMENT_ARRAY_BUFFER* 而不是 *gl.ARRAY_BUFFER* 。VBO将保存整数值，可以是 *gl.UNSIGNED_BYTE* 或 *gl.UNSIGNED_SHORT* 类型（或者对于WebGL 2.0，是 *gl.UNSIGNED_INT* ）。值可以从JavaScript类型化数组加载，对于 *gl.UNSIGNED_BYTE* 使用 **Uint8Array** ，对于 *gl.UNSIGNED_SHORT* 使用 **Uint16Array** 。创建VBO并用数据填充它是一个多步骤过程。例如：
 
     ```js
     elementBuffer = gl.createBuffer();
@@ -686,19 +688,19 @@
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl.STREAM_DRAW);
     ```
 
-    假设属性数据也已经加载到VBO中，然后可以使用*gl.drawElements*来绘制原语。调用*gl.drawElements*的形式是
+    假设属性数据也已经加载到VBO中，然后可以使用 *gl.drawElements* 来绘制原语。调用 *gl.drawElements* 的形式是
 
     ```js
     gl.drawElements(primitiveType, count, dataType, startByte);
     ```
 
-    当调用这个函数时，包含顶点索引的VBO必须绑定到*ELEMENT_ARRAY_BUFFER*目标。*gl.drawElements*的第一个参数是原语类型，如*gl.TRIANGLE_FAN*。计数是原语中的顶点数。*dataType*指定了加载到VBO中的数据类型；它将是*gl.UNSIGNED_SHORT*或*gl.UNSIGNED_BYTE*。*startByte*是VBO中原语数据的起始点；它通常是零。（注意，起始点以字节为单位给出，而不是顶点号。）一个典型的例子是
+    当调用这个函数时，包含顶点索引的VBO必须绑定到 *ELEMENT_ARRAY_BUFFER* 目标。 *gl.drawElements* 的第一个参数是原语类型，如 *gl.TRIANGLE_FAN* 。计数是原语中的顶点数。 *dataType* 指定了加载到VBO中的数据类型；它将是 *gl.UNSIGNED_SHORT* 或 *gl.UNSIGNED_BYTE* 。 *startByte* 是VBO中原语数据的起始点；它通常是零。（注意，起始点以字节为单位给出，而不是顶点号。）一个典型的例子是
 
     ```js
     gl.drawElements(gl.TRIANGLES, 9, gl.UNSIGNED_BYTE, 0);
     ```
 
-    我们将在后面的场合使用这个函数。如果你发现它令人困惑，你应该回顾[3.4.2小节](../c3/s4.md#342-gldrawarrays和gldrawelements)。WebGL中的情况与OpenGL 1.1中的情况非常相似。
+    我们将在后面的场合使用这个函数。如果你发现它令人困惑，你应该回顾 :ref:`c3.4.2` 。WebGL中的情况与OpenGL 1.1中的情况非常相似。
 
 .. tab:: 英文
 
@@ -718,7 +720,7 @@
 
     We encountered the original version of *glDrawArrays* in [Subsection 3.4.2](../c3/s4.md#342-gldrawarrays和gldrawelements). That section also introduced an alternative function for drawing primitives, *glDrawElements*, which can be used for drawing indexed face sets. A *gl.drawElements* function is also available in WebGL. With *gl.drawElements*, attribute data is not used in the order in which it occurs in the VBOs. Instead, there is a separate list of indices that determines the order in which the data is accessed.
 
-    To use *gl.drawElements*, an extra VBO is required to hold the list of indices. When used for this purpose, the VBO must be bound to the target *gl.ELEMENT_ARRAY_BUFFER* rather than *gl.ARRAY_BUFFER*. The VBO will hold integer values, which can be of type *gl.UNSIGNED_BYTE* or *gl.UNSIGNED_SHORT* (or, for WebGL 2.0, *gl.UNSIGNED_INT*). The values can be loaded from a JavaScript typed array of type ***Uint8Array***, for *gl.UNSIGNED_BYTE*, or ***Uint16Array***, for *gl.UNSIGNED_SHORT*. Creating the VBO and filling it with data is again a multistep process. For example,
+    To use *gl.drawElements*, an extra VBO is required to hold the list of indices. When used for this purpose, the VBO must be bound to the target *gl.ELEMENT_ARRAY_BUFFER* rather than *gl.ARRAY_BUFFER*. The VBO will hold integer values, which can be of type *gl.UNSIGNED_BYTE* or *gl.UNSIGNED_SHORT* (or, for WebGL 2.0, *gl.UNSIGNED_INT*). The values can be loaded from a JavaScript typed array of type **Uint8Array**, for *gl.UNSIGNED_BYTE*, or **Uint16Array**, for *gl.UNSIGNED_SHORT*. Creating the VBO and filling it with data is again a multistep process. For example,
 
     ```js
     elementBuffer = gl.createBuffer();
@@ -739,7 +741,7 @@
     gl.drawElements( gl.TRIANGLES, 9, gl.UNSIGNED_BYTE, 0 );
     ```
 
-    We will have occasion to use this function later. If you find it confusing, you should review [Subsection 3.4.2](../c3/s4.md#342-gldrawarrays和gldrawelements). The situation is much the same in WebGL as it was in OpenGL 1.1.
+    We will have occasion to use this function later. If you find it confusing, you should review :ref:`Subsection 3.4.2 <c3.4.2>`. The situation is much the same in WebGL as it was in OpenGL 1.1.
 
 6.1.7 WebGL 2.0：顶点数组对象
 ----------------------------
@@ -748,27 +750,27 @@
 
 .. tab:: 中文
 
-    与属性一起工作的大量函数可能看起来有些过分。在绘制几个不同对象的程序中，情况更糟。每个对象可能需要自己的缓冲区和自己的属性指针设置。在绘制每个对象之前，都需要为每个属性调用*gl.bindBuffer()*和*gl.vertexAttribPointer()*。一个典型的3D图形程序会使用属性来表示顶点坐标、法向量、材质属性和纹理坐标。所以，每个对象都会有大量的函数调用。
+    与属性一起工作的大量函数可能看起来有些过分。在绘制几个不同对象的程序中，情况更糟。每个对象可能需要自己的缓冲区和自己的属性指针设置。在绘制每个对象之前，都需要为每个属性调用 *gl.bindBuffer()* 和 *gl.vertexAttribPointer()* 。一个典型的3D图形程序会使用属性来表示顶点坐标、法向量、材质属性和纹理坐标。所以，每个对象都会有大量的函数调用。
 
-    为了解决这个问题，WebGL 2.0引入了**顶点数组对象**（VAOs）。VAO是一块内存区域，通常存储在显卡上。它保存了由渲染函数（如*gl.drawArrays()*）使用的设置。这包括每个属性的启用状态、用于属性数据的缓冲区引用，以及通过调用*gl.vertexAttribPointer()*设置的所有属性的值。它还包括设置和对由*gl.drawElements()*使用的缓冲区的引用，以及下一节中讨论的属性除数。
+    为了解决这个问题，WebGL 2.0引入了 **顶点数组对象** （VAOs）。VAO是一块内存区域，通常存储在显卡上。它保存了由渲染函数（如 *gl.drawArrays()* ）使用的设置。这包括每个属性的启用状态、用于属性数据的缓冲区引用，以及通过调用 *gl.vertexAttribPointer()* 设置的所有属性的值。它还包括设置和对由 *gl.drawElements()* 使用的缓冲区的引用，以及下一节中讨论的属性除数。
 
-    WebGL 2.0有一个默认的VAO，当没有选择其他VAO时，它将使用这个默认VAO。要使用替代VAO，首先需要通过调用*gl.createVertexArray()*来创建它：
+    WebGL 2.0有一个默认的VAO，当没有选择其他VAO时，它将使用这个默认VAO。要使用替代VAO，首先需要通过调用 *gl.createVertexArray()* 来创建它：
 
     ```js
     vao = gl.createVertexArray();
     ```
 
-    返回值*vao*是已创建VAO的标识符。在新的VAO中，所有属性都具有默认值。特别是，所有顶点属性都被禁用，并且没有关联的缓冲区。要实际使用VAO，需要绑定它：
+    返回值 *vao* 是已创建VAO的标识符。在新的VAO中，所有属性都具有默认值。特别是，所有顶点属性都被禁用，并且没有关联的缓冲区。要实际使用VAO，需要绑定它：
 
     ```js
     gl.bindVertexArray(vao);
     ```
 
-    影响或使用属性的函数适用于当前绑定的VAO。例如，在调用*gl.vertexAttribPointer()*时的设置存储在当前VAO中。调用*gl.drawArrays()*时，它需要绘制原语的所有数据都来自当前VAO。程序可以随时通过调用*gl.bindVertexArray*从一个VAO切换到另一个VAO。要回到使用默认VAO，程序可以调用*gl.bindVertexArray(0)*。
+    影响或使用属性的函数适用于当前绑定的VAO。例如，在调用 *gl.vertexAttribPointer()* 时的设置存储在当前VAO中。调用 *gl.drawArrays()* 时，它需要绘制原语的所有数据都来自当前VAO。程序可以随时通过调用 *gl.bindVertexArray* 从一个VAO切换到另一个VAO。要回到使用默认VAO，程序可以调用 *gl.bindVertexArray(0)* 。
 
     这个想法是，绘制几个对象的程序可以使用每个对象的不同VAO。对象的VAO必须在配置对象的设置时绑定。但在绘制对象之前，程序只需要绑定该对象的VAO。这个单一的函数调用可以替代可能需要恢复每个属性的适当设置的大量函数调用。优势不仅仅是更整洁的程序组织——也更有效率，因为只需要发送一个命令到GPU来配置所有属性。
 
-    示例WebGL 2.0程序[webgl/VAO-test-webgl2.html](../../../en/source/webgl/VAO-test-webgl2.html)为六个不同的对象使用不同的VAO。该程序使用了许多我们尚未涵盖的技术，但你可以查看*drawModel()*函数，看看它如何使用VAOs和VBOs。
+    示例WebGL 2.0程序[webgl/VAO-test-webgl2.html](../../../en/source/webgl/VAO-test-webgl2.html)为六个不同的对象使用不同的VAO。该程序使用了许多我们尚未涵盖的技术，但你可以查看 *drawModel()* 函数，看看它如何使用VAOs和VBOs。
 
 .. tab:: 英文
 
@@ -801,23 +803,23 @@
 
 .. tab:: 中文
 
-    在一个场景中，通常包含使用相同顶点坐标的同一原语的多个副本，但每个副本具有不同的变换、颜色或其他属性。WebGL 2.0使得只需一个函数调用即可绘制所有这些副本。这称为**实例化绘制**或实例化，原语的个别副本称为实例。使用实例化绘制的函数是*gl.drawArraysInstanced()*和*gl.drawElementsInstanced()*。
+    在一个场景中，通常包含使用相同顶点坐标的同一原语的多个副本，但每个副本具有不同的变换、颜色或其他属性。WebGL 2.0使得只需一个函数调用即可绘制所有这些副本。这称为 **实例化绘制** 或实例化，原语的个别副本称为实例。使用实例化绘制的函数是 *gl.drawArraysInstanced()* 和 *gl.drawElementsInstanced()* 。
 
     实例化属性——从一个实例到另一个实例变化的属性——当分别绘制每个实例时，很可能是统一变量。也就是说，每个实例都有一个适用于实例中所有顶点的属性值。尽管如此，属性在着色器程序中由属性变量表示，而不是统一变量，并且它们被配置为属性。
 
-    要指定一个属性是实例化属性，只需要为该属性指定一个“除数”。这是通过调用*gl.vertexAttribDivisor*完成的：
+    要指定一个属性是实例化属性，只需要为该属性指定一个“除数”。这是通过调用 *gl.vertexAttribDivisor* 完成的：
 
     ```js
     gl.vertexAttribDivisor(attribID, divisor);
     ```
 
-    这里，*attribID*是由*gl.getAttribLocation()*返回的属性标识符。除数是一个非负整数。将除数传递为零将关闭该属性的实例化。如果*divisor*是正数，那么属性的每个值将适用于那么多实例。例如，如果*divisor*是3，那么属性值数组中的第一个条目适用于第一、第二和第三个实例；数组中的第二个值适用于第四、第五和第六个实例；以此类推。实际上，除数的值通常是1，这意味着每个实例在属性值数组中都有自己的条目。
+    这里， *attribID* 是由 *gl.getAttribLocation()* 返回的属性标识符。除数是一个非负整数。将除数传递为零将关闭该属性的实例化。如果 *divisor* 是正数，那么属性的每个值将适用于那么多实例。例如，如果 *divisor* 是3，那么属性值数组中的第一个条目适用于第一、第二和第三个实例；数组中的第二个值适用于第四、第五和第六个实例；以此类推。实际上，除数的值通常是1，这意味着每个实例在属性值数组中都有自己的条目。
 
-    对于实例化属性，除了设置除数之外，还需要启用属性，将数据加载到VBO中，并使用gl.vertexAttribPointer进行配置。当然，还需要使用*gl.drawArraysInstanced()*或*gl.drawElementsInstanced()*绘制原语，而不是使用*gl.drawArrays()*或*gl.drawElements()*。
+    对于实例化属性，除了设置除数之外，还需要启用属性，将数据加载到VBO中，并使用gl.vertexAttribPointer进行配置。当然，还需要使用 *gl.drawArraysInstanced()* 或 *gl.drawElementsInstanced()* 绘制原语，而不是使用 *gl.drawArrays()* 或 *gl.drawElements()* 。
 
-    示例WebGL 2.0程序[webgl/instancing-test-webgl2.html](../../../en/source/webgl/instancing-test-webgl2.html)是实例化绘制的一个例子。（再说一次，程序中有很多内容在我们覆盖更多WebGL之前你是不会理解的）。该程序绘制了30个彩色圆盘，其中圆盘由*gl.TRIANGLE_FAN*类型的原语近似。使用了三个属性：一个属性保存顶点的坐标，一个实例化属性保存圆盘的颜色，另一个实例化属性保存每个圆盘的不同平移。
+    示例WebGL 2.0程序[webgl/instancing-test-webgl2.html](../../../en/source/webgl/instancing-test-webgl2.html)是实例化绘制的一个例子。（再说一次，程序中有很多内容在我们覆盖更多WebGL之前你是不会理解的）。该程序绘制了30个彩色圆盘，其中圆盘由 *gl.TRIANGLE_FAN* 类型的原语近似。使用了三个属性：一个属性保存顶点的坐标，一个实例化属性保存圆盘的颜色，另一个实例化属性保存每个圆盘的不同平移。
 
-    程序中另一个有趣的点是它对顶点缓冲对象的使用。圆盘可以被动画化。圆盘在移动，但它们的颜色不会改变。由于颜色不会改变，圆盘的颜色值在程序初始化期间一次性加载到VBO中。*gl.bufferData*中的使用参数设置为*gl.STATIC_DRAW*，因为数据不会被修改。然而，由于圆盘在移动，圆盘的平移值必须在每一帧中更改。所以，每一帧都会将新数据加载到相应的VBO中，使用*gl.STREAM_DRAW*，因为正在加载的数据只会使用一次。
+    程序中另一个有趣的点是它对顶点缓冲对象的使用。圆盘可以被动画化。圆盘在移动，但它们的颜色不会改变。由于颜色不会改变，圆盘的颜色值在程序初始化期间一次性加载到VBO中。 *gl.bufferData* 中的使用参数设置为 *gl.STATIC_DRAW* ，因为数据不会被修改。然而，由于圆盘在移动，圆盘的平移值必须在每一帧中更改。所以，每一帧都会将新数据加载到相应的VBO中，使用 *gl.STREAM_DRAW* ，因为正在加载的数据只会使用一次。
 
     最后，我应该注意，VAO和实例化需要WebGL 2.0，但许多WebGL 1.0的实现中也提供了相同的功能作为可选扩展。WebGL扩展将在[第7.5节](../c7/s5.md)中讨论。
 
