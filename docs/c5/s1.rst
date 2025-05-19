@@ -7,27 +7,27 @@
 
 .. tab:: 中文
 
-    Three.js 是一个用于 3D 图形的面向对象 JavaScript 库。它是由 Ricardo Cabello（化名 "mr.doob"，<https://mrdoob.com/>）最初创建的开源项目，并且得到了其他程序员的贡献。它似乎是最受欢迎的开源 JavaScript 库，用于 3D Web 应用程序。（另一个受欢迎的选择是 [Babylon.js](https://www.babylonjs.com/)。）Three.js 使用了你已经熟悉的概念，比如几何对象、变换、灯光、材质、纹理和摄像机。但它也有额外的特性，这些特性建立在 WebGL 的强大和灵活性之上。
+    Three.js 是一个用于 3D 图形的面向对象 JavaScript 库。它是由 Ricardo Cabello（化名 "mr.doob"，https://mrdoob.com/）最初创建的开源项目，并且得到了其他程序员的贡献。它似乎是最受欢迎的开源 JavaScript 库，用于 3D Web 应用程序。（另一个受欢迎的选择是 `Babylon.js <https://www.babylonjs.com/>`_ 。）Three.js 使用了你已经熟悉的概念，比如几何对象、变换、灯光、材质、纹理和摄像机。但它也有额外的特性，这些特性建立在 WebGL 的强大和灵活性之上。
 
-    你可以在它的主网站 <https://threejs.org> 下载 *three.js* 并阅读文档。下载的文件相当大，因为它包括了许多示例和支持文件。这本书使用的是 2023 年 7 月发布的版本 154。你应该意识到，你可能在网上找到的关于 *three.js* 的一些材料并不适用于最新版本。
+    你可以在它的主网站 https://threejs.org 下载 *three.js* 并阅读文档。下载的文件相当大，因为它包括了许多示例和支持文件。这本书使用的是 2023 年 7 月发布的版本 154。你应该意识到，你可能在网上找到的关于 *three.js* 的一些材料并不适用于最新版本。
 
     *three.js* 的当前版本是一个“模块化”的 JavaScript 库。旧的非模块化形式仍然可用，但它已被弃用，并计划在版本 160 中移除。这本教科书的以前版本使用了非模块化版本。教科书的第 1.4 版已经更新为使用 *three.js* 模块；除此之外，*three.js* 材料只针对 *three.js* 版本之间的一些小差异进行了更改。（值得注意的是，我发现我必须显著增加材质颜色的镜面分量。）
 
-    本书中使用的所有 *three.js* 脚本副本可以在教科书网站源文件夹中的 [threejs/script](../../../en/source/threejs/script) 文件夹中找到。*three.js* 许可证允许这些文件自由重新分发。但如果你计划认真使用 *three.js*，你应该阅读其网站上的文档，了解如何使用它以及如何部署它。
+    本书中使用的所有 *three.js* 脚本副本可以在教科书网站源文件夹中的 `threejs/script <../en/source/threejs/script>`_ 文件夹中找到。*three.js* 许可证允许这些文件自由重新分发。但如果你计划认真使用 *three.js*，你应该阅读其网站上的文档，了解如何使用它以及如何部署它。
 
-    *three.js* 的核心特性定义在一个名为 "three.module.js" 的单一大型 JavaScript 文件中，该文件可以在 *three.js* 下载中的构建目录中找到。还有一个更小的 "压缩" 版本，*three.module.min.js*，它包含了相同定义，但格式不适合人类阅读。通常在网页上使用的是压缩版本。除了这个核心之外，*three.js* 下载还有一个目录，包含许多示例和在示例中使用的各种支持文件。示例使用了许多不是 *three.js* 核心部分的特性。这些插件可以在 *three.js* 下载的 examples 文件夹内的 jsm 文件夹中找到。其中一些插件在这本教科书中使用，并包含在 [threejs/script](../../../en/source/threejs/script) 文件夹中。
+    *three.js* 的核心特性定义在一个名为 "three.module.js" 的单一大型 JavaScript 文件中，该文件可以在 *three.js* 下载中的构建目录中找到。还有一个更小的 "压缩" 版本，*three.module.min.js*，它包含了相同定义，但格式不适合人类阅读。通常在网页上使用的是压缩版本。除了这个核心之外，*three.js* 下载还有一个目录，包含许多示例和在示例中使用的各种支持文件。示例使用了许多不是 *three.js* 核心部分的特性。这些插件可以在 *three.js* 下载的 examples 文件夹内的 jsm 文件夹中找到。其中一些插件在这本教科书中使用，并包含在 `threejs/script <../en/source/threejs/script>`_ 文件夹中。
 
 .. tab:: 英文
 
-    Three.js is an object-oriented JavaScript library for 3D graphics. It is an open-source project originally created by Ricardo Cabello (who goes by the handle "mr.doob", <https://mrdoob.com/>), with contributions from other programmers. It seems to be the most popular open-source JavaScript library for 3D web applications. (Another popular option is [Babylon.js](https://www.babylonjs.com/).) Three.js uses concepts that you are already familiar with, such as geometric objects, transformations, lights, materials, textures, and cameras. But it also has additional features that build on the power and flexibility of WegGL.
+    Three.js is an object-oriented JavaScript library for 3D graphics. It is an open-source project originally created by Ricardo Cabello (who goes by the handle "mr.doob", https://mrdoob.com/), with contributions from other programmers. It seems to be the most popular open-source JavaScript library for 3D web applications. (Another popular option is `Babylon.js <https://www.babylonjs.com/>`_ .) Three.js uses concepts that you are already familiar with, such as geometric objects, transformations, lights, materials, textures, and cameras. But it also has additional features that build on the power and flexibility of WegGL.
 
-    You can download *three.js* and read the documentation at its main web site, <https://threejs.org>. The download is quite large, since it includes many examples and support files. This book uses Release 154 of the software, from July, 2023. You should be aware that some of the material about *three.js* that you might find on the Internet does not apply to the most recent release.
+    You can download *three.js* and read the documentation at its main web site, https://threejs.org. The download is quite large, since it includes many examples and support files. This book uses Release 154 of the software, from July, 2023. You should be aware that some of the material about *three.js* that you might find on the Internet does not apply to the most recent release.
 
     The current release of *three.js* is a "modular" JavaScript library. The older, non-modular form is still available, but it is deprecated and is scheduled to be removed in Release 160. Previous versions of this textbook used the non-modular version. Version 1.4 of the textbook has been updated to use *three.js* modules; aside from that, the *three.js* material has been changed only to account for some minor differences between *three.js* releases. (Notably, I found that I had to significantly increase the specular component of material colors.)
 
-    Copies of all *three.js* scripts that are used in this textbook can be found in the [threejs/script](../../../en/source/threejs/script) folder in the source folder of this textbook's web site. The *three.js* license allows these files to be freely redistributed. But if you plan to do any serious work with *three.js*, you should read the documentation on its web site about how to use it and how to deploy it.
+    Copies of all *three.js* scripts that are used in this textbook can be found in the `threejs/script <../en/source/threejs/script>`_ folder in the source folder of this textbook's web site. The *three.js* license allows these files to be freely redistributed. But if you plan to do any serious work with *three.js*, you should read the documentation on its web site about how to use it and how to deploy it.
 
-    The core features of *three.js* are defined in a single large JavaScript file named "three.module.js", which can be found in a build directory in the *three.js* download. There is also a smaller "minified" version, *three.module.min.js*, that contains the same definitions in a format that is not meant to be human-readable. It is the minified version that is usually used on web pages. In addition to this core, the *three.js* download has a directory containing many examples and a variety of support files that are used in the examples. The examples use many features that are not part of the *three.js* core. These add-ons can be found in a folder named jsm inside the folder named examples in the *three.js* download. Several of the add-ons are used in this textbook and are included in the [threejs/script](../../../en/source/threejs/script) folder.
+    The core features of *three.js* are defined in a single large JavaScript file named "three.module.js", which can be found in a build directory in the *three.js* download. There is also a smaller "minified" version, *three.module.min.js*, that contains the same definitions in a format that is not meant to be human-readable. It is the minified version that is usually used on web pages. In addition to this core, the *three.js* download has a directory containing many examples and a variety of support files that are used in the examples. The examples use many features that are not part of the *three.js* core. These add-ons can be found in a folder named jsm inside the folder named examples in the *three.js* download. Several of the add-ons are used in this textbook and are included in the `threejs/script <../en/source/threejs/script>`_ folder.
 
 5.1.1 关于 JavaScript 模块
 -----------------------------
@@ -86,7 +86,7 @@
 
     ----
 
-    我的许多示例使用不在主要 *three.js* 脚本中的插件。我已经将使用它们的文件放置在我的 [脚本目录](https://math.hws.edu/graphicsbook/source/threejs/script) 的子目录中。所有文件都来自 *three.js* 下载中的 examples/jsm 文件夹。我使用了与该文件夹相同的子目录结构，因为一些文件通过名称引用其他子目录中的文件。其中一个插件脚本是 "controls" 子目录中的 "OrbitControls.js"。它导出了一个名为 OrbitControls 的类，可以使用以下方式导入：
+    我的许多示例使用不在主要 *three.js* 脚本中的插件。我已经将使用它们的文件放置在我的 `脚本目录 <https://math.hws.edu/graphicsbook/source/threejs/script>`_ 的子目录中。所有文件都来自 *three.js* 下载中的 examples/jsm 文件夹。我使用了与该文件夹相同的子目录结构，因为一些文件通过名称引用其他子目录中的文件。其中一个插件脚本是 "controls" 子目录中的 "OrbitControls.js"。它导出了一个名为 OrbitControls 的类，可以使用以下方式导入：
 
     ```js
     import { OrbitControls } from "./script/controls/OrbitControls.js";
@@ -354,7 +354,7 @@
 
 .. tab:: 中文
 
-    *three.js* 场景图由 **THREE.Object3D** 类型的对象组成（包括属于该类的子类的物体）。摄像机、灯光和可见物体都由 **Object3D** 的子类表示。实际上，**THREE.Scene** 本身也是 **Object3D** 的一个子类。
+    *three.js* 场景图由 **THREE.Object3D** 类型的对象组成（包括属于该类的子类的物体）。摄像机、灯光和可见物体都由 **Object3D** 的子类表示。实际上， **THREE.Scene** 本身也是 **Object3D** 的一个子类。
 
     任何 **Object3D** 都包含一个子对象列表，这些子对象也是 **Object3D** 类型。子列表定义了场景图的结构。如果 *node* 和 object 是 Object3D 类型，那么方法 *node.add(object)* 将 *object* 添加到 *node* 的子列表中。方法 *node.remove(object)* 可以用来从列表中移除一个对象。
 
@@ -382,7 +382,7 @@
     scene.add(nodeCopy2);
     ```
 
-    一个 **Object3D**，*obj*，有一个关联的变换，由属性 *obj.scale*、*obj.rotation* 和 *obj.position* 给出。这些属性表示在渲染对象及其子节点时应用到对象上的建模变换。对象首先按比例缩放，然后旋转，然后根据这些属性的值进行平移。（变换实际上比这更复杂，但我们现在先保持简单，稍后将回到这个话题。）
+    一个 **Object3D** ， *obj* ，有一个关联的变换，由属性 *obj.scale* 、 *obj.rotation* 和 *obj.position* 给出。这些属性表示在渲染对象及其子节点时应用到对象上的建模变换。对象首先按比例缩放，然后旋转，然后根据这些属性的值进行平移。（变换实际上比这更复杂，但我们现在先保持简单，稍后将回到这个话题。）
 
     *obj.scale* 和 *obj.position* 的值是 **THREE.Vector3** 类型的对象。一个 **Vector3** 表示三维中的向量或点。（还有类似的类 **THREE.Vector2** 和 **THREE.Vector4**，用于2维和4维的向量。）可以从三个数字构造一个 **Vector3** 对象，这些数字给出向量的坐标：
 
@@ -487,11 +487,11 @@
 
 .. tab:: 中文
 
-    在 three.js 中，可见对象由点、线或三角形组成。一个单独的对象对应于 OpenGL 基元，如 *GL_POINTS*、*GL_LINES* 或 *GL_TRIANGLES*（见 [3.1.1小节](../c3/s1.md#311--opengl基元)）。有五个类来表示这些可能性：**THREE.Points** 用于点，**THREE.Mesh** 用于三角形，以及三个类用于线：**THREE.Line**，使用 *GL_LINE_STRIP* 基元；**THREE.LineSegments**，使用 *GL_LINES* 基元；和 **THREE.LineLoop**，使用 *GL_LINE_LOOP* 基元。
+    在 three.js 中，可见对象由点、线或三角形组成。一个单独的对象对应于 OpenGL 基元，如 *GL_POINTS* 、 *GL_LINES* 或 *GL_TRIANGLES* （见 [3.1.1小节](../c3/s1.md#311--opengl基元)）。有五个类来表示这些可能性： **THREE.Points** 用于点， **THREE.Mesh** 用于三角形，以及三个类用于线： **THREE.Line** ，使用 *GL_LINE_STRIP* 基元； **THREE.LineSegments** ，使用 *GL_LINES* 基元；和 **THREE.LineLoop**，使用 *GL_LINE_LOOP* 基元。
 
     可见对象由一些几何体和决定该几何体外观的材料组成。在 *three.js* 中，可见对象的几何体和材料本身由 JavaScript 类 **THREE.BufferGeometry** 和 **THREE.Material** 表示。
 
-    **THREE.BufferGeometry** 类型的对象可以存储顶点坐标及其属性。（实际上，顶点坐标也被视为几何体的“属性”。）这些值必须以适合与 OpenGL 函数 *glDrawArrays* 和 *glDrawElements*（见 [3.4.2小节](../c3/s4.md#342-gldrawarrays和gldrawelements)）一起使用的形式存储。对于 JavaScript，这意味着它们必须存储在类型化数组中。类型化数组类似于普通的 JavaScript 数组，只是它的长度是固定的，只能保存特定类型的数值。例如，**Float32Array** 保存 32 位浮点数，**UInt16Array** 保存无符号 16 位整数。类型化数组可以通过指定数组长度的构造函数来创建。例如，
+    **THREE.BufferGeometry** 类型的对象可以存储顶点坐标及其属性。（实际上，顶点坐标也被视为几何体的“属性”。）这些值必须以适合与 OpenGL 函数 *glDrawArrays* 和 *glDrawElements* （见 [3.4.2小节](../c3/s4.md#342-gldrawarrays和gldrawelements)）一起使用的形式存储。对于 JavaScript，这意味着它们必须存储在类型化数组中。类型化数组类似于普通的 JavaScript 数组，只是它的长度是固定的，只能保存特定类型的数值。例如， **Float32Array** 保存 32 位浮点数， **UInt16Array** 保存无符号 16 位整数。类型化数组可以通过指定数组长度的构造函数来创建。例如，
 
     ```js
     vertexCoords = new Float32Array(300);  // 300个数字的空间。
@@ -558,7 +558,7 @@
     });
     ```
 
-    构造函数的参数是一个 JavaScript 对象，其属性用于初始化材料。将 *sizeAttenuation* 属性设置为 *false* 时，大小以像素为单位；如果是 *true*，则 *size* 表示世界坐标中的大小，并且点会根据与观察者的距离进行缩放。如果省略 *color*，则使用默认值白色。*size* 的默认值为 1，*sizeAttenuation* 的默认值为 *true*。可以完全省略构造函数的参数，以使用所有默认值。**PointsMaterial** 不受照明影响；它简单地显示由其 *color* 属性指定的颜色。
+    构造函数的参数是一个 JavaScript 对象，其属性用于初始化材料。将 *sizeAttenuation* 属性设置为 *false* 时，大小以像素为单位；如果是 *true*，则 *size* 表示世界坐标中的大小，并且点会根据与观察者的距离进行缩放。如果省略 *color* ，则使用默认值白色。 *size* 的默认值为 1， *sizeAttenuation* 的默认值为 *true* 。可以完全省略构造函数的参数，以使用所有默认值。 **PointsMaterial** 不受照明影响；它简单地显示由其 *color* 属性指定的颜色。
 
     也可以在对象创建后为材料的属性分配值。例如，
 
@@ -597,9 +597,9 @@
 
     ----
 
-    在 *three.js* 中，上述材料的颜色参数是通过字符串 "yellow" 指定的。*three.js* 中的颜色可以由 ***THREE.Color** 类型的值表示。***THREE.Color** 类代表一个 RGB 颜色。一个 ***Color** 对象 c 有属性 *c.r*、*c.g* 和 *c.b*，分别给出红色、蓝色和绿色颜色分量，作为范围在 0.0 到 1.0 之间的浮点数。请注意，没有 alpha 分量；*three.js* 将透明度与颜色分开处理。
+    在 *three.js* 中，上述材料的颜色参数是通过字符串 "yellow" 指定的。 *three.js* 中的颜色可以由 **THREE.Color** 类型的值表示。 **THREE.Color** 类代表一个 RGB 颜色。一个 **Color** 对象 c 有属性 *c.r* 、 *c.g* 和 *c.b*，分别给出红色、蓝色和绿色颜色分量，作为范围在 0.0 到 1.0 之间的浮点数。请注意，没有 alpha 分量； *three.js* 将透明度与颜色分开处理。
 
-    有几种方式可以构造一个 ***THREE.Color** 对象。构造函数可以接收三个参数，给出 RGB 分量，作为范围在 0.0 到 1.0 之间的实数。它可以接受一个字符串参数，以 CSS 颜色字符串的形式给出颜色，如 2D 画布图形 API 中使用的；示例包括 "white"、"red"、"rgb(255,0,0)" 和 "#FF0000"。或者颜色构造函数可以接收一个整数参数，其中每种颜色分量都以整数中的一个八位字段给出。通常，以这种方式表示颜色的整数会写成以 "0x" 开头的十六进制字面量。示例包括 0xff0000 表示红色，0x00ff00 表示绿色，0x0000ff 表示蓝色，0x007050 表示深蓝绿色。以下是使用颜色构造函数的一些示例：
+    有几种方式可以构造一个 **THREE.Color** 对象。构造函数可以接收三个参数，给出 RGB 分量，作为范围在 0.0 到 1.0 之间的实数。它可以接受一个字符串参数，以 CSS 颜色字符串的形式给出颜色，如 2D 画布图形 API 中使用的；示例包括 "white"、"red"、"rgb(255,0,0)" 和 "#FF0000"。或者颜色构造函数可以接收一个整数参数，其中每种颜色分量都以整数中的一个八位字段给出。通常，以这种方式表示颜色的整数会写成以 "0x" 开头的十六进制字面量。示例包括 0xff0000 表示红色，0x00ff00 表示绿色，0x0000ff 表示蓝色，0x007050 表示深蓝绿色。以下是使用颜色构造函数的一些示例：
 
     ```js
     let c1 = new THREE.Color("skyblue");
@@ -607,7 +607,7 @@
     let c3 = new THREE.Color(0x98fb98);  // pale green
     ```
 
-    在许多上下文中，如 ***THREE.Points** 构造函数，*three.js* 会接受一个字符串或整数，当需要一个颜色时；字符串或整数将通过 Color 构造函数。作为另一个示例，一个 ***WebGLRenderer** 对象有一个 "clear color" 属性，当渲染器渲染场景时用作背景颜色。这个属性可以使用以下任何命令设置：
+    在许多上下文中，如 **THREE.Points** 构造函数， *three.js* 会接受一个字符串或整数，当需要一个颜色时；字符串或整数将通过 Color 构造函数。作为另一个示例，一个 **WebGLRenderer** 对象有一个 "clear color" 属性，当渲染器渲染场景时用作背景颜色。这个属性可以使用以下任何命令设置：
 
     ```js
     renderer.setClearColor( new THREE.Color(0.6, 0.4, 0.1) );
@@ -617,9 +617,9 @@
 
     ----
 
-    接下来是线条，类型为 ***THREE.Line*** 的对象表示一个线带——在 OpenGL 中被称为 *GL_LINE_STRIP* 类型的原素。要得到相同的连接线段条带，加上一条回到起始顶点的线，我们可以使用类型为 ***THREE.LineLoop*** 的对象。例如，对于一个三角形的轮廓，我们可以提供一个包含三个点坐标的 BufferGeometry，并使用一个 ***LineLoop***。
+    接下来是线条，类型为 **THREE.Line** 的对象表示一个线带——在 OpenGL 中被称为 *GL_LINE_STRIP* 类型的原素。要得到相同的连接线段条带，加上一条回到起始顶点的线，我们可以使用类型为 **THREE.LineLoop** 的对象。例如，对于一个三角形的轮廓，我们可以提供一个包含三个点坐标的 BufferGeometry，并使用一个 **LineLoop**。
 
-    我们还需要一个材料。对于线条，材料可以由类型为 ***THREE.LineBasicMaterial*** 的对象表示。像往常一样，构造函数的参数是一个 JavaScript 对象，其属性可以包括 *color* 和 *linewidth*。例如：
+    我们还需要一个材料。对于线条，材料可以由类型为 **THREE.LineBasicMaterial** 的对象表示。像往常一样，构造函数的参数是一个 JavaScript 对象，其属性可以包括 *color* 和 *linewidth*。例如：
 
     ```js
     let lineMat = new THREE.LineBasicMaterial({
@@ -664,11 +664,11 @@
 
     ![Threejs Triangle Vertexcolors](../../en/c5/threejs-triangle-vertexcolors.png)
 
-    "Basic" 在 ***LineBasicMaterial*** 中表示这种材料使用基本颜色，这些颜色不需要照明就能看到，也不会受到照明的影响。这通常是线条想要的。
+    "Basic" 在 **LineBasicMaterial** 中表示这种材料使用基本颜色，这些颜色不需要照明就能看到，也不会受到照明的影响。这通常是线条想要的。
 
     ----
 
-    在 *three.js* 中，网格对象对应于 OpenGL 基元 *GL_TRIANGLES*。网格的几何体对象必须指定哪些顶点是属于哪些三角形的。我们将在[下一节](./s2.md)中看到如何做到这一点。然而，*three.js* 提供了一些类来表示常见的网格几何体，例如球体、圆柱体和圆环面。对于这些内置类，您只需要调用构造函数即可创建适当的几何体。例如，类 ***THREE.CylinderGeometry*** 表示圆柱体的几何体，其构造函数的形式如下：
+    在 *three.js* 中，网格对象对应于 OpenGL 基元 *GL_TRIANGLES* 。网格的几何体对象必须指定哪些顶点是属于哪些三角形的。我们将在[下一节](./s2.md)中看到如何做到这一点。然而，*three.js* 提供了一些类来表示常见的网格几何体，例如球体、圆柱体和圆环面。对于这些内置类，您只需要调用构造函数即可创建适当的几何体。例如，类 **THREE.CylinderGeometry** 表示圆柱体的几何体，其构造函数的形式如下：
 
     ```js
     new THREE.CylinderGeometry(radiusTop, radiusBottom, height,
@@ -677,7 +677,7 @@
 
     这个构造函数创建的几何体是对圆柱体的近似表示，其轴线沿着 y 轴。它沿着该轴从 *−height/2* 延伸到 *height/2*。其圆形顶部的半径是 *radiusTop*，底部的半径是 *radiusBottom*。两个半径不必相同；当它们不同时，您将得到一个截断的圆锥而不是真正的圆柱体。使用 *radiusTop* 的零值可以制作一个实际的圆锥。参数 *radiusSegments* 和 *heightSegments* 分别给出圆柱体圆周和长度上的细分数——在 OpenGL 的 GLUT 库中称为切片和堆叠。参数 *openEnded* 是一个布尔值，指示是否绘制圆柱体的顶部和底部；使用值 *true* 可以得到一个开放式的管子。最后两个参数允许您制作部分圆柱体。它们的值以弧度为单位，围绕 y 轴测量。仅渲染从 *thetaStart* 开始到 *thetaStart* 加上 *thetaLength* 结束的圆柱体部分。例如，如果 *thetaLength* 是 Math.PI，您将得到一个半圆柱体。
 
-    构造函数的大量参数提供了很多灵活性。所有参数都是可选的。前三个参数的默认值每个都是一。*radiusSegments* 的默认值是 8，这为平滑圆柱体提供了一个较差的近似。省略最后三个参数将得到一个两端封闭的完整圆柱体。
+    构造函数的大量参数提供了很多灵活性。所有参数都是可选的。前三个参数的默认值每个都是一。 *radiusSegments* 的默认值是 8，这为平滑圆柱体提供了一个较差的近似。省略最后三个参数将得到一个两端封闭的完整圆柱体。
 
     其他标准网格几何体类似。这里是一些构造函数，列出了所有参数（但请记住，大多数参数是可选的）：
 
@@ -699,13 +699,13 @@
     new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments, arc)
     ```
 
-    类 ***BoxGeometry*** 表示以原点为中心的矩形盒子的几何体。它的构造函数有三个参数，用于给出盒子在每个方向上的大小；默认值为一。最后三个参数给出每个方向上的细分数，默认值为一；大于一的值将导致盒子的面被细分为更小的三角形。
+    类 **BoxGeometry** 表示以原点为中心的矩形盒子的几何体。它的构造函数有三个参数，用于给出盒子在每个方向上的大小；默认值为一。最后三个参数给出每个方向上的细分数，默认值为一；大于一的值将导致盒子的面被细分为更小的三角形。
 
-    类 ***PlaneGeometry*** 表示位于 xy 平面上、以原点为中心的矩形的几何体。它的参数与立方体类似。***RingGeometry*** 表示一个圆环，即从中心去掉一个较小圆盘的圆盘。圆环位于 xy 平面上，其中心位于原点。您应该总是指定圆环的内外半径。
+    类 **PlaneGeometry** 表示位于 xy 平面上、以原点为中心的矩形的几何体。它的参数与立方体类似。 **RingGeometry** 表示一个圆环，即从中心去掉一个较小圆盘的圆盘。圆环位于 xy 平面上，其中心位于原点。您应该总是指定圆环的内外半径。
 
-    ***ConeGeometry*** 的构造函数与 ***CylinderGeometry*** 的构造函数具有完全相同的形式和效果，只是将 radiusTop 设置为零。也就是说，它构建了一个以 y 轴为中心、以原点为中心的圆锥。
+    **ConeGeometry** 的构造函数与 **CylinderGeometry** 的构造函数具有完全相同的形式和效果，只是将 radiusTop 设置为零。也就是说，它构建了一个以 y 轴为中心、以原点为中心的圆锥。
 
-    对于 ***SphereGeometry***，所有参数都是可选的。构造函数创建了一个以原点为中心、y 轴为轴的球体。第一个参数，给出球体的半径，默认值为一。接下来两个参数给出切片和堆叠的数量，默认值分别为 32 和 16。最后四个参数允许您制作球体的一部分；默认值给出一个完整的球体。这四个参数是以弧度为单位测量的角度。*phiStart* 和 *phiLength* 在赤道周围的角度测量，并给出生成的球壳的经度范围。例如：
+    对于 **SphereGeometry**，所有参数都是可选的。构造函数创建了一个以原点为中心、y 轴为轴的球体。第一个参数，给出球体的半径，默认值为一。接下来两个参数给出切片和堆叠的数量，默认值分别为 32 和 16。最后四个参数允许您制作球体的一部分；默认值给出一个完整的球体。这四个参数是以弧度为单位测量的角度。*phiStart* 和 *phiLength* 在赤道周围的角度测量，并给出生成的球壳的经度范围。例如：
 
     ```js
     new THREE.SphereGeometry( 5, 32, 16, 0, Math.PI )
@@ -717,9 +717,9 @@
     new THREE.SphereGeometry( 5, 32, 16, 0, 2*Math.PI, 0, Math.PI/2 )
     ```
 
-    对于 ***TorusGeometry***，构造函数创建了一个位于 xy 平面上、以原点为中心、z 轴穿过其孔的圆环面。参数 *radius* 是圆环中心到圆环管中心的距离，而 *tube* 是管的半径。接下来的两个参数分别给出每个方向上的细分数。最后一个参数，arc，允许您只制作圆环的一部分。它是一个在 0 到 *2\*Math.PI* 之间的角度，沿着圆环管中心的圆周测量。
+    对于 **TorusGeometry**，构造函数创建了一个位于 xy 平面上、以原点为中心、z 轴穿过其孔的圆环面。参数 *radius* 是圆环中心到圆环管中心的距离，而 *tube* 是管的半径。接下来的两个参数分别给出每个方向上的细分数。最后一个参数，arc，允许您只制作圆环的一部分。它是一个在 0 到 *2\*Math.PI* 之间的角度，沿着圆环管中心的圆周测量。
 
-    还有代表正多面体的几何体类：***THREE.TetrahedronGeometry***、***THREE.OctahedronGeometry***、***THREE.DodecahedronGeometry*** 和 ***THREE.IcosahedronGeometry***。（对于立方体，使用 ***BoxGeometry***。）这四个类的构造函数接受两个参数。第一个指定多面体的大小，默认值为 1。大小以包含多面体的球体的半径给出。第二个参数是一个整数，称为 *detail*。默认值 0 给出实际的正多面体。较大的值通过添加额外的面来增加细节。随着细节的增加，多面体成为对球体的更好近似。这可以通过下面的插图更容易理解：
+    还有代表正多面体的几何体类： **THREE.TetrahedronGeometry** 、 **THREE.OctahedronGeometry** 、 **THREE.DodecahedronGeometry** 和 **THREE.IcosahedronGeometry** 。（对于立方体，使用 **BoxGeometry** 。）这四个类的构造函数接受两个参数。第一个指定多面体的大小，默认值为 1。大小以包含多面体的球体的半径给出。第二个参数是一个整数，称为 *detail*。默认值 0 给出实际的正多面体。较大的值通过添加额外的面来增加细节。随着细节的增加，多面体成为对球体的更好近似。这可以通过下面的插图更容易理解：
 
     ![Icosahedron Detail](../../en/c5/icosahedron-detail.png)
 
@@ -727,9 +727,9 @@
 
     ----
 
-    要创建一个网格对象，您需要一个材料以及一个几何体。有几种材料适合网格对象，包括 ***THREE.MeshBasicMaterial***、***THREE.MeshLambertMaterial*** 和 ***THREE.MeshPhongMaterial***。（还有更多网格材料，包括两种较新的材料，***THREE.MeshStandardMaterial*** 和 ***THREE.MeshPhysicalMaterial***，它们实现了与**基于物理的渲染**相关的技术，这是一种已成为流行的改进渲染方法。然而，我将不会在这里介绍它们。）
+    要创建一个网格对象，您需要一个材料以及一个几何体。有几种材料适合网格对象，包括 **THREE.MeshBasicMaterial** 、 **THREE.MeshLambertMaterial** 和 **THREE.MeshPhongMaterial** 。（还有更多网格材料，包括两种较新的材料， **THREE.MeshStandardMaterial** 和 **THREE.MeshPhysicalMaterial** ，它们实现了与 **基于物理的渲染** 相关的技术，这是一种已成为流行的改进渲染方法。然而，我将不会在这里介绍它们。）
 
-    ***MeshBasicMaterial*** 表示一种不受照明影响的颜色；无论场景中是否有灯光，它看起来都是一样的，并且它没有阴影，给它一个平坦的而不是3D的外观。其他两个类代表需要被照亮才能看到的材料。它们实现了称为**Lambert着色**和**Phong着色**的照明模型。主要的区别是 ***MeshPhongMaterial*** 有一个镜面颜色，但 ***MeshLambertMaterial** 没有。它们都可以有散射和自发光颜色。对于所有三种材料类，构造函数有一个参数，一个 JavaScript 对象，它指定了材料的属性值。例如：
+    **MeshBasicMaterial** 表示一种不受照明影响的颜色；无论场景中是否有灯光，它看起来都是一样的，并且它没有阴影，给它一个平坦的而不是3D的外观。其他两个类代表需要被照亮才能看到的材料。它们实现了称为 **Lambert着色** 和 **Phong着色** 的照明模型。主要的区别是 **MeshPhongMaterial** 有一个镜面颜色，但 **MeshLambertMaterial** 没有。它们都可以有散射和自发光颜色。对于所有三种材料类，构造函数有一个参数，一个 JavaScript 对象，它指定了材料的属性值。例如：
 
     ```js
     let mat = new THREE.MeshPhongMaterial({
@@ -745,11 +745,11 @@
     还有一些其他材料属性，您可能需要在构造函数中设置。除了 flatShading，这些适用于所有三种网格材料：
 
     - vertexColors — 一个布尔属性，可以设置为 *true* 以使用几何体中的顶点颜色。默认值为 false。
-    - wireframe — 一个布尔值，表示是否应将网格绘制为线框模型，只显示其面的轮廓。默认值为 *false*。一个 *true* 值最适合使用 ***MeshBasicMaterial***。
+    - wireframe — 一个布尔值，表示是否应将网格绘制为线框模型，只显示其面的轮廓。默认值为 *false*。一个 *true* 值最适合使用 **MeshBasicMaterial**。
     - wireframeLinewidth — 用于绘制线框的线条宽度，以像素为单位。默认值为 1。（非默认值可能不被尊重。）
     - visible — 一个布尔值，控制是否渲染使用它的对象，默认值为 *true*。
     - side — 值为 *THREE.FrontSide*、*THREE.BackSide* 或 *THREE.DoubleSide*，默认值为 *THREE.FrontSide*。这决定了是否根据面可见的一侧来绘制网格面。使用默认值 *THREE.FrontSide*，只有从前面看时才绘制面。*THREE.DoubleSide* 无论从前面还是从后面看都会绘制它，而 *THREE.BackSide* 仅从后面看时绘制。对于封闭对象，如立方体或完整球体，只要观察者在对象外部，默认值就讲得通。对于平面、开放管或部分球体，应该将值设置为 *THREE.DoubleSide*。否则，应该在视图中的对象部分将不会被绘制。
-    - flatShading — 一个 *boolean* 值，默认为 *false*。这对 ***MeshBasicMaterial*** 不起作用。对于应该看起来“有面”的物体，具有平坦侧面，重要的是将此属性设置为 *true*。例如，对于立方体或边数较少的圆柱体，就是这样。
+    - flatShading — 一个 *boolean* 值，默认为 *false*。这对 **MeshBasicMaterial** 不起作用。对于应该看起来“有面”的物体，具有平坦侧面，重要的是将此属性设置为 *true*。例如，对于立方体或边数较少的圆柱体，就是这样。
 
     作为示例，让我们制作一个有光泽的蓝绿色、开放的、五边的管子，侧面平坦：
 
@@ -782,7 +782,7 @@
     });
     ```
 
-    这里显示的 *polygonOffset*、*polygonOffsetUnits* 和 *polygonOffsetFactor* 设置将略微增加使用此材料的物体的深度，以便它不与同一物体的线框版本发生干扰。
+    这里显示的 *polygonOffset* 、 *polygonOffsetUnits* 和 *polygonOffsetFactor* 设置将略微增加使用此材料的物体的深度，以便它不与同一物体的线框版本发生干扰。
 
     最后一点：您并不总是需要制作新的材料和几何体来制作新对象。您可以在多个对象中重用相同的材料和几何体。
 
@@ -898,9 +898,9 @@
 
     ----
 
-    The color parameter in the above material was specified by the string "yellow". Colors in *three.js* can be represented by values of type ***THREE.Color***. The class ***THREE.Color*** represents an RGB color. A ***Color*** object c has properties *c.r*, *c.g*, and *c.b* giving the red, blue, and green color components as floating point numbers in the range from 0.0 to 1.0. Note that there is no alpha component; *three.js* handles transparency separately from color.
+    The color parameter in the above material was specified by the string "yellow". Colors in *three.js* can be represented by values of type **THREE.Color**. The class **THREE.Color** represents an RGB color. A **Color** object c has properties *c.r*, *c.g*, and *c.b* giving the red, blue, and green color components as floating point numbers in the range from 0.0 to 1.0. Note that there is no alpha component; *three.js* handles transparency separately from color.
 
-    There are several ways to construct a ***THREE.Color*** object. The constructor can take three parameters giving the RGB components as real numbers in the range 0.0 to 1.0. It can take a single string parameter giving the color as a CSS color string, like those used in the 2D canvas graphics API; examples include "white", "red", "rgb(255,0,0)", and "#FF0000". Or the color constructor can take a single integer parameter in which each color component is given as an eight-bit field in the integer. Usually, an integer that is used to represent a color in this way is written as a hexadecimal literal, beginning with "0x". Examples include 0xff0000 for red, 0x00ff00 for green, 0x0000ff for blue, and 0x007050 for a dark blue-green. Here are some examples of using color constructors:
+    There are several ways to construct a **THREE.Color** object. The constructor can take three parameters giving the RGB components as real numbers in the range 0.0 to 1.0. It can take a single string parameter giving the color as a CSS color string, like those used in the 2D canvas graphics API; examples include "white", "red", "rgb(255,0,0)", and "#FF0000". Or the color constructor can take a single integer parameter in which each color component is given as an eight-bit field in the integer. Usually, an integer that is used to represent a color in this way is written as a hexadecimal literal, beginning with "0x". Examples include 0xff0000 for red, 0x00ff00 for green, 0x0000ff for blue, and 0x007050 for a dark blue-green. Here are some examples of using color constructors:
 
     ```js
     let c1 = new THREE.Color("skyblue");
@@ -908,7 +908,7 @@
     let c3 = new THREE.Color(0x98fb98);  // pale green
     ```
 
-    In many contexts, such as the ***THREE.Points*** constructor, *three.js* will accept a string or integer where a color is required; the string or integer will be fed through the Color constructor. As another example, a ***WebGLRenderer*** object has a "clear color" property that is used as the background color when the renderer renders a scene. This property could be set using any of the following commands:
+    In many contexts, such as the **THREE.Points** constructor, *three.js* will accept a string or integer where a color is required; the string or integer will be fed through the Color constructor. As another example, a **WebGLRenderer** object has a "clear color" property that is used as the background color when the renderer renders a scene. This property could be set using any of the following commands:
 
     ```js
     renderer.setClearColor( new THREE.Color(0.6, 0.4, 0.1) );
@@ -918,9 +918,9 @@
 
     ----
 
-    Turning next to lines, an object of type ***THREE.Line*** represents a line strip—what would be a primitive of the type called *GL_LINE_STRIP* in OpenGL. To get the same strip of connected line segments, plus a line back to the starting vertex, we can use an object of type ***THREE.LineLoop***. For the outline of a triangle, for example, we could provide a BufferGeometry holding coordinates for three points and use a ***LineLoop***.
+    Turning next to lines, an object of type **THREE.Line** represents a line strip—what would be a primitive of the type called *GL_LINE_STRIP* in OpenGL. To get the same strip of connected line segments, plus a line back to the starting vertex, we can use an object of type **THREE.LineLoop**. For the outline of a triangle, for example, we could provide a BufferGeometry holding coordinates for three points and use a **LineLoop**.
 
-    We will also need a material. For lines, the material can be represented by an object of type ***THREE.LineBasicMaterial***. As usual, the parameter for the constructor is a JavaScript object, whose properties can include *color* and *linewidth*. For example:
+    We will also need a material. For lines, the material can be represented by an object of type **THREE.LineBasicMaterial**. As usual, the parameter for the constructor is a JavaScript object, whose properties can include *color* and *linewidth*. For example:
 
     ```js
     let lineMat = new THREE.LineBasicMaterial( {
@@ -965,11 +965,11 @@
 
     ![123](../../en/c5/threejs-triangle-vertexcolors.png)
 
-    The "Basic" in ***LineBasicMaterial*** indicates that this material uses basic colors that do not require lighting to be visible and are not affected by lighting. This is generally what you want for lines.
+    The "Basic" in **LineBasicMaterial** indicates that this material uses basic colors that do not require lighting to be visible and are not affected by lighting. This is generally what you want for lines.
 
     ----
 
-    A mesh object in *three.js* corresponds to the OpenGL primitive *GL_TRIANGLES*. The geometry object for a mesh must specify which vertices are part of which triangles. We will see how to do that in the [next section](./s2.md). However, *three.js* comes with classes to represent common mesh geometries, such as a sphere, a cylinder, and a torus. For these built-in classes, you just need to call a constructor to create the appropriate geometry. For example, the class ***THREE.CylinderGeometry*** represents the geometry for a cylinder, and its constructor takes the form
+    A mesh object in *three.js* corresponds to the OpenGL primitive *GL_TRIANGLES*. The geometry object for a mesh must specify which vertices are part of which triangles. We will see how to do that in the [next section](./s2.md). However, *three.js* comes with classes to represent common mesh geometries, such as a sphere, a cylinder, and a torus. For these built-in classes, you just need to call a constructor to create the appropriate geometry. For example, the class **THREE.CylinderGeometry** represents the geometry for a cylinder, and its constructor takes the form
 
     ```js
     new THREE.CylinderGeometry(radiusTop, radiusBottom, height,
@@ -1000,13 +1000,13 @@
     new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments, arc)
     ```
 
-    The class ***BoxGeometry*** represents the geometry of a rectangular box centered at the origin. Its constructor has three parameters to give the size of the box in each direction; their default value is one. The last three parameters give the number of subdivisions in each direction, with a default of one; values greater than one will cause the faces of the box to be subdivided into smaller triangles.
+    The class **BoxGeometry** represents the geometry of a rectangular box centered at the origin. Its constructor has three parameters to give the size of the box in each direction; their default value is one. The last three parameters give the number of subdivisions in each direction, with a default of one; values greater than one will cause the faces of the box to be subdivided into smaller triangles.
 
-    The class ***PlaneGeometry*** represents the geometry of a rectangle lying in the xy-plane, centered at the origin. Its parameters are similar to those for a cube. A ***RingGeometry*** represents an annulus, that is, a disk with a smaller disk removed from its center. The ring lies in the xy-plane, with its center at the origin. You should always specify the inner and outer radii of the ring.
+    The class **PlaneGeometry** represents the geometry of a rectangle lying in the xy-plane, centered at the origin. Its parameters are similar to those for a cube. A **RingGeometry** represents an annulus, that is, a disk with a smaller disk removed from its center. The ring lies in the xy-plane, with its center at the origin. You should always specify the inner and outer radii of the ring.
 
-    The constructor for ***ConeGeometry*** has exactly the same form and effect as the constructor for ***CylinderGeometry***, with the radiusTop set to zero. That is, it constructs a cone with axis along the y-axis and centered at the origin.
+    The constructor for **ConeGeometry** has exactly the same form and effect as the constructor for **CylinderGeometry**, with the radiusTop set to zero. That is, it constructs a cone with axis along the y-axis and centered at the origin.
 
-    For ***SphereGeometry***, all parameters are optional. The constructor creates a sphere centered at the origin, with axis along the y-axis. The first parameter, which gives the radius of the sphere, has a default of one. The next two parameters give the numbers of slices and stacks, with default values 32 and 16. The last four parameters allow you to make a piece of a sphere; the default values give a complete sphere. The four parameters are angles measured in radians. *phiStart* and *phiLength* are measured in angles around the equator and give the extent in longitude of the spherical shell that is generated. For example,
+    For **SphereGeometry**, all parameters are optional. The constructor creates a sphere centered at the origin, with axis along the y-axis. The first parameter, which gives the radius of the sphere, has a default of one. The next two parameters give the numbers of slices and stacks, with default values 32 and 16. The last four parameters allow you to make a piece of a sphere; the default values give a complete sphere. The four parameters are angles measured in radians. *phiStart* and *phiLength* are measured in angles around the equator and give the extent in longitude of the spherical shell that is generated. For example,
 
     ```js
     new THREE.SphereGeometry( 5, 32, 16, 0, Math.PI )
@@ -1018,9 +1018,9 @@
     new THREE.SphereGeometry( 5, 32, 16, 0, 2*Math.PI, 0, Math.PI/2 )
     ```
 
-    For ***TorusGeometry***, the constructor creates a torus lying in the xy-plane, centered at the origin, with the z-axis passing through its hole. The parameter *radius* is the distance from the center of the torus to the center of the torus's tube, while *tube* is the radius of the tube. The next two parameters give the number of subdivisions in each direction. The last parameter, arc, allows you to make just part of a torus. It is an angle between 0 and *2\*Math.PI*, measured along the circle at the center of the tube.
+    For **TorusGeometry**, the constructor creates a torus lying in the xy-plane, centered at the origin, with the z-axis passing through its hole. The parameter *radius* is the distance from the center of the torus to the center of the torus's tube, while *tube* is the radius of the tube. The next two parameters give the number of subdivisions in each direction. The last parameter, arc, allows you to make just part of a torus. It is an angle between 0 and *2\*Math.PI*, measured along the circle at the center of the tube.
 
-    There are also geometry classes representing the regular polyhedra: ***THREE.TetrahedronGeometry***, ***THREE.OctahedronGeometry***, ***THREE.DodecahedronGeometry***, and ***THREE.IcosahedronGeometry***. (For a cube use a ***BoxGeometry***.) The constructors for these four classes take two parameters. The first specifies the size of the polyhedron, with a default of 1. The size is given as the radius of the sphere that contains the polyhedron. The second parameter is an integer called *detail*. The default value, 0, gives the actual regular polyhedron. Larger values add detail by adding additional faces. As the detail increases, the polyhedron becomes a better approximation for a sphere. This is easier to understand with an illustration:
+    There are also geometry classes representing the regular polyhedra: **THREE.TetrahedronGeometry**, **THREE.OctahedronGeometry**, **THREE.DodecahedronGeometry**, and **THREE.IcosahedronGeometry**. (For a cube use a **BoxGeometry**.) The constructors for these four classes take two parameters. The first specifies the size of the polyhedron, with a default of 1. The size is given as the radius of the sphere that contains the polyhedron. The second parameter is an integer called *detail*. The default value, 0, gives the actual regular polyhedron. Larger values add detail by adding additional faces. As the detail increases, the polyhedron becomes a better approximation for a sphere. This is easier to understand with an illustration:
 
     ![123](../../en/c5/icosahedron-detail.png)
 
@@ -1028,9 +1028,9 @@
 
     ----
 
-    To create a mesh object, you need a material as well as a geometry. There are several kinds of material suitable for mesh objects, including ***THREE.MeshBasicMaterial***, ***THREE.MeshLambertMaterial***, and ***THREE.MeshPhongMaterial***. (There are more mesh materials, including two newer ones, ***THREE.MeshStandardMaterial*** and ***THREE.MeshPhysicalMaterial***, that implement techniques associated with **physically based rendering**, an approach to improved rendering that has become popular. However, I will not cover them here.)
+    To create a mesh object, you need a material as well as a geometry. There are several kinds of material suitable for mesh objects, including **THREE.MeshBasicMaterial**, **THREE.MeshLambertMaterial**, and **THREE.MeshPhongMaterial**. (There are more mesh materials, including two newer ones, **THREE.MeshStandardMaterial** and **THREE.MeshPhysicalMaterial**, that implement techniques associated with **physically based rendering**, an approach to improved rendering that has become popular. However, I will not cover them here.)
 
-    A ***MeshBasicMaterial*** represents a color that is not affected by lighting; it looks the same whether or not there are lights in the scene, and it is not shaded, giving it a flat rather than 3D appearance. The other two classes represent materials that need to be lit to be seen. They implement models of lighting known as **Lambert shading** and **Phong shading**. The major difference is that ***MeshPhongMaterial*** has a specular color *but **MeshLambertMateri*al** does not. Both can have diffuse and emissive colors. For all three material classes, the constructor has one parameter, a JavaScript object that specifies values for properties of the material. For example:
+    A **MeshBasicMaterial** represents a color that is not affected by lighting; it looks the same whether or not there are lights in the scene, and it is not shaded, giving it a flat rather than 3D appearance. The other two classes represent materials that need to be lit to be seen. They implement models of lighting known as **Lambert shading** and **Phong shading**. The major difference is that **MeshPhongMaterial** has a specular color *but **MeshLambertMateri*al** does not. Both can have diffuse and emissive colors. For all three material classes, the constructor has one parameter, a JavaScript object that specifies values for properties of the material. For example:
 
     ```js
     let mat = new THREE.MeshPhongMaterial( {
@@ -1046,11 +1046,11 @@
     There are a few other material properties that you might need to set in the constructor. Except for flatShading, these apply to all three kinds of mesh material:
 
     - vertexColors — a boolean property that can be set to *true* to use vertex colors from the geometry. The default is false.
-    - wireframe — a boolean value that indicates whether the mesh should be drawn as a wireframe model, showing only the outlines of its faces. The default is *false*. A *true* value works best with ***MeshBasicMaterial***.
+    - wireframe — a boolean value that indicates whether the mesh should be drawn as a wireframe model, showing only the outlines of its faces. The default is *false*. A *true* value works best with **MeshBasicMaterial**.
     - wireframeLinewidth — the width of the lines used to draw the wireframe, in pixels. The default is 1. (Non-default values might not be respected.)
     - visible — a boolean value that controls whether the object on which it is used is rendered or not, with a default of *true*.
     - side — has value *THREE.FrontSide*, *THREE.BackSide*, or *THREE.DoubleSide*, with the default being *THREE.FrontSide*. This determines whether faces of the mesh are drawn or not, depending on which side of the face is visible. With the default value, *THREE.FrontSide*, a face is drawn only if it is being viewed from the front. *THREE.DoubleSide* will draw it whether it is viewed from the front or from the back, and *THREE.BackSide* only if it is viewed from the back. For closed objects, such as a cube or a complete sphere, the default value makes sense, at least as long as the viewer is outside of the object. For a plane, an open tube, or a partial sphere, the value should be set to *THREE.DoubleSide*. Otherwise, parts of the object that should be in view won't be drawn.
-    - flatShading — a *boolean* value, with the default being *false*. This does not work for ***MeshBasicMaterial***. For an object that is supposed to look "faceted," with flat sides, it is important to set this property to *true*. That would be the case, for example, for a cube or for a cylinder with a small number of sides.
+    - flatShading — a *boolean* value, with the default being *false*. This does not work for **MeshBasicMaterial**. For an object that is supposed to look "faceted," with flat sides, it is important to set this property to *true*. That would be the case, for example, for a cube or for a cylinder with a small number of sides.
 
     As an example, let's make a shiny, blue-green, open, five-sided tube with flat sides:
 
@@ -1094,15 +1094,15 @@
 
 .. tab:: 中文
 
-    与几何体和材料相比，灯光就容易多了！Three.js 有几个类来表示灯光。灯光类是 *THREE.Object3D* 的子类。一个灯光对象可以被添加到场景中，然后照亮场景中的对象。我们将看看 *定向光*、*点光*、*环境光* 和 *聚光灯*。
+    与几何体和材料相比，灯光就容易多了！Three.js 有几个类来表示灯光。灯光类是 *THREE.Object3D* 的子类。一个灯光对象可以被添加到场景中，然后照亮场景中的对象。我们将看看 *定向光* 、 *点光* 、 *环境光* 和 *聚光灯*。
 
-    类 ***THREE.DirectionalLight*** 表示从给定方向平行照射的光，就像太阳光一样。定向光的位置属性给出了光线照射的方向。（这是所有场景图对象都有的相同 *位置* 属性，类型为 ***Vector3***，但对于定向光，其含义不同。）请注意，光线从给定位置向原点照射。默认位置是向量 (0,1,0)，它提供了沿 y 轴向下照射的光。这个类的构造函数有两个参数：
+    类 **THREE.DirectionalLight** 表示从给定方向平行照射的光，就像太阳光一样。定向光的位置属性给出了光线照射的方向。（这是所有场景图对象都有的相同 *位置* 属性，类型为 **Vector3**，但对于定向光，其含义不同。）请注意，光线从给定位置向原点照射。默认位置是向量 (0,1,0)，它提供了沿 y 轴向下照射的光。这个类的构造函数有两个参数：
 
     ```js
     new THREE.DirectionalLight(color, intensity)
     ```
 
-    其中 *color* 指定光的颜色，可以是 ***THREE.Color*** 对象，或十六进制整数，或 CSS 颜色字符串。与 OpenGL 中不同，灯光没有单独的散射和镜面颜色。*intensity* 是一个非负数，控制光的亮度，较大的值使光更亮。强度为零的光根本不发光。参数是可选的。颜色的默认值为白色 (0xffffff)，*intensity* 的默认值为 1。强度可以大于 1，但通常最好小于 1，以避免场景中的照明过强。
+    其中 *color* 指定光的颜色，可以是 **THREE.Color** 对象，或十六进制整数，或 CSS 颜色字符串。与 OpenGL 中不同，灯光没有单独的散射和镜面颜色。 *intensity* 是一个非负数，控制光的亮度，较大的值使光更亮。强度为零的光根本不发光。参数是可选的。颜色的默认值为白色 (0xffffff)， *intensity* 的默认值为 1。强度可以大于 1，但通常最好小于 1，以避免场景中的照明过强。
 
     假设我们在正 z 轴上有一个相机，朝向原点，我们希望一个与相机朝向相同方向的光线。我们可以使用位置在正 z 轴上的定向光：
 
@@ -1112,15 +1112,15 @@
     scene.add(light);
     ```
 
-    类 ***THREE.PointLight*** 表示从点向所有方向照射的光。该点的位置由光的 *position* 属性给出。构造函数有三个可选参数：
+    类 **THREE.PointLight** 表示从点向所有方向照射的光。该点的位置由光的 *position* 属性给出。构造函数有三个可选参数：
 
     ```js
     new THREE.PointLight(color, intensity, cutoff)
     ```
 
-    前两个参数与定向光相同，默认值也相同。*cutoff* 是一个非负数。如果值为零（这也是默认值），那么光的照明范围延伸到无限远，并且强度不会随着距离而减少。虽然这在物理上不现实，但通常在实践中效果良好。如果 *cutoff* 大于零，那么光的强度从光的位置的最大值下降到距离光的 *cutoff* 距离处的强度为零；光对距离大于 *cutoff* 的物体没有影响。这种光强度随距离减小被称为光源的 **衰减**。
+    前两个参数与定向光相同，默认值也相同。 *cutoff* 是一个非负数。如果值为零（这也是默认值），那么光的照明范围延伸到无限远，并且强度不会随着距离而减少。虽然这在物理上不现实，但通常在实践中效果良好。如果 *cutoff* 大于零，那么光的强度从光的位置的最大值下降到距离光的 *cutoff* 距离处的强度为零；光对距离大于 *cutoff* 的物体没有影响。这种光强度随距离减小被称为光源的 **衰减** 。
 
-    第三种类型的光是 ***THREE.AmbientLight***。这个类的存在是为了向场景添加环境光。环境光只有颜色：
+    第三种类型的光是 **THREE.AmbientLight** 。这个类的存在是为了向场景添加环境光。环境光只有颜色：
 
     ```js
     new THREE.AmbientLight(color)
@@ -1139,15 +1139,15 @@
 
     ----
 
-    第四种类型的光，***THREE.SpotLight***，对我们来说是新事物。该类型的对象表示一个 **聚光灯**，它类似于点光，只是它不是向所有方向发光，而是只产生一个光锥。光锥的顶点位于光的位置。默认情况下，光锥的轴线从该位置指向原点（所以除非你改变轴线的方向，否则应该将光的位置从原点移开）。构造函数为点光添加了两个参数：
+    第四种类型的光， **THREE.SpotLight** ，对我们来说是新事物。该类型的对象表示一个 **聚光灯**，它类似于点光，只是它不是向所有方向发光，而是只产生一个光锥。光锥的顶点位于光的位置。默认情况下，光锥的轴线从该位置指向原点（所以除非你改变轴线的方向，否则应该将光的位置从原点移开）。构造函数为点光添加了两个参数：
 
     ```js
     new THREE.SpotLight(color, intensity, cutoff, coneAngle, exponent)
     ```
 
-    *coneAngle* 是一个介于 0 和 *Math.PI/2* 之间的数字，它决定了光锥的大小。它是光锥轴线与光锥侧面之间的角度。默认值是 *Math.PI/3*。*exponent* 是一个非负数，它决定了当你从光锥轴线向侧面移动时，光强度减少的速度。默认值 10 给出了合理的结果。*exponent* 为零则根本没有衰减，以至于与轴线距离不同的物体被均匀照明。
+    *coneAngle* 是一个介于 0 和 *Math.PI/2* 之间的数字，它决定了光锥的大小。它是光锥轴线与光锥侧面之间的角度。默认值是 *Math.PI/3* 。 *exponent* 是一个非负数，它决定了当你从光锥轴线向侧面移动时，光强度减少的速度。默认值 10 给出了合理的结果。*exponent* 为零则根本没有衰减，以至于与轴线距离不同的物体被均匀照明。
 
-    设置 *three.js* 聚光灯方向的技术有点奇怪，但它确实使控制方向变得容易。类型为 ***SpotLight*** 的对象 *spot* 有一个名为 spot.target 的属性。目标是场景图节点。聚光灯的光锥指向从聚光灯位置到目标位置的方向。当聚光灯首次创建时，其目标是一个新的、空的 *Object3D*，位置在 (0,0,0)。然而，你可以将目标设置为场景图中的任何对象，这将使聚光灯朝向该对象发光。为了让 *three.js* 计算聚光灯方向，目标的位置除了原点外，实际上必须是场景图中的节点。例如，假设我们想要一个位于点 (0,0,5) 并指向点 (2,2,0) 的聚光灯：
+    设置 *three.js* 聚光灯方向的技术有点奇怪，但它确实使控制方向变得容易。类型为 **SpotLight** 的对象 *spot* 有一个名为 spot.target 的属性。目标是场景图节点。聚光灯的光锥指向从聚光灯位置到目标位置的方向。当聚光灯首次创建时，其目标是一个新的、空的 *Object3D* ，位置在 (0,0,0)。然而，你可以将目标设置为场景图中的任何对象，这将使聚光灯朝向该对象发光。为了让 *three.js* 计算聚光灯方向，目标的位置除了原点外，实际上必须是场景图中的节点。例如，假设我们想要一个位于点 (0,0,5) 并指向点 (2,2,0) 的聚光灯：
 
     ```js
     spotlight = new THREE.SpotLight();
@@ -1161,13 +1161,13 @@
 
     Compared to geometries and materials, lights are easy! Three.js has several classes to represent lights. Light classes are subclasses of *THREE.Object3D*. A light object can be added to a scene and will then illuminate objects in the scene. We'll look at *directional lights*, *point lights*, *ambient lights*, and *spotlights*.
 
-    The class ***THREE.DirectionalLight*** represents light that shines in parallel rays from a given direction, like the light from the sun. The position property of a directional light gives the direction from which the light shines. (This is the same *position* property, of type ***Vector3***, that all scene graph objects have, but the meaning is different for directional lights.) Note that the light shines from the given position towards the origin. The default position is the vector (0,1,0), which gives a light shining down the y-axis. The constructor for this class has two parameters:
+    The class **THREE.DirectionalLight** represents light that shines in parallel rays from a given direction, like the light from the sun. The position property of a directional light gives the direction from which the light shines. (This is the same *position* property, of type **Vector3**, that all scene graph objects have, but the meaning is different for directional lights.) Note that the light shines from the given position towards the origin. The default position is the vector (0,1,0), which gives a light shining down the y-axis. The constructor for this class has two parameters:
 
     ```js
     new THREE.DirectionalLight( color, intensity )
     ```
 
-    where *color* specifies the color of the light, given as a ***THREE.Color*** object, or as a hexadecimal integer, or as a CSS color string. Lights do not have separate diffuse and specular colors, as they do in OpenGL. The *intensity* is a non-negative number that controls the brightness of the light, with larger values making the light brighter. A light with intensity zero gives no light at all. The parameters are optional. The default for color is white (0xffffff) and for *intensity* is 1. The intensity can be greater than 1, but values less than 1 are usually preferable, to avoid having too much illumination in the scene.
+    where *color* specifies the color of the light, given as a **THREE.Color** object, or as a hexadecimal integer, or as a CSS color string. Lights do not have separate diffuse and specular colors, as they do in OpenGL. The *intensity* is a non-negative number that controls the brightness of the light, with larger values making the light brighter. A light with intensity zero gives no light at all. The parameters are optional. The default for color is white (0xffffff) and for *intensity* is 1. The intensity can be greater than 1, but values less than 1 are usually preferable, to avoid having too much illumination in the scene.
 
     Suppose that we have a camera on the positive z-axis, looking towards the origin, and we would like a light that shines in the same direction that the camera is looking. We can use a directional light whose position is on the positive z-axis:
 
@@ -1177,7 +1177,7 @@
     scene.add(light);
     ```
 
-    The class ***THREE.PointLight*** represents a light that shines in all directions from a point. The location of the point is given by the light's *position* property. The constructor has three optional parameters:
+    The class **THREE.PointLight** represents a light that shines in all directions from a point. The location of the point is given by the light's *position* property. The constructor has three optional parameters:
 
     ```js
     new THREE.PointLight( color, intensity, cutoff )
@@ -1185,7 +1185,7 @@
 
     The first two parameters are the same as for a directional light, with the same defaults. The *cutoff* is a non-negative number. If the value is zero—which is the default—then the illumination from the light extends to infinity, and intensity does not decrease with distance. While this is not physically realistic, it generally works well in practice. If *cutoff* is greater than zero, then the intensity falls from a maximum value at the light's position down to an intensity of zero at a distance of *cutoff* from the light; the light has no effect on objects that are at a distance greater than *cutoff*. This falloff of light intensity with distance is referred to as **attenuation** of the light source.
 
-    A third type of light is ***THREE.AmbientLight***. This class exists to add ambient light to a scene. An ambient light has only a color:
+    A third type of light is **THREE.AmbientLight**. This class exists to add ambient light to a scene. An ambient light has only a color:
 
     ```js
     new THREE.AmbientLight( color )
@@ -1204,7 +1204,7 @@
 
     ----
 
-    The fourth type of light, ***THREE.SpotLight***, is something new for us. An object of that type represents a **spotlight**, which is similar to a point light, except that instead of shining in all directions, a spotlight only produces a cone of light. The vertex of the cone is located at the position of the light. By default, the axis of the cone points from that location towards the origin (so unless you change the direction of the axis, you should move the position of the light away from the origin). The constructor adds two parameters to those for a point light:
+    The fourth type of light, **THREE.SpotLight**, is something new for us. An object of that type represents a **spotlight**, which is similar to a point light, except that instead of shining in all directions, a spotlight only produces a cone of light. The vertex of the cone is located at the position of the light. By default, the axis of the cone points from that location towards the origin (so unless you change the direction of the axis, you should move the position of the light away from the origin). The constructor adds two parameters to those for a point light:
 
     ```js
     new THREE.SpotLight( color, intensity, cutoff, coneAngle, exponent )
@@ -1212,7 +1212,7 @@
 
     The *coneAngle* is a number between 0 and *Math.PI/2* that determines the size of the cone of light. It is the angle between the axis of the cone and the side of the cone. The default value is *Math.PI/3*. The *exponent* is a non-negative number that determines how fast the intensity of the light decreases as you move from the axis of the cone toward the side. The default value, 10, gives a reasonable result. An *exponent* of zero gives no falloff at all, so that objects at all distances from the axis are evenly illuminated.
 
-    The technique for setting the direction of a *three.js* spotlight is a little odd, but it does make it easy to control the direction. An object *spot* of type ***SpotLight*** has a property named spot.target. The target is a scene graph node. The cone of light from the spotlight is pointed in the direction from spotlight's position towards the target's position. When a spotlight is first created, its target is a new, empty *Object3D*, with position at (0,0,0). However, you can set the target to be any object in the scene graph, which will make the spotlight shine towards that object. For *three.js* to calculate the spotlight direction, a target whose position is anything other than the origin must actually be a node in the scene graph. For example, suppose we want a spotlight located at the point (0,0,5) and pointed towards the point (2,2,0):
+    The technique for setting the direction of a *three.js* spotlight is a little odd, but it does make it easy to control the direction. An object *spot* of type **SpotLight** has a property named spot.target. The target is a scene graph node. The cone of light from the spotlight is pointed in the direction from spotlight's position towards the target's position. When a spotlight is first created, its target is a new, empty *Object3D*, with position at (0,0,0). However, you can set the target to be any object in the scene graph, which will make the spotlight shine towards that object. For *three.js* to calculate the spotlight direction, a target whose position is anything other than the origin must actually be a node in the scene graph. For example, suppose we want a spotlight located at the point (0,0,5) and pointed towards the point (2,2,0):
 
     ```js
     spotlight = new THREE.SpotLight();
@@ -1262,7 +1262,7 @@
     tree.add(leaves);
     ```
 
-    树干是一个高度等于 1 的圆柱体。它的轴线沿着 y 轴，并且以原点为中心。磁盘世界的平面位于 xz 平面上，所以我想将树干的底部移动到该平面上。这是通过设置 *trunk.position*.y 的值来完成的，它表示要应用于树干的平移。记住，对象有自己的建模坐标系。指定变换的对象属性，如 *trunk.position*，在该坐标系中变换对象。在这种情况下，树干是一个更大的复合对象的一部分，代表整棵树。在渲染场景时，树干首先通过它自己的建模变换进行变换。然后，它会被应用于整个树的任何建模变换进一步变换。（这种分层建模首次在 [2.4.1小节](../c2/s4.md#241--构建复杂对象) 中介绍。）
+    树干是一个高度等于 1 的圆柱体。它的轴线沿着 y 轴，并且以原点为中心。磁盘世界的平面位于 xz 平面上，所以我想将树干的底部移动到该平面上。这是通过设置 *trunk.position.y* 的值来完成的，它表示要应用于树干的平移。记住，对象有自己的建模坐标系。指定变换的对象属性，如 *trunk.position* ，在该坐标系中变换对象。在这种情况下，树干是一个更大的复合对象的一部分，代表整棵树。在渲染场景时，树干首先通过它自己的建模变换进行变换。然后，它会被应用于整个树的任何建模变换进一步变换。（这种分层建模首次在 [2.4.1小节](../c2/s4.md#241--构建复杂对象) 中介绍。）
 
     一旦我们有了树对象，就可以将其添加到代表磁盘世界的模型中。在程序中，模型是一个名为 *diskworldModel* 的 **Object3D** 类型的对象。模型将包含几棵树，但树不必单独构建。我可以通过克隆已经创建的树来制作更多的树。例如：
 
@@ -1278,7 +1278,7 @@
 
     这将两棵树添加到模型中，具有不同的大小和位置。当树被克隆时，克隆得到它自己的建模变换属性 *position* 和 *scale* 的副本。更改原始树对象中这些属性的值不会影响克隆。
 
-    让我们转向一个更复杂的对象，轴和轮子。我开始创建一个轮子，使用圆环面作为轮胎，并使用三个圆柱体的副本作为辐条。在这种情况下，我不是制作一个新的 ***Object3D*** 来容纳轮子的所有组件，而是将圆柱体作为圆环的子节点添加。记住，*three.js* 中的任何屏幕图节点都可以有子节点。
+    让我们转向一个更复杂的对象，轴和轮子。我开始创建一个轮子，使用圆环面作为轮胎，并使用三个圆柱体的副本作为辐条。在这种情况下，我不是制作一个新的 **Object3D** 来容纳轮子的所有组件，而是将圆柱体作为圆环的子节点添加。记住， *three.js* 中的任何屏幕图节点都可以有子节点。
 
     ```js
     let wheel = new THREE.Mesh(  // 轮胎；辐条将作为子节点添加
@@ -1381,7 +1381,7 @@
 
     This adds two trees to the model, with different sizes and positions. When the tree is cloned, the clone gets its own copies of the modeling transformation properties, *position* and *scale*. Changing the values of those properties in the original tree object does not affect the clone.
 
-    Lets turn to a more complicated object, the axle and wheels. I start by creating a wheel, using a torus for the tire and using three copies of a cylinder for the spokes. In this case, instead of making a new ***Object3D*** to hold all the components of the wheel, I add the cylinders as children of the torus. Remember that any screen graph node in *three.js* can have child nodes.
+    Lets turn to a more complicated object, the axle and wheels. I start by creating a wheel, using a torus for the tire and using three copies of a cylinder for the spokes. In this case, instead of making a new **Object3D** to hold all the components of the wheel, I add the cylinders as children of the torus. Remember that any screen graph node in *three.js* can have child nodes.
 
     ```js
     let wheel = new THREE.Mesh(  // the tire; spokes will be added as children

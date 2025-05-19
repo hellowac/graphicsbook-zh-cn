@@ -7,7 +7,7 @@
 
 .. tab:: 中文
 
-    统一颜色的3D对象看起来足够好，但它们有点单调。它们的统一颜色没有像砖墙或格子沙发那样的视觉吸引力。通过在表面添加**纹理**，可以使三维对象看起来更有趣、更逼真。一般来说，纹理是在单个原素内部像素与像素之间的变化。我们只考虑一种纹理：**图像纹理**。图像纹理可以应用于表面，使表面的色泽从点到点变化，有点像将图像复制到表面上。以下是展示了六个具有不同图像纹理的对象的图片：
+    统一颜色的3D对象看起来足够好，但它们有点单调。它们的统一颜色没有像砖墙或格子沙发那样的视觉吸引力。通过在表面添加 **纹理** ，可以使三维对象看起来更有趣、更逼真。一般来说，纹理是在单个原素内部像素与像素之间的变化。我们只考虑一种纹理： **图像纹理** 。图像纹理可以应用于表面，使表面的色泽从点到点变化，有点像将图像复制到表面上。以下是展示了六个具有不同图像纹理的对象的图片：
 
     ![TextureDemo](../../en/c4/TextureDemo.png)
 
@@ -15,7 +15,7 @@
 
     纹理可能是 OpenGL 最复杂的部分，并且它们是自 OpenGL 1.1 以来一直存在并变得更加复杂的部分，因为它们对于有效创建逼真图像至关重要。本节只涵盖了 OpenGL 1.1 纹理 API 的部分内容。我们将在后续章节中看到更多的纹理。
 
-    请注意，用作纹理的图像应具有为二的幂的宽度和高度，例如 128、256 或 512。这是 OpenGL 1.1 的要求。在某些版本中放宽了这一要求，但使用**二的幂纹理**仍然是一个好主意。本节讨论的一些事情如果不使用二的幂纹理，即使在现代系统中也不会起作用。
+    请注意，用作纹理的图像应具有为二的幂的宽度和高度，例如 128、256 或 512。这是 OpenGL 1.1 的要求。在某些版本中放宽了这一要求，但使用 **二的幂纹理** 仍然是一个好主意。本节讨论的一些事情如果不使用二的幂纹理，即使在现代系统中也不会起作用。
 
     当图像纹理应用于表面时，默认行为是将表面的像素的 RGBA 颜色分量与图像中的颜色分量相乘。如果启用了照明，表面颜色将被照明效果修改，然后与纹理颜色相乘。通常使用白色作为表面颜色。如果表面使用不同的颜色，它将为纹理图像的颜色添加一种“色彩倾向”。
 
@@ -33,6 +33,8 @@
 
     When an image texture is applied to a surface, the default behavior is to multiply the RGBA color components of pixels on the surface by the color components from the image. The surface color will be modified by light effects, if lighting is turned on, before it is multiplied by the texture color. It is common to use white as the surface color. If a different color is used on the surface, it will add a "tint" to the color from the texture image.
 
+.. _c4.3.1:
+
 4.3.1 纹理坐标
 --------------------
 
@@ -40,7 +42,7 @@
 
 .. tab:: 中文
 
-    当一个纹理应用于表面时，表面上的每个点必须对应于纹理中的一个点。必须有一种方法来确定如何计算这种映射。为此，对象需要**纹理坐标**。正如在 OpenGL 中通常的情况一样，为一个原素的每个顶点指定**纹理坐标**。原素内部点的纹理坐标通过插值顶点的值来计算。
+    当一个纹理应用于表面时，表面上的每个点必须对应于纹理中的一个点。必须有一种方法来确定如何计算这种映射。为此，对象需要 **纹理坐标** 。正如在 OpenGL 中通常的情况一样，为一个原素的每个顶点指定 **纹理坐标** 。原素内部点的纹理坐标通过插值顶点的值来计算。
 
     纹理图像带有它自己的二维坐标系统。传统上，s 用于图像的水平坐标，t 用于垂直坐标。s 坐标是一个实数，从图像左侧的 0 到右侧的 1，而 t 从底部的 0 到顶部的 1。s 或 t 的值在 0 到 1 范围之外不处于图像内部，但这样的值作为纹理坐标仍然有效。请注意，纹理坐标不是基于像素的。无论图像大小如何，s 和 t 的值在 0 和 1 之间覆盖整个图像。
 
@@ -50,7 +52,7 @@
 
     这个区域的顶点具有 (s,t) 坐标 (0.3,0.1)，(0.45,0.6) 和 (0.25,0.7)。这些来自图像的坐标应该用作三角形原素顶点的纹理坐标。
 
-    顶点的纹理坐标是顶点的属性，就像颜色、法向量和材质属性一样。纹理坐标由 *glTexCoord** 系列函数指定，包括函数 *glTexCoord2f(s,t)*，*glTexCoord2d(s,t)*，*glTexCoord2fv(array)* 和 *glTexCoord2dv(array)*。OpenGL 状态包括由这些函数指定的当前纹理坐标集。当您使用 *glVertex** 指定一个顶点时，当前纹理坐标被复制并成为一个与顶点关联的属性。像往常一样，这意味着顶点的纹理坐标必须在调用 *glVertex** 之前指定。一个原素的每个顶点都需要不同的纹理坐标集。
+    顶点的纹理坐标是顶点的属性，就像颜色、法向量和材质属性一样。纹理坐标由 *glTexCoord\** 系列函数指定，包括函数  *glTexCoord2f(s,t)* ， *glTexCoord2d(s,t)* ， *glTexCoord2fv(array)* 和 *glTexCoord2dv(array)* 。OpenGL 状态包括由这些函数指定的当前纹理坐标集。当您使用 *glVertex\** 指定一个顶点时，当前纹理坐标被复制并成为一个与顶点关联的属性。像往常一样，这意味着顶点的纹理坐标必须在调用 *glVertex\** 之前指定。一个原素的每个顶点都需要不同的纹理坐标集。
 
     例如，要将上图中的三角形区域应用于 xy 平面上顶点位于 (0,0)，(0,1) 和 (1,0) 的三角形，我们可以这样写：
 
@@ -118,7 +120,7 @@
 
     The vertices of this area have (s,t) coordinates (0.3,0.1), (0.45,0.6), and (0.25,0.7). These coordinates from the image should be used as the texture coordinates for the vertices of the triangular primitive.
 
-    The texture coordinates of a vertex are an attribute of the vertex, just like color, normal vectors, and material properties. Texture coordinates are specified by the family of functions *glTexCoord\**, including the functions *glTexCoord2f(s,t)*, *glTexCoord2d(s,t)*, *glTexCoord2fv(array)*, and *glTexCoord2dv(array)*. The OpenGL state includes a current set of texture coordinates, as specified by these functions. When you specify a vertex with *glVertex\**, the current texture coordinates are copied and become an attribute that is associated with the vertex. As usual, this means that the texture coordinates for a vertex must be specified before *glVertex\** is called. Each vertex of a primitive will need a different set of texture coordinates.
+    The texture coordinates of a vertex are an attribute of the vertex, just like color, normal vectors, and material properties. Texture coordinates are specified by the family of functions *glTexCoord\**, including the functions *glTexCoord2f(s,t)* , *glTexCoord2d(s,t)* , *glTexCoord2fv(array)* , and *glTexCoord2dv(array)* . The OpenGL state includes a current set of texture coordinates, as specified by these functions. When you specify a vertex with *glVertex\** , the current texture coordinates are copied and become an attribute that is associated with the vertex. As usual, this means that the texture coordinates for a vertex must be specified before *glVertex\** is called. Each vertex of a primitive will need a different set of texture coordinates.
 
     For example, to apply the triangular region in the image shown above to the triangle in the xy-plane with vertices at (0,0), (0,1), and (1,0), we can say:
 
@@ -174,6 +176,8 @@
 
     The size, for us, will always be 2. (OpenGL also allows 3 or 4 texture coordinates, but we have no use for them.) The *dataType* can be *GL_FLOAT*, *GL_DOUBLE*, or *GL_INT*. The *stride* will ordinarily be zero, to indicate that there is no extra data between texture coordinates in the array. The last parameter is an array or pointer to the data, which must be of the type indicated by the *dataType*. In JOGL, as usual, you would use an nio buffer instead of an array.
 
+.. _c4.3.2:
+
 4.3.2 MipMap 和过滤
 --------------------
 
@@ -181,13 +185,13 @@
 
 .. tab:: 中文
 
-    当一个纹理应用于表面时，纹理中的像素通常不会与表面的像素一一对应，在通常情况下，纹理在映射到表面时必须被拉伸或缩小。有时，纹理中的几个像素会被映射到表面的同一个像素上。在这种情况下，应用到表面像素的颜色必须从映射到它的所有纹理像素的颜色中计算得出。这是“过滤”的一个例子；具体来说，它使用了一个**缩放过滤**，因为纹理正在被缩小。当纹理中的一个像素覆盖了表面的多个像素时，纹理必须被放大，我们需要一个**放大过滤**。
+    当一个纹理应用于表面时，纹理中的像素通常不会与表面的像素一一对应，在通常情况下，纹理在映射到表面时必须被拉伸或缩小。有时，纹理中的几个像素会被映射到表面的同一个像素上。在这种情况下，应用到表面像素的颜色必须从映射到它的所有纹理像素的颜色中计算得出。这是“过滤”的一个例子；具体来说，它使用了一个 **缩放过滤** ，因为纹理正在被缩小。当纹理中的一个像素覆盖了表面的多个像素时，纹理必须被放大，我们需要一个 **放大过滤** 。
 
-    在我们继续之前，有一个术语：**纹理**中的像素被称为texels（“texture pixel”或“texture element”的缩写），从现在开始我将使用这个术语。
+    在我们继续之前，有一个术语： **纹理** 中的像素被称为texels（“texture pixel”或“texture element”的缩写），从现在开始我将使用这个术语。
 
     在决定如何将纹理应用到表面的一个像素上时，OpenGL 必须处理这样一个事实，即那个像素实际上包含无限多点，每个点都有自己的纹理坐标。那么，应该如何计算像素的纹理颜色呢？最简单的方法是从一个像素中选择一个点，比如说像素中心的点。OpenGL 知道那个点的纹理坐标。这些纹理坐标对应于纹理中的一个点，那个点位于纹理的一个texels 中。那个texel 的颜色可以被用作像素的纹理颜色。这被称为“最近像素过滤”。它非常快，但通常不会给出好的结果。它没有考虑到表面像素和图像中texels 大小的差异。最近像素过滤的改进是“线性过滤”，它可以通过计算几个texels 颜色的平均值来得出应用到表面的颜色。
 
-    线性过滤的问题在于，当一个大纹理应用到一个更小的表面积时，它会变得非常低效。在这种情况下，许多texels 映射到一个像素，计算这么多texels 的平均值变得非常低效。这里有一个巧妙的解决方案：**Mipmaps**。
+    线性过滤的问题在于，当一个大纹理应用到一个更小的表面积时，它会变得非常低效。在这种情况下，许多texels 映射到一个像素，计算这么多texels 的平均值变得非常低效。这里有一个巧妙的解决方案： **Mipmaps** 。
 
     纹理的mipmap 是纹理的缩小版本。一套完整的mipmaps 包括全尺寸纹理、每个维度都除以二的半尺寸版本、四分之一尺寸版本、八分之一尺寸版本，等等。如果一个维度缩小到一个像素，它就不再进一步缩小，但另一个维度会继续减半，直到它也达到一个像素。无论如何，最终的mipmap 由一个像素组成。以下是一组砖纹理的mipmaps 的前几张图像：
 
@@ -219,6 +223,8 @@
 
     In newer versions of OpenGL, you can get OpenGL to generate mipmaps automatically. In OpenGL 1.1, if you want to use mipmaps, you must either load each mipmap individually, or you must generate them yourself. (The GLU library has a method, *gluBuild2DMipmaps* that can be used to generate a set of mipmaps for a 2D texture.) However, my sample programs do not use mipmaps.
 
+.. _c4.3.3:
+
 4.3.3 纹理目标和纹理参数
 -----------------------
 
@@ -235,9 +241,9 @@
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
     ```
 
-    *magFilter* 和 *minFilter* 的值是指定过滤算法的常量。对于 *magFilter*，唯一的选项是 *GL_NEAREST* 和 *GL_LINEAR*，分别提供最近像素和线性过滤。MAG 过滤器的默认值是 GL_LINEAR，很少需要更改它。对于 *minFilter*，除了 *GL_NEAREST* 和 *GL_LINEAR*，还有四个选项使用 mipmaps 进行更有效的过滤。MIN 过滤器的默认值是 *GL_NEAREST_MIPMAP_LINEAR*，它在每个 mipmap 内进行 mipmap 之间和最近像素过滤的平均处理。为了获得更好的结果，尽管效率较低，您可以使用 *GL_LINEAR_MIPMAP_LINEAR*，它在 mipmap 之间和内部都进行平均处理。另外两个选项是 *GL_NEAREST_MIPMAP_NEAREST* 和 *GL_LINEAR_MIPMAP_NEAREST*。
+    *magFilter* 和 *minFilter* 的值是指定过滤算法的常量。对于 *magFilter*，唯一的选项是 *GL_NEAREST* 和 *GL_LINEAR*，分别提供最近像素和线性过滤。MAG 过滤器的默认值是 GL_LINEAR，很少需要更改它。对于 *minFilter* ，除了 *GL_NEAREST* 和 *GL_LINEAR*，还有四个选项使用 mipmaps 进行更有效的过滤。MIN 过滤器的默认值是 *GL_NEAREST_MIPMAP_LINEAR*，它在每个 mipmap 内进行 mipmap 之间和最近像素过滤的平均处理。为了获得更好的结果，尽管效率较低，您可以使用 *GL_LINEAR_MIPMAP_LINEAR*，它在 mipmap 之间和内部都进行平均处理。另外两个选项是 *GL_NEAREST_MIPMAP_NEAREST* 和  *GL_LINEAR_MIPMAP_NEAREST* 。
 
-    **非常重要的一点**：如果您不为纹理使用 mipmaps，那么必须将该纹理的缩放过滤器更改为 *GL_LINEAR*，或者较少可能的是 *GL_NEAREST*。默认的 MIN 过滤器 **需要** mipmaps，如果 mipmaps 不可用，则纹理被认为未正确形成，OpenGL 会忽略它！请记住，如果您不创建 mipmaps 并且不更改缩放过滤器，那么您的纹理将被 OpenGL 简单地忽略。
+    **非常重要的一点** ：如果您不为纹理使用 mipmaps，那么必须将该纹理的缩放过滤器更改为 *GL_LINEAR* ，或者较少可能的是  *GL_NEAREST* 。默认的 MIN 过滤器 **需要** mipmaps，如果 mipmaps 不可用，则纹理被认为未正确形成，OpenGL 会忽略它！请记住，如果您不创建 mipmaps 并且不更改缩放过滤器，那么您的纹理将被 OpenGL 简单地忽略。
 
     还有另一对纹理参数来控制范围在 0 到 1 之外的纹理坐标如何处理。如上所述，默认行为是重复纹理。另一种选择是“夹”纹理。这意味着当指定范围在 0 到 1 之外的纹理坐标时，这些值会被强制进入该范围：小于 0 的值被替换为 0，大于 1 的值被替换为 1。可以使用以下方式分别在 *s* 和 *t* 方向上夹住值：
 
@@ -280,6 +286,8 @@
 
     The two squares in this image have s and t texture coordinates that range from −1 to 2. The original image lies in the center of the square. For the square on the left, the texture is repeated. On the right, the texture is clamped.
 
+.. _c4.3.4:
+
 4.3.4 纹理变换
 --------------------
 
@@ -302,7 +310,7 @@
 
     由于图像位于 st 平面上，因此 *glScalef* 的前两个参数才重要。对于旋转，您将使用 (0,0,1) 作为旋转轴，这将在 st 平面上旋转图像。
 
-    现在，这对纹理在表面上的外观实际上意味着什么？在示例中，缩放变换将每个纹理坐标乘以 2。例如，如果一个顶点被分配了二维纹理坐标 (0.4,0.1)，那么在应用纹理变换后，该顶点将映射到纹理中的点 (s,t) = (0.8,0.2)。纹理坐标在表面上的变化速度是不带缩放变换时的两倍。一个在没有变换时会映射到纹理图像中 1x1 平方区域的表面上的区域，将改为映射到图像中的 2x2 平方区域——因此，在该区域内将看到图像的更大一部分。换句话说，纹理图像在表面上将被*缩小*两倍！更一般地说，纹理变换对纹理外观的影响是其对纹理坐标影响的**逆**。（这与视图变换和建模变换之间的逆关系完全类似。）如果纹理变换是向右平移，那么纹理就会在表面上向左移动。如果纹理变换是逆时针旋转，那么纹理就会在表面上顺时针旋转。
+    现在，这对纹理在表面上的外观实际上意味着什么？在示例中，缩放变换将每个纹理坐标乘以 2。例如，如果一个顶点被分配了二维纹理坐标 (0.4,0.1)，那么在应用纹理变换后，该顶点将映射到纹理中的点 (s,t) = (0.8,0.2)。纹理坐标在表面上的变化速度是不带缩放变换时的两倍。一个在没有变换时会映射到纹理图像中 1x1 平方区域的表面上的区域，将改为映射到图像中的 2x2 平方区域——因此，在该区域内将看到图像的更大一部分。换句话说，纹理图像在表面上将被 *缩小* 两倍！更一般地说，纹理变换对纹理外观的影响是其对纹理坐标影响的 **逆** 。（这与视图变换和建模变换之间的逆关系完全类似。）如果纹理变换是向右平移，那么纹理就会在表面上向左移动。如果纹理变换是逆时针旋转，那么纹理就会在表面上顺时针旋转。
 
     我在这里提到纹理变换主要是为了展示 OpenGL 如何在另一个上下文中使用变换。但有时变换纹理以使其更好地适应表面是有用的。并且为了获得不寻常的效果，您甚至可以动画化纹理变换，使纹理图像在表面上移动。这里有一个演示，让您尝试纹理变换并查看效果。在左侧，您可以看到 st 平面上 s 和 t 介于 -1 和 2 之间的区域。一个框勾勒出映射到具有纹理坐标范围在 0 到 1 的 3D 对象区域的纹理区域。您可以通过拖动滑块来应用纹理变换，看看变换如何影响框以及如何影响对象上的纹理。有关更多信息，请查看演示中的帮助文本。
 
@@ -331,6 +339,8 @@
 
     <iframe src="../../../en/demos/c4/texture-transform.html" width="675" height="550"></iframe>
 
+.. _c4.3.5:
+
 4.3.5 从内存加载纹理
 --------------------
 
@@ -340,16 +350,16 @@
 
     OpenGL 中将图像用作纹理的过程通常开始于文件中的图像。OpenGL 本身没有从文件加载图像的函数。目前，我们假设图像已经从文件加载到计算机的内存中。本节稍后，我将解释如何在 C 和 Java 中完成这一过程。
 
-    OpenGL 从计算机内存中加载图像数据到 2D 纹理的函数是 *glTexImage2D()*，其形式如下：
+    OpenGL 从计算机内存中加载图像数据到 2D 纹理的函数是 *glTexImage2D()* ，其形式如下：
 
     ```c
     glTexImage2D(target, mipmapLevel, internalFormat, width, height, border,
                 format, dataType, pixels);
     ```
 
-    target 应该是 *GL_TEXTURE_2D*。mipmapLevel 通常应该是 0。值 0 用于加载主纹理；更大的值用于加载单独的 mipmap。internalFormat 告诉 OpenGL 您希望纹理数据在 OpenGL 纹理内存中的存储方式。它可以是 *GL_RGB*，用于为每个像素存储 8 位的红色/绿色/蓝色分量。另一种可能性是 *GL_RGBA*，它增加了一个 alpha 分量。width 和 height 提供了图像的大小；这些值应该是 2 的幂。border 的值应该是 0；另一种可能性是 1，这表明已经在图像数据周围添加了一像素的边界，我将不讨论其原因。最后三个参数描述了图像数据。format 告诉如何在计算机的内存中表示原始图像数据，例如 *GL_RGB* 或 *GL_RGBA*。dataType 通常是 *GL_UNSIGNED_BYTE*，表示每个颜色分量被表示为范围在 0 到 255 的一字节值。而 pixels 是指向像素实际颜色数据的起始点的指针。像素数据必须在特定的格式中，但这在这里并不需要我们关心，因为通常由用于从文件中读取图像的函数来处理。（对于 JOGL，指针将被缓冲区替换。）
+    target 应该是 *GL_TEXTURE_2D* 。mipmapLevel 通常应该是 0。值 0 用于加载主纹理；更大的值用于加载单独的 mipmap。internalFormat 告诉 OpenGL 您希望纹理数据在 OpenGL 纹理内存中的存储方式。它可以是 *GL_RGB* ，用于为每个像素存储 8 位的红色/绿色/蓝色分量。另一种可能性是 *GL_RGBA* ，它增加了一个 alpha 分量。width 和 height 提供了图像的大小；这些值应该是 2 的幂。border 的值应该是 0；另一种可能性是 1，这表明已经在图像数据周围添加了一像素的边界，我将不讨论其原因。最后三个参数描述了图像数据。format 告诉如何在计算机的内存中表示原始图像数据，例如 *GL_RGB* 或 *GL_RGBA* 。dataType 通常是 *GL_UNSIGNED_BYTE* ，表示每个颜色分量被表示为范围在 0 到 255 的一字节值。而 pixels 是指向像素实际颜色数据的起始点的指针。像素数据必须在特定的格式中，但这在这里并不需要我们关心，因为通常由用于从文件中读取图像的函数来处理。（对于 JOGL，指针将被缓冲区替换。）
 
-    这看起来相当复杂，但实际上，对 glTexImage2D 的调用通常采取以下形式，只是可能用 *GL_RGBA* 替换 *GL_RGB*。
+    这看起来相当复杂，但实际上，对 glTexImage2D 的调用通常采取以下形式，只是可能用 *GL_RGBA* 替换 *GL_RGB* 。
 
     ```c
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
@@ -392,6 +402,8 @@
 
     If you want to use the texture on some objects but not others, you can enable *GL_TEXTURE_2D* before drawing objects that you want to be textured and disable it before drawing untextured objects. You can also change the texture that is being used at any time by calling *glTexImage2D*.
 
+.. _c4.3.6:
+
 4.3.6 来自颜色缓冲区的纹理
 ------------------------
 
@@ -406,7 +418,7 @@
                                         x, y, 宽度, 高度, 边框 );
     ```
 
-    在这个方法中，目标将是 *GL_TEXTURE_2D*；*mipmap级别* 应该是零；*内部格式* 通常是 *GL_RGB* 或 *GL_RGBA*；x 和 y 指定从颜色缓冲区读取纹理的矩形的左下角；*width* 和 *height* 是该矩形的大小；边框应该是 0。像往常一样，纹理的宽度和高度应该是 2 的幂。对 *glCopyTexImage2D* 的调用通常看起来像这样：
+    在这个方法中，目标将是 *GL_TEXTURE_2D* ； *mipmap级别* 应该是零； *内部格式* 通常是 *GL_RGB* 或 *GL_RGBA* ；x 和 y 指定从颜色缓冲区读取纹理的矩形的左下角； *width* 和 *height* 是该矩形的大小；边框应该是 0。像往常一样，纹理的宽度和高度应该是 2 的幂。对 *glCopyTexImage2D* 的调用通常看起来像这样：
 
     ```c
     glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 宽度, 高度, 0);
@@ -443,6 +455,8 @@
 
     The texture can be animated! For the animation, a new texture is drawn for each frame. All the work is done in the program's display function. In that function, the current frame of the windmill-and-cart scene is first drawn as a 2D scene with lighting disabled. This picture is not shown on the computer screen; the drawing is done off-screen and the image will be erased and replaced with the 3D image before it's ever shown on screen. The *glCopyTexImage2D()* function is then called to copy the scene into the current texture. Then, the color buffer is cleared, lighting is enabled, and a 3D projection is set up, before finally drawing the 3D object that is seen on the computer screen.
 
+.. _c4.3.7:
+
 4.3.7 纹理对象
 --------------------
 
@@ -450,7 +464,7 @@
 
 .. tab:: 中文
 
-    OpenGL 1.0 中关于纹理的所有内容在 OpenGL 1.1 中仍然适用。OpenGL 1.1 引入了一个名为纹理对象的新特性，以使纹理处理更加高效。**纹理对象**用于当你需要在同一个程序中使用多个纹理图像时。加载纹理图像的常用方法 *glTexImage2D*，将数据从你的程序传输到显卡。这是一个昂贵的操作，使用这种方法在多个纹理之间切换可能会严重降低程序的性能。纹理对象提供了在显卡上存储多个纹理数据的可能性。有了纹理对象，你可以使用一个单一的、快速的 OpenGL 命令在不同的纹理对象之间切换：你只需要告诉 OpenGL 你想要使用哪个纹理对象。（当然，显卡只有有限的内存用于存储纹理，你不能保证所有的纹理对象都会被实际存储在显卡上。不适合放在显卡内存中的纹理对象并不比普通纹理更高效。）
+    OpenGL 1.0 中关于纹理的所有内容在 OpenGL 1.1 中仍然适用。OpenGL 1.1 引入了一个名为纹理对象的新特性，以使纹理处理更加高效。 **纹理对象** 用于当你需要在同一个程序中使用多个纹理图像时。加载纹理图像的常用方法 *glTexImage2D* ，将数据从你的程序传输到显卡。这是一个昂贵的操作，使用这种方法在多个纹理之间切换可能会严重降低程序的性能。纹理对象提供了在显卡上存储多个纹理数据的可能性。有了纹理对象，你可以使用一个单一的、快速的 OpenGL 命令在不同的纹理对象之间切换：你只需要告诉 OpenGL 你想要使用哪个纹理对象。（当然，显卡只有有限的内存用于存储纹理，你不能保证所有的纹理对象都会被实际存储在显卡上。不适合放在显卡内存中的纹理对象并不比普通纹理更高效。）
 
     纹理对象由 OpenGL 和图形硬件管理。一个纹理对象由一个整数 ID 号标识。要使用一个纹理对象，你需要从 OpenGL 获取一个 ID 号。这是通过 *glGenTextures* 函数完成的：
 
@@ -465,7 +479,7 @@
     glGenTextures( 3, idList );
     ```
 
-    然后，你可以使用 *idList[0]*、*idList[1]* 和 *idList[2]* 来引用纹理。由于 C 中指针的工作方式，如果你想要获取一个单一的纹理 ID，你可以将一个整型变量的指针作为第二个参数传递给 *glGenTextures()*。例如：
+    然后，你可以使用 *idList[0]* 、 *idList[1]* 和 *idList[2]* 来引用纹理。由于 C 中指针的工作方式，如果你想要获取一个单一的纹理 ID，你可以将一个整型变量的指针作为第二个参数传递给 *glGenTextures()* 。例如：
 
     ```c
     int texID;
@@ -480,7 +494,7 @@
     glBindTexture( GL_TEXTURE_2D, texID )
     ```
 
-    其中 texID 是由 *glGenTextures* 返回的纹理 ID。在此调用之后，任何对 *glTexParameteri*、*glTexImage2D* 或 *glCopyTexImage2D* 的使用都将应用于 ID 为 texID 的纹理对象。
+    其中 texID 是由 *glGenTextures* 返回的纹理 ID。在此调用之后，任何对 *glTexParameteri* 、 *glTexImage2D* 或 *glCopyTexImage2D* 的使用都将应用于 ID 为 texID 的纹理对象。
 
     类似地，当渲染一个带纹理的原素时，所使用的纹理是最近一次使用 *glBindTexture* 绑定的那个。一个典型的模式是在程序初始化期间加载和配置多个纹理：
 
@@ -554,6 +568,8 @@
 
     The small sample program [glut/texture-objects.c](../../../en/source/glut/texture-objects.c) shows how to use texture objects in C. In is available only in C since, as we will see, JOGL has its own way of working with texture objects.
 
+.. _c4.3.8:
+
 4.3.8 在 C 中加载纹理
 --------------------
 
@@ -618,7 +634,7 @@
     } // end loadTexture
     ```
 
-    这个函数被调用后，我们需要的 `glTexImage2D()` 数据就在全局变量 `imgWidth`、`imgHeight` 和 `imgPixels` 中（或者 `imgPixels` 为 0，表示加载图像的尝试失败）。有一个复杂性：FreeImage 会在某些平台上以红/绿/蓝的顺序存储像素的颜色分量，但在其他平台上以蓝/绿/红的顺序存储。第二种数据格式在 OpenGL 中被称为 *GL_BGR*。如果你在 `glTexImage2D()` 中使用了错误的格式，那么颜色的红色和蓝色分量将会颠倒。为了区分，你可以使用 FreeImage 常量 FI_RGBA_RED，它告诉像素数据中红色分量的位置。如果格式是 *GL_RGB*，这个常量将是 0；如果格式是 *GL_BGR*，这个常量将是 2。所以，要在 OpenGL 中使用纹理，你可能会说：
+    这个函数被调用后，我们需要的 `glTexImage2D()` 数据就在全局变量 `imgWidth` 、 `imgHeight` 和 `imgPixels` 中（或者 `imgPixels` 为 0，表示加载图像的尝试失败）。有一个复杂性：FreeImage 会在某些平台上以红/绿/蓝的顺序存储像素的颜色分量，但在其他平台上以蓝/绿/红的顺序存储。第二种数据格式在 OpenGL 中被称为 *GL_BGR* 。如果你在 `glTexImage2D()` 中使用了错误的格式，那么颜色的红色和蓝色分量将会颠倒。为了区分，你可以使用 FreeImage 常量 FI_RGBA_RED，它告诉像素数据中红色分量的位置。如果格式是 *GL_RGB* ，这个常量将是 0；如果格式是 *GL_BGR* ，这个常量将是 2。所以，要在 OpenGL 中使用纹理，你可能会说：
 
     ```c
     if ( imgPixels ) { // 图像数据存在
@@ -644,7 +660,7 @@
 
 .. tab:: 英文
 
-    We have seen how to load texture image data from memory into OpenGL. The problem that remains is how to get the image data into memory before calling *glTexImage2D*. One possibility is to compute the data—you can actually have your program generate texture data on the fly. More likely, however, you want to load it from a file. This section looks at how that might be done in C. You will probably want to use a library of image-manipulation functions. Several free image processing libraries are available. I will discuss one of them, FreeImage, which can work with many image file formats. *FreeImage* can be obtained from <http://freeimage.sourceforge.net/>, but I was able to use it in Linux simply by installing the package *libfreeimage-dev*. To make it available to my program, I added `#include "FreeImage.h"` to the top of my C program, and I added the option -lfreeimage to the gcc command to make the library available to the compiler. (See the sample program [glut/texture-demo.c](../../../en/source/glut/texture-demo.c) for an example that uses this library.) Instead of discussing FreeImage in detail, I present a well-commented function that uses it to load image data from a file:
+    We have seen how to load texture image data from memory into OpenGL. The problem that remains is how to get the image data into memory before calling *glTexImage2D*. One possibility is to compute the data—you can actually have your program generate texture data on the fly. More likely, however, you want to load it from a file. This section looks at how that might be done in C. You will probably want to use a library of image-manipulation functions. Several free image processing libraries are available. I will discuss one of them, FreeImage, which can work with many image file formats. *FreeImage* can be obtained from http://freeimage.sourceforge.net/, but I was able to use it in Linux simply by installing the package *libfreeimage-dev*. To make it available to my program, I added `#include "FreeImage.h"` to the top of my C program, and I added the option -lfreeimage to the gcc command to make the library available to the compiler. (See the sample program [glut/texture-demo.c](../../../en/source/glut/texture-demo.c) for an example that uses this library.) Instead of discussing FreeImage in detail, I present a well-commented function that uses it to load image data from a file:
 
     ```c
     void* imgPixels; // Pointer to raw RGB data for texture in memory.
@@ -730,6 +746,8 @@
 
     FreeImage is a large, complicated system that might not be easily made available on your computer. To make it easier for you to experiment with textures in C, I have also included a small C utility for reading textures from .rgb files. The rgb file format is fairly simple, but rgb files are generally much larger than the corresponding .png or .jpeg files. The format is not widely supported, but I have included .rgb versions of my sample texture images in the folder [glut/textures-rgb](../../../en/source/glut/textures-rgb). The small library for loading them into textures is [glut/textures-rgb/readrgb.c](../../../en/source/glut/textures-rgb/readrgb.c) and its header file [glut/textures-rgb/readrgb.h](../../../en/source/glut/textures-rgb/readrgb.h). (The library is from <http://paulbourke.net/dataformats/sgirgb/>.) Sample programs that use the library are [glut/texture-objects-rgb.c](../../../en/source/glut/texture-objects-rgb.c) and [glut/texture-demo-rgb.c](../../../en/source/glut/texture-demo-rgb.c).
 
+.. _c4.3.9:
+
 4.3.9 通过 JOGL 使用纹理
 ----------------------------
 
@@ -773,7 +791,7 @@
 
     将文件中的纹理加载到 **Texture** 对象 tex 中。这里的 *boolean* 参数，以及我们将要查看的所有方法中的参数，告诉 JOGL 是否为纹理创建 mipmaps；通过传递 true，我们自动获得一组完整的 mipmaps！
 
-    **一个重要的注意事项**：Java 的纹理创建函数只有在 OpenGL 上下文是“当前的”时才会工作。这将在 **GLEventListener** 的事件处理方法中成立，包括 *init()* 和 *display()* 方法。然而，在普通方法和构造函数中，这将不成立。
+    **一个重要的注意事项** ：Java 的纹理创建函数只有在 OpenGL 上下文是“当前的”时才会工作。这将在 **GLEventListener** 的事件处理方法中成立，包括 *init()* 和 *display()* 方法。然而，在普通方法和构造函数中，这将不成立。
 
     当然，在 Java 中，你更有可能将图像作为程序中的资源存储，而不是作为一个单独的文件。如果 *resourceName* 是指向图像资源的路径，你可以使用
 
@@ -797,7 +815,7 @@
     texture = AWTTextureIO.newTexture(GLProfile.getDefault(), img, true);
     ```
 
-    **ImageUtil** 类在包 *com.jogamp.opengl.util.awt* 中定义。在这里，我通过从资源中读取来获取一个 **BufferedImage**。你也可以从文件中读取它——甚至使用 Java 2D 图形绘制它。
+    **ImageUtil** 类在包 *com.jogamp.opengl.util.awt* 中定义。在这里，我通过从资源中读取来获取一个 **BufferedImage** 。你也可以从文件中读取它——甚至使用 Java 2D 图形绘制它。
 
 .. tab:: 英文
 

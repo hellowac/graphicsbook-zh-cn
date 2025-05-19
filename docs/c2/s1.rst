@@ -53,7 +53,7 @@
     .. raw:: html
        
         <div style="text-align: center;">
-            <iframe src="../_static/demos/c2/pixel-magnifier.html" width="530" height="380" ></iframe>
+            <iframe src="../en/demos/c2/pixel-magnifier.html" width="530" height="380" ></iframe>
         </div>
         
     所有这些都被现今像素不再是过去的像素所复杂化。今天的像素更小了！显示设备的分辨率可以用每英寸的像素数来衡量，这个数量被称为PPI（每英寸像素）或有时称为DPI（每英寸点）。早期的屏幕的分辨率大约在72 PPI左右。在这种分辨率下，个别像素是清晰可见的。有一段时间，大多数显示器的像素密度约为100像素/英寸，但是今天的高分辨率显示器可以有200、300甚至400像素/英寸。在最高分辨率下，单个像素已经无法分辨。
