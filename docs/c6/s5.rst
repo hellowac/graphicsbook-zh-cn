@@ -13,6 +13,8 @@
 
     This chapter uses WebGL for 2D drawing. Of course, the real motivation for using WebGL is to have high-performance 3D graphics on the web. We will turn to that in the [next chapter](../c7/index.md). With WebGL, implementing transformations is the responsibility of the programmer, which adds a level of complexity compared to OpenGL 1.1. But before we attempt to deal with that complexity in three dimensions, this short section shows how to implement transforms and hierarchical modeling in a 2D context.
 
+.. _c6.5.1:
+
 6.5.1 GLSL 中的转换
 -------------------------
 
@@ -101,6 +103,8 @@
     ```js
     gl.uniformMatrix3fv(u_transform_location, false, [ a, b, 0, c, d, 0, e, f, 1 ]);
     ```
+
+.. _c6.5.2:
 
 6.5.2 JavaScript 中的转换
 -------------------------

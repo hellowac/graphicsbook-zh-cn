@@ -29,6 +29,8 @@
 
     The core features of *three.js* are defined in a single large JavaScript file named "three.module.js", which can be found in a build directory in the *three.js* download. There is also a smaller "minified" version, *three.module.min.js*, that contains the same definitions in a format that is not meant to be human-readable. It is the minified version that is usually used on web pages. In addition to this core, the *three.js* download has a directory containing many examples and a variety of support files that are used in the examples. The examples use many features that are not part of the *three.js* core. These add-ons can be found in a folder named jsm inside the folder named examples in the *three.js* download. Several of the add-ons are used in this textbook and are included in the `threejs/script <../en/source/threejs/script>`_ folder.
 
+.. _c5.1.1:
+
 5.1.1 关于 JavaScript 模块
 -----------------------------
 
@@ -196,6 +198,8 @@
 
     I have given you only a very brief overview of JavaScript modules—enough, I hope to let you understand my sample programs and write some similar programs of your own. For more complex projects, you should look at what the three.js developers have to say about setting up a development environment. See the "Installation" section of the Manual at <https://threejs.org/docs/>.
 
+.. _c5.1.2:
+
 5.1.2 场景、渲染器、相机
 -------------------------
 
@@ -347,6 +351,8 @@
 
     (I should note that most of the examples that I have seen do not provide a canvas to the renderer; instead, they allow the renderer to create it. The canvas can then be obtained from the renderer and added to the page. Furthermore, the canvas typically fills the entire browser window. The sample program [threejs/full-window.html](../../../en/source/threejs/full-window.html) shows how to do that. However, all of my other examples use an existing canvas, with the renderer constructor shown above.)
 
+.. _c5.1.3:
+
 5.1.3 THREE.Object3D
 -----------------------
 
@@ -479,6 +485,8 @@
     means that the camera will be moved from its default position at the origin to the point (0,0,20) on the positive z-axis. This modeling transformation on the camera becomes a viewing transformation when the camera is used to render a scene.
 
     The object *obj.rotation* has properties obj.rotation.x, obj.rotation.y, and obj.rotation.z that represent rotations about the x-, y-, and z-axes. The angles are measured in radians. The object is rotated first about the x-axis, then about the y-axis, then about the z-axis. (It is possible to change this order.) The value of obj.rotation is not a vector. Instead, it belongs to a similar type, **THREE.Euler**, and the angles of rotation are called **Euler angles**.
+
+.. _c5.1.4:
 
 5.1.4 物体、几何形状、材料
 --------------------------
@@ -1087,6 +1095,8 @@
 
     One final note: You don't always need to make new materials and geometries to make new objects. You can reuse the same materials and geometries in multiple objects.
 
+.. _c5.1.5:
+
 5.1.5 灯光
 --------------------
 
@@ -1221,6 +1231,8 @@
     scene.add(spotlight);
     scene.add(spotlight.target);
     ```
+
+.. _c5.1.6:
 
 5.1.6 建模示例
 --------------------

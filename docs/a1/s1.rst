@@ -7,9 +7,9 @@ A.1 Java 编程语言
 
 .. tab:: 中文
 
-    Java 在许多大学和高中的计算机科学课程中作为第一门编程语言进行教授。它是一种庞大且复杂的语言，具有使其适合大型复杂编程项目的功能。这些特性可能使它看起来有点冗长和过于严格，但它们也使得编程环境能够为编写和调试程序提供极好的支持。如果你打算编写 Java 代码，你应该考虑使用一个功能齐全的编程环境，比如 **Eclipse**（[Eclipse 官网](https://eclipse.org/)）。[3.6.2 小节](../c3/s6.md#362-使用jogl) 讲解了如何为使用 JOGL（Java API for OpenGL）编程设置 Eclipse。
+    Java 在许多大学和高中的计算机科学课程中作为第一门编程语言进行教授。它是一种庞大且复杂的语言，具有使其适合大型复杂编程项目的功能。这些特性可能使它看起来有点冗长和过于严格，但它们也使得编程环境能够为编写和调试程序提供极好的支持。如果你打算编写 Java 代码，你应该考虑使用一个功能齐全的编程环境，比如 **Eclipse** （ `Eclipse 官网 <https://eclipse.org/>`_ ）。 :ref:`c3.6.2` 讲解了如何为使用 JOGL（Java API for OpenGL）编程设置 Eclipse。
 
-    这本书附带了几个用于编写图形 Java 程序的“启动”程序，例如 [java2d/EventsStarter.java](../../../en/source/java2d/EventsStarter.java) 用于 Java Graphics2D，[jogl/JoglStarter.java](../../../en/source/jogl/JoglStarter.java) 用于 JOGL。尽管本节没有提供足够的信息让你从头开始编写 Java 程序，但它可能有足够的信息让你在启动程序中“填补空白”并修改随书附带的其他示例程序。如果你想更详细地学习 Java，你可以考虑我的免费在线 Java 教科书，[JavaNotes](http://math.hws.edu/javanotes)。
+    这本书附带了几个用于编写图形 Java 程序的“启动”程序，例如 `java2d/EventsStarter.java <../en/source/java2d/EventsStarter.java>`_ 用于 Java Graphics2D， `jogl/JoglStarter.java <../en/source/jogl/JoglStarter.java>`_ 用于 JOGL。尽管本节没有提供足够的信息让你从头开始编写 Java 程序，但它可能有足够的信息让你在启动程序中“填补空白”并修改随书附带的其他示例程序。如果你想更详细地学习 Java，你可以考虑我的免费在线 Java 教科书， `JavaNotes <http://math.hws.edu/javanotes>`_ 。
 
     Java 有几个 2D 图形 API：AWT、Swing 和 JavaFX。Swing 建立在 AWT 之上，而 JavaFX 是一个全新的 API。JavaFX 在这本教科书中没有使用，但你将在这里看到对 Swing 和 AWT 的引用。
 
@@ -21,6 +21,8 @@ A.1 Java 编程语言
     This book comes with several "starter" programs for writing graphical Java programs, such as [java2d/EventsStarter.java](../../../en/source/java2d/EventsStarter.java) for Java Graphics2D and [jogl/JoglStarter.java](../../../en/source/jogl/JoglStarter.java) for JOGL. Although this section doesn't tell you enough to let you write Java programs from scratch, it might have enough information to let you "fill in the blanks" in the starter programs and modify other sample programs that come with the book. If you want to learn Java in more detail, you can consider my free on-line Java textbook, <http://math.hws.edu/javanotes>.
 
     Java has had several 2D graphics APIs: AWT, Swing, and JavaFX. Swing is built on top of the AWT, while JavaFX is a completely new API. JavaFX is not used in this textbook, but you will see references here both to Swing and to the AWT.
+
+.. _a.1.1:
 
 A.1.1  基本语言结构
 -------------------------
@@ -245,6 +247,8 @@ A.1.1  基本语言结构
 
     There is also a formatted output method, `System.out.printf`, which is similar to C's printf function.
 
+.. _a.1.2:
+
 A.1.2  对象和数据结构
 -------------------------
 
@@ -415,6 +419,8 @@ A.1.2  对象和数据结构
     ```
 
     (The for loop in this class is one that is specific to Java. It iterates automatically through all of the objects in the list.)
+
+.. _a.1.3:
 
 A.1.3  窗口和事件
 -------------------------

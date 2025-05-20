@@ -13,6 +13,8 @@ B.4 有关光和材料的更多信息
 
     Blender has extensive support for light and materials, and we only scratched the surface in [Subsection B.1.4](s1.md#b14--光源材质和纹理). In this section, we will go into a little more depth, but of course this is still only an introduction. In particular, we will look at the Shader Editor, which offers complete control over the design of materials.
 
+.. _b.4.1:
+
 B.4.1 光照
 -------------------------
 
@@ -67,7 +69,7 @@ B.4.1 光照
 
     The file [Blender-hdri-background-example.zip](../../../en/source/Blender-hdri-background-example.zip), which can be found in the source folder of the web site download of this textbook, is a compressed archive file that contains the Blender project that produced this image. (The project in the archive uses a jpg version of the much larger hdr background image file. This gives a poorer rendered image, but it makes the file size more reasonable.)
 
-
+.. _b.4.2:
 
 B.4.2 Eevee与Cycles 
 -------------------------
@@ -94,6 +96,8 @@ B.4.2 Eevee与Cycles
     ![123](../../en/a2/blender-eevee-settings.png)
 
     Note, however, that there are some things that will work in one of the renderers but not in the other.
+
+.. _b.4.3:
 
 B.4.3 着色器编辑器
 -------------------------

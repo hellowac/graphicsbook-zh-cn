@@ -17,6 +17,8 @@
 
     <iframe src="../../../en/demos/c9/diskworld-webgpu-demo.html" width="475" height="575"></iframe>
 
+.. _c9.4.1:
+
 9.4.1 深度测试
 -------------------------
 
@@ -166,6 +168,8 @@
     ```
 
 
+.. _c9.4.2:
+
 9.4.2 坐标系
 -------------------------
 
@@ -211,6 +215,8 @@
     There is one important transformation not shown in the diagram. Normal vectors for surfaces play an important role in lighting ([Subsection 4.1.3](../c4/s1.md#413-法向量)). When an object is transformed by the modelview transformation, its normal vectors must also be transformed. The transformation for normal vectors is not the same as the modelview transformation but can be derived from it.
 
     All of these transformations are implemented as matrices. The modelview and projection transformations are 4-by-4 matrices. The transformation matrix for normal vectors is a 3-by-3 matrix.
+
+.. _c9.4.3:
 
 9.4.3 进入 3D
 -------------------------
@@ -325,6 +331,8 @@
     To understand this code, you need to understand the various coordinate systems and the support in WGSL for matrix and vector math. The eye coordinates of the vertex are obtained by multiplying the homogeneous object coordinate vector by the modelview matrix. This gives the homogeneous (x,y,z,w) eye coordinates, which are converted to ordinary (x,y,z) coordinates by dividing the vec3f eyeCoords.xyz by the w-coordinate, eyeCoords.w. The position output, which must be given in clip coordinates, is obtained by multiplying the eye coordinate vector by the projection matrix.
 
     The unit normal and eye coordinate outputs from the vertex shader become inputs to the fragment shader, where they are used in the lighting calculation. (Their values for a fragment are, of course, interpolated from the vertices of the triangle that contains the fragment.) Phong lighting refers to doing lighting calculations in the fragment shader using interpolated normal vectors and the basic OpenGL lighting model (see [Subsection 4.1.4](../c4/s1.md#414-opengl-11-光照方程) and [Subsection 7.2.2](../c7/s2.md#722-镜面反射和-phong-着色)). There is more about lighting in the last example in this section.
+
+.. _c9.4.4:
 
 9.4.4 wgpu 矩阵
 -------------------------
@@ -493,6 +501,8 @@
     ```
 
     and similarly for a 3-vector and a 3-by-3 matrix.
+
+.. _c9.4.5:
 
 9.4.5 再次磁盘世界
 -------------------------

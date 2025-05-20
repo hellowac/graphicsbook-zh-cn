@@ -33,6 +33,8 @@
 
     You should keep this big picture in mind as we work through some examples that use various aspects of the lighting model.
 
+.. _c7.2.1:
+
 7.2.1 最小照明
 -------------------------
 
@@ -215,6 +217,8 @@
 
     (Note, however, that in some situations, it can be better to move the lighting calculations to the fragment shader, as we will soon see.)
 
+.. _c7.2.2:
+
 7.2.2 镜面反射和 Phong 着色
 ----------------------------
 
@@ -390,6 +394,8 @@
 
     The sample program [webgl/basic-specular-lighting-Phong-webgl2.html](../../../en/source/webgl/basic-specular-lighting-Phong-webgl2.html) is a port of the original WebGL 1.0 Phong lighting program to WebGL 2.0. It shows what the shader program looks like in GLSL ES 3.00. The changes are minimal. Attribute variables become "in" variables, varying variables become "out" variables in the vertex shader and "in" variables in the fragment shader, and the built-in fragment shader variable gl_FragColor is replaced with a custom "out" variable. The JavaScript side would not have to be changed at all, but as an example, it has been modified to use vertex array objects to organize the data for the various objects that can be drawn in the in program.
 
+.. _c7.2.3:
+
 7.2.3 增加复杂性
 -------------------------
 
@@ -537,6 +543,8 @@
     }
     ```
 
+.. _c7.2.4:
+
 7.2.4 两侧照明
 -------------------------
 
@@ -675,6 +683,8 @@
 
     In the sample program, polygon offset is turned on while drawing the graph and is turned off while drawing the grid lines.
 
+.. _c7.2.5:
+
 7.2.5 移动灯
 -------------------------
 
@@ -748,6 +758,8 @@
     The appropriate *modelview* matrix is the identity, for a light fixed with respect to the viewer; just the viewing transformation, for a light that has a fixed position in the world; or a combined viewing and modeling transformation, for a light that moves around in the world.
 
     Remember that the light position, like other light properties, must be set before rendering any geometry that is to be illuminated by the light.
+
+.. _c7.2.6:
 
 7.2.6 聚光灯
 -------------------------
@@ -904,6 +916,8 @@
 
     Of course, the position of the spotlight also has to be transformed, as for any moving light.
 
+.. _c7.2.7:
+
 7.2.7 光衰减
 -------------------------
 
@@ -924,6 +938,8 @@
     OpenGL 1.1 supports attenuation. The light intensity can be multiplied by 1.0 / *(a+b\*d+c\*d2)*, where d is the distance to the light source, and a, b, and c are properties of the light. The numbers a, b, and c are called the "constant attenuation," "linear attenuation," and "quadratic attenuation" of the light source. By default, a is one, and b and c are zero, which means that there is no attenuation.
 
     Of course, there is no need to implement exactly the same model in your own applications. For example, quadratic attenuation is rarely used. In the next sample program, I use the formula 1 / *(1+a\*d)* for the attenuation factor. The attenuation constant a is added as another property of light sources. A value of zero means no attenuation. In the lighting computation, the contribution of a light source to the lighting equation is multiplied by the attenuation factor for the light.
+
+.. _c7.2.8:
 
 7.2.8 磁盘世界2
 -------------------------

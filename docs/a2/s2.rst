@@ -13,6 +13,8 @@ B.2 Blender 建模
 
     Blender has a wide variety of basic shapes and tools for making more complex objects. This section will discuss just a few of the possibilities for modeling 3D shapes.
 
+.. _b.2.1:
+
 B.2.1 文本
 -------------------------
 
@@ -55,7 +57,7 @@ B.2.1 文本
 
     Once you have your text, you can extrude and bevel it, exactly as described in the next subsection for curves, to get a nice 3D appearance. The text in the above image has been extruded and beveled, and you can see the shadow of the 3D text object on the background.
 
-
+.. _b.2.2:
 
 B.2.2 曲线
 -------------------------
@@ -107,6 +109,8 @@ B.2.2 曲线
 
     It's possible to transform a Text object into a curve. Just select the text object, right-click to get a pop-up menu, and select "Curve" from the "Convert To" submenu of the popup menu. (Note, however, that you won't be able convert the curve back to a text object.) Once you've converted the text into a curve, you can edit the character outlines as curves. Furthermore, you can add other curve segments to the text curve. For the left object in the above picture, I created the text, converted it to a curve, put it into Edit Mode, added a Bezier circle, and manipulated the vertices of the circle so that the circle surrounded the text. The inside of the text was effectively subtracted from the interior of the circle.
 
+.. _b.2.3:
+
 B.2.3 比例编辑
 -------------------------
 
@@ -145,7 +149,7 @@ B.2.3 比例编辑
 
     (Try selecting the vertices along equator of a UV Sphere and scaling the selection up, with proportional editing enabled. You can make something like a flying saucer shape!)
 
-
+.. _b.2.4:
 
 B.2.4 拉伸网格
 -------------------------
@@ -172,6 +176,8 @@ B.2.4 拉伸网格
     As an example, I started with a mesh cube and extruded various faces, scaling each extruded face along the way. Here is what it looked like in the Blender 3D window in Edit Mode:
 
     ![123](../../en/a2/blender-extrude.jpg)
+
+.. _b.2.5:
 
 B.2.5 网格修改器
 -------------------------

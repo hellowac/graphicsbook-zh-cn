@@ -33,6 +33,8 @@
 
     This must be the very first line of the shader source code. It cannot even be preceded by blank lines or comments. A shader program that does not start with this line is a version 1.00 shader. A version 1.00 shader does not include a declaration of the version number.
 
+.. _c6.3.1:
+
 6.3.1 基本类型
 --------------------
 
@@ -184,6 +186,8 @@
 
     The only other built-in types are the so-called "sampler types", which are used for accessing textures. The sampler types can be used only in limited ways. They are not numeric types and cannot be converted to or from numeric types. The will be covered in the [next section](./s4.md).
 
+.. _c6.3.2:
+
 6.3.2 数据结构
 --------------------
 
@@ -274,6 +278,8 @@
     Array indexing uses the usual syntax, such as *A[0]* or *palette[i+1]* or *lights[3].color*. In GLSL ES 1.00, there are some strong limitations on the expressions that can be used as array indices. With one exception, an expression that is used as the index for an array can contain only integer constants and for loop variables (that is, variables that are used as loop control variables in for loops). For example, the expression *palette[i+1]* would only be legal inside a for of the form *for (int i = ....* The single exception is that arbitrary index expressions can be used for arrays of *uniforms* in a vertex shader (and then only if the array does not contain samplers). Note that these restrictions do not apply in GLSL ES 3.00.
 
     Just as in C, there is no check for array index out of bounds errors. It is up to the programmer to make sure that array indices are valid.
+
+.. _c6.3.3:
 
 6.3.3 预选赛
 --------------------
@@ -510,6 +516,8 @@
 
     The same kind of layout qualifier can be used on an *out* variable in a GLSL ES 3.00 fragment shader that has multiple outputs. In that case, it specifies which of several output destinations should be used for that variable.
 
+.. _c6.3.4:
+
 6.3.4 表达式
 --------------------
 
@@ -619,6 +627,8 @@
 
     There are also functions for working with sampler variables. I will discuss some of them in the next section.
 
+.. _c6.3.5:
+
 6.3.5 函数定义
 --------------------
 
@@ -682,6 +692,8 @@
 
     Note that recursion is not supported for functions in GLSL.
 
+.. _c6.3.6:
+
 6.3.6 控制结构
 --------------------
 
@@ -722,6 +734,8 @@
     ```
 
     In version 3.00, these restrictions do not apply. Note that all loops can include break and continue statements.
+
+.. _c6.3.7:
 
 6.3.7 限制
 --------------------

@@ -22,6 +22,8 @@
 
     <iframe src="../../../en/demos/c9/multisampling-demo.html" width="390" height="450"></iframe>
 
+.. _c9.2.1:
+
 9.2.1 实例绘图
 -------------------------
 
@@ -175,6 +177,8 @@
     Although it is not related to instanced drawing, another interesting point from the sample program is how it draws a disk. The disk is approximated as a polygon. In WebGL, I would draw the disk as a *TRIANGLE_FAN*, but WebGPU lacks that primitive type. Here, the disk is drawn using a triangle-strip primitive, which requires a careful ordering of the vertices:
 
     ![How to draw a disk as a triangle strip](../../en/c9/triangle-strip-disk.png)
+
+.. _c9.2.2:
 
 9.2.2 索引绘图
 -------------------------
@@ -360,6 +364,8 @@
 
     Note that for the first render pass, the loadOp is "clear", since we want to fill the image with the background color before rendering the disk. For the second render pass, we want to draw the outline on top of the existing image, so the loadOp must be "load". The same renderPassDescriptor can be used for both passes, with just the loadOp property changed.
 
+.. _c9.2.3:
+
 9.2.3 绘制多个基元
 -------------------------
 
@@ -502,6 +508,8 @@
 
     I will have more to say about alignment in [Subsection 9.3.1](../c9/s3.md#931-地址空间和对齐). You should be able to understand the rest of the [program source](../../../en/source/webgpu/draw_multiple.html). As always, read the comments.
 
+.. _c9.2.4:
+
 9.2.4 在着色器中使用索引
 -------------------------
 
@@ -575,6 +583,8 @@
     For each instance, the vertex shader function is invoked six times, with a vertex index ranging from 0 to 5. In each invocation, the shader function computes and outputs the appropriate values for just one vertex. I won't go into the coding details here; you can read them in the [sample program](../../../en/source/webgpu/indices_in_shader.html) source code.
 
     There is one more point of interest in the program: I really wanted to draw disks, not squares, and I wanted to have some use for the texture coordinates on the square. So the fragment shader function uses the texture coordinates for a pixel to discard that pixel if it lies outside the disk. (This is similar to what was done in WebGL for the [demo](../../../en/demos/c6/textured-points.html) in [Subsection 6.4.2](../c6/s4.md#642-处理图像).)
+
+.. _c9.2.5:
 
 9.2.5 多重采样
 -------------------------

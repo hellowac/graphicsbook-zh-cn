@@ -1,4 +1,4 @@
-.. c2.1:
+.. _c2.1:
 
 2.1 像素、坐标和颜色
 =====================
@@ -12,6 +12,8 @@
 .. tab:: 英文
 
     To create a two-dimensional image, each point in the image is assigned a color. A point in 2D can be identified by a pair of numerical coordinates. Colors can also be specified numerically. However, the assignment of numbers to points or colors is somewhat arbitrary. So we need to spend some time studying coordinate systems, which associate numbers to points, and color models, which associate numbers to colors.
+
+.. _c2.1.1:
 
 2.1.1 像素坐标
 ------------------
@@ -110,6 +112,8 @@
 
     Pixels cause problems that have not been completely solved. Fortunately, they are less of a problem for vector graphics, which is mostly what we will use in this book. For vector graphics, pixels only become an issue during rasterization, the step in which a vector image is converted into pixels for display. The vector image itself can be created using any convenient coordinate system. It represents an idealized, resolution-independent image. A rasterized image is an approximation of that ideal image, but how to do the approximation can be left to the display hardware.
 
+.. _c2.1.2:
+
 2.1.2  实数坐标系
 ----------------
 
@@ -203,6 +207,8 @@
 
     In practice, though, you won't usually have to do the transformations yourself, since most graphics APIs provide some higher level way to specify transforms. We will talk more about this in :ref:`Section 2.3 Transforms <c2.3>` .
 
+.. _c2.1.3:
+
 2.1.3  纵横比
 ----------------
 
@@ -256,6 +262,8 @@
        :alt: aspect ratio 2
 
     We will look more deeply into geometric transforms later in the chapter, and at that time, we'll see some program code for setting up coordinate systems.
+
+.. _c2.1.4:
 
 2.1.4  颜色模型
 ----------------

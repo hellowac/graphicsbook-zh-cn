@@ -21,6 +21,8 @@
 
     This section covers the WebGL extension mechanism, and it discusses a few of the standard extensions.
 
+.. _c7.5.1:
+
 7.5.1 各向异性过滤
 -------------------------
 
@@ -117,6 +119,8 @@
     ```
 
     If the extension is not available, the texture might not look as good as it might have, but it will still work (and only a very observant user is likely to notice).
+
+.. _c7.5.2:
 
 7.5.2 浮点颜色
 -------------------------
@@ -267,6 +271,8 @@
 
     The call to *gl.readPixels* reads the color data for the 16 pixels into the array, *data*. Again, the *gl.FLOAT* parameter specifies the data type, and that parameter value is legal in *gl.readPixels* only because the extensions have been activated.
 
+.. _c7.5.3:
+
 7.5.3 WebGL 1.0 中的实例化绘图
 -----------------------------
 
@@ -349,6 +355,8 @@
     ```
 
     Note that, in general, a WebGL 1.0 program that does **not** use any extensions will work as a WebGL 2.0 program without any modifications. However, if the WebGL 1.0 program uses extensions that are no longer available or no longer needed in WebGL 2.0, some work will be required to convert the program to WebGL 2.0.
+
+.. _c7.5.4:
 
 7.5.4 延迟着色
 -------------------------
@@ -492,6 +500,8 @@
     After all that setup, you are ready to do the first pass for deferred shading. For the subsequent passes, you would use a different shader, with a single color buffer. For those passes, you want to run the fragment shader once for each pixel in the image. The fragment shader will use the pixel data that was saved in the first pass, together with other information such as light properties, to compute the output color for the pixel. You can trigger a call to the fragment shader for each pixel simply by drawing a single rectangle that covers the image.
 
     The theory behind deferred shading is not all that complicated, but there are a lot of details to get right in the implementation. Deferred shading is just one of many tricks that are used by video game programmers to improve the rendering speed for their games.
+
+.. _c7.5.5:
 
 7.5.5 WebGL 2.0 中的多个绘制缓冲区
 -------------------------------------

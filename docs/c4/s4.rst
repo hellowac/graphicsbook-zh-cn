@@ -21,6 +21,8 @@
 
     A fundamental choice is the shape of the graph. In general, a scene graph can be a directed acyclic graph, or "dag," which is a tree-like structure except that a node can have several parents in the graph. The scene graphs in [Subsection 2.4.2](../c2/s4.md#242--场景图) were dags. This has the advantage that a single node in the graph can represent several objects in the scene, since in a dag, a node can be encountered several times as the graph is traversed. On the other hand, representing several objects with one scene graph node can lead to a lack of flexibility, since those objects will all have the same value for any property encoded in the node. So, in some applications, scene graphs are required to be trees. In a tree, each node has a unique parent, and the node will be encountered only once as the tree in traversed. The distinction between trees and dags will show up when we discuss camera nodes in scene graphs.
 
+.. _c4.4.1:
+
 4.4.1 属性栈
 --------------------
 
@@ -176,6 +178,8 @@
 
     Since *glPushAttrib* can be used to push large groups of attribute values, you might think that it would be more efficient to use *glIsEnabled* and the *glGet\** family of commands to read the values of just those state variables that you are planning to modify. However, recall that OpenGL can queue a number of commands into a batch to be sent to the graphics card, and those commands can be executed by the GPU at the same time that your program continues to run. A *glGet* command can require your program to communicate with the graphics card and wait for the response. This means that any pending OpenGL commands will have to be sent to the graphics card and executed before the *glGet* command can complete. This is the kind of thing that can hurt performance. In contrast, calls to *glPushAttrib* and *glPopAttrib* can be queued with other OpenGL commands and sent to the graphics card in batches, where they can be executed efficiently by the graphics hardware. In fact, you should generally prefer using *glPushAttrib/glPopAttrib* instead of a *glGet* command when possible.
 
+.. _c4.4.2:
+
 4.4.2 移动相机
 --------------------
 
@@ -236,6 +240,8 @@
     We this in mind, the algorithm for rendering the scene from the point of view of a camera goes as follows: Set the modelview transform to be the identity, by calling *glLoadIdentity()*. Start at the camera node, and follow parent pointers until you reach the root of the tree. At each node, apply the inverse of any modeling transformation in that node. (For example, if the modeling transform is translation by (a,b,c), call *glTranslatef(−a,−b,−c)*.) Upon reaching the root, the viewing transform corresponding to the camera has been established. Now, traverse the scene graph to render the scene as usual. During this traversal, camera nodes should be ignored.
 
     Note that a camera can be attached to an object, in the sense that the camera and the object are both subject to the same modeling transformation and so move together as a unit. In modeling terms, the camera and the object are sub-objects in a complex object. For example, a camera might be attached to a car to show the view through the windshield of that car. If the car moves, because its modeling transformation changes, the camera will move along with it.
+
+.. _c4.4.3:
 
 4.4.3 移动光源
 --------------------

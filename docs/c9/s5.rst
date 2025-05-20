@@ -23,6 +23,8 @@
     WebGPU has one-, two-, and three-dimensional image textures plus cubemap textures ([Subsection 5.3.4](../c5/s3.md#534-立方体贴图纹理和天空盒)). I will concentrate on two-dimensional image textures for most of this section.
 
 
+.. _c9.5.1:
+
 9.5.1 纹理坐标
 -------------------------
 
@@ -102,6 +104,8 @@
     ```
 
     Note that the texture coordinates for the top left corner are (0,0) and for the bottom right corner are (1,1). You should check out how this corresponds to the colors on the first square in the illustration. When used to map an image texture onto the square (with no texture transformation), the square will show one full copy of the image, in its usual orientation. If the OpenGL convention for texture coordinates were used on the square, texture coordinates (0,0) would be assigned to the bottom left corner of the square, and the image would appear upside-down. To account for this, images in OpenGL are often flipped vertically before loading the image data into a texture. See the end of [Subsection 6.4.2](../c6/s4.md#642-处理图像). If you use geometric models that come with texture coordinates, they might well be texture coordinates designed for OpenGL, and you might find that you need to flip your images to get them to apply correctly to the model. This is true, for example, in the [textured objects](../../../en/source/webgpu/textured_objects.html) example.
+
+.. _c9.5.2:
 
 9.5.2 纹理和采样器
 -------------------------
@@ -454,6 +458,8 @@
     ```
 
 
+.. _c9.5.3:
+
 9.5.3 Mipmap
 -------------------------
 
@@ -588,6 +594,8 @@
     }
     ```
 
+
+.. _c9.5.4:
 
 9.5.4 立方体贴图纹理
 -------------------------
@@ -773,6 +781,8 @@
     ```
 
     where mipmap is the desired mipmap level and side is the array index for the desired side of the cube. The dimension must be explicitly specified as "2d". (All this might help you understand the difference between a texture and a view of a texture.)
+
+.. _c9.5.5:
 
 9.5.5 纹理格式
 -------------------------

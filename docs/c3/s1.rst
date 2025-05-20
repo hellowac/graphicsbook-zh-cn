@@ -19,6 +19,8 @@
 
     A note about programming: OpenGL can be implemented in many different programming languages, but the API specification more or less assumes that the language is C. (See [Section A.2](../../cn/a1/s2.md) for a short introduction to C.) For the most part, the C specification translates directly into other languages. The main differences are due to the special characteristics of arrays in the C language. My examples will follow the C syntax, with a few notes about how things can be different in other languages. Since I'm following the C API, I will refer to "functions" rather than "subroutines" or "methods." [Section 3.6](./s6.md) explains in detail how to write OpenGL programs in C and in Java. You will need to consult that section before you can do any actual programming. The live OpenGL 1.1 demos for this book are written using a JavaScript simulator that implements a subset of OpenGL 1.1. That simulator is discussed in [Subsection 3.6.3](./s6.md#363-关于-glsimjs).
 
+.. _c3.1.1:
+
 3.1.1  OpenGL基元
 --------------------
 
@@ -157,6 +159,8 @@
     ![123](../../en//c3/obsolete-primitives.png)
 
     The vertices for these primitives are specified in the order A, B, C, .... Note how the order differs for the two quad primitives: For *GL_QUADS*, the vertices for each individual quad should be specified in counterclockwise order around the quad; for *GL_QUAD_STRIP*, the vertices should alternate from one side of the strip to the other.
+
+.. _c3.1.2:
 
 3.1.2  OpenGL颜色
 --------------------
@@ -344,6 +348,8 @@
 
     This is the form of *glClear* that is generally used in 3D graphics, where the depth buffer plays an essential role. For 2D graphics, the depth buffer is generally not used, and the appropriate parameter for *glClear* is just *GL_COLOR_BUFFER_BIT*.
 
+.. _c3.1.3:
+
 3.1.3  glColor 和 glVertex 与数组
 -------------------------------------
 
@@ -460,6 +466,8 @@
     ```
 
     For *glColor**, keep in mind that the "ub" variations require integers in the range 0 to 255, while the "f" and "d" variations require floating-point numbers in the range 0.0 to 1.0.
+
+.. _c3.1.4:
 
 3.1.4 深度测试
 --------------------

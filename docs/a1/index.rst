@@ -21,9 +21,10 @@ Java 仅对于[第 2.5 节](../c2/s5/)是强制性的。[第3章](../c3/)和[第
        s3.rst
        s4.rst
 
-**附录A的内容：**
+..
+    **附录A的内容：**
 
-- 第 1 部分：[Java 编程语言](./s1.md)
-- 第 2 部分：[C 编程语言](./s2.md)
-- 第 3 节：[JavaScript 编程语言](./s3.md)
-- 第 4 节：[JavaScript Promise 和异步函数](./s4.md)
+    - 第 1 部分：[Java 编程语言](./s1.md)
+    - 第 2 部分：[C 编程语言](./s2.md)
+    - 第 3 节：[JavaScript 编程语言](./s3.md)
+    - 第 4 节：[JavaScript Promise 和异步函数](./s4.md)

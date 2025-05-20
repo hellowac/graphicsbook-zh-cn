@@ -13,6 +13,8 @@
 
     We have already seen in [Chapter 6](../c6/index.md) how to draw primitives using WebGL, and how to implement 2D transformations. Drawing primitives is the same in 3D, except that there are three coordinates per vertex instead of two. Transformations in 3D are also similar to 2D, but for transformations the increase in complexity that comes with the third dimension is substantial. This section covers the geometric side of 3D graphics with WebGL. In the [next section](./s2.md), we will move on to the question of lighting and materials.
 
+.. _c7.1.1:
+
 7.1.1 关于着色器脚本
 -------------------------
 
@@ -108,7 +110,10 @@
 
     This technique is used in many of the sample programs in this chapter. Note that if you define a GLSL ES 3.00 shader as a template string, you should be sure to include the required first line, #version 3.00 es, immediately after the opening backquote, since that line cannot be preceded by a blank line.
 
-## 7.1.2 glMatrix简介
+.. _c7.1.2:
+
+7.1.2 glMatrix简介
+---------------------------
 
 **Introducing glMatrix**
 
@@ -358,6 +363,8 @@
 
     As with the modelview transformation, you do not need to load *projection* with the identity before calling one of these functions, but you must create *projection* as a ***mat4*** (or an array of length 16).
 
+.. _c7.1.3:
+
 7.1.3 变换坐标
 -------------------------
 
@@ -504,6 +511,8 @@
     }
     ```
 
+.. _c7.1.4:
+
 7.1.4 变换法线
 -------------------------
 
@@ -596,6 +605,8 @@
     We will look at several specific examples in the [next section](./s2.md).
 
     I will note that GLSL ES 3.00 (but not GLSL ES 1.00) has built-in functions for computing the inverse and the transpose of a matrix, making it fairly easy to compute the normal matrix in the shader. However, it might still be more efficient to compute the matrix once on the JavaScript side, rather than computing it in every execution of the vertex shader.
+
+.. _c7.1.5:
 
 7.1.5 鼠标旋转
 -------------------------

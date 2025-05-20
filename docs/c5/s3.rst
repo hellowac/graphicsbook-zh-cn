@@ -13,6 +13,8 @@
 
     We will finish this chapter with a look at a few additional features of three.js. In the process, you will learn about some new aspects of 3D graphics.
 
+.. _c5.3.1:
+
 5.3.1 实例化网格
 --------------------
 
@@ -89,6 +91,8 @@
     The sample program [threejs/instanced-mesh.html](../../../en/source/threejs/instanced-mesh.html) uses a single **InstancedMesh** to make 1331 spheres, arranged in an 11-by-11-by-11 cube. To move the spheres into position, different translations are applied to each instance. An instance color is also set for each instance.
 
     ![123](../../en/c5/instanced-mesh.png)
+
+.. _c5.3.2:
 
 5.3.2 用户输入
 --------------------
@@ -371,6 +375,8 @@
 
     For a Drag action, we can determine which cylinder was clicked using the same test as for delete. However, the problem of moving the cylinder as the user drags the mouse raises a new issue: how do we know where to put the cylinder when the mouse moves? We somehow have to transform a new mouse position into a new position for the cylinder. For that, we can use the raycaster again. My first thought was to create a ray from the camera through the new mouse position, use that ray to find its intersection with the ground, and then to move the cylinder to that point of intersection. Unfortunately, this puts the **base** of the cylinder at the mouse position, and it made the cylinder jump to the wrong position as soon as I started moving the mouse. I realized that I didn't want to track the intersection with the ground; I needed to track the intersection with a plane that lies at the same height as the original point of intersection. To implement this, I add an invisible plane at that height just during dragging, and I use intersections with that plane instead of intersections with the ground. (You can have invisible objects in *three.js*—just set the *visible* property of the material to *false*.)
 
+.. _c5.3.3:
+
 5.3.3 阴影
 --------------------
 
@@ -482,6 +488,8 @@
 
     I'm not sure whether power-of-two values are absolutely required here, but they are commonly used for textures.
 
+.. _c5.3.4:
+
 5.3.4 立方体贴图纹理和天空盒
 -----------------------------
 
@@ -552,6 +560,8 @@
     Here, *onLoad* is a function that will be called after the texture has finished loading. The function could, for example, set *scene.background* equal to *cubeTexture* and re-render the scene with the new background. The last parameter onError is a function that will be called if the texture cannot be loaded. Only the first parameter is required.
 
     The sample program [threejs/skybox.html](../../../en/source/threejs/skybox.html) shows two WebGL scenes. The first scene shows a cube with the six images from a cube map applied as normal textures to the six faces of a cube. The second scene uses the same cube map as a skybox. If you rotate the view of the second scene, you can look at all parts of the skybox and see how it forms a seamless environment that completely encloses the scene.
+
+.. _c5.3.5:
 
 5.3.5 反射和折射
 --------------------

@@ -13,6 +13,8 @@
 
     In [Section 2.1](./s1.md), we discussed coordinate systems and how it is possible to transform coordinates from one coordinate system to another. In this section, we'll look at that idea a little more closely, and also look at how geometric transformations can be used to place graphics objects into a coordinate system.
 
+.. _c2.3.1:
+
 2.3.1  视口和建模
 --------------------
 
@@ -132,6 +134,8 @@
 
     A transformation of this form is called an **affine transform**. An affine transform has the property that, when it is applied to two parallel lines, the transformed lines will also be parallel. Also, if you follow one affine transform by another affine transform, the result is again an affine transform.
 
+.. _c2.3.2:
+
 2.3.2  平移
 ----------------
 
@@ -191,6 +195,8 @@
 
     Also remember that you don't compute coordinate transformations yourself. You just specify the original coordinates for the object (that is, the object coordinates), and you specify the transform or transforms that are to be applied. The computer takes care of applying the transformation to the coordinates. You don't even need to know the equations that are used for the transformation; you just need to understand what it does geometrically.
 
+.. _c2.3.3:
+
 2.3.3  旋转
 ----------------
 
@@ -233,6 +239,8 @@
     Again, the light gray "F" is the original shape, and the dark red "F" is the shape that results if you apply the rotation. The arrow shows how the upper left corner of the original "F" has been moved.
 
     A 2D graphics API would typically have a command rotate(r) to apply a rotation. The command is used before drawing the objects to which the rotation applies.
+
+.. _c2.3.4:
 
 2.3.4  组合变换
 ----------------
@@ -307,6 +315,8 @@
 
     before drawing the shape. (In fact, some graphics APIs let us accomplish this transform with a single command such as rotate(r,p,q). This would apply a rotation through the angle r about the point (p,q).)
 
+.. _c2.3.5:
+
 2.3.5  缩放
 ----------------
 
@@ -366,6 +376,8 @@
 
     I also note that a transform that is made from translations and rotations, with no scaling, will preserve length and angles in the objects to which it is applied. It will also preserve aspect ratios of rectangles. Transforms with this property are called "**Euclidean**." If you also allow **uniform** scaling, the resulting transformation will preserve angles and aspect ratio, but not lengths.
 
+.. _c2.3.6:
+
 2.3.6  剪切
 ----------------
 
@@ -418,6 +430,8 @@
     ```
 
     Shear is occasionally called "skew," but skew is usually specified as an angle rather than as a shear factor.
+
+.. _c2.3.7:
 
 2.3.7  视窗到视口
 ----------------
@@ -518,7 +532,7 @@
         translate( -left, -top )
     ```
 
-.. _2.3.8:
+.. _c2.3.8:
 
 2.3.8  矩阵和向量
 -------------------

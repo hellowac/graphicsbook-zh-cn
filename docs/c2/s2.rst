@@ -13,6 +13,8 @@
 
     We have been talking about low-level graphics concepts like pixels and coordinates, but fortunately we don't usually have to work on the lowest levels. Most graphics systems let you work with higher-level shapes, such as triangles and circles, rather than individual pixels. And a lot of the hard work with coordinates is done using transforms rather than by working with coordinates directly. In this section and the next, we will look at some of the higher-level capabilities that are typically provided by 2D graphics APIs.
 
+.. _c2.2.1:
+
 2.2.1  基本形状
 -------------------
 
@@ -175,6 +177,8 @@
 
     <iframe src="../../../en/demos/c2/approximating-ovals.html" width="630" height="375"></iframe>
 
+.. _c2.2.2:
+
 2.2.2  描边和填充
 -------------------
 
@@ -235,6 +239,8 @@
     <figure markdown="span">
         ![pixel-coordinates](../../en/c2/filled-text.png)
     </figure>
+
+.. _c2.2.3:
 
 2.2.3  多边形、曲线和路径
 --------------------------

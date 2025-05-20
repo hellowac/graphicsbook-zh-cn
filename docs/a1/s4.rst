@@ -38,6 +38,8 @@ A.4 JavaScript Promise和异步函数
 
     Typical programmers are more likely to use promises created by some API than to create them directly. And they are more likely to use those promises with the await operator in async functions than to use them directly, so we will cover that case first.
 
+.. _a.4.1:
+
 A.4.1  异步函数和等待
 -------------------------
 
@@ -174,7 +176,7 @@ A.4.1  异步函数和等待
 
     The nice thing is that an async function looks essentially the same as a regular JavaScript function. The potential trap is that the flow of control in a program that uses async functions can be very different from the regular flow of control: Regular functions run from beginning to end with no interruption.
 
-
+.. _a.4.2:
 
 A.4.2  直接使用 Promise
 -------------------------

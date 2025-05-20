@@ -20,6 +20,8 @@
 
     This rather technical section covers major aspects of the syntax and semantics of WGSL. Note that the parts of the language that deal with textures are not covered here; they are postponed until the [next section](./s4.md). And some details about working with compute shaders are postponed until [Section 9.6](./s6.md). I will assume that you are already familiar with a language like C or JavaScript, but see [Appendix A](../a1/index.md) if you need a refresher. Familiarity with GLSL ([Section 6.3](../c6/s3.md#63-glsl)) would also be useful, but not essential. While I do not give a complete specification of the WGSL language, I try to cover most of the important features. For the very long complete specification, see <https://www.w3.org/TR/WGSL/>.
 
+.. _c9.3.1:
+
 9.3.1 地址空间和对齐
 -------------------------
 
@@ -174,6 +176,8 @@
 
     WGSL also has data types for matrices of floating point values. A matrix in WGSL is essentially an array of column vectors, and it follows the same alignment rules. In particular, a matrix with 3 rows is an array of vec3f, with four bytes of padding after each column. This will become important when we work with normal transformation metrics in 3D graphics.
 
+.. _c9.3.2:
+
 9.3.2 数据类型
 -------------------------
 
@@ -306,6 +310,8 @@
     var i = vec4i(2);              // Same as vec4i(2,2,2,2); the 2 is repeated
     ```
 
+.. _c9.3.3:
+
 9.3.3 声明和注解
 -------------------------
 
@@ -372,6 +378,7 @@
     - @builtin(position) when used on an output from a vertex shader entry point function specifies that the output is the (x,y,z,w) coordinates of the vertex in the clip coordinate system. Every vertex shader entry point function is required to have an output with this annotation. When used on an input to a fragment shader program, it specifies that the input is the interpolated position of the fragment being processed, in viewport coordinates. (See [Subsection 9.4.2](./s4.md#942-坐标系) for a discussion of coordinate systems in WebGPU.)
     - @builtin(front_facing) is used on an input of type bool to a fragment shader program. The value will be true if the fragment that is being processed is part of a front facing triangle. This can be useful, for example, when doing two-sided lighting in 3D graphics ([Subsection 7.2.4](../c7/s2.md#724-两侧照明)).
 
+.. _c9.3.4:
 
 9.3.4 表达式和内置函数
 -------------------------
@@ -433,6 +440,8 @@
     - reflect(L,N), where L and N are unit vectors, computes the vector L reflected by a surface with normal vector N. (See [Subsection 4.1.4](../c4/s1.md#414-opengl-11-光照方程), except that the L in the illustration in that section points from the surface towards the light source, but the L in reflect(L,N) points from the light source towards the surface.)
     - refract(L,N,ior), where L and N are unit vectors, and ior is the ratio of indices of refraction, computes the refracted vector when light from direction L hits a surface with normal vector N separating regions with different indices of refraction.
 
+.. _c9.3.5:
+
 9.3.5 语句和控制
 -------------------------
 
@@ -478,6 +487,8 @@
     The switch statement in WGSL is significantly changed from its usual form. Cases can be combined (case 1,2,3). The colon after a case is optional. The code in each case must be enclosed in braces. There is no fallthrough from one case to the next in the absence of a break statement, so break statements are optional in cases. However, break and return can still be used to end a case early. A default case is required. The switch expression must be of type i32 or u32, and all of the case constants must either be of the same type, or be abstract integers. For an example, see the switch statement in the shader source code in [webgpu/indices_in_shader.html](../../../en/source/webgpu/indices_in_shader.html).
 
     WGSL does not have the concept of exceptions, and there is no try..catch statement.
+
+.. _c9.3.6:
 
 9.3.6 函数定义
 -------------------------

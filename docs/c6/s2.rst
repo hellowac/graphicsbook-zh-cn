@@ -13,6 +13,8 @@
 
     We are ready to start working towards our first WebGL programs. This section begins with a few more details about the WebGL graphics context, followed by a short introduction to GLSL, the programming language for WebGL shaders. With that in hand, we can turn to the standard first example: the RGB color triangle.
 
+.. _c6.2.1:
+
 6.2.1 WebGL 上下文选项
 ----------------------
 
@@ -63,6 +65,8 @@
     **antialias** — is used to request that antialiasing be applied to the image. A WebGL implementation might ignore the request, for example if antialiasing is not supported by the GPU. The default value is *true*. Antialiasing can improve the quality of an image, but it can also significantly increase the computation time.
 
     **preserveDrawingBuffer** — determines whether the contents of the drawing buffer are discarded after the image has been copied to the web page. The default value is *false*. The drawing buffer is internal to WebGL. Its contents only become visible on the screen when the web browser copies the image onto the web page. The default value for *preserveDrawingBuffer* means that once that happens, WebGL can discard its own copy of the image, which allows the GPU to free up resources for other operations. As long as your rendering functions completely redraw the image every time they called, the default is fine. You should set the value to true only if you need to keep the image around so that you can add to it incrementally over time.
+
+.. _c6.2.2:
 
 6.2.2 GLSL 简介
 --------------------
@@ -198,6 +202,8 @@
     
 
     The strange first line in this fragment shader has not been explained, but something like it is required. It will be explained in the [next section](./s3.md).
+
+.. _c6.2.3:
 
 6.2.3 WebGL 中的 RGB 三角形
 --------------------------
@@ -444,6 +450,8 @@
     In this function, the variable *coords* contains values for the attribute named "a_coords" in the vertex shader. That attribute represents the x and y coordinates of the vertex. Since the attribute is of type *vec2*, two numbers are required for each vertex. The value for *coords* is created here with a **Float32Array** constructor that takes an ordinary JavaScript array as its parameter; the values from the JavaScript array are copied into the newly created typed array. Similarly, the variable color contains values for the "a_color" attribute in the vertex shader, with three numbers per vertex.
 
     We have now accounted for all the pieces of the RGB triangle program. Read the complete `source code <../en/source/webgl/webgl-rgb-triangle.html>`_  to see how it fits together.
+
+.. _c6.2.4:
 
 6.2.4 形状压模
 --------------------
@@ -781,6 +789,8 @@
 
     You would probably find it worthwhile to read the full source code for the [demo](../../../en/demos/c6/shape-stamper-demo.html) as well as the [sample program](../../../en/source/webgl/shape-stamper.html).
 
+.. _c6.2.5:
+
 6.2.5 POINTS原语
 --------------------
 
@@ -902,6 +912,8 @@
     
 
     See the [source code](../../../en/source/webgl/moving-points.html) for full details of the example.
+
+.. _c6.2.6:
 
 6.2.6 WebGL 错误处理
 -----------------------

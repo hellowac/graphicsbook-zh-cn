@@ -22,6 +22,8 @@ A.3 JavaScript 编程语言
 
     This page is a short overview of JavaScript. If you really want to learn JavaScript in detail, you might consider the book JavaScript: The Definitive Guide, seventh edition, by David Flanagan.
 
+.. _a.3.1:
+
 A.3.1  核心语言
 -------------------------
 
@@ -407,6 +409,8 @@ A.3.1  核心语言
 
     In C, functions can be assigned to variables and passed as parameters to functions. However, there are no anonymous functions in C. Something similar to arrow functions has been added to Java in the form of "lambda expressions."
 
+.. _a.3.2:
+
 A.3.2  数组和对象
 -------------------------
 
@@ -741,6 +745,8 @@ A.3.2  数组和对象
 
     The properties of the prototype are shared by all objects of type ***Point2D***. In this case, there is a single copy of move in the prototype, which is used by all such objects. The result is then a ***Point2D*** class that is essentially the same as the class defined using the class keyword.
 
+.. _a.3.3:
+
 A.3.3  网页上的 JavaScript
 -------------------------
 
@@ -921,7 +927,7 @@ A.3.3  网页上的 JavaScript
 
     When an error occurs on a web page, you don't get any notification, except for some output in the console. So, if your script doesn't seem to be working, the first thing you should do is open the console and look for an error message. When you are doing JavaScript development, you might want to keep the console always open.
 
-.. tab:: 英文
+.. _a.3.4:
 
 A.3.4  与页面交互
 -------------------------

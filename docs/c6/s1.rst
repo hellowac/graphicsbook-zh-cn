@@ -29,6 +29,8 @@
 
     I should note that later versions of OpenGL have introduced new programmable stages, in addition to the vertex and fragment shaders, but they are not part of WebGL 1.0 or 2.0, and they are not covered in this book.
 
+.. _c6.1.1:
+
 6.1.1 WebGL 图形上下文
 --------------------------
 
@@ -143,6 +145,8 @@
     Note that both functions and constants in the API are referenced through the graphics context. The name "gl" for the graphics context is conventional, but remember that it is just an ordinary JavaScript variable whose name is up to the programmer.
 
     (Some very old browsers required *canvas.getContext("experimental-webgl")* to create a WebGL 1.0 context. This includes Internet Explorer 11, but at this point, no one should be using Internet Explorer.)
+
+.. _c6.1.2:
 
 6.1.2 着色器程序
 --------------------
@@ -315,6 +319,8 @@
 
     Shaders and programs that are no longer needed can be deleted to free up the resources they consume. Use the functions *gl.deleteShader(shader)* and *gl.deleteProgram(program)*.
 
+.. _c6.1.3:
+
 6.1.3 管道中的数据流
 --------------------
 
@@ -392,6 +398,8 @@
 
     **For GLSL ES 3.00**, the same diagram applies, except that there is no special variable *gl_FragColor*. Instead, the fragment shader must define its own output variable to represent the color. In GLSL ES 1.00, the words "attribute" and "varying" are used when declaring variables in the actual shader program source code. In source code for the 3.00 version, attribute variables become "in" variables, since they are inputs to the vertex shader, and varying variables become "out" variables in the vertex shader and "in" variables in the fragment shader. And the variable *gl_FragColor* is replaced by an "out" variable in the fragment shader. The use of the terms "in" and "out" are actually more appropriate to systems with additional pipeline stages, where "out" variables from one stage can become "in" variables to the next stage. In any case, people still use the terms attribute and varying when discussing WebGL, even if it is using GLSL ES 3.00.
 
+.. _c6.1.4:
+
 6.1.4 统一变量的值
 --------------------
 
@@ -456,6 +464,8 @@
     The value of a uniform variable can be set any time after the shader program has been compiled, and the value remains in effect until it is changed by another call to *gl.uniform\**.
 
     If the string that is passed as the second parameter *gl.getUniformLocation* is not the name of a uniform variable in the shader programs, then the return value is *null*. The return value can also be *null* if the uniform variable is declared in the shader source code but is not "active" in the program. A variable that is declared but not actually used is not active, and it does not get a location in the compiled program. This has occasionally caused problems for me, when I commented out part of a shader program for debugging purposes, and accidentally made a variable inactive by doing so.
+
+.. _c6.1.5:
 
 6.1.5 属性值
 --------------------
@@ -656,6 +666,8 @@
 
     However, the six commands will not always occur at the same point in the JavaScript code. The first three commands are often done as part of initialization. *gl.bufferData* would be called whenever the data for the attribute needs to be changed; it might be used just once during initialization, or it might be used whenever the data needs to be modified. *gl.bindBuffer* must be called before *gl.vertexAttribPointer* or *gl.bufferData*, since it establishes the VBO that is used by those two commands. Remember that all of this must be done for every attribute that is used in the shader program.
 
+.. _c6.1.6:
+
 6.1.6 绘制基元
 --------------------
 
@@ -743,6 +755,8 @@
 
     We will have occasion to use this function later. If you find it confusing, you should review :ref:`Subsection 3.4.2 <c3.4.2>`. The situation is much the same in WebGL as it was in OpenGL 1.1.
 
+.. _c6.1.7:
+
 6.1.7 WebGL 2.0：顶点数组对象
 ----------------------------
 
@@ -795,6 +809,8 @@
     The idea is that a program that draws several objects can use a different VAO for each object. The VAO for an object must be bound when the settings for the object are configured. But before drawing the object, the program simply needs to bind the VAO for that object. That single function call replaces a potentially a large number of function calls that would be needed to restore the appropriate settings for each attribute individually. The advantage is more than just a more nicely organized program—it is also much more efficient, since only one command needs to be sent to the GPU to configure all of the attributes.
 
     The sample WebGL 2.0 program [webgl/VAO-test-webgl2.html](../../../en/source/webgl/VAO-test-webgl2.html) uses a different VAO for each of six different objects. That program uses many techniques that we have not yet covered, but you can look at the *drawModel()* function to see how it uses VAOs and VBOs.
+
+.. _c6.1.8:
 
 6.1.8 WebGL 2.0 实例化绘图
 -------------------------------

@@ -13,6 +13,8 @@
 
     Most of the WebGL API for working with textures was already covered in [Section 6.4](../c6/s4.md). In this section, we look at several examples and techniques for using textures.
 
+.. _c7.3.1:
+
 7.3.1 使用 glMatrix 进行纹理变换
 ------------------------------
 
@@ -79,6 +81,8 @@
     ```
 
     Read the source code to see how all this is used in the context of a complete program.
+
+.. _c7.3.2:
 
 7.3.2 生成纹理坐标
 -------------------------
@@ -166,6 +170,8 @@
     You can experiment with generated textures using the following demo. The demo shows a variety of textures and objects using cubical generated texture coordinates, as discussed above. You can also try texture coordinates projected just onto the xy or zx plane, as well as a cylindrical projection that wraps a texture image once around a cylinder. A final option is to use the x and y coordinates from the eye coordinate system as texture coordinates. That option fixes the texture on the screen rather than on the object, so the texture doesn't rotate with the object. The effect is interesting, but probably not very useful.
 
     <iframe src="../../../en/demos/c7/generated-texcoords.html" width="680" height="480"></iframe>
+
+.. _c7.3.3:
 
 7.3.3 程序纹理
 -------------------------
@@ -316,6 +322,8 @@
 
     <iframe src="../../../en/demos/c7/procedural-textures.html" width="680" height="480"></iframe>
 
+.. _c7.3.4:
+
 7.3.4 凹凸贴图
 -------------------------
 
@@ -434,6 +442,8 @@
     The two vectors *(bmRight−bm0)\*tangent* and *(bmUp−bm0)\*binormal* are the two white vectors in the above illustration. Their sum is *bumpVector*. A multiple of that sum is added to the normal vector to give the modified normal vector. The multiplier, *bumpmapStrength*, is a uniform float variable.
 
     All of the calculations so far have been done in the object coordinate system. The resulting normal depends only on the original object coordinates, not on any transformation that has been applied. The normal vector still has to be transformed into eye coordinates before it can be used in the lighting equation. That transformation is done in the last line of code shown above.
+
+.. _c7.3.5:
 
 7.3.5 环境映射
 -------------------------

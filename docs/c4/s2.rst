@@ -37,6 +37,8 @@
 
     This command turns on a directional light that shines from the direction of the viewer into the scene. (Note that the last character in *GL_LIGHT0* is a zero.) Since it shines from the direction of the viewer, it will illuminate everything that the user can see. The light is white, with no specular component; that is, you will see the diffuse color of objects, without any specular highlights. We will see later in this section how to change the characteristics of this light source and how to configure additional sources. But first, we will consider materials and normal vectors.
 
+.. _c4.2.1:
+
 4.2.1 应用材料
 --------------------
 
@@ -256,6 +258,8 @@
 
     Recall that when *glDrawArrays* or *glDrawElements* is used to draw a primitive, the color values for the vertices of the primitive can be taken from a color array, as specified using *glColorPointer*. (See [Subsection 3.4.2](../c3/s4.md#342-gldrawarrays和gldrawelements).) There are no similar arrays for material properties. However, if a color array is used while lighting is enabled, and if GL_COLOR_MATERIAL is also enabled, then the color array will be used as the source for the values of the material properties that are tracking the color.
 
+.. _c4.2.2:
+
 4.2.2 定义法向量
 --------------------
 
@@ -465,6 +469,8 @@
 
     Note that when a geometric transform is applied, normal vectors are transformed along with vertices; this is necessary because a transformation can change the direction in which a surface is facing. A scaling transformation can change the length of a normal vector, so even if you provided unit normal vectors, they will not be unit normals after a scaling transformation. However, if you have enabled *GL_NORMALIZE*, the transformed normals will automatically be converted back to unit normals. My recommendation is to **always** enable *GL_NORMALIZE* as part of your OpenGL initialization. The only exception would be if all of the normal vectors that you provide are of length one and you do not apply any scaling transformations. (Translations and rotations are OK, because they do not modify lengths.)
 
+.. _c4.2.3:
+
 4.2.3 应用灯光
 --------------------
 
@@ -593,6 +599,8 @@
     The sample program [glut/four-lights.c](../../../en/source/glut/four-lights.c) or [jogl/FourLights.java](../../../en/source/jogl/FourLights.java) uses multiple moving, colored lights and lets you turn them on and off to see the effect. The demo below is a JavaScript version of the same program. The program lets you see how light from various sources combines to produce the visible color of an object. The source code provides examples of configuring lights and using material properties.
 
     <iframe src="../../../en/demos/c4/four-lights-demo.html" width="620" height="470"></iframe>
+
+.. _c4.2.4:
 
 4.2.4 全局光照属性
 --------------------

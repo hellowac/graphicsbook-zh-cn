@@ -21,6 +21,8 @@
 
     SVG can be used as a file format for storing vector graphics images, in much the same way that PNG and JPEG are file formats for storing pixel-based images. That means that you can open an SVG file with almost any web browser to view the image. An SVG image can be included in a web page by using it as the src of an `<img>` element. That's how the SVG examples on this page are displayed. Since SVG documents are written in plain text, you can create SVG images using a regular text editor, and you can read the source for an SVG image by opening it in a text editor or by viewing the source of the image when it is displayed in a web browser.
 
+.. _c2.7.1:
+
 2.7.1  SVG 文档结构
 --------------------
 
@@ -195,6 +197,8 @@
     </figure>
 
     You can take a look at the source code, [svg/svg-starter.svg](../../../en/source/svg/svg-starter.svg). (For example, open it in a text editor, or open it in a web browser and use the browser's "view source" command.)
+
+.. _c2.7.2:
 
 2.7.2  形状, 样式, 和变换
 ------------------------
@@ -403,6 +407,8 @@
         transform="rotate(20)">Hello World</text>
     ```
 
+.. _c2.7.3:
+
 2.7.3  多边形和路径
 -----------------------------
 
@@ -463,6 +469,8 @@
     ```
 
     SVG paths add flexibility by defining "relative" versions of the path commands, where the data for the command is given relative to the current position. A relative move command, for example, instead of telling where to move, tells how far to move from the current position. The names of the relative versions of the path commands are lower case letters instead of upper case. "M 10,20" means to move to the point with coordinates (10,20), while "m 10,20" means to move 10 units horizontally and 20 units vertically from the current position. Similarly, if the current position is (x,y), then the command "l 3,5", where the first character is a lower case L, draws a line from (x,y) to (x+3,y+5).
+
+.. _c2.7.4:
 
 2.7.4  分层模型
 --------------------
@@ -643,6 +651,8 @@
     <figure markdown="span">
         ![pixel-coordinates](../../en/c2/svg-hierarchy.svg)
     </figure>
+
+.. _c2.7.5:
 
 2.7.5 动画
 --------------------

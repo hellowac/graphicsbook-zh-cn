@@ -14,6 +14,8 @@
 
     We have seen how ray tracing can be extended to approximate a variety of effects that are not handled by the basic algorithm. We look next at an algorithm that accounts for all those effects and more in a fairly straightforward and unified way: **path tracing**. Like ray tracing, path tracing computes colors for points in an image by tracing the paths of light rays backwards from the viewer through points on the image and into the scene. But in path tracing, the idea is to account for **all** possible paths that the light could have followed. Of course, that is not literally possible, but following a large number of paths can give a good approximation—one that gets better as the number of paths is increased ("Forward path tracing," where paths of light rays emitted from light sources are traced forward in time, is also sometimes used.)
 
+.. _c8.2.1:
+
 8.2.1 BSDF
 -------------------------
 
@@ -67,6 +69,8 @@
     BSDFs can also correctly handle a phenomenon called **subsurface scattering**, which can be an important visual effect for materials that are just a bit translucent, such as milk, jade, and skin. In sub-surface scattering, light that hits a surface can be transmitted into the object, be scattered a few times internally inside the object, and then emerge from the surface at another point. How the light behaves inside the object is determined by the BSDF of the material in the interior of the object. The BSDF in this case would be similar to the one for fog, except that the probability of scattering would be larger.
 
     The point is that just about any physically realistic material can be modeled by a correctly chosen BSDF.
+
+.. _c8.2.2:
 
 8.2.2 路径追踪算法
 -------------------------

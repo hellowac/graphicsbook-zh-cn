@@ -29,6 +29,8 @@
 
     This section contains information to get you started using GLUT and JOGL, assuming that you already know the basics of programming with C and Java. It also briefly discusses *glsim.js*, a JavaScript library that I have written to simulate the subset of OpenGL 1.1 that is used in this book.
 
+.. _c3.6.1:
+
 3.6.1 使用GLUT
 --------------------
 
@@ -537,6 +539,8 @@
 
     GLUT also includes some limited support for drawing text in an OpenGL drawing context. I won't discuss that possibility here. You can check the API documentation if you are interested, and you can find an example in the sample program `glut/color-cube-of-spheres.c <../en/source/glut/color-cube-of-spheres.c>`_.
 
+.. _c3.6.2:
+
 3.6.2 使用JOGL
 --------------------
 
@@ -928,6 +932,8 @@
         GLU glu = new GLU();
         
         glu.gluLookAt( 5,15,7, 0,0,0, 0,1,0 );
+
+.. _c3.6.3:
     
 
 3.6.3 关于 glsim.js

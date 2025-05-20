@@ -17,6 +17,8 @@
 
     One of the significant differences between WebGL 1.0 and WebGL 2.0 is an increase in support for different types of textures and for different ways of using textures. Access to most of the new features requires using GLSL ES 3.00 for the shader programs. We will stick to WebGL 1.0 for most of this section, but will discuss some of the new WebGL 2.0 features in the final subsection.
 
+.. _c6.4.1:
+
 6.4.1 纹理单元和纹理对象
 -------------------------
 
@@ -255,6 +257,8 @@
     ```
 
     Getting images into the texture objects is another question, which we turn to next.
+
+.. _c6.4.2:
 
 6.4.2 处理图像
 -------------------------
@@ -496,6 +500,8 @@
 
     Generally, you can do this as part of initialization. Note however that for *gl.POINTS* primitives, the coordinate system used by *gl_PointCoord* is already upside down, with the y-coordinate increasing from top to bottom. So, if you are loading an image for use on a *POINTS* primitive, you might want to set *gl.UNPACK_FLIP_Y_WEBGL* to its default value, 0.
 
+.. _c6.4.3:
+
 6.4.3 更多制作纹理的方法
 -------------------------
 
@@ -674,6 +680,8 @@
     ```
 
     See the [sample program](../../../en/source/webgl/texture-from-pixels.html) for more detail.
+
+.. _c6.4.4:
 
 6.4.4 立方体贴图纹理
 -------------------------
@@ -920,6 +928,8 @@
     }
     ```
 
+.. _c6.4.5:
+
 6.4.5 计算示例
 -------------------------
 
@@ -1070,6 +1080,8 @@
     On my computer, the [webgl/webgl-game-of-life.html](../../../en/source/webgl/webgl-game-of-life.html) can easily compute 360 generations per second. I urge you to try it. It can be fun to watch.
 
     General purpose programming on GPUs has become more and more important. Modern GPUs can do computations that have nothing to do with color, using various numerical data types. WebGL 2.0, as we'll see, has moved a bit in that direction, but accessing the full computational power of GPUs from the Web will require a new API. **WebGPU**, currently under development and already available as an experimental feature in some web browsers, is an attempt to fulfill that need. (However, unlike WebGL, it is not based on OpenGL.)
+
+.. _c6.4.6:
 
 6.4.6 WebGL 2.0 中的纹理
 -------------------------

@@ -13,6 +13,9 @@
 
     To finish this introduction to WebGPU, we'll look briefly at a few useful things to know that didn't make it into earlier sections. You will find several new sample programs in the last two subsections.
 
+
+.. _c9.7.1:
+
 9.7.1 丢失设备
 -------------------------
 
@@ -58,6 +61,8 @@
     The only possible values of info.reason are "destroyed" (meaning that device.destroy() was called) and "unknown." If the reason is not "destroyed," you might try to create a new device and reinitialize your application—at the risk that the same thing will go wrong again.
 
     Hopefully, the behavior of `device.lost()` will be better defined in the future.
+
+.. _c9.7.2:
 
 9.7.2 错误处理
 -------------------------
@@ -133,6 +138,8 @@
 
     When WebGPU encounters an error that is not captured by an error scope, it generates an "uncapturederror" event. You can add an event handler to the device to respond to uncaptured errors: `device.onuncapturederror = function(event) { ... }`. But, as always, remember that watching the Web browser console is usually good enough!
 
+.. _c9.7.3:
+
 9.7.3 限制和特性
 -------------------------
 
@@ -190,6 +197,8 @@
     ```
 
     Again, this will throw an exception if the feature is not available, and a feature request will limit the devices on which your program can run. The boolean-valued function adapter.hasFeature(name) can be used to test whether the adapter supports the feature wih the given name. For a list of possible features, see the WebGPU documentation.
+
+.. _c9.7.4:
 
 
 
@@ -250,6 +259,8 @@
     where again left, top, width, and height are given in pixel coordinates. The difference between viewport and scissor rect is that a scissor rect does not affect the coordinate mapping: The viewport shows the entire rendered scene, but a scissor rect prevents part of the scene from being drawn.
 
     The sample program [webgpu/viewport_and_scissor.html](../../../en/source/webgpu/viewport_and_scissor.html) uses both viewport and scissor rect. It is yet another moving disk animation, showing colored disks with black outlines. Different viewports are used to draw four copies of the scene to the four quadrants of a canvas. In two of the viewports, a scissor rect is also applied, but just to the disk interiors, not to their outlines.
+
+.. _c9.7.5:
 
 9.7.5 渲染管线选项
 -------------------------

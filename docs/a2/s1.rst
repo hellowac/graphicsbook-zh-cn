@@ -21,6 +21,8 @@ B.1 Blender 基础知识
 
     When Blender starts for the first time, you have a chance to select some customizations. I will assume that you are using the defaults, which include using the left mouse button for selecting things.
 
+.. _b.1.1:
+
 B.1.1 3D 视图
 -------------------------
 
@@ -116,6 +118,8 @@ B.1.1 3D 视图
 
     All these operations can be applied to the camera, just as they are applied to any other object. You can move and rotate the camera to get the view of the world that you want to see when you render an image. You can even apply transformations to the camera while in the camera view (Numpad 0), as long as the camera is the selected object. This can be a good way to get the exact view that you want for the rendered image.
 
+.. _b.1.2:
+
 B.1.2  将对象添加到场景中
 -------------------------
 
@@ -166,6 +170,8 @@ B.1.2  将对象添加到场景中
 
     As you modify the world, you can undo most operations by pressing Control-Z. That includes adding, deleting, and editing objects. Control-Shift-Z is the Redo operation.
 
+.. _b.1.3:
+
 B.1.3  编辑模式
 -------------------------
 
@@ -203,6 +209,8 @@ B.1.3  编辑模式
     There are a lot of things you **can't do** in Edit Mode, so don't forget that you have to press the TAB key to get out of that mode!
 
     By the way, the "Z" key can be used outside of Edit Mode to select how objects are rendered in the 3D View. And "A" and "ALT-A" can be used outside of Edit Mode for selecting sets of objects.
+
+.. _b.1.4:
 
 B.1.4  光源、材质和纹理
 -------------------------
@@ -291,6 +299,8 @@ B.1.4  光源、材质和纹理
 
     ![123](../../en/a2/blender-wave-texture.png)
 
+.. _b.1.5:
+
 B.1.5 保存您的工作
 -------------------------
 
@@ -315,6 +325,8 @@ B.1.5 保存您的工作
     When you save an image—or need to choose a file from the file system for some other reason—you will see the Blender File Browser window. The File Browser, like the rest of Blender, uses a non-standard interface. However, it is not difficult to use. Shortcuts to some directories are listed along the left edge of the window. For saving a file, you should type the file name into the input field at the bottom of the window.
 
     To save your entire Blender session, use the "Save" command in the "File" menu of the main Blender window. A Blender session is stored in a file with the extension ".blend". Opening a .blend file will restore the saved state of the program. If you use the "Save Startup File" command in the "Defaults" submenu of the "File" menu, Blender will save the current state of the program in a .blend file somewhere in your home directory. After that, when you start Blender, it will open that file as the starting point for your session, instead of the usual initial scene. This feature allows you to customize your startup environment.
+
+.. _b.1.6:
 
 B.1.6  更多功能
 -------------------------

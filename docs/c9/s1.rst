@@ -34,6 +34,8 @@
 
     <iframe src="../../../en/demos/c9/first-webgpu-demo.html" width="390" height="450"></iframe>
 
+.. _c9.1.1:
+
 9.1.1 适配器、设备和画布
 -------------------------
 
@@ -110,6 +112,8 @@
     The only thing you might want to change in this initialization is the alphaMode for the context. The value "premultiplied" allows the alpha value of a pixel in the canvas to determine the degree of transparency of that pixel when the canvas is drawn on the web page. The alternative value, "opaque", means that the alpha value of a pixel is ignored, and the pixel is opaque.
 
     This initialization code does some error checking and can throw an error if a problem is encountered. Presumably, the program would catch that error elsewhere and report it to the user. However, as a WebGPU developer, you should be aware that WebGPU does extensive validity checks on programs and reports all errors and warnings to the web browser console. So, it is a good idea to keep the console open when testing your work.
+
+.. _c9.1.2:
 
 9.1.2 着色器模块
 -------------------------
@@ -216,6 +220,8 @@
     The words beginning with "@" are annotations or modifiers. For example, @vertex means that the following function can be used as a vertex shader entry point, and @fragment means that the following function can be used as a fragment shader entry point. The @builtin(position) annotation says that the return value from vertexMain() gives the coordinates of the vertex in the standard WebGPU coordinate system. And @location(0), @group(0), and @binding(0) in this example are used to specify connections between data in the shader and data on the JavaScript side, as will be discussed below.
 
     The vertex and fragment shader functions that are used here are very simple. The vertex shader simply takes the (x,y) coordinates from its parameter, which comes from the JavaScript side, and adds z- and w-coordinates to get the final homogeneous coordinates for the vertex. The expression vec4f(coords,0,1) for the return value constructs a vec4f (a vector of four floats) from the four floating-point values in its parameter list. The fragment shader, which outputs an RGBA color for the pixel that it is processing, simple uses the three RGB components from the uniform color variable, which comes from the JavaScript side, and adds a 1 for the alpha component of the color.
+
+.. _c9.1.3:
 
 9.1.3 渲染管线
 -------------------------
@@ -389,6 +395,8 @@
 
     You don't have to create a pipeline every time you draw an image. A pipeline can be used any number of times. It can be used to draw different things by attaching different input sources. Drawing a single image might require several pipelines, each of which might be executed several times. It is common for programs to create pipelines during initialization and store them in global variables.
 
+.. _c9.1.4:
+
 9.1.4 缓冲区
 -------------------------
 
@@ -521,6 +529,8 @@
 
     When `device.queue.writeBuffer()` is called, it immediately copies the data into an intermediate "staging" buffer that exists in memory that is shared by the JavaScript and GPU sides. This means that you are free to reuse the array immediately; you don't have to wait for the data to be copied to its final destination. Instead of calling `writeBuffer()`, it's possible to do the work yourself—create a staging buffer, copy the data into the staging buffer, enqueue a command to copy the data from the staging buffer to the destination buffer—but `writeBuffer()` makes the process much easier.
 
+.. _c9.1.5:
+
 9.1.5 绘图
 -------------------------
 
@@ -620,6 +630,8 @@
     The parameter to `device.queue.submit()` is an array of command buffers, although in this case there is only one. (The command encoder cannot be reused; if you want to submit multiple command buffers, you will need to create a new command encoder for each one.)
 
     Note that commands are submitted to the device queue. The `submit()` function returns immediately after enqueueing the commands. They will be executed in a separate process on the GPU side of the application.
+
+.. _c9.1.6:
 
 9.1.6 多个顶点输入
 -------------------------
@@ -794,6 +806,8 @@
     Note that the data for each buffer takes up 20 bytes (five 4-byte floats). This becomes the arrayStride in the layout, which gives the distance, in bytes, from the values for one vertex to the values for the next vertex. The offset property for an attribute tells where to find the value for that attribute within the block of data for a given vertex: The offset for coords is 0 because it is found at the start of the data; the offset for color is 8 because it is found 8 bytes from the start of the data.
 
     There are other differences between our first example and the two new variations. I encourage you to look at the source code for the two new programs and read the comments. Only the new features of each program are commented.
+
+.. _c9.1.7:
 
 9.1.7 自动绑定组布局
 -------------------------

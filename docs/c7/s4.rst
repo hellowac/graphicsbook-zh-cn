@@ -33,6 +33,8 @@
 
     The first parameter to this function is always gl.FRAMEBUFFER. The second parameter can be null to select the default framebuffer for drawing, or it can be a non-default framebuffer created by the function gl.createFramebuffer(), which will be discussed below.
 
+.. _c7.4.1:
+
 7.4.1 帧缓冲区操作
 -------------------------
 
@@ -217,6 +219,8 @@
 
     As a simple example, the sample program [webgl/image-blur.html](../../../en/source/webgl/image-blur.html) uses a multi-pass algorithm to implement blurring. The scene in the example is just a texture image applied to a rectangle, so the effect is to blur the texture image. The technique involves drawing the scene nine times. In the fragment shader, the color is divided by nine. Blending is used to add the fragment colors from the nine passes, so that the final color in the color buffer is the average of the colors from the nine passes. For eight of the nine passes, the scene is offset slightly from its original position, so that the color of a pixel in the final image is the average of the colors of that pixel and the surrounding pixels from the original scene.
 
+.. _c7.4.2:
+
 7.4.2 渲染到纹理
 -------------------------
 
@@ -394,6 +398,8 @@
 
     This example could be implemented without using a framebuffer, as was done for the example in [Subsection 4.3.6](../c4/s3.md#435-从内存加载纹理). In that example, the texture image was drawn to the default framebuffer, then copied to the texture object. However, the version in this section is more efficient because it does not need to copy the image after rendering it.
 
+.. _c7.4.3:
+
 7.4.3 渲染缓冲区
 -------------------------
 
@@ -440,6 +446,8 @@
     ```
 
     The framebuffer must be bound by calling *gl.bindFramebuffer* before this function is called. The first and third parameters to gl.framebufferRenderbuffer must be as shown. The last parameter is the renderbuffer. The second parameter specifies how the renderbuffer will be used. It can be, for example, *gl.COLOR_ATTACHMENT0*, *gl.DEPTH_ATTACHMENT*, or *gl.STENCIL_ATTACHMENT*.
+
+.. _c7.4.4:
 
 7.4.4 动态立方体贴图纹理
 -------------------------

@@ -13,6 +13,8 @@
 
     In *three.js*, a visible object is constructed from a geometry and a material. We have seen how to create simple geometries that are suitable for point and line primitives, and we have encountered a variety of standard mesh geometries, such as **THREE.CylinderGeometry** and **THREE.IcosahedronGeometry**, that use the *GL_TRIANGLES* primitive. In this section, we will see how to create new mesh geometries from scratch. We'll also look at some of the other support that three.js provides for working with objects and materials.
 
+.. _c5.2.1:
+
 5.2.1 多边形网格和 IFS
 ----------------------
 
@@ -334,6 +336,8 @@
 
     The *computeVertexNormals()* method can still be used for a **BufferedGeometry** that has an index array. To compute a normal vector for a vertex, it finds all of the faces in which that vertex occurs. For each of those faces, it computes a vector perpendicular to the face. Then it averages those vectors to get the vertex normal. (I will note if you tried this for our pyramid, it would look pretty bad. It's really only appropriate for smooth surfaces.)
 
+.. _c5.2.2:
+
 5.2.2 曲线和曲面
 --------------------
 
@@ -539,6 +543,8 @@
     ![123](../../en/c5/extrusion-geometry.png)
 
     The other two objects in the picture were created by **extruding** the shape. In extrusion, a filled 2D shape is moved along a path in 3D. The points that the shape passes through make up a 3D solid. In this case, the shape was extruded along a line segment perpendicular to the shape, which is the most common case. The basic extruded shape is shown on the right in the illustration. The middle object is the same shape with "beveled" edges. For more details on extrusion, see the documentation for **THREE.ExtrudeGeometry** and the source code for the [sample program](../../../en/source/threejs/curves-and-surfaces.html).
+
+.. _c5.2.3:
 
 5.2.3 纹理
 --------------------
@@ -769,6 +775,8 @@
 
     ![123](../../en/c5/textured-pyramid.png)
 
+.. _c5.2.4:
+
 5.2.4 变换
 --------------------
 
@@ -817,6 +825,8 @@
     The actual transformation that is applied to an object when it is rendered is a combination of the modeling transformation of that object, combined with the modeling transformation on all of its ancestors in the scene graph. In *three.js*, that transformation is stored in a property of the object named *obj.matrixWorld*.
 
     There is one more useful method for setting the rotation: *obj.lookAt(vec)*, which rotates the object so that it is facing towards a given point. The parameter, *vec*, is a **Vector3**, which must be expressed in the object's own local coordinate system. (For an object that has no parent, or whose ancestors have no modeling transformations, that will be the same as world coordinates.) The object is also rotated so that its "up" direction is equal to the value of the property obj.up, which by default is (0,1,0). This function can be used with any object, but it is most useful for a camera.
+
+.. _c5.2.5:
 
 5.2.5 加载模型
 --------------------

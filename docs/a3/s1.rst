@@ -42,6 +42,8 @@ C.1 Gimp 2D绘画程序
 
     To save an image file, you should use the "Export" or "Export As" command in the "File" menu. If you opened an image file for editing, the "Export" command becomes an "Overwrite" command that is used to replace the original image with the edited version. These commands let you save images in a wide variety of formats. In general, you should save your images in JPEG or PNG format.
 
+.. _c.1.1:
+
 C.1.1 绘画工具 
 -------------------------
 
@@ -149,6 +151,8 @@ C.1.1 绘画工具
 
     Another way to modify an image is with a filter. Filters in Gimp can be very general. They might better be called "effects." For example, there is a filter for blurring the image, one for making the image look like an old photograph, and one to make it look like it's made out of cloth. Some filters in Gimp generate images from nothing, and some do even more complicated things. You will find Gimp's filters in the "Filter" menu. I will not discuss them further here, but some interesting filters to try include: Distorts/Emboss, Distorts/Mosaic, Distorts/Ripple, Edge-Detect, Artistic/Apply-Canvas, Artistic/Cubism, Decor/Old-Photo, and Map/Warp.
 
+.. _c.1.2:
+
 C.1.2 选择和路径
 -------------------------
 
@@ -201,6 +205,8 @@ C.1.2 选择和路径
     As an example of using paths, this illustration explains how I made a heart shape using the Path Tool:
 
     ![123](../../en/a3/gimp-heart.png)
+
+.. _c.1.3:
 
 C.1.3 层
 -------------------------
