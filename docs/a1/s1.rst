@@ -16,9 +16,9 @@ A.1 Java 编程语言
 
 .. tab:: 英文
 
-    Java is taught as a first programming language in many college and high school computer science programs. It is a large and complex language, with features that make it suitable for large and complex programming projects. Those features can make it seem a little verbose and overly strict, but they also make it possible for programming environments to provide excellent support for writing and debugging programs. If you are going to write Java code, you should consider using a full-featured programming environment such as **Eclipse** (<https://eclipse.org/>). [Subsection 3.6.2](../c3/s6.md#362-使用jogl) explains how to set up Eclipse for programming with JOGL, the Java API for OpenGL.
+    Java is taught as a first programming language in many college and high school computer science programs. It is a large and complex language, with features that make it suitable for large and complex programming projects. Those features can make it seem a little verbose and overly strict, but they also make it possible for programming environments to provide excellent support for writing and debugging programs. If you are going to write Java code, you should consider using a full-featured programming environment such as **Eclipse** (https://eclipse.org/).  :ref:`Subsection 3.6.2 <c3.6.2>` explains how to set up Eclipse for programming with JOGL, the Java API for OpenGL.
 
-    This book comes with several "starter" programs for writing graphical Java programs, such as [java2d/EventsStarter.java](../../../en/source/java2d/EventsStarter.java) for Java Graphics2D and [jogl/JoglStarter.java](../../../en/source/jogl/JoglStarter.java) for JOGL. Although this section doesn't tell you enough to let you write Java programs from scratch, it might have enough information to let you "fill in the blanks" in the starter programs and modify other sample programs that come with the book. If you want to learn Java in more detail, you can consider my free on-line Java textbook, <http://math.hws.edu/javanotes>.
+    This book comes with several "starter" programs for writing graphical Java programs, such as `java2d/EventsStarter.java <../en/source/java2d/EventsStarter.java>`_ for Java Graphics2D and `jogl/JoglStarter.java <../en/source/jogl/JoglStarter.java>`_ for JOGL. Although this section doesn't tell you enough to let you write Java programs from scratch, it might have enough information to let you "fill in the blanks" in the starter programs and modify other sample programs that come with the book. If you want to learn Java in more detail, you can consider my free on-line Java textbook, http://math.hws.edu/javanotes.
 
     Java has had several 2D graphics APIs: AWT, Swing, and JavaFX. Swing is built on top of the AWT, while JavaFX is a completely new API. JavaFX is not used in this textbook, but you will see references here both to Swing and to the AWT.
 
@@ -31,33 +31,36 @@ A.1.1  基本语言结构
 
 .. tab:: 中文
 
-    Java 是一种面向对象的语言。一个 Java 程序由类组成，类中可以包含变量定义和方法定义（"方法"是面向对象术语中的函数或子程序）。一个类定义在自己的文件中，文件名必须与类名匹配：如果类名为 "MyClass"，那么文件名必须是 *MyClass.java*。类也可以作为嵌套类出现在其他类中；当然，嵌套类没有自己的文件。定义类的基本语法是：
+    Java 是一种面向对象的语言。一个 Java 程序由类组成，类中可以包含变量定义和方法定义（"方法"是面向对象术语中的函数或子程序）。一个类定义在自己的文件中，文件名必须与类名匹配：如果类名为 "MyClass"，那么文件名必须是 *MyClass.java* 。类也可以作为嵌套类出现在其他类中；当然，嵌套类没有自己的文件。定义类的基本语法是：
 
-    ```java
-    public class MyClass {
-        // 变量、方法和嵌套类定义。
-    }
-    ```
+    .. code-block:: java
+
+        public class MyClass {
+            // 变量、方法和嵌套类定义。
+        }
+    
 
     这个语法有一些变化。例如，要定义一个类作为现有类的子类，你需要说明新类“扩展”了现有类：
 
-    ```java
-    public class MyClass extends ExistingClass {
-        // ...
-    }
-    ```
+    .. code-block:: java
+
+        public class MyClass extends ExistingClass {
+            // ...
+        }
+    
 
     Java 中的一个类只能扩展一个类。然而，在扩展一个类的同时或代替扩展类，一个新类也可以实现一个或多个“接口”。Java 中的接口指定了一些必须在实现该接口的每个类中定义的方法。有了所有这些选项，类定义可能看起来像这样：
 
-    ```java
-    public class MyGUI extends JPanel implements KeyListener, MouseListener {
-        // ...
-    }
-    ```
+    .. code-block:: java
+
+        public class MyGUI extends JPanel implements KeyListener, MouseListener {
+            // ...
+        }
+    
 
     实际上，一个像这样的类可能在 GUI 程序中使用。
 
-    一个类可以包含一个 main() 方法，并且组成程序的类中必须有一个包含此类方法的类。main() 方法是程序执行开始的地方。它有一个参数，类型为 ***String[]***，代表命令行参数的数组。Java 中静态和非静态变量及方法之间有一个令人困惑的区别，我们在这里可以大多忽略。main() 方法是静态的。通常，在图形程序中，main 是 **唯一** 的静态内容，所以这个区别对我们来说不是很重要。在 GUI 程序中，main 方法通常只是创建一个窗口并将其显示在屏幕上；之后，窗口会自我管理。
+    一个类可以包含一个 main() 方法，并且组成程序的类中必须有一个包含此类方法的类。main() 方法是程序执行开始的地方。它有一个参数，类型为 **String[]**，代表命令行参数的数组。Java 中静态和非静态变量及方法之间有一个令人困惑的区别，我们在这里可以大多忽略。main() 方法是静态的。通常，在图形程序中，main 是 **唯一** 的静态内容，所以这个区别对我们来说不是很重要。在 GUI 程序中，main 方法通常只是创建一个窗口并将其显示在屏幕上；之后，窗口会自我管理。
 
     类中的非静态方法定义实际上为从该类创建的每个对象定义了一个方法。在方法定义中，特殊变量 this 可以用来引用方法所属的对象。你可能熟悉 JavaScript 中的同一个特殊变量。然而，与 JavaScript 不同的是，this 在 Java 中的使用是可选的，所以同一个对象中的变量可以被称为 x 或 this.x，并且方法可以在同一类中作为 *doSomething()* 或 *this.doSomething()* 调用。
 
@@ -65,29 +68,33 @@ A.1.1  基本语言结构
 
     本书中的程序使用一个定义窗口的主类，图形显示将在此窗口中看到。该类还包含 main() 程序。（这不是特别好的风格，但它适用于小型程序。）在某些情况下，程序依赖于我编写的其他类；这些类的文件应该与定义主类的文件在同一文件夹中。然后，可以在命令行中使用以下命令编译程序：
 
-    ```shell
-    javac  *.java
-    ```
+    .. code-block:: shell
+
+        javac  *.java
+    
 
     要运行主类为 MyClass 的程序，请使用：
 
-    ```shell
-    java  MyClass
-    ```
+    .. code-block:: shell
 
-    然而，使用 JOGL 的程序需要在这些命令中添加一些额外的选项。你需要知道的内容在 [3.6.2 小节](../c3/s6.md#362-使用jogl) 中有解释。（Eclipse IDE 有自己的简单命令来运行程序。）
+        java  MyClass
+    
 
-    有许多标准类可供程序使用。一些标准类，如 ***Math*** 和 ***System***，对任何程序都是自动可用的。其他类在使用前必须“导入”到源代码文件中。一个类可以是包的一部分，包是类的集合。例如，***Graphics2D*** 类定义在 java.awt 包中。这个类可以通过在文件开头添加以下行导入到源代码文件中：
+    然而，使用 JOGL 的程序需要在这些命令中添加一些额外的选项。你需要知道的内容在 :ref:`<c3.6.2>` 中有解释。（Eclipse IDE 有自己的简单命令来运行程序。）
 
-    ```java
-    import java.awt.Graphics2D;
-    ```
+    有许多标准类可供程序使用。一些标准类，如 **Math** 和 **System**，对任何程序都是自动可用的。其他类在使用前必须“导入”到源代码文件中。一个类可以是包的一部分，包是类的集合。例如， **Graphics2D** 类定义在 java.awt 包中。这个类可以通过在文件开头添加以下行导入到源代码文件中：
+
+    .. code-block:: java
+    
+        import java.awt.Graphics2D;
+    
 
     在类定义之前。或者，可以使用：
 
-    ```java
-    import java.awt.*;
-    ```
+    .. code-block:: java
+    
+        import java.awt.*;
+    
 
     导入 java.awt 包中的所有类。
 
@@ -98,30 +105,32 @@ A.1.1  基本语言结构
 
     Java 是一种强类型语言。每个变量都有类型，并且只能保存该类型的值。每个变量都必须声明，声明指定了变量的类型。声明中可以包含初始值。例如：
 
-    ```java
-    String name;  // 声明 name 为一个必须包含 String 类型值的变量。
-    int x = 17;   // x 是一个必须包含 int 类型的值的变量，初始值为 17。
-    Graphics2D g; // g 是一个变量，其值是 Graphics2D 类型的对象。
-    ```
+    .. code-block:: java
+        
+        String name;  // 声明 name 为一个必须包含 String 类型值的变量。
+        int x = 17;   // x 是一个必须包含 int 类型的值的变量，初始值为 17。
+        Graphics2D g; // g 是一个变量，其值是 Graphics2D 类型的对象。
+    
 
-    Java 有八种“原始”类型，它们的值不是对象：***int***、***long***、***short***、***byte***、***double***、***float***、***char*** 和 ***boolean***。前四种是具有不同位数的整数类型。实数类型是 ***double*** 和 ***float***。例如，3.7 是 ***double*** 类型的常量。要得到一个 ***float*** 类型的常量，你需要加上 'F'：3.7F（这在 JOGL 编程中会出现，有些方法需要类型为 ***float*** 的参数）。常量 ***char*** 值用单引号括起来；例如，'A' 和 '%'。双引号用于字符串，它们在 Java 中不是原始值。
+    Java 有八种“原始”类型，它们的值不是对象： **int** 、 **long** 、 **short** 、 **byte** 、 **double** 、 **float** 、 **char** 和 **boolean**。前四种是具有不同位数的整数类型。实数类型是 **double** 和 **float**。例如，3.7 是 **double** 类型的常量。要得到一个 **float** 类型的常量，你需要加上 'F'：3.7F（这在 JOGL 编程中会出现，有些方法需要类型为 **float** 的参数）。常量 **char** 值用单引号括起来；例如，'A' 和 '%'。双引号用于字符串，它们在 Java 中不是原始值。
 
-    除了这八种原始类型，任何类都定义了一个类型。如果一个变量的类型是一个类，那么这个变量可能的值就是属于那个类的对象。接口也定义了一个类型，其可能的值是实现了该接口的对象。与原始值不同，对象包含变量和方法。例如，***Point*** 是一个类。一个 ***Point*** 类型的对象包含 ***int*** 类型的变量 x 和 y。一个 ***String*** 是一个对象，它包含几个用于处理字符串的方法，包括一个名为 length() 的方法，它返回字符串的长度，另一个名为 charAt(i) 的方法，它返回字符串中的第 i 个字符。对象中的变量和方法总是使用 "." 点操作符访问：如果 pt 是一个 ***Point*** 类型的变量，引用一个 ***Point*** 类型的对象，那么 pt.x 和 pt.y 就是该对象中实例变量的名称。如果 str 是一个 ***String*** 类型的变量，那么 str.length() 和 str.charAt(i) 就是 str 引用的 ***String*** 对象中的方法。
+    除了这八种原始类型，任何类都定义了一个类型。如果一个变量的类型是一个类，那么这个变量可能的值就是属于那个类的对象。接口也定义了一个类型，其可能的值是实现了该接口的对象。与原始值不同，对象包含变量和方法。例如， **Point** 是一个类。一个 **Point** 类型的对象包含 **int** 类型的变量 x 和 y。一个 **String** 是一个对象，它包含几个用于处理字符串的方法，包括一个名为 length() 的方法，它返回字符串的长度，另一个名为 charAt(i) 的方法，它返回字符串中的第 i 个字符。对象中的变量和方法总是使用 "." 点操作符访问：如果 pt 是一个 **Point** 类型的变量，引用一个 **Point** 类型的对象，那么 pt.x 和 pt.y 就是该对象中实例变量的名称。如果 str 是一个 **String** 类型的变量，那么 str.length() 和 str.charAt(i) 就是 str 引用的 **String** 对象中的方法。
 
-    方法定义指定了方法返回值的类型以及每个参数的类型。它通常被标记为 *public* 或 *private*。这里有一个例子：
+    方法定义指定了方法返回值的类型以及每个参数的类型。它通常被标记为 *public* 或 *private* 。这里有一个例子：
 
-    ```java
-    public int countChars(String str, char ch) {
-        int count = 0;
-        for (int i = 0; i < str.length(); i++) {
-            if (str.charAt(i) == ch)
-                count++;
+    .. code-block:: java
+
+        public int countChars(String str, char ch) {
+            int count = 0;
+            for (int i = 0; i < str.length(); i++) {
+                if (str.charAt(i) == ch)
+                    count++;
+            }
+            return count;
         }
-        return count;
-    }
-    ```
+    
 
-    这里，countChars 是方法的名称。它接受两个类型为 ***String*** 和 ***char*** 的参数，并返回一个类型为 int 的值。对于不返回值的方法，返回类型（在上面的例子中是 ***int***）指定为 void。
+    这里，countChars 是方法的名称。它接受两个类型为 **String** 和 **char** 的参数，并返回一个类型为 int 的值。对于不返回值的方法，返回类型（在上面的例子中是 **int**）指定为 void。
 
     Java 中的方法可以在它定义的类中使用，即使定义点在它使用点之后也可以（这与 C 相反，C 中函数在使用前必须声明，但与 JavaScript 类似）。全局变量也是如此，它们在任何方法外部声明。所有编程代码，如赋值语句和控制结构，都必须在方法定义内。
 
@@ -130,16 +139,16 @@ A.1.1  基本语言结构
 
     Java 拥有与 C 和 JavaScript 相同的基本控制结构：*if* 语句、*while* 和 *do..while* 循环、for 循环以及 switch 语句在三种语言中的形式本质上是相同的。赋值语句也是相同的。
 
-    同样，这三种语言拥有几乎相同的运算符集合，包括基本的算术运算符（`+`, `−`, `*` 和 `/`）、增量（`++`）和减量（`--`）运算符、逻辑运算符（`||`, `&&`, 和 `!`）、三元运算符（`?:`）以及位运算符（如 `&` 和 `|`）。Java 算术的一个特性，正如 C 语言中的一样，是当除法运算符 `/` 应用于整数操作数时，会产生一个整数结果。因此，18/5 的结果是 3，而 1/10 的结果是 0。
+    同样，这三种语言拥有几乎相同的运算符集合，包括基本的算术运算符（ `+`, `−`, `*` 和 `/`）、增量（ `++` ）和减量（ `--` ）运算符、逻辑运算符（ `||`, `&&`, 和 `!` ）、三元运算符（ `?:` ）以及位运算符（如 `&` 和 `|` ）。Java 算术的一个特性，正如 C 语言中的一样，是当除法运算符 `/` 应用于整数操作数时，会产生一个整数结果。因此，18/5 的结果是 3，而 1/10 的结果是 0。
 
     `+` 运算符可以用来连接字符串，这样 "Hello" + "World" 的值就是 "HelloWorld"。如果 `+` 的操作数中只有一个是字符串，那么另一个操作数会自动转换为字符串。
 
-    Java 的标准函数定义在类中。例如，数学函数包括 `Math.sin(x)`、`Math.cos(x)`、`Math.sqrt(x)` 和 `Math.pow(x,y)` 用于求 x 的 y 次幂。`Math.random()` 返回一个介于 0.0 到 1.0 范围内的随机数，包括 0.0 但不包括 1.0。方法 `System.out.println(str)` 向命令行输出一个字符串。在图形程序中，`System.out.println` 主要用于调试。要输出多个项目，使用字符串连接：
+    Java 的标准函数定义在类中。例如，数学函数包括 `Math.sin(x)` 、 `Math.cos(x)` 、 `Math.sqrt(x)` 和 `Math.pow(x,y)` 用于求 x 的 y 次幂。 `Math.random()` 返回一个介于 0.0 到 1.0 范围内的随机数，包括 0.0 但不包括 1.0。方法 `System.out.println(str)` 向命令行输出一个字符串。在图形程序中， `System.out.println`  主要用于调试。要输出多个项目，使用字符串连接：
 
-    ```java
-    System.out.println("The values are x = " + x + " and y = " + y);
-    ```
-
+    .. code-block:: java
+    
+        System.out.println("The values are x = " + x + " and y = " + y);
+    
     还有一个格式化输出方法 `System.out.printf`，它类似于 C 语言的 printf 函数。
 
 
@@ -147,29 +156,32 @@ A.1.1  基本语言结构
 
     Java is object-oriented. A Java program is made up of classes, which can contain variable definitions and method definitions. ("Method" is the object-oriented term for function or subroutine.) A class is defined in its own file, whose name must match the name of the class: If the class is named "MyClass", then the name of the file must be *MyClass.java*. Classes can also occur as nested classes within other classes; a nested class, of course, doesn't get its own file. The basic syntax for defining a class is
 
-    ```java
-    public class MyClass {
-        .
-        .  // Variable, method, and nested class definitions.
-        .   
-    }
-    ```
+    .. code-block:: java
+
+        public class MyClass {
+            .
+            .  // Variable, method, and nested class definitions.
+            .   
+        }
+    
 
     There are variations on this syntax. For example, to define a class as a subclass of an existing class, you need to say that the new class "extends" an the existing class:
 
-    ```java
-    public class MyClass extends ExistingClass { ...
-    ```
+    .. code-block:: java
+
+        public class MyClass extends ExistingClass { ...
+    
 
     A class in Java can only extend one class. However, in addition to or instead of extending a class, a new class can also implement one or more "interfaces." An interface in Java specifies some methods that must be defined in every class that implements the interface. With all of these options, a class definition might look something like this:
 
-    ```java
-    public class MyGUI extends JPanel implements KeyListener, MouseListener { ...
-    ```
+    .. code-block:: java
+    
+        public class MyGUI extends JPanel implements KeyListener, MouseListener { ...
+    
 
     In fact, a class exactly like this one might be used in a GUI program.
 
-    A class can contain a main() method, and one of the classes that make up a program must contain such a method. The main() method is where program execution begins. It has one parameter, of type ***String[]***, representing an array of command-line arguments. There is a confusing distinction in Java between static and non-static variables and methods, which we can mostly ignore here. The main() method is static. Often, in a graphical program, main is the **only** thing that is static, so the distinction will not be very important for us. In a GUI program, the main method usually just creates a window and makes it visible on the screen; after that, the window takes care of itself.
+    A class can contain a main() method, and one of the classes that make up a program must contain such a method. The main() method is where program execution begins. It has one parameter, of type **String[]**, representing an array of command-line arguments. There is a confusing distinction in Java between static and non-static variables and methods, which we can mostly ignore here. The main() method is static. Often, in a graphical program, main is the **only** thing that is static, so the distinction will not be very important for us. In a GUI program, the main method usually just creates a window and makes it visible on the screen; after that, the window takes care of itself.
 
     A non-static method definition in a class actually defines a method for each object that is created from that class. Inside the method definition, the special variable this can be used to refer to the object of which the method is a part. You might be familiar with the same special variable in JavaScript. However, unlike in JavaScript, the use of this is optional in Java, so that a variable that is part of the same object might be referred to either as x or this.x, and a method could be called from within the same class as *doSomething()* or *this.doSomething()*.
 
@@ -177,26 +189,29 @@ A.1.1  基本语言结构
 
     The programs in this book use a main class that defines the window where the graphical display will be seen. That class also contains the main() routine. (This is not particularly good style, but it works well for small programs.) In some cases, the program depends on other classes that I have written; the files for those classes should be in the same folder as the file that defines the main class. The programs can then be compiled on the command line, working in that folder, with the command
 
-    ```shell
-    javac  *.java
-    ```
+    .. code-block:: shell
+
+        javac  *.java
+    
 
     To run the program whose main class is MyClass, use
 
-    ```shell
-    java  MyClass
-    ```
+    .. code-block:: shell
 
-    However, programs that use JOGL require some extra options in these commands. What you need to know is explained in [Subsection 3.6.2](../c3/s6.md#362-使用jogl). (The Eclipse IDE has its own simple commands for running a program.)
+        java  MyClass
+    
 
-    There are many standard classes that are available for use in programs. A few of the standard classes, such as ***Math*** and ***System***, are automatically available to any program. Others have to be "imported" into a source code file before they can be used in that file. A class can be part of a package, which is a collection of classes. For example, class ***Graphics2D*** is defined in the package java.awt. This class can be imported into a source code file by adding the line
+    However, programs that use JOGL require some extra options in these commands. What you need to know is explained in :ref:`Subsection 3.6.2 <c3.6.2>`. (The Eclipse IDE has its own simple commands for running a program.)
+
+    There are many standard classes that are available for use in programs. A few of the standard classes, such as **Math** and **System**, are automatically available to any program. Others have to be "imported" into a source code file before they can be used in that file. A class can be part of a package, which is a collection of classes. For example, class **Graphics2D** is defined in the package java.awt. This class can be imported into a source code file by adding the line
 
     import java.awt.Graphics2D;
     to the beginning of the file, before the definition of the class. Alternatively, all of the classes in package java.awt can be imported with
 
-    ```java
-    import java.awt.*;
-    ```
+    .. code-block:: java
+
+        import java.awt.*;
+    
 
     It is possible to put your own classes into packages, but that adds some complications when compiling and using them. My sample programs in this book are not defined in named packages. Officially, they are said to be in the "default package." Recent versions of Java also have "modules," which are collections of packages. Again, using modules complicates things, and they are not used in this textbook.
 
@@ -204,30 +219,32 @@ A.1.1  基本语言结构
 
     Java is a strongly typed language. Every variable has a type, and it can only hold values of that type. Every variable must be declared, and the declaration specifies the type of the variable. The declaration can include an initial value. For example,
 
-    ```java
-    String name;  // Declares name as a variable whose value must be a String.
-    int x = 17;   // x is a variable whose value must an int, with initial value 17.
-    Graphics2D g; // g is a variable whose value is an object of type Graphics2D.
-    ```
+    .. code-block:: java
 
-    Java has eight "primitive" types, whose values are not objects: ***int***, ***long***, ***short***, ***byte***, ***double***, ***float***, ***char***, and ***boolean***. The first four are integer types with different numbers of bits. The real number types are ***double*** and ***float***. A constant such as 3.7 is of type ***double***. To get a constant of type ***float***, you need to add an 'F': 3.7F. (This comes up when programming in JOGL, where some methods require parameters of type ***float***.) Constant ***char*** values are enclosed in single quotes; for example, 'A' and '%'. Double quotes are used for strings, which are not primitive values in Java.
+        String name;  // Declares name as a variable whose value must be a String.
+        int x = 17;   // x is a variable whose value must an int, with initial value 17.
+        Graphics2D g; // g is a variable whose value is an object of type Graphics2D.
+    
 
-    In addition to the eight primitive types, any class defines a type. If the type of a variable is a class, then the possible values of the variable are objects belonging to that class. An interface also defines a type, whose possible values are objects that implement the interface. An object, unlike a primitive value, contains variables and methods. For example, ***Point*** is a class. An object of type ***Point*** contains ***int*** variables x and y. A ***String*** is an object, and it contains several methods for working with the string, including one named length() that returns its length and another named charAt(i) that returns the i-th character in the string. Variables and methods in an object are always accessed using the "." period operator: If pt is a variable of type ***Point***, referring to an object of t*ype ***Point***, then pt.x and pt.y are names for the instance variables in that object. If str is a variable of type ***String***, then str.length() and str.charAt(i) are methods in the ***String*** object to which str refers.
+    Java has eight "primitive" types, whose values are not objects: **int**, **long**, **short**, **byte**, **double**, **float**, **char**, and **boolean**. The first four are integer types with different numbers of bits. The real number types are **double** and **float**. A constant such as 3.7 is of type **double**. To get a constant of type **float**, you need to add an 'F': 3.7F. (This comes up when programming in JOGL, where some methods require parameters of type **float**.) Constant **char** values are enclosed in single quotes; for example, 'A' and '%'. Double quotes are used for strings, which are not primitive values in Java.
+
+    In addition to the eight primitive types, any class defines a type. If the type of a variable is a class, then the possible values of the variable are objects belonging to that class. An interface also defines a type, whose possible values are objects that implement the interface. An object, unlike a primitive value, contains variables and methods. For example, **Point** is a class. An object of type **Point** contains **int** variables x and y. A **String** is an object, and it contains several methods for working with the string, including one named length() that returns its length and another named charAt(i) that returns the i-th character in the string. Variables and methods in an object are always accessed using the "." period operator: If pt is a variable of type **Point**, referring to an object of t*ype **Point**, then pt.x and pt.y are names for the instance variables in that object. If str is a variable of type **String**, then str.length() and str.charAt(i) are methods in the **String** object to which str refers.
 
     A method definition specifies the type of value that is returned by the method and a type for each of its parameters. It is usually marked as being *public* or *private*. Here is an example:
 
-    ```java
-    public int countChars( String str, char ch ) {
-        int count = 0;
-        for ( int i = 0; i < str.length(); i++) {
-            if ( str.charAt(i) == ch )
-                count++;
-        }
-        return count;
-    }
-    ```
+    .. code-block:: java
 
-    Here, countChars is the name of the method. It takes two parameters of type ***String*** and ***char***, and it returns a value of type int. For a method that does not return a value, the return type (***int*** in the above example) is specified as void.
+        public int countChars( String str, char ch ) {
+            int count = 0;
+            for ( int i = 0; i < str.length(); i++) {
+                if ( str.charAt(i) == ch )
+                    count++;
+            }
+            return count;
+        }
+    
+
+    Here, countChars is the name of the method. It takes two parameters of type **String** and **char**, and it returns a value of type int. For a method that does not return a value, the return type (**int** in the above example) is specified as void.
 
     A method in Java can be used throughout the class where it is defined, even if the definition comes after the point where it is used. (This is in contrast to C, where functions must be declared before they are used, but similar to JavaScript.) The same is true for global variables, which are declared outside any method. All programming code, such as assignment statements and control structures, must be inside method definitions.
 
@@ -241,9 +258,10 @@ A.1.1  基本语言结构
 
     Java's standard functions are defined in classes. For example, the mathematical functions include `Math.sin(x)`, `Math.cos(x)`, `Math.sqrt(x)`, and `Math.pow(x,y)` for raising x to the power y. `Math.random()` returns a random number in the range 0.0 to 1.0, including 0.0 but not including 1.0. The method `System.out.println(str)` outputs a string to the command line. In graphical programs, `System.out.println` is useful mainly for debugging. To output more than one item, use string concatenation:
 
-    ```java
-    System.out.println("The values are x = " + x + " and y = " + y);
-    ```
+    .. code-block:: java
+    
+        System.out.println("The values are x = " + x + " and y = " + y);
+    
 
     There is also a formatted output method, `System.out.printf`, which is similar to C's printf function.
 
@@ -258,82 +276,90 @@ A.1.2  对象和数据结构
 
     Java 除了原始类型外，还有“对象类型”，代表那些是对象的值。对象类型的变量不持有对象；它只能持有指向对象的指针。（有时人们说 Java 不使用指针，但更准确的说法是它迫使你使用它们。）类名或接口名是一个对象类型。对象是通过使用 **new** 运算符从类中创建的。例如：
 
-    ```java
-    Point pt;  // 声明一个类型为 Point 的变量。
-    pt = new Point(100, 200);  // 创建一个类型为 Point 的对象。
-    ```
+    .. code-block:: java
 
-    这里，类是 ***Point***，它也是一个可以用来创建变量的类型。类型为 ***Point*** 的变量可以引用属于类 ***Point*** 的对象或该类任何子类的对象。赋值语句中的表达式 *new Point(100,200)* 调用了 ***Point*** 类中的一种特殊程序，称为 ***构造函数***。构造函数的目的是初始化一个对象。在这种情况下，构造函数的参数 100 和 200 成为新对象中 *pt.x* 和 *pt.y* 变量的值。上述代码的结果是 pt 的值是一个指向新创建对象的指针。我们说 pt “引用”那个对象。
+        Point pt;  // 声明一个类型为 Point 的变量。
+        pt = new Point(100, 200);  // 创建一个类型为 Point 的对象。
+    
 
-    而不是引用一个对象，pt 可以有特殊值 *null*。当一个变量的值是 null 时，该变量不引用任何对象。如果 pt 的值是 null，那么变量 pt.x 和 pt.y 就不存在，试图使用它们将是一个错误。这个错误被称为 ***NullPointerException***。
+    这里，类是 **Point**，它也是一个可以用来创建变量的类型。类型为 **Point** 的变量可以引用属于类 **Point** 的对象或该类任何子类的对象。赋值语句中的表达式 *new Point(100,200)* 调用了 **Point** 类中的一种特殊程序，称为 **构造函数**。构造函数的目的是初始化一个对象。在这种情况下，构造函数的参数 100 和 200 成为新对象中 *pt.x* 和 *pt.y* 变量的值。上述代码的结果是 pt 的值是一个指向新创建对象的指针。我们说 pt “引用”那个对象。
 
-    ***字符串***，顺便说一下，是特殊的对象。它们不是用 new 运算符创建的。相反，字符串是作为字面量值创建的，用双引号括起来。例如：
+    而不是引用一个对象，pt 可以有特殊值 *null*。当一个变量的值是 null 时，该变量不引用任何对象。如果 pt 的值是 null，那么变量 pt.x 和 pt.y 就不存在，试图使用它们将是一个错误。这个错误被称为 **NullPointerException**。
 
-    ```java
-    String greeting = "Hello World!";
-    ```
+    **字符串**，顺便说一下，是特殊的对象。它们不是用 new 运算符创建的。相反，字符串是作为字面量值创建的，用双引号括起来。例如：
 
-    数组也是特殊的对象。Java 中的任何类型定义了一个数组类型。数组类型是一个对象类型。例如，从类型 ***int***，我们得到数组类型 `int[]`。从 ***String*** 和 ***Point***，我们得到类型 `String[]` 和 `Point[]`。类型 `int[]` 的变量值是一个整型数组（或者值可以是 *null*）。类型 `Point[]` 的变量值是一个 ***Point*** 数组。数组可以用 *new* 运算符的版本创建：
+    .. code-block:: java
+        
+        String greeting = "Hello World!";
+    
 
-    ```java
-    int[] intList;  // 声明一个可以引用任何整型数组的变量。
-    intList = new int[100];  // 创建一个可以容纳 100 个整数的数组。
-    ```
+    数组也是特殊的对象。Java 中的任何类型定义了一个数组类型。数组类型是一个对象类型。例如，从类型 **int**，我们得到数组类型 `int[]`。从 **String** 和 **Point**，我们得到类型 `String[]` 和 `Point[]`。类型 `int[]` 的变量值是一个整型数组（或者值可以是 *null*）。类型 `Point[]` 的变量值是一个 **Point** 数组。数组可以用 *new* 运算符的版本创建：
 
-    数组有一个在创建时设置的固定长度，并且不能改变。如果 intList 引用一个数组，那么该数组的长度由只读变量 intList.length 给出。数组的元素是 `intList[0]`、`intList[1]` 等等。如果尝试使用 `intList[i]` 而 i 在 0 到 intList.length − 1 的范围之外，将产生一个类型为 ***ArrayIndexOutOfBoundsException*** 的错误。
+    .. code-block:: java
 
-    数组元素的初始值是“二进制零”；也就是说，数值类型的是 0，***boolean*** 的是 *false*，对象的是 *null*。
+        int[] intList;  // 声明一个可以引用任何整型数组的变量。
+        intList = new int[100];  // 创建一个可以容纳 100 个整数的数组。
+    
+
+    数组有一个在创建时设置的固定长度，并且不能改变。如果 intList 引用一个数组，那么该数组的长度由只读变量 intList.length 给出。数组的元素是 `intList[0]`、 `intList[1]` 等等。如果尝试使用 `intList[i]` 而 i 在 0 到 intList.length − 1 的范围之外，将产生一个类型为 **ArrayIndexOutOfBoundsException** 的错误。
+
+    数组元素的初始值是“二进制零”；也就是说，数值类型的是 0， **boolean** 的是 *false*，对象的是 *null*。
 
     可以使用以下语法在创建时创建并初始化数组，以持有任意值：
 
-    ```java
-    intList = new int[] {2, 3, 5, 7, 11, 13, 15, 17, 19};
-    ```
+    .. code-block:: java
+    
+        intList = new int[] {2, 3, 5, 7, 11, 13, 15, 17, 19};
+    
 
-    这个版本的 new 运算符创建了一个长度为九个的 ***int*** 数组，并最初持有九个指定的值。如果数组的初始化是作为变量声明的一部分完成的，那么只需要值的列表，用 { 和 } 括起来：
+    这个版本的 new 运算符创建了一个长度为九个的 **int** 数组，并最初持有九个指定的值。如果数组的初始化是作为变量声明的一部分完成的，那么只需要值的列表，用 { 和 } 括起来：
 
-    ```java
-    String[] commands = { "New", "Open", "Close", "Save", "Save As" };
-    ```
+    .. code-block:: java
+    
+        String[] commands = { "New", "Open", "Close", "Save", "Save As" };
+    
 
 
     ----
 
-    Java 提供了几种标准类，这些类定义了常见的数据结构，包括链表、栈、队列、树和哈希表，它们由 *java.util* 包中的类定义。这些类定义了“泛型”或“参数化”类型，可以适用于多种元素类型。例如，类型 `LinkedList<String>` 的对象是一个包含 ***String*** 类型项的列表。遗憾的是，这些类不能与原始类型一起使用；没有“***int*** 的链表”。（然而，你可以有 `LinkedList<Integer>`，其中类型为 ***Integer*** 的对象是原始 ***int*** 值的“包装器”。）
+    Java 提供了几种标准类，这些类定义了常见的数据结构，包括链表、栈、队列、树和哈希表，它们由 *java.util* 包中的类定义。这些类定义了“泛型”或“参数化”类型，可以适用于多种元素类型。例如，类型 `LinkedList<String>` 的对象是一个包含 **String** 类型项的列表。遗憾的是，这些类不能与原始类型一起使用；没有“ **int** 的链表”。（然而，你可以有 `LinkedList<Integer>`，其中类型为 **Integer** 的对象是原始 **int** 值的“包装器”。）
 
-    也许最常用的泛型数据结构是 ***ArrayList***。像数组一样，一个 ***ArrayList*** 包含一系列编号的项目。然而，一个 ***ArrayList*** 可以增长和收缩。例如，创建一个可以容纳 Point 类型对象的 **ArrayLi**st：
+    也许最常用的泛型数据结构是 **ArrayList**。像数组一样，一个 **ArrayList** 包含一系列编号的项目。然而，一个 **ArrayList** 可以增长和收缩。例如，创建一个可以容纳 Point 类型对象的 **ArrayList** ：
 
-    ```java
-    ArrayList<Point> pointList;
-    pointList = new ArrayList<Point>();
-    ```
+    .. code-block:: java
 
-    这创建了一个最初为空的列表。方法 *pointList.add(pt)* 可以用来将一个 ***Point*** 添加到列表的末尾，将其长度增加一。*pointList.size()* 的值是当前列表中的项数。方法 *pointList.get(i)* 返回列表的第 i 个元素，*pointList.set(i,pt)* 用 pt 替换第 i 个元素。同样，pointList.remove(i) 删除第 i 个元素，将列表的长度减少一。对于所有这些方法，如果 i 不在从 0 到 *pointList.size()* −1 的范围内，就会发生错误。
+        ArrayList<Point> pointList;
+        pointList = new ArrayList<Point>();
+    
+
+    这创建了一个最初为空的列表。方法 *pointList.add(pt)* 可以用来将一个 **Point** 添加到列表的末尾，将其长度增加一。 *pointList.size()* 的值是当前列表中的项数。方法 *pointList.get(i)* 返回列表的第 i 个元素， *pointList.set(i,pt)* 用 pt 替换第 i 个元素。同样，pointList.remove(i) 删除第 i 个元素，将列表的长度减少一。对于所有这些方法，如果 i 不在从 0 到 *pointList.size() −1* 的范围内，就会发生错误。
 
     也可以直接构建链接数据结构，记住类型由类给出的变量的值要么是 null，要么是指向对象的指针。例如，可以使用简单的类定义的对象创建一个整数值的链表：
 
-    ```java
-    class ListNode {
-        int item;       // 列表中的一个整数
-        ListNode next;  // 指向列表中下一个节点的指针，或者对于列表末尾是 null。
-    }
-    ```
+    .. code-block:: java
 
-    对于本课程来说，一个更有用的数据结构是场景图，就像在 [2.4.2 小节](../c2/s4.md#242-场景图) 中讨论的，并在示例程序 [java2d/SceneGraphAPI2D.java](../../../en/source/java2d/SceneGraphAPI2D.java) 中实现的。在那个 API 中，场景图中的一个节点由属于类 ***SceneGraphNode*** 或其子类的对象表示。例如，一个 ***CompoundObject*** 表示由子对象组成的图形对象。它需要存储指向其所有子对象的指针。它们可以方便地存储在 ***ArrayList*** 中。然后绘制一个 ***CompoundObject*** 只意味着绘制其子对象。类可以定义如下：
+        class ListNode {
+            int item;       // 列表中的一个整数
+            ListNode next;  // 指向列表中下一个节点的指针，或者对于列表末尾是 null。
+        }
+    
 
-    ```java
-    class CompoundObject extends SceneGraphNode {
-        ArrayList<SceneGraphNode> subobjects = new ArrayList<SceneGraphNode>();
-        CompoundObject add(SceneGraphNode node) {
-            subobjects.add(node);
-            return this;
+    对于本课程来说，一个更有用的数据结构是场景图，就像在 :ref:`<c2.4.2>` 中讨论的，并在示例程序 `java2d/SceneGraphAPI2D.java <../en/source/java2d/SceneGraphAPI2D.java>`_ 中实现的。在那个 API 中，场景图中的一个节点由属于类 **SceneGraphNode** 或其子类的对象表示。例如，一个 **CompoundObject** 表示由子对象组成的图形对象。它需要存储指向其所有子对象的指针。它们可以方便地存储在 **ArrayList** 中。然后绘制一个 **CompoundObject** 只意味着绘制其子对象。类可以定义如下：
+
+    .. code-block:: java
+
+        class CompoundObject extends SceneGraphNode {
+            ArrayList<SceneGraphNode> subobjects = new ArrayList<SceneGraphNode>();
+            CompoundObject add(SceneGraphNode node) {
+                subobjects.add(node);
+                return this;
+            }
+            void doDraw(Graphics2D g) {
+                for (SceneGraphNode node : subobjects)
+                    node.draw(g);
+            }
         }
-        void doDraw(Graphics2D g) {
-            for (SceneGraphNode node : subobjects)
-                node.draw(g);
-        }
-    }
-    ```
+    
 
     （这个类中的 for 循环是 Java 特有的。它自动遍历列表中的所有对象。）
 
@@ -342,81 +368,89 @@ A.1.2  对象和数据结构
 
     In addition to the primitive types, Java has "object types" that represent values that are objects. A variable of object type doesn't hold an object; it can only hold a pointer to an object. (Sometimes it's said that Java doen't use pointers, but it's more correct to say that it forces you to use them.) The name of a class or of an interface is an object type. Objects are created from classes using the **new** operator. For example,
 
-    ```java
-    Point pt;  // Declare a variable of type Point.
-    pt = new Point( 100, 200 );  // Create an object of type Point.
-    ```
+    .. code-block:: java
 
-    Here, the class is ***Point***, which also acts as a type that can be used to create variables. A variable of type ***Point*** can refer to an object belonging to the class ***Point*** or to any subclass of that class. The expression *new Point(100,200)* in the assignment statement calls a special kind of routine in the ***Point*** class that is known as a ***constructor***. The purpose of a constructor is to initialize an object. In this case, the parameters to the constructor, 100 and 200, become the values of the variables *pt.x* and *pt.y* in the new object. The effect of the above code is that the value of pt is a pointer to the newly created object. We say that pt "refers" to that object.
+        Point pt;  // Declare a variable of type Point.
+        pt = new Point( 100, 200 );  // Create an object of type Point.
+    
 
-    Instead of referring to an object, pt could have the special value *null*. When the value of a variable is null, the variable does not refer to any object. If the value of pt is null, then the variables pt.x and pt.y don't exist, and an attempt to use them is an error. The error is called a ***NullPointerException***.
+    Here, the class is **Point**, which also acts as a type that can be used to create variables. A variable of type **Point** can refer to an object belonging to the class **Point** or to any subclass of that class. The expression *new Point(100,200)* in the assignment statement calls a special kind of routine in the **Point** class that is known as a **constructor**. The purpose of a constructor is to initialize an object. In this case, the parameters to the constructor, 100 and 200, become the values of the variables *pt.x* and *pt.y* in the new object. The effect of the above code is that the value of pt is a pointer to the newly created object. We say that pt "refers" to that object.
 
-    ***Strings***, by the way, are special objects. They are not created with the new operator. Instead, a string is created as a literal value, enclosed in double quotes. For example
+    Instead of referring to an object, pt could have the special value *null*. When the value of a variable is null, the variable does not refer to any object. If the value of pt is null, then the variables pt.x and pt.y don't exist, and an attempt to use them is an error. The error is called a **NullPointerException**.
 
-    ```java
-    String greeting = "Hello World!";
-    ```
+    **Strings**, by the way, are special objects. They are not created with the new operator. Instead, a string is created as a literal value, enclosed in double quotes. For example
 
-    Arrays are also special objects. Any type in Java defines an array type. An array type is an object type. From the type ***int***, for example, we get the array type `int[]`. From ***String*** and ***Point***, we get the types `String[]` and `Point[]`. The value of a variable of type `int[]` is an array of ints (or the value can be *null*). The value of a variable of type `Point[]` is an array of ***Points***. Arrays can be created with a version of the *new* operator:
+    .. code-block:: java
+    
+        String greeting = "Hello World!";
+    
 
-    ```java
-    int[] intList;  // Declare a variable that can refer to any array of ints.
-    intList = new int[100];  // Create an array that can hold 100 ints.
-    ```
+    Arrays are also special objects. Any type in Java defines an array type. An array type is an object type. From the type **int**, for example, we get the array type `int[]`. From **String** and **Point**, we get the types `String[]` and `Point[]`. The value of a variable of type `int[]` is an array of ints (or the value can be *null*). The value of a variable of type `Point[]` is an array of **Points**. Arrays can be created with a version of the *new* operator:
 
-    An array has a fixed length that is set at the time it is created and cannot be changed. If intList refers to an array, then the length of that array is given by the read-only variable intList.length. The elements of the array are `intList[0]`, `intList[1]`, and so on. An attempt to use `intList[i]` where i is outside the range from 0 to intList.length − 1 generates an error of type ***ArrayIndexOutOfBoundsException***.
+    .. code-block:: java
 
-    The initial value for array elements is "binary zero"; that is, 0 for numeric values, *false* for ***boolean***, and *null* for objects.
+        int[] intList;  // Declare a variable that can refer to any array of ints.
+        intList = new int[100];  // Create an array that can hold 100 ints.
+    
+
+    An array has a fixed length that is set at the time it is created and cannot be changed. If intList refers to an array, then the length of that array is given by the read-only variable intList.length. The elements of the array are `intList[0]`, `intList[1]`, and so on. An attempt to use `intList[i]` where i is outside the range from 0 to intList.length − 1 generates an error of type **ArrayIndexOutOfBoundsException**.
+
+    The initial value for array elements is "binary zero"; that is, 0 for numeric values, *false* for **boolean**, and *null* for objects.
 
     An array can be created and initialized to hold arbitrary values at the time it is created using the syntax
 
-    ```java
-    intList = new int[] {2, 3, 5, 7, 11, 13, 15, 17, 19};
-    ```
+    .. code-block:: java
+    
+        intList = new int[] {2, 3, 5, 7, 11, 13, 15, 17, 19};
+    
 
-    This version of the new operator creates an array of ***ints*** of length nine that initially holds the nine specified values. If the initialization of an array is done as part of a variable declaration, then only the list of values, enclosed between { and }, is required:
+    This version of the new operator creates an array of **ints** of length nine that initially holds the nine specified values. If the initialization of an array is done as part of a variable declaration, then only the list of values, enclosed between { and }, is required:
 
-    ```java
-    String[] commands = { "New", "Open", "Close", "Save", "Save As" };
-    ```
+    .. code-block:: java
+    
+        String[] commands = { "New", "Open", "Close", "Save", "Save As" };
+    
 
     ----
 
-    Java comes with several standard classes that define common data structures, including linked lists, stacks, queues, trees, and hash tables, which are defined by classes in the package *java.util*. The classes define "generic" or "parameterized" types that will work for a variety of element types. For example, an object of type `LinkedList<String>` is a list of items of type ***String***. Unfortunately, it is not possible to use these classes with the primitive types;. There is no "linked list of ***int***". (However, you can have `LinkedList<Integer>`, where an object of type ***Integer*** is a "wrapper" for a primitive ***int*** value.)
+    Java comes with several standard classes that define common data structures, including linked lists, stacks, queues, trees, and hash tables, which are defined by classes in the package *java.util*. The classes define "generic" or "parameterized" types that will work for a variety of element types. For example, an object of type `LinkedList<String>` is a list of items of type **String**. Unfortunately, it is not possible to use these classes with the primitive types;. There is no "linked list of **int**". (However, you can have `LinkedList<Integer>`, where an object of type **Integer** is a "wrapper" for a primitive **int** value.)
 
-    Perhaps the most commonly used of the generic data structures is the ***ArrayList***. Like an array, an ***ArrayList*** contains a numbered sequence of items. However, an ***ArrayList*** can grow and shrink. For example, to create* an **ArrayLi*st** that can hold objects of type Point:
+    Perhaps the most commonly used of the generic data structures is the **ArrayList**. Like an array, an **ArrayList** contains a numbered sequence of items. However, an **ArrayList** can grow and shrink. For example, to create* an **ArrayLi*st** that can hold objects of type Point:
 
-    ```java
-    ArrayList<Point>  pointList;
-    pointList = new ArrayList<Point>();
-    ```
+    .. code-block:: java
 
-    This creates an initially empty list. The method *pointList.add(pt)* can be used to add a ***Point*** to the end of the list, increasing its length by one. The value of *pointList.size()* is the number of items currently in the list. The method *pointList.get(i)* returns the i-th element of the list, and *pointList.set(i,pt)* replaces the i-th element with pt. Similarly, pointList.remove(i) removes the i-th element, decreasing the length of the list by one. For all of these methods, an error occurs if i is not in the range from 0 to *pointList.size()* −1.
+        ArrayList<Point>  pointList;
+        pointList = new ArrayList<Point>();
+    
+
+    This creates an initially empty list. The method *pointList.add(pt)* can be used to add a **Point** to the end of the list, increasing its length by one. The value of *pointList.size()* is the number of items currently in the list. The method *pointList.get(i)* returns the i-th element of the list, and *pointList.set(i,pt)* replaces the i-th element with pt. Similarly, pointList.remove(i) removes the i-th element, decreasing the length of the list by one. For all of these methods, an error occurs if i is not in the range from 0 to *pointList.size()* −1.
 
     It is also possible to build linked data structures directly, remembering that the value of a variable whose type is given by a class is either null or is a pointer to an object. For example, a linked list of integer values can be created using objects defined by the simple class
 
-    ```java
-    class ListNode {
-        int item;       // One of the integers in the list
-        ListNode next;  // Pointer to next node in list, or null for end-of-list.
-    }
-    ```
+    .. code-block:: java
 
-    A more useful data structure for this course is a scene graph, like the ones discussed in [Subsection 2.4.2](../c2/s4.md#242--场景图) and implemented in the sample program [java2d/SceneGraphAPI2D.java](../../../en/source/java2d/SceneGraphAPI2D.java). In that API, a node in a scene graph is represented by an object belonging to the class ***SceneGraphNode*** or to a subclass of that class. For example, a ***CompoundObject*** represents a graphical object made up of subobjects. It needs to store pointers to all of its subobjects. They can conveniently be stored in an ***ArrayList***. Then drawing a ***CompoundObject*** just means drawing its subobjects. The class can be defined as follows:
+        class ListNode {
+            int item;       // One of the integers in the list
+            ListNode next;  // Pointer to next node in list, or null for end-of-list.
+        }
+        
 
-    ```java
-    class CompoundObject extends SceneGraphNode {
-        ArrayList<SceneGraphNode> subobjects = new ArrayList<SceneGraphNode>();
-        CompoundObject add(SceneGraphNode node) {
-            subobjects.add(node);
-            return this;
+    A more useful data structure for this course is a scene graph, like the ones discussed in :ref:`Subsection 2.4.2 <c2.4.2>`_ and implemented in the sample program `java2d/SceneGraphAPI2D.java <../en/source/java2d/SceneGraphAPI2D.java>`_. In that API, a node in a scene graph is represented by an object belonging to the class **SceneGraphNode** or to a subclass of that class. For example, a **CompoundObject** represents a graphical object made up of subobjects. It needs to store pointers to all of its subobjects. They can conveniently be stored in an **ArrayList**. Then drawing a **CompoundObject** just means drawing its subobjects. The class can be defined as follows:
+
+    .. code-block:: java
+
+        class CompoundObject extends SceneGraphNode {
+            ArrayList<SceneGraphNode> subobjects = new ArrayList<SceneGraphNode>();
+            CompoundObject add(SceneGraphNode node) {
+                subobjects.add(node);
+                return this;
+            }
+            void doDraw(Graphics2D g) {
+                for (SceneGraphNode node : subobjects)
+                node.draw(g);
+            }
         }
-        void doDraw(Graphics2D g) {
-            for (SceneGraphNode node : subobjects)
-            node.draw(g);
-        }
-    }
-    ```
+    
 
     (The for loop in this class is one that is specific to Java. It iterates automatically through all of the objects in the list.)
 
@@ -431,147 +465,159 @@ A.1.3  窗口和事件
 
     Java 附带了一套标准类，用于处理窗口和事件。我会提到其中最常见的一些。我将尽量告诉您足够的信息，以便您能够理解并使用本书中的示例程序。从头开始编写程序将需要更深入的知识。我讨论的所有类都是 Swing GUI API 的一部分，包含在 java.awt、javax.swing 和 java.awt.event 包中。我的许多程序都以以下导入指令开始，以使它们包含的类可用：
 
-    ```java
-    import java.awt.*;
-    import java.awt.event.*;
-    import javax.swing.*;
-    ```
+    .. code-block:: java
 
-    窗口可以由 ***JFrame*** 类的对象表示。JFrame 可以包含一个菜单栏和一个称为其“内容面板”的较大内容区域。内容面板通常属于 ***JPanel*** 的子类。***JPanel*** 可以用两种方式使用：作为绘图表面或作为其他组件（如按钮、文本输入框和嵌套面板）的容器。
+        import java.awt.*;
+        import java.awt.event.*;
+        import javax.swing.*;
+    
+
+    窗口可以由 **JFrame** 类的对象表示。JFrame 可以包含一个菜单栏和一个称为其“内容面板”的较大内容区域。内容面板通常属于 **JPanel** 的子类。 **JPanel** 可以用两种方式使用：作为绘图表面或作为其他组件（如按钮、文本输入框和嵌套面板）的容器。
 
     当面板用作绘图表面时，它由包含一个 paintComponent() 方法的子类定义。当面板第一次出现在屏幕上并且需要重新绘制时，会调用 paintComponent 方法。它的任务是完全重新绘制面板。它有一个类型为 Graphics 的参数，这是用于绘图的图形上下文。它的形式是
 
-    ```java
-    public void paintComponent(Graphics g) { ...
-    ```
+    .. code-block:: java
+    
+        public void paintComponent(Graphics g) { ...
+    
 
-    *paintComponent* 方法在 [2.5 节](../c2/s5.md) 中进一步讨论。通常，所有绘图都应该在这个方法中完成，并且 *paintComponent* 只应该由系统调用。当需要重新绘制时，可以通过调用面板的 repaint() 方法来触发 *paintComponent*。（在 [第 3 章](../c3/index.md) 和 [第 4 章](../c4/index.md) 中的 OpenGL 编程中，我使用了一个 ***GLJPanel***，它是 ***JPanel*** 的子类。在那种情况下，绘图是在 display() 方法中完成的，而不是在 *paintComponent* 中，但你仍然可以调用 repaint() 来触发重绘。见 [3.6.2 小节](../c3/s6.md#362-使用jogl)。）
+    *paintComponent* 方法在 :ref:`c2.5` 中进一步讨论。通常，所有绘图都应该在这个方法中完成，并且 *paintComponent* 只应该由系统调用。当需要重新绘制时，可以通过调用面板的 repaint() 方法来触发 *paintComponent*。（在 :ref:`c3` 和 :ref:`c4` 中的 OpenGL 编程中，我使用了一个 **GLJPanel**，它是 **JPanel** 的子类。在那种情况下，绘图是在 display() 方法中完成的，而不是在 *paintComponent* 中，但你仍然可以调用 repaint() 来触发重绘。见 :ref:`c3.6.2`。）
 
     当面板用作其他组件的容器时，这些组件通常会在构造函数中创建并添加到面板中，构造函数是一个特殊的例程，当对象通过 new 运算符创建时，它被调用以初始化对象。构造函数可以通过它与包含它的类具有相同的名称，并且没有返回类型这一事实来识别。
 
-    面板中组件的大小和位置通常由一个“布局管理器”设置，它是一个实现在容器中布局组件的某些策略的对象。例如，***BorderLayout*** 是一个布局管理器，它将一个大型组件放在面板的中心，并在面板的北、南、东和西边缘上为多达四个额外的组件留出空间。而 GridLayout 按行和列布局组件，所有组件具有相同的大小。除了嵌套面板，可能的组件类型还包括典型的界面组件，如 ***JButton***、***JCheckBox*** 和 ***JRadioButton***。您将在示例程序中看到所有这些内容的示例。
+    面板中组件的大小和位置通常由一个“布局管理器”设置，它是一个实现在容器中布局组件的某些策略的对象。例如， **BorderLayout** 是一个布局管理器，它将一个大型组件放在面板的中心，并在面板的北、南、东和西边缘上为多达四个额外的组件留出空间。而 GridLayout 按行和列布局组件，所有组件具有相同的大小。除了嵌套面板，可能的组件类型还包括典型的界面组件，如 **JButton**、 **JCheckBox** 和 **JRadioButton**。您将在示例程序中看到所有这些内容的示例。
 
 
     ----
 
-    一个 GUI 程序必须能够响应 **事件**，包括用户操作鼠标或键盘时生成的低级事件，以及用户从菜单中选择项目或点击按钮时生成的高级事件。为了响应事件，程序定义了事件处理方法，这些方法将在事件发生时被调用。在 Java 中，包含事件处理方法的对象被称为“监听”这些事件。例如，基本的鼠标事件处理器由一个名为 ***MouseListener*** 的接口指定。实现此接口的对象可以响应鼠标事件。它必须定义如 mousePressed() 等方法，当用户按下鼠标上的按钮时将调用此方法。***MouseListener*** 总共定义了五个方法。实现该接口的类将采用以下形式：
+    一个 GUI 程序必须能够响应 **事件**，包括用户操作鼠标或键盘时生成的低级事件，以及用户从菜单中选择项目或点击按钮时生成的高级事件。为了响应事件，程序定义了事件处理方法，这些方法将在事件发生时被调用。在 Java 中，包含事件处理方法的对象被称为“监听”这些事件。例如，基本的鼠标事件处理器由一个名为 **MouseListener** 的接口指定。实现此接口的对象可以响应鼠标事件。它必须定义如 mousePressed() 等方法，当用户按下鼠标上的按钮时将调用此方法。 **MouseListener** 总共定义了五个方法。实现该接口的类将采用以下形式：
 
-    ```java
-    class MouseHandler implements MouseListener {
-        public void mousePressed(MouseEvent evt) {
-            // 当用户按下鼠标按钮时作出响应
+    .. code-block:: java
+
+        class MouseHandler implements MouseListener {
+            public void mousePressed(MouseEvent evt) {
+                // 当用户按下鼠标按钮时作出响应
+            }
+            public void mouseClicked(MouseEvent evt) { }
+            public void mouseReleased(MouseEvent evt) { }
+            public void mouseEntered(MouseEvent evt) { }
+            public void mouseExited(MouseEvent evt) { }
         }
-        public void mouseClicked(MouseEvent evt) { }
-        public void mouseReleased(MouseEvent evt) { }
-        public void mouseEntered(MouseEvent evt) { }
-        public void mouseExited(MouseEvent evt) { }
-    }
-    ```
+    
 
-    这些方法中的 ***MouseEvent*** 参数是一个对象，它将包含有关事件的信息。例如，在事件处理方法中可以调用 *evt.getX()* 和 *evt.getY()* 来找到鼠标的 x 和 y 坐标。
+    这些方法中的 **MouseEvent** 参数是一个对象，它将包含有关事件的信息。例如，在事件处理方法中可以调用 *evt.getX()* 和 *evt.getY()* 来找到鼠标的 x 和 y 坐标。
 
-    事件通常与某些组件关联，称为事件的“目标”。例如，鼠标按下事件与用户按下鼠标按钮时包含鼠标的组件关联。按钮点击事件与被点击的按钮关联。要接收组件的事件，程序必须向该组件注册一个事件监听对象。例如，如果你想响应名为 panel 的 ***JPanel*** 上的鼠标点击，你需要创建一个 ***MouseListener*** 对象并将其注册到面板：
+    事件通常与某些组件关联，称为事件的“目标”。例如，鼠标按下事件与用户按下鼠标按钮时包含鼠标的组件关联。按钮点击事件与被点击的按钮关联。要接收组件的事件，程序必须向该组件注册一个事件监听对象。例如，如果你想响应名为 panel 的 **JPanel** 上的鼠标点击，你需要创建一个 **MouseListener** 对象并将其注册到面板：
 
-    ```java
-    MouseHandler handler = new MouseHandler(); // 创建监听器
-    panel.addMouseListener(handler);  // 将其注册到面板
-    ```
+    .. code-block:: java
+
+        MouseHandler handler = new MouseHandler(); // 创建监听器
+        panel.addMouseListener(handler);  // 将其注册到面板
+        
 
     在许多情况下，我会创建一个类，通常是一个嵌套类，来定义我需要的事件监听器。然而，任何类都可以实现接口，有时我让我的主类实现监听器接口：
 
-    ```java
-    public class MyPanel extends JPanel implements MouseListener { ... }
-    ```
+    .. code-block:: java
+    
+        public class MyPanel extends JPanel implements MouseListener { ... }
+    
 
     在这样一个类中，面板和监听器是同一个对象，特殊的变量 this 引用该对象。因此，要注册面板以监听它自己的鼠标事件，我会说：
 
-    ```java
-    this.addMouseListener( this );
-    ```
+    .. code-block:: java
+    
+        this.addMouseListener( this );
+    
 
     这句话可以简化为 *addMouseListener(this)*。
 
     其他事件类型与鼠标事件类型类似。你需要一个实现该类型事件监听器接口的对象，并且你需要将该对象注册为将成为事件目标的组件的监听器。
 
-    ***MouseMotionListener*** 接口定义了处理用户移动或拖动鼠标时生成的事件的方法。为了效率，它与 ***MouseListener*** 接口分开。响应鼠标拖动操作通常需要一个同时充当鼠标监听器和鼠标运动监听器的对象。
+    **MouseMotionListener** 接口定义了处理用户移动或拖动鼠标时生成的事件的方法。为了效率，它与 **MouseListener** 接口分开。响应鼠标拖动操作通常需要一个同时充当鼠标监听器和鼠标运动监听器的对象。
 
-    ***KeyListener*** 接口用于处理键盘事件。当用户按下键盘上的键以及释放键时，会生成一个事件。当用户在键盘上输入字符时，也会生成另一种类型的事件。例如，输入大写字母 'A' 将生成多个键按下和键释放事件以及一个字符输入事件。
+    **KeyListener** 接口用于处理键盘事件。当用户按下键盘上的键以及释放键时，会生成一个事件。当用户在键盘上输入字符时，也会生成另一种类型的事件。例如，输入大写字母 'A' 将生成多个键按下和键释放事件以及一个字符输入事件。
 
-    ***ActionListener*** 接口用于响应各种用户操作。例如，当用户点击按钮、从菜单中选择命令或更改复选框的设置时，会生成一个 ***ActionEvent***。它还用于一种事件不是来自用户的情况：***Timer*** 是一个可以定期间隔生成一系列 ***ActionEvents*** 的对象。***ActionListener*** 可以响应这些事件来实现动画。请参阅示例程序 [java2d/AnimationStarter.java](../../../en/source/java2d/AnimationStarter.java) 看看如何实现。
+    **ActionListener** 接口用于响应各种用户操作。例如，当用户点击按钮、从菜单中选择命令或更改复选框的设置时，会生成一个 **ActionEvent**。它还用于一种事件不是来自用户的情况：**Timer** 是一个可以定期间隔生成一系列 **ActionEvents** 的对象。 **ActionListener** 可以响应这些事件来实现动画。请参阅示例程序 `java2d/AnimationStarter.java <../en/source/java2d/AnimationStarter.java>`_ 看看如何实现。
 
-    最后，我将指出 JOGL 使用类型为 ***GLEventListener*** 的事件监听器来使用 OpenGL。其使用方法在 [3.6.2 小节](../c3/s6.md#362-使用jogl) 中解释。
+    最后，我将指出 JOGL 使用类型为 **GLEventListener** 的事件监听器来使用 OpenGL。其使用方法在 :ref:`c3.6.2` 中解释。
 
 .. tab:: 英文
 
     Java comes with a set of standard classes for working with windows and events. I will mention some of the most common. I will try to tell you enough to understand and work with the sample programs in this book. Writing programs from scratch will require more in-depth knowledge. All of the classes that I discuss are part of the Swing GUI API, and are contained in the packages java.awt, javax.swing, and java.awt.event. Many of my programs begin with the following import directives to make the classes that they contain available:
 
-    ```java
-    import java.awt.*;
-    import java.awt.event.*;
-    import javax.swing.*;
-    ```
+    .. code-block:: java
 
-    A window can be represented by an object of class ***JFrame***. A JFrame can hold a menu bar and a large content area known as its "content pane." The content pane often belongs to a subclass of ***JPanel***. A ***JPanel*** can be used in two ways: as a drawing surface or as a container for other components such as buttons, text input boxes, and nested panels.
+        import java.awt.*;
+        import java.awt.event.*;
+        import javax.swing.*;
+    
+
+    A window can be represented by an object of class **JFrame**. A JFrame can hold a menu bar and a large content area known as its "content pane." The content pane often belongs to a subclass of **JPanel**. A **JPanel** can be used in two ways: as a drawing surface or as a container for other components such as buttons, text input boxes, and nested panels.
 
     When a panel is to be used as a drawing surface, it is defined by a subclass that includes a paintComponent() method. The paintComponent method is called when the panel first appears on the screen and when it needs to be redrawn. Its task is to completely redraw the panel. It has a parameter of type Graphics, which is the graphics context that is used to do the drawing. It takes the form
 
-    ```java
-    public void paintComponent(Graphics g) { ...
-    ```
+    .. code-block:: java
 
-    The *paintComponent* method is discussed further in [Section 2.5](../c2/s5.md). In general, all drawing should be done in this method, and *paintComponent* should only be called by the system. When redrawing is necessary, a call to *paintComponent* can be triggered by calling the panel's repaint() method. (For OpenGL programming in [Chapter 3](../c3/index.md) and [Chapter 4](../c4/index.md), I use a ***GLJPanel***, which is a subclass of ***JPanel***. In that case, the drawing is done in a display() method, instead of in *paintComponent*, but you can still call repaint() to trigger a redraw. See [Subsection 3.6.2](../c3/s6.md#362-使用jogl).)
+        public void paintComponent(Graphics g) { ...
+    
+
+    The *paintComponent* method is discussed further in :ref:`Section 2.5 <c2.5>`. In general, all drawing should be done in this method, and *paintComponent* should only be called by the system. When redrawing is necessary, a call to *paintComponent* can be triggered by calling the panel's repaint() method. (For OpenGL programming in :ref:`Chapter 3 <c3>` and :ref:`Chapter 4 <c4>`, I use a **GLJPanel**, which is a subclass of **JPanel**. In that case, the drawing is done in a display() method, instead of in *paintComponent*, but you can still call repaint() to trigger a redraw. See :ref:`Subsection 3.6.2 <c3.6.2>`.)
 
     When a panel is to be used as a container for other components, those components will usually be created and added to the panel in a constructor, a special routine that is called to initialize an object when the object is created by the new operator. A constructor routine can be recognized by the fact that it has the same name as the class that contains it, and it has no return type.
 
-    The sizes and positions of the components in a panel will generally be set by a "layout manager," which is an object that implements some policy for laying out the components in a container. For example, a ***BorderLayout*** is a layout manager that puts one large component in the center of the panel, with space for up to four additional components on the north, south, east, and west edges of the panel. And a GridLayout lays out components in rows and columns, with all components having the same size. In addition to nested panels, possible component types include typical interface components such as ***JButton***, ***JCheckBox***, and ***JRadioButton***. You will see examples of all of these things in the sample programs.
+    The sizes and positions of the components in a panel will generally be set by a "layout manager," which is an object that implements some policy for laying out the components in a container. For example, a **BorderLayout** is a layout manager that puts one large component in the center of the panel, with space for up to four additional components on the north, south, east, and west edges of the panel. And a GridLayout lays out components in rows and columns, with all components having the same size. In addition to nested panels, possible component types include typical interface components such as **JButton**, **JCheckBox**, and **JRadioButton**. You will see examples of all of these things in the sample programs.
 
     ----
 
-    A GUI program must be able to respond to **events**, including low-level events such as those generated when the user manipulates a mouse or keyboard, and high level events such as those generated when the user selects an item from a menu or clicks on a button. To respond to events, a program defines event-handling methods, which will be called when the event occurs. In Java, an object that includes event-handling methods is said to "listen" for those events. For example, the basic mouse-event handlers are specified by an interface named ***MouseListener***. An object that implements this interface can respond to mouse events. It must define methods such as mousePressed(), which will be called when the user presses a button on the mouse. ***MouseListener*** defines five methods in all. A class that implements the interface would take the form
+    A GUI program must be able to respond to **events**, including low-level events such as those generated when the user manipulates a mouse or keyboard, and high level events such as those generated when the user selects an item from a menu or clicks on a button. To respond to events, a program defines event-handling methods, which will be called when the event occurs. In Java, an object that includes event-handling methods is said to "listen" for those events. For example, the basic mouse-event handlers are specified by an interface named **MouseListener**. An object that implements this interface can respond to mouse events. It must define methods such as mousePressed(), which will be called when the user presses a button on the mouse. **MouseListener** defines five methods in all. A class that implements the interface would take the form
 
-    ```java
-    class MouseHandler implements MouseListerner {
-        public void mousePressed(MouseEvent evt) {
-            .
-            .  // respond when the user presses a mouse button
-            .
+    .. code-block:: java
+
+        class MouseHandler implements MouseListerner {
+            public void mousePressed(MouseEvent evt) {
+                .
+                .  // respond when the user presses a mouse button
+                .
+            }
+            public void mouseClicked(MouseEvent evt) { }
+            public void mouseReleased(MouseEvent evt) { }
+            public void mouseEntered(MouseEvent evt) { }
+            public void mouseExited(MouseEvent evt) { }
         }
-        public void mouseClicked(MouseEvent evt) { }
-        public void mouseReleased(MouseEvent evt) { }
-        public void mouseEntered(MouseEvent evt) { }
-        public void mouseExited(MouseEvent evt) { }
-    }
-    ```
+    
 
-    The ***MouseEvent*** parameter in each of these methods is an object that will contain information about the event. For example, *evt.getX()* and *evt.getY()* can be called in the event-handler method to find the x and y coordinates of the mouse.
+    The **MouseEvent** parameter in each of these methods is an object that will contain information about the event. For example, *evt.getX()* and *evt.getY()* can be called in the event-handler method to find the x and y coordinates of the mouse.
 
-    An event is usually associated with some component, called the "target" of the event. For example, a mouse press event is associated with the component that contained the mouse when the user pressed the mouse button. A button click event is associated with the button that was clicked. To receive events from a component, a program must register an event-listening object with that component. For example, if you want to respond to mouse clicks on a ***JPanel*** named panel, you need to create a ***MouseListener*** object and register it with the panel:
+    An event is usually associated with some component, called the "target" of the event. For example, a mouse press event is associated with the component that contained the mouse when the user pressed the mouse button. A button click event is associated with the button that was clicked. To receive events from a component, a program must register an event-listening object with that component. For example, if you want to respond to mouse clicks on a **JPanel** named panel, you need to create a **MouseListener** object and register it with the panel:
 
-    ```java
-    MouseHandler handler = new MouseHandler(); // create the listener
-    panel.addMouseListener(handler);  // register it with the panel
-    ```
+    .. code-block:: java
+
+        MouseHandler handler = new MouseHandler(); // create the listener
+        panel.addMouseListener(handler);  // register it with the panel
+    
 
     In many cases, I create a class, often a nested class, to define an event listener that I need. However, any class, can implement an interface, and sometimes I let my main class implement the listener interface:
 
-    ```java
-    public class MyPanel extends JPanel implements MouseListener { ...
-    ```
+    .. code-block:: java
+    
+        public class MyPanel extends JPanel implements MouseListener { ...
+    
 
     Inside such a class, the panel and the listener are the same object, and the special variable this refers to that object. So, to register the panel to listen for mouse events on itself, I would say
 
-    ```java
-    this.addMouseListener( this );
-    ```
+    .. code-block:: java
+    
+        this.addMouseListener( this );
+    
 
     This statement can be shortened to simply *addMouseListener(this)*.
 
     Other event types work similarly to mouse event types. You need an object that implements a listener interface for events of that type, and you need to register that object as a listener with the component that will be the target of the events.
 
-    The ***MouseMotionListener*** interface defines methods that handle events that are generated when the user moves or drags the mouse. It is separate from the ***MouseListener*** interface for the sake of efficiency. Responding to a mouse-drag action usually requires an object that acts both as a mouse listener and a mouse motion listener.
+    The **MouseMotionListener** interface defines methods that handle events that are generated when the user moves or drags the mouse. It is separate from the **MouseListener** interface for the sake of efficiency. Responding to a mouse-drag action usually requires an object that acts both as a mouse listener and a mouse motion listener.
 
-    The ***KeyListener*** interface is used for handling keyboard events. An event is generated when the user presses a key and when the user releases a key on the keyboard. Another kind of event is generated when the user types a character. Typing a character such as upper case 'A' would generate several key-pressed and key-released events as well as a character-typed event.
+    The **KeyListener** interface is used for handling keyboard events. An event is generated when the user presses a key and when the user releases a key on the keyboard. Another kind of event is generated when the user types a character. Typing a character such as upper case 'A' would generate several key-pressed and key-released events as well as a character-typed event.
 
-    The ***ActionListener*** interface is used to respond to a variety of user actions. An ***ActionEvent*** is generated, for example, when the user clicks a button, selects a command from a menu, or changes the setting of a checkbox. It is also used in one context where the event doesn't come from the user: A ***Timer*** is an object that can generate a sequence of ***ActionEvents*** at regularly spaced intervals. An ***ActionListener*** can respond to those events to implement an animation. See the sample program [java2d/AnimationStarter.java](../../../en/source/java2d/AnimationStarter.java) to see how its done.
+    The **ActionListener** interface is used to respond to a variety of user actions. An **ActionEvent** is generated, for example, when the user clicks a button, selects a command from a menu, or changes the setting of a checkbox. It is also used in one context where the event doesn't come from the user: A **Timer** is an object that can generate a sequence of **ActionEvents** at regularly spaced intervals. An **ActionListener** can respond to those events to implement an animation. See the sample program `java2d/AnimationStarter.java <../en/source/java2d/AnimationStarter.java>`_ to see how its done.
 
-    Finally, I will note that JOGL uses an event listener of type ***GLEventListener*** for working with OpenGL. Its use is explained in [Subsection 3.6.2](../c3/s6.md#362-使用jogl).
+    Finally, I will note that JOGL uses an event listener of type **GLEventListener** for working with OpenGL. Its use is explained in :ref:`Subsection 3.6.2 <c3.6.2>`.

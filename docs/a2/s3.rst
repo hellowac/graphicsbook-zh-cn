@@ -26,7 +26,8 @@ B.3.1 关键帧动画和函数曲线
 
     在默认 Blender 窗口的底部有一个时间轴区域，其中包含有关动画的一些信息，并允许您控制它们：
 
-    ![123](../../en/a2/blender-timeline.png)
+    .. image:: ../en/a2/blender-timeline.png
+       :align: center
 
     时间轴显示了动画的起始帧号、结束帧和当前帧（在图片中分别为 1、250 和 12）。当前帧号指定了在 3D 视图中显示的帧。这些是您可以编辑的数字输入按钮。在帧号输入按钮的左侧是一组播放控件，可以在 3D 视图窗口中运行动画。您也可以通过按空格键开始和停止播放动画。开始和结束帧确定了播放动画时显示的帧范围。它们还决定了在渲染动画时将包含哪些帧。请注意，默认的 250 帧在以大约每秒 30 帧的典型帧率观看时，制作出的动画相当短。
 
@@ -47,7 +48,8 @@ B.3.1 关键帧动画和函数曲线
 
     图表编辑器显示在 3D 视图中选择的对象的 F-曲线。这是图表编辑器显示具有位置和旋转关键帧值的动画对象的一些 F-曲线：
 
-    ![123](../../en/a2/blender-graph-editor.png)
+    .. image:: ../en/a2/blender-graph-editor.png
+       :align: center
 
     每条曲线控制一个动画属性，将属性的值在垂直轴上与水平轴上的画面编号绘制对比。曲线默认为贝塞尔曲线。在图片中，旋转曲线已被隐藏（通过点击曲线名称旁边的“眼睛”），并且三个可见的曲线及其所有贝塞尔手柄已被选中（通过在图表上方按“A”键）。曲线上的点标记关键帧值。您可以使用“G”键选择并移动它们；在“G”键之后按“Y”键可以强制点保持在同一帧。您所做的任何更改将立即影响 3D 视图。您可以选择并移动贝塞尔曲线手柄上的控制点以改变曲线的形状。
 
@@ -65,7 +67,8 @@ B.3.1 关键帧动画和函数曲线
 
     对于我们的旋转示例，“制成循环”外推将使完整的 360 度旋转永远重复。这是使用“线性”插值和“制成循环”外推的 y 旋转的 F-曲线的样子：
 
-    ![123](../../en/a2/blender-cyclic-f-curve.png)
+    .. image:: ../en/a2/blender-cyclic-f-curve.png
+       :align: center
 
     您应该有恒定速度的永久旋转。诚然，这比它应该是更复杂。但希望如果您完成这个练习，它将给您一些关于如何使用 F-曲线的想法。
 
@@ -76,7 +79,8 @@ B.3.1 关键帧动画和函数曲线
 
     There is Timeline area at the bottom of the default Blender window that contains some information about animations and lets you control them:
 
-    ![123](../../en/a2/blender-timeline.png)
+    .. image:: ../en/a2/blender-timeline.png
+       :align: center
 
     The timeline shows the starting frame number, the end frame, and the current frame of the animation (1, 250, and 12 in the picture). The current frame number specifies the frame that is displayed in the 3D View. These are numerical input buttons that you can edit. To the left of the frame number inputs is a set of playback controls, which run the animation in the 3D View window. You can also start and stop playing the animation by pressing the spacebar. The start and end frames determine the range of frames that are displayed when the animation is played. They also determine what frames will be included when you render an animation. Note that the default 250 frames make a rather short animation when viewed at a typical frame rate of about 30 frames per second.
 
@@ -96,7 +100,8 @@ B.3.1 关键帧动画和函数曲线
 
     The Graph Editor shows F-curves for the object that is selected in the 3D View. Here is the Graph editor showing some F-curves for an animated object that has key frame values for the location and rotation:
 
-    ![123](../../en/a2/blender-graph-editor.png)
+    .. image:: ../en/a2/blender-graph-editor.png
+       :align: center
 
     Each curve controls one animated property, plotting the value of the property on the vertical axis against the frame number on the horizontal axis. The curves are Bezier curves by default. In the picture, the Rotation curves have been hidden (by clicking the "eyes" next to the curve names), and the three visible curves and all their Bezier handles have been selected (by hitting the "A" key while the mouse is over the graphs). The dots on the curves mark key frame values. You can select and move them using the "G" Key; hit the "Y" key after the "G" key to force the dot to stay in the same frame. Any changes that you make will immediately affect the 3D View. You can select and move the control points on the Bezier curve handles to change the shape of the curve.
 
@@ -114,7 +119,8 @@ B.3.1 关键帧动画和函数曲线
 
     For our rotation example, "Make Cyclic" extrapolation will make the full 360-degree rotation repeat forever. Here's what the F-curve for the y-rotation looks like with "Linear"" interpolation and "Make Cyclic" extrapolation:
 
-    ![123](../../en/a2/blender-cyclic-f-curve.png)
+    .. image:: ../en/a2/blender-cyclic-f-curve.png
+       :align: center
 
     You should have perpetual rotation at a constant speed. Admittedly, this is more complicated than it should be. But hopefully if you work through this exercise, it will give you some idea of how F-curves can be used.
 
@@ -127,7 +133,7 @@ B.3.2 追踪
 
 .. tab:: 中文
 
-    回想一下，你可以将一个对象“父子级”到另一个对象（见 [B.1.6 小节](./s1.md#b16--更多功能)）。“跟踪”是一种父子级的方式。当一个对象跟踪另一个对象时，第一个对象的旋转总是被设置为使其面向它正在跟踪的对象。要设置跟踪关系，点击你想要进行跟踪的对象，然后 shift-点击你想要它跟踪的对象。转到 3D 视图中的“对象”菜单下的“跟踪”子菜单，并选择“阻尼跟踪约束”或“跟踪到约束”。第一个，“阻尼跟踪约束”通常工作得很好，但当进行跟踪的是相机时，“跟踪到约束”似乎效果更好。（你可以通过选择正在跟踪的对象并使用同一菜单中的“清除跟踪”命令来清除跟踪。）
+    回想一下，你可以将一个对象“父子级”到另一个对象（见 :ref:`b.1.6` ）。“跟踪”是一种父子级的方式。当一个对象跟踪另一个对象时，第一个对象的旋转总是被设置为使其面向它正在跟踪的对象。要设置跟踪关系，点击你想要进行跟踪的对象，然后 shift-点击你想要它跟踪的对象。转到 3D 视图中的“对象”菜单下的“跟踪”子菜单，并选择“阻尼跟踪约束”或“跟踪到约束”。第一个，“阻尼跟踪约束”通常工作得很好，但当进行跟踪的是相机时，“跟踪到约束”似乎效果更好。（你可以通过选择正在跟踪的对象并使用同一菜单中的“清除跟踪”命令来清除跟踪。）
 
     实际上，跟踪是一种“约束”，在设置完成后，当你选择跟踪对象时，你会在属性编辑器中的“约束属性”中找到它。在约束属性中，你可以设置跟踪对象指向被跟踪对象的哪个轴。（跟踪只是“约束”的一种类型。你可以使用属性编辑器面板中的约束控件来设置和清除各种约束，除了跟踪外。“拉伸到”很有趣，我们将在本节后面看到“跟随路径”。）
 
@@ -136,7 +142,7 @@ B.3.2 追踪
 
 .. tab:: 英文
 
-    Recall that you can "parent" one object to another ([Subsection B.1.6](./s1.md#b16--更多功能)). "Tracking"" is a kind of parenting. When one object tracks another, the rotation of the first object is always set so that it faces the object that it is tracking. To set up a tracking relation, click the object that you want to do the tracking, then shift-click the object that you want it to track. Go to the "Track" submenu of the "Object" menu in the 3D View, and select "Damped Track Constraint" or "Track To Constraint." The first, "Damped Track Constraint" seems to work well in general, but "Track To Constraint" seems to work better when it's a camera that's doing the tracking. (You can clear tracking by selecting the object that is doing the tracking and using the "Clear Track" command in the same menu.)
+    Recall that you can "parent" one object to another ( :ref:`Subsection B.1.6 <b.1.6>` ). "Tracking"" is a kind of parenting. When one object tracks another, the rotation of the first object is always set so that it faces the object that it is tracking. To set up a tracking relation, click the object that you want to do the tracking, then shift-click the object that you want it to track. Go to the "Track" submenu of the "Object" menu in the 3D View, and select "Damped Track Constraint" or "Track To Constraint." The first, "Damped Track Constraint" seems to work well in general, but "Track To Constraint" seems to work better when it's a camera that's doing the tracking. (You can clear tracking by selecting the object that is doing the tracking and using the "Clear Track" command in the same menu.)
 
     Tracking is in fact a "constraint", and after you set it up you will find it listed in the "Constraint Properties" in the Properties Editor when the tracking object is selected. In the Constraint Properties, you can set which axis of the tracking object points towards the object that is being tracked. (Tracking is only one kind of "constraint." You can use the Constraint controls in the properties editor panel to set and clear various constraints in addition to tracking. "Stretch To" is interesting, and we will look at "Follow Path" later in this section.)
 
@@ -151,17 +157,19 @@ B.3.3 路径动画
 
 .. tab:: 中文
 
-    路径动画可以用来沿着一条曲线移动一个对象。任何贝塞尔曲线或 NURBS 曲线都可以工作。例如，你可以通过让一个对象沿着贝塞尔圆移动来获得圆周运动。对于路径动画，如果你想将运动限制在二维空间内，请记得将曲线设置为 2D（见 [B.2.2 小节](./s2.md#b22--曲线)）。
+    路径动画可以用来沿着一条曲线移动一个对象。任何贝塞尔曲线或 NURBS 曲线都可以工作。例如，你可以通过让一个对象沿着贝塞尔圆移动来获得圆周运动。对于路径动画，如果你想将运动限制在二维空间内，请记得将曲线设置为 2D（见 :ref:`b.2.2` ）。
 
     “路径”类型的曲线通常用于路径动画。在 Blender 中，“路径”是一种 NURBS 曲线，其端点被限制在曲线的第一个和最后一个控制点上，这使得控制曲线的起始和结束位置变得更加容易。要向场景中添加路径，使用“添加 / 曲线 / 路径”。（路径可能几乎看不见，因为它是一条直线。我建议立即通过按 Tab 键进入编辑模式，这样你可以更好地看到它。无论如何你可能都需要进入编辑模式。）最初，路径是一条带有四个控制点的直线。回想一下，你可以通过进入编辑模式，选择一个端点，并使用控制右键单击来添加点来延长非闭合路径。你还可以通过对控制点对进行选择并在 3D 视图的弹出菜单中点击“细分”来在曲线中间添加点。你可以通过在编辑模式下按 ALT-C 键来关闭路径。当然，你可以选择控制点并移动、缩放或旋转它们。
 
     有两种方法可以让一个对象沿着曲线移动。最简单的方法将路径动画视为一种父子级关系：点击对象，shift-点击曲线，按 Control-P，并从弹出菜单中选择“跟随路径”。你会注意到对象实际上并没有跳到曲线上。要让它这样做，选择跟随路径的对象，转到“对象”菜单下的“清除”子菜单，并选择“清除原点”命令。现在你应该有一个路径动画，对象在帧号 0 和帧号 100 之间沿着路径移动，帧号 100 之后进行线性外推。要更改帧数，请转到属性编辑器中曲线的对象属性，并更改“路径动画”下的“帧数”值。记住，100 帧只是大约 4 秒！另外，请确保在那里选中了路径动画选项，否则你将看不到任何动画。选中“夹具”复选框将把外推模式更改为常数，以便对象在路径末端停止。“跟随”复选框使对象在沿着曲线移动时旋转，以保持恒定的前进方向。
 
-    ![123](../../en/a2/blender-path-anim-easy.png)
+    .. image:: ../en/a2/blender-path-anim-easy.png
+       :align: center
 
     在许多情况下，这是你需要的全部控制。但是，要获得更多的控制，你可以使用“跟随路径”约束来进行路径动画。要做到这一点，请确保你知道你想要使用的曲线的名称。选择你想要沿着曲线移动的对象，然后转到属性编辑器中的约束属性。点击“添加对象约束”按钮，并在弹出菜单的“关系”部分下选择“跟随路径”。这将添加约束并为你提供一组控件来配置它：
 
-    ![123](../../en/a2/blender-path-anim.png)
+    .. image:: ../en/a2/blender-path-anim.png
+       :align: center
 
     你需要使用“目标”菜单来选择你希望对象跟随的曲线的名称。要让对象真正跳到曲线上，你需要清除它的位置，而不是它的原点。（选择对象并使用 ALT-G，或者使用“对象”菜单下“清除”子菜单中的“位置”命令。）
 
@@ -182,11 +190,13 @@ B.3.3 路径动画
 
     There are two ways to make an object follow a curve. The easiest way treats path animation as a kind of parenting: Click the object, shift-click the curve, hit Control-P, and select "Follow Path" from the popup menu. You will notice that the object does not actually jump onto the curve. To make it do that, select the object that is following the path, go to the "Clear" submenu in the "Object" menu, and select the "Clear Origin" command. You should now have a path animation in which the object moves along the path between frame number 0 and frame number 100, with linear extrapolation after frame 100. To change the number of frames, go to the Object Properties for the curve, in the Properties Editor, and change the value of "Frames" under "Path Animation." Remember that 100 frames is only about 4 seconds! Also, make sure Path Animation is checked there, or you won't see any animation. Checking the "Clamp" checkbox will change the extrapolation mode to constant, so that the object will stop at the end of the path. The "Follow" checkbox makes the object rotate to keep a constant heading as it moves along the curve.
 
-    ![123](../../en/a2/blender-path-anim-easy.png)
+    .. image:: ../en/a2/blender-path-anim-easy.png
+       :align: center
 
     In many cases, this is as much control as you need. But for more control, you can do path animation by using a "Follow Path" constraint. To do that, make sure that you know the name of the curve that you want to use. Select the object that you want to move along the curve, and go to the Constraint Properties in the Properties Editor. Click the "Add Object Constraint" button and select "Follow Path" under the "Relationship" section of the popup menu. This will add the constraint and give you a set of controls for configuring it:
 
-    ![123](../../en/a2/blender-path-anim.png)
+    .. image:: ../en/a2/blender-path-anim.png
+       :align: center
 
     You will need to use the "Target" menu to select the name of the curve that you want the object to follow. To get the object to actually jump onto the curve, you will need to clear it's Location, not its Origin. (Select the object and use ALT-G, or use the "Location" command in the "Clear" submenu of the "Object" menu.)
 
@@ -209,7 +219,8 @@ B.3.4 渲染动画
 
     在 Blender 的“渲染”菜单中有一个用于渲染动画的命令，但你不应该直接使用它——如果你这么做了，它可能会在硬盘上的某个位置生成数百个单独的图像文件，文件名类似于 0001.png、0002.png、...。在渲染动画之前，你应该使用属性编辑器中的输出属性来设置渲染动画的图像大小、文件格式和输出位置。请注意，渲染动画时不可能不保存结果，但当你使用渲染动画命令时，没有任何对话框——它只是自动使用输出属性中的设置。以下是相关属性：
 
-    ![123](../../en/a2/blender-render-output.png)
+    .. image:: ../en/a2/blender-render-output.png
+       :align: center
 
     输出属性控制单独图像的渲染以及动画的渲染。“分辨率”部分控制将要生成的图像的大小。你可以指定 X 和 Y 尺寸（以像素为单位），也可以指定百分比；声明的尺寸乘以百分比得到实际图像大小（可能是为了便于进行小尺寸的测试运行）。“帧范围”部分复制了 Blender 窗口底部时间轴上的动画开始和结束帧。请注意，“帧步骤”可以让你只渲染帧的一个子集。例如，设置为 2 可以渲染每隔一帧；同样，这可以用于加快测试运行的速度。
 
@@ -219,12 +230,12 @@ B.3.4 渲染动画
 
     输出的默认格式是 PNG，这对于单个图像很好，也可以用来制作动画。当你为动画使用单一图像格式时，Blender 会为每一帧单独保存一个文件。文件名将包括帧编号。这通常是为了方便进一步处理，但你可能更想使用视频文件格式，如 AVI、JPEG 或 H.264。我建议使用“MP4 中的 H.264”，因为它得到了广泛支持，并且可以在几乎所有网络浏览器中的网页上使用。为此，你必须将文件格式设置为 FFMpeg 视频。这将在输出属性中添加一个“编码”部分，你可以从菜单中选择“MP4 中的 H.264”。如果你编写自己的网页，这里有一个 HTML 代码示例，你可以包含它来在网页上嵌入你的动画：
 
-    ```html
-    <video width="640" height="480" controls>
-        <source src="myAnimation.mp4" type="video/mp4">
-        <b style="color:red">Sorry, but your browser can't show this video.</b>
-    </video>
-    ```
+    .. code-block:: html
+
+        <video width="640" height="480" controls>
+            <source src="myAnimation.mp4" type="video/mp4">
+            <b style="color:red">Sorry, but your browser can't show this video.</b>
+        </video>
 
     渲染动画可能需要一些时间，因为每一帧都必须作为单独的图像进行渲染。对于实验，我建议使用短动画、小图像尺寸和 Eevee 渲染器。Cycles 渲染器通常需要更长的时间。你会看到每一帧在渲染时的样子。你可以按 Esc 键中止渲染。
 
@@ -239,7 +250,8 @@ B.3.4 渲染动画
 
     There is a command for rendering an animation in Blender's "Render" menu, but you shouldn't simply jump into using it—if you do, it will dump several hundred individual image files with names like 0001.png, 0002.png, ..., somewhere on your hard drive. Before rendering an animation, you should use the Output Properties in the Property Editor to set up the image size, file format, and output location of the rendered animation. Note that's it's not possible to render an animation without saving the result, but you don't get any kind of dialog box when you use the Render Animation command — it just automatically uses the settings in the Output Properties. Here are the relevant properties:
 
-    ![123](../../en/a2/blender-render-output.png)
+    .. image:: ../en/a2/blender-render-output.png 
+       :align: center
 
     The Output Properties control rendering of individual images as well as animations. The "Resolution" section controls the size of the image that will be produced. You can specify the X and Y dimensions, in pixels, and also a percentage; the stated dimensions are multiplied by the percentage to get the actual image size (presumably to make it easy to make small size test runs). The "Frame Range" duplicates the animation start and end frames from the timeline at the bottom of the Blender window. Note that the "Frame Step" lets you render just a subset of the frames. For example, set it to 2 to render every other frame; again, this can be used to speed things up for test runs.
 
@@ -249,12 +261,12 @@ B.3.4 渲染动画
 
     The default format for the output is PNG, which is good for single images and could also be used for animations. When you use a single-image format for an animation, Blender will save each frame in a separate file. The file names will include the frame numbers. This is something that is often done to allow further processing, but you probably want to use a video file format such as AVI JPEG or H.264. I suggest using "H.264 in MP4," since it is widely supported and can be used on web pages in almost all web browsers. For that, you have to set the file format to FFMpeg Video. This will add an "Encoding" section to the output properties, and you can select "H.264 in MP4" from the menu. If you write your own web pages, here is an example of the HTML code that you can include to embed your animation on a web page:
 
-    ```html
-    <video width="640" height="480" controls>
-        <source src="myAnimation.mp4" type="video/mp4">
-        <b style="color:red">Sorry, but your browser can't show this video.</b>
-    </video>
-    ```
+    .. code-block:: html
+
+        <video width="640" height="480" controls>
+            <source src="myAnimation.mp4" type="video/mp4">
+            <b style="color:red">Sorry, but your browser can't show this video.</b>
+        </video>
 
     It can take some time to render an animation, since each frame must be rendered as a separate image. For experimentation, I suggest using a short animation, a small image size, and the Eevee renderer. The Cycles renderer will generally take much longer. You will see each frame as it is being rendered. You can abort the rendering with the Escape key.
 

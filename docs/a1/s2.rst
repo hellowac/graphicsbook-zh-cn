@@ -9,7 +9,7 @@ A.2 C 编程语言
 
     C 语言是我们在这本书中遇到的最古老的编程语言。它的基本语法已经被许多其他语言采用，包括 Java、JavaScript 以及 OpenGL 着色器语言。C 语言不是面向对象的。它是面向对象语言 C++ 的基础，但 C 语言几乎和 C++ 一样与 Java 截然不同。虽然这本书的任何读者都会对 C 语言的大部分内容感到熟悉，但要真正掌握 C 语言，你需要了解它不太熟悉的部分。
 
-    我个人使用 C 语言的经验主要限于在 Linux 上使用，在那里我可以使用 gcc 命令来编译 C 程序。如果你想在 Windows 上使用 gcc，你可能考虑安装 Windows 的 Linux 子系统（Windows Subsystem for Linux, WSL）(<https://docs.microsoft.com/en-us/windows/wsl/>) 或者 Cygwin (<https://cygwin.com/>)。对于 Mac OS，你可以使用苹果的 XCode 开发工具编写 C 程序。使用 Cygwin 或 XCode 工具进行 OpenGL 编程在 [3.6.1 小节](../c3/s6.md#361-使用glut) 中有简要介绍。
+    我个人使用 C 语言的经验主要限于在 Linux 上使用，在那里我可以使用 gcc 命令来编译 C 程序。如果你想在 Windows 上使用 gcc，你可能考虑安装 Windows 的 Linux 子系统 ( `Windows Subsystem for Linux, WSL <https://docs.microsoft.com/en-us/windows/wsl/>`_ ) 或者 `Cygwin <https://cygwin.com/>`_ 。对于 Mac OS，你可以使用苹果的 XCode 开发工具编写 C 程序。使用 Cygwin 或 XCode 工具进行 OpenGL 编程在 :ref:`c3.6.1` 中有简要介绍。
 
     由于网络问题，上述网页的解析并没有成功。如果用户需要这些网页的内容，请告知用户这个原因，并提醒用户检查网页链接的合法性或网络连接，然后适当重试。如果不需要这些链接的内容，可以继续回答用户的问题。
 
@@ -18,7 +18,7 @@ A.2 C 编程语言
 
     C is the oldest programming language that we will encounter in this book. Its basic syntax has been adopted by many other languages, including Java, JavaScript and the OpenGL shader language. C is not object-oriented. It was the basis for the object-oriented language C++, but C is almost as different from C++ as it is from Java. While a large part of C will be familiar to any reader of this book, to really master C, you need to know something about its less familiar parts.
 
-    My own experience with C is mostly limited to using it on Linux, where I can use the gcc command to compile C programs. If you want to use gcc on Windows, you might consider installing the Linux Subsystem for Windows (<https://docs.microsoft.com/en-us/windows/wsl/>) or Cygwin (<https://cygwin.com/>). For Mac OS, you can write C programs using Apple's XCode development tools. Using Cygwin or XCode tools for OpenGL programming is briefly covered in [Subsection 3.6.1](../c3/s6.md#361-使用glut).
+    My own experience with C is mostly limited to using it on Linux, where I can use the gcc command to compile C programs. If you want to use gcc on Windows, you might consider installing the Linux Subsystem for Windows ( https://docs.microsoft.com/en-us/windows/wsl/ ) or Cygwin ( https://cygwin.com/ ). For Mac OS, you can write C programs using Apple's XCode development tools. Using Cygwin or XCode tools for OpenGL programming is briefly covered in :ref:`Subsection 3.6.1 <c3.6.1>`.
 
 .. _a.2.1:
 
@@ -31,81 +31,90 @@ A.2.1  语言基础知识
 
     C 程序由一系列函数和全局变量组成，它们可以分布在多个文件中。（C 中的所有子程序都被称为“函数”，无论它们是否返回值。）其中必须恰好有一个函数是 *main()* 例程，其定义通常采用以下形式：
 
-    ```c
-    int main(int argc, char **argv) {
-        // 主程序代码
-    }
-    ```
+    .. code-block:: c
 
-    程序的执行始于 *main()* 函数。正如在 Java 中一样，*main()* 的参数包含有关用于执行程序的命令行参数的信息。（"**" 与 C 实现指针和数组的方式有关，我稍后将讨论。）如果程序不需要这些参数，可以从 main() 的定义中省略它们。*main()* 的返回值发送给操作系统，以指示程序是否成功；值为 0 表示成功，任何其他值表示发生了错误。
+        int main(int argc, char **argv) {
+            // 主程序代码
+        }
+    
 
-    C 在“定义”变量或函数和“声明”它之间做了区分。变量或函数只能有一个定义，但它可以被声明多次。变量或函数在使用前应该被**声明**，但不必在使用前就被**定义**。任何定义也是声明。C 编译器不会向前查找声明。（更准确地说，如果它遇到一个未声明的变量，它会假定它是 ***int*** 类型，如果它遇到一个未声明的函数，它会尝试推断声明。然而，这几乎从来都不是你想要的。）
+    程序的执行始于 *main()* 函数。正如在 Java 中一样， *main()* 的参数包含有关用于执行程序的命令行参数的信息。（"**" 与 C 实现指针和数组的方式有关，我稍后将讨论。）如果程序不需要这些参数，可以从 main() 的定义中省略它们。*main()* 的返回值发送给操作系统，以指示程序是否成功；值为 0 表示成功，任何其他值表示发生了错误。
+
+    C 在“定义”变量或函数和“声明”它之间做了区分。变量或函数只能有一个定义，但它可以被声明多次。变量或函数在使用前应该被 **声明** ，但不必在使用前就被 **定义** 。任何定义也是声明。C 编译器不会向前查找声明。（更准确地说，如果它遇到一个未声明的变量，它会假定它是 **int** 类型，如果它遇到一个未声明的函数，它会尝试推断声明。然而，这几乎从来都不是你想要的。）
 
     函数定义的形式类似于 Java 中的方法定义。必须指定函数的返回类型，对于不返回值的函数，使用 void 作为返回类型。必须指定每个参数的类型。例如：
 
-    ```c
-    int square( int x ) {
-        return x * x;
-    }
-    ```
+    .. code-block:: c
+
+        int square( int x ) {
+            return x * x;
+        }
+    
 
     由于定义也是声明，这也声明了 *square()*。要声明函数而不定义它，省略函数体。这称为函数的“原型”：
 
-    ```c
-    int square(int x);
-    ```
+    .. code-block:: c
+
+        int square(int x);
+    
 
     对于变量，典型的变量声明，如 "`int x;`"，也是变量的定义。要获得不是定义的变量声明，请添加 "extern" 这个词。例如："`extern int x;`"。你可能不需要知道这个。
 
-    区分声明和定义的一个原因是，尽管 C 程序可以由多个文件组成，但每个文件都是独立编译的。也就是说，当 C 编译一个文件时，它只查看该文件。即使多个文件使用单个命令编译，也是如此。如果文件 A 想要使用在文件 B 中*定义*的函数或变量，那么文件 A 必须包含该函数或变量的声明。这种跨文件引用通常使用“头文件”和 #include 指令来处理。文件中的 include 指令告诉编译器在它编译的代码中包含包含文件的副本。头文件通常以 ".h" 结尾，并且只包含声明。例如，想要使用标准输入/输出的 C 源文件将在文件开头使用以下指令：
+    区分声明和定义的一个原因是，尽管 C 程序可以由多个文件组成，但每个文件都是独立编译的。也就是说，当 C 编译一个文件时，它只查看该文件。即使多个文件使用单个命令编译，也是如此。如果文件 A 想要使用在文件 B 中 *定义* 的函数或变量，那么文件 A 必须包含该函数或变量的声明。这种跨文件引用通常使用“头文件”和 #include 指令来处理。文件中的 include 指令告诉编译器在它编译的代码中包含包含文件的副本。头文件通常以 ".h" 结尾，并且只包含声明。例如，想要使用标准输入/输出的 C 源文件将在文件开头使用以下指令：
 
-    ```c
-    #include <stdio.h>
-    ```
+    .. code-block:: c
+
+        #include <stdio.h>
+    
 
     stdio.h 是应该与任何 C 编译器一起安装的几个标准头文件之一。其他标准头文件包括 math.h（常用数学函数），string.h（字符串操作函数）和 stdlib.h（包括内存管理函数在内的一些杂项函数）。
 
     编译器还会在当前目录中查找头文件。在 include 指令中，此类头文件的名称应该用引号而不是尖括号括起来。例如：
 
-    ```c
-    #include "my-header.h"
-    ```
+    .. code-block:: c
+
+        #include "my-header.h"
+    
 
     如果你编写了一个 .c 文件，其中包含旨在其他文件中使用的函数，你通常会编写一个匹配的 .h 文件，其中包含这些函数的声明。
 
     在构成程序的所有文件都被编译之后，它们仍然需要被“链接”在一起形成一个完整的程序。gcc 编译器默认会自动进行链接。即使所有文件都已成功编译，仍然可能出现链接错误。如果为已声明的变量或函数未找到定义，或者在不同文件中为同一事物找到了两个定义，就会发生链接错误。对于在标准库中定义的函数，你可能需要使用 gcc 编译器上的 "-l" 选项将程序与适当的库链接。例如，使用 math.h 头文件中的函数的程序必须与名为 "m" 的库链接，如下所示：
 
-    ```shell
-    gcc my-program.c my-utils.c -lm
-    ```
+    .. code-block:: shell
 
-    确定需要链接哪些库可能很困难。我的大多数示例 C 程序，例如 [glut/first-triangle.c](../../../en/source/glut/first-triangle.c)，在注释中说明了如何编译和链接程序。
+        gcc my-program.c my-utils.c -lm
+    
+
+    确定需要链接哪些库可能很困难。我的大多数示例 C 程序，例如 `glut/first-triangle.c <../en/source/glut/first-triangle.c>`_ ，在注释中说明了如何编译和链接程序。
 
     关于使用 gcc 编译的另一个注意事项。默认情况下，编译程序的名称将是 a.out。gcc 命令上的 "-o" 选项用于为编译程序指定不同的名称。例如：
 
-    ```shell
-    gcc  -o my-program  my-program.c my-utils.c -lm
-    ```
+    .. code-block:: shell
+        
+        gcc  -o my-program  my-program.c my-utils.c -lm
+    
 
     在这里，编译程序的名称将是 my-program。编译程序的名称可以像任何其他命令一样使用。在 Linux 或 MacOS 中，你可以使用类似以下的命令在命令行上运行程序：
 
-    ```shell
-    ./my-program
-    ```
+    .. code-block:: shell
+        
+        ./my-program
+    
 
     名称前面的 "./" 是从当前目录运行命令所需的。你也可以使用命令的完整路径名。
 
     ----
 
-    C 语言拥有与 Java 类似的基本类型：***char***、***short***、***int***、***long***、***float***、***double***。C 语言中没有 ***boolean*** 类型，但整数可以用作布尔值，0 代表 false，任何非零值代表 true。C 语言中没有“byte”数据类型，但 ***char*** 本质上是一个 8 位整数类型，可以作为 byte 的替代品。对于其他数值数据类型，没有关于使用的位数的保证，但通常 ***int*** 表示 32 位整数，***long*** 表示 64 位。包括 ***char*** 在内的整数类型可以标记为“有符号”或“无符号”，无符号类型只有正值。例如，signed char 的值范围是 -128 到 127，而 unsigned char 的值范围是 0 到 255。除了 ***char***，整数类型的默认是有符号的（对于 ***char***，默认值在标准中未指定）。由于 C 语言在将一种数值类型转换为另一种数值类型时非常慷慨，我们不必太担心这一点。（我应该注意，为了避免 C 数据类型的歧义，OpenGL 定义了自己的一组数据类型，如 GLfloat 和 GLint，为了完全正确，你可以在 OpenGL 程序中使用它们代替 C 的通常类型名称。）
+    C 语言拥有与 Java 类似的基本类型： **char** 、 **short** 、 **int** 、 **long** 、 **float** 、 **double**。C 语言中没有 **boolean** 类型，但整数可以用作布尔值，0 代表 false，任何非零值代表 true。C 语言中没有“byte”数据类型，但 **char** 本质上是一个 8 位整数类型，可以作为 byte 的替代品。对于其他数值数据类型，没有关于使用的位数的保证，但通常 **int** 表示 32 位整数，**long** 表示 64 位。包括 **char** 在内的整数类型可以标记为“有符号”或“无符号”，无符号类型只有正值。例如，signed char 的值范围是 -128 到 127，而 unsigned char 的值范围是 0 到 255。除了 **char**，整数类型的默认是有符号的（对于 **char**，默认值在标准中未指定）。由于 C 语言在将一种数值类型转换为另一种数值类型时非常慷慨，我们不必太担心这一点。（我应该注意，为了避免 C 数据类型的歧义，OpenGL 定义了自己的一组数据类型，如 GLfloat 和 GLint，为了完全正确，你可以在 OpenGL 程序中使用它们代替 C 的通常类型名称。）
 
     C、Java 和 JavaScript 中的运算符和表达式类似。和 Java 一样，C 中的整数除法会产生整数结果，所以 17/3 的结果是 5。C 不使用 "+" 作为字符串连接运算符；实际上，C 没有用于字符串的此类运算符。可以使用 string.h 头文件中的 strcat 函数来完成字符串连接。我们将看到一些运算符也可以与 C 中的指针一起使用，这些方式在 Java 或 JavaScript 中没有对应的操作。
 
     头文件 stdio.h 声明了 C 的标准输入/输出函数。我在这里主要提到它是为了函数 printf()，它将文本输出到命令行，并且对于编写调试消息很有用。它本质上与 Java 中的 System.out.printf 函数相同。例如：
 
-    ```c
-    printf("The square root of %d is %f\n", x, sqrt(x));
-    ```
+    .. code-block:: c
+
+        printf("The square root of %d is %f\n", x, sqrt(x));
+    
 
     顺便说一下，sqrt(x) 函数在头文件 math.h 中定义，连同其他数学函数如 sin(x)、cos(x) 和 abs(x)。（在 C 中，abs(x) 总是一个 int。对于浮点绝对值，使用 fabs(x)。）
 
@@ -116,81 +125,90 @@ A.2.1  语言基础知识
 
     A C program consists of a collection of functions and global variables, which can be spread across multiple files. (All subroutines in C are referred to as "functions," whether or not they return a value.) Exactly one of those functions must be a *main()* routine, whose definition generally takes the form
 
-    ```c
-    int main(int argc, char **argv) {
-    // main program code
-    }
-    ```
+    .. code-block:: c
+
+        int main(int argc, char **argv) {
+        // main program code
+        }
+    
 
     Execution of the program begins in the *main()* function. As in Java, the parameters to *main()* contain information about command line arguments from the command that was used to execute the program. (The "\*\*" has to do with C's implementation of pointers and arrays, which I will discuss later.) The parameters can be omitted from the definition of main if the program has no need for them. The return value of *main()* is sent to the operating system to indicate whether or not the program succeeded; a value of 0 indicates success, and any other value indicates that an error occurred.
 
-    C makes a distinction between "defining" a variable or function and "declaring" it. A variable or function can have only one definition, but it can be declared any number of times. A variable or function should be **declared** before it is used, but does not have to be **defined** before it is used. Any definition is also a declaration. A C compiler will not look ahead to search for a declaration. (More precisely, if it encounters an undeclared variable, it will assume that it is of type ***int***, and if it encounters an undeclared function, it will try to deduce a declaration. However, this is almost never what you want.)
+    C makes a distinction between "defining" a variable or function and "declaring" it. A variable or function can have only one definition, but it can be declared any number of times. A variable or function should be **declared** before it is used, but does not have to be **defined** before it is used. Any definition is also a declaration. A C compiler will not look ahead to search for a declaration. (More precisely, if it encounters an undeclared variable, it will assume that it is of type **int**, and if it encounters an undeclared function, it will try to deduce a declaration. However, this is almost never what you want.)
 
     A function definition takes a form similar to a method definition in Java. The return type for the function must be specified, and a return type of void is used for a function that does not return a value. The type of each parameter must be specified. For example,
 
-    ```c
-    int square( int x ) {
-        return x * x;
-    }
-    ```
+    .. code-block:: c
+
+        int square( int x ) {
+            return x * x;
+        }
+    
 
     Since a definition is also a declaration, this also declares *square()*. To declare a function without defining it, leave out the body of the function. This is called a "prototype" for the function:
 
-    ```c
-    int square(int x);
-    ```
+    .. code-block:: c
+
+        int square(int x);
+    
 
     For variables, a typical variable declaration, such as "`int x;`", is also a definition of the variable. To get a variable declaration that is not a definition, add the word "extern". For example: "`extern int x;`". You probably won't need to know this.
 
     One reason for the distinction between declaration and definition is that, although C programs can consist of several files, each file is compiled independently. That is, when C is compiling a file, it looks only at that file. This is true even if several files are compiled with a single command. If file A wants to use a function or variable that is *defined* in file B, then file A must include a declaration of that function or variable. This type of cross-file reference is usually handled using "header files" and the #include directive. An include directive in a file tells the compiler to include a copy of the text from the included file in the code that it compiles. A header file typically has a name that ends with ".h" and contains only declarations. For example, a C source file that wants to use standard input/output will use the following directive at the beginning of the file:
 
-    ```c
-    #include <stdio.h>
-    ```
+    .. code-block:: c
+
+        #include <stdio.h>
+    
 
     The stdio.h header file is one of several standard header files that should be installed with any C compiler. Other standard headers include math.h for common mathematical functions, string.h for string manipulation functions, and stdlib.h for some miscellaneous functions including memory management functions.
 
     The compiler will also look in the current directory for header files. In an include directive, the name of such a header file should be enclosed in quotation marks instead of angle brackets. For example,
 
-    ```c
-    #include "my-header.h"
-    ```
+    .. code-block:: c
+
+        #include "my-header.h"
+    
 
     If you write a .c file that contains functions meant for use in other files, you will usually write a matching .h file containing declarations of those functions.
 
     After all the files that make up a program have been compiled, they still have to be "linked" together into a complete program. The gcc compiler does the linking automatically by default. Even if all of the files have compiled successfully, there can still be link errors. A link error occurs if no definition is found for a variable or function that has been declared, or if two definitions for the same thing are found in different files. For functions defined in standard libraries, you might need to link the program with the appropriate libraries using the "-l" option on the gcc compiler. For example, a program that uses functions from the math.h header file must be linked with the library named "m", like this:
 
-    ```shell
-    gcc my-program.c my-utils.c -lm
-    ```
+    .. code-block:: shell
+    
+        gcc my-program.c my-utils.c -lm
+    
 
     It can be difficult to know what libraries need to be linked. Most of my sample C programs, such as [glut/first-triangle.c](../../../en/source/glut/first-triangle.c), have a comment that tells how to compile and link the program.
 
     One more note about compiling with gcc. By default, the name of the compiled program will be a.out. The "-o" option on the gcc command is used to specify a different name for the compiled program. For example,
 
-    ```shell
-    gcc  -o my-program  my-program.c my-utils.c -lm
-    ```
+    .. code-block:: shell
+
+        gcc  -o my-program  my-program.c my-utils.c -lm
+    
 
     Here, the name of the compiled program will be my-program. The name of the compiled program can be used like any other command. In Linux or MacOS, you can run the program on the command line using a command such as
 
-    ```shell
-    ./my-program
-    ```
+    .. code-block:: shell
+
+        ./my-program
+    
 
     The "./" in front of the name is needed to run a command from the current directory. You could also use a full path name to the command.
 
     ----
 
-    C has most of the same basic types as Java: ***char***, ***short***, ***int***, ***long***, ***float***, ***double***. There is no ***boolean*** type, but integers can be used as booleans, with 0 representing false and any non-zero value representing true. There is no "byte" data type, but ***char*** is essentially an 8-bit integer type that can be used in place of **byte**. There are no guarantees about the number of bits used for the other numerical data types, but usually ***int*** means 32-bit integers and ***long*** means 64-bit. The integer types, including ***char***, can be marked "signed" or "unsigned", where the unsigned types have only positive values. For example, signed char has values in the range −128 to 127, while unsigned char has values in the range 0 to 255. Except for ***char*** the default for the integer types is signed. (For ***char***, the default is not specified in the standard.) Since C is very profligate about converting one numeric type to another, we don't have to worry too much about this. (I should note that to avoid the ambiguities of C data types, OpenGL defines its own set of data types such as GLfloat and GLint, and to be completely correct, you can use them in your OpenGL programs in place of C's usual type names.)
+    C has most of the same basic types as Java: **char**, **short**, **int**, **long**, **float**, **double**. There is no **boolean** type, but integers can be used as booleans, with 0 representing false and any non-zero value representing true. There is no "byte" data type, but **char** is essentially an 8-bit integer type that can be used in place of **byte**. There are no guarantees about the number of bits used for the other numerical data types, but usually **int** means 32-bit integers and **long** means 64-bit. The integer types, including **char**, can be marked "signed" or "unsigned", where the unsigned types have only positive values. For example, signed char has values in the range −128 to 127, while unsigned char has values in the range 0 to 255. Except for **char** the default for the integer types is signed. (For **char**, the default is not specified in the standard.) Since C is very profligate about converting one numeric type to another, we don't have to worry too much about this. (I should note that to avoid the ambiguities of C data types, OpenGL defines its own set of data types such as GLfloat and GLint, and to be completely correct, you can use them in your OpenGL programs in place of C's usual type names.)
 
     Operators and expressions are similar in C, Java, and JavaScript. As in Java, integer division in C produces an integer result, so that 17/3 is 5. C does not use "+" as a string concatenation operator; in fact, C has no such operator for strings. String concatenation can be done using a function, strcat, from the string.h header file. We will see that some operators can be also used with pointers in C, in ways that have no analog in Java or JavaScript.
 
     The header file stdio.h declares C's standard input/output functions. I mention it here mostly for the function printf(), which outputs text to the command line and is useful for writing debugging messages. It is essentially the same function as System.out.printf in Java. For example:
 
-    ```c
-    printf("The square root of %d is %f\n", x, sqrt(x));
-    ```
+    .. code-block:: c
+
+        printf("The square root of %d is %f\n", x, sqrt(x));
+    
 
     The function sqrt(x), by the way, is defined in the header file, math.h, along with other mathematical functions such as sin(x), cos(x), and abs(x). (In C, abs(x) is always an int. For a floating-point absolute value, use fabs(x).)
 
@@ -207,77 +225,86 @@ A.2.2  指针和数组
 
     对于熟悉 Java 或 JavaScript 的程序员来说，C 语言中最难适应的一点可能就是它对显式指针的使用。对我们的目的而言，你主要需要了解一元运算符 "\*" 和 "&" 如何与指针一起使用。但如果你想在 C 中使用动态数据结构，你需要了解更多。
 
-    在 C 中，存在一个数据类型 `int*`，它代表“指向 int 的指针”。类型为 `int*` 的值是一个内存地址，该地址处的内存位置假定保存了一个类型为 int 的值。如果 ptr 是一个类型为 `int*` 的变量，那么 `*ptr` 就表示存储在 ptr 指向地址的整数。`*ptr` 的工作方式类似于类型为 int 的变量：你可以在表达式中使用它来从内存中获取整数值，你也可以给它赋值以改变内存中的值（例如，"`*ptr = 17;`"）。
+    在 C 中，存在一个数据类型 `int*`，它代表“指向 int 的指针”。类型为 `int*` 的值是一个内存地址，该地址处的内存位置假定保存了一个类型为 int 的值。如果 ptr 是一个类型为 `int*` 的变量，那么 `*ptr` 就表示存储在 ptr 指向地址的整数。`\*ptr` 的工作方式类似于类型为 int 的变量：你可以在表达式中使用它来从内存中获取整数值，你也可以给它赋值以改变内存中的值（例如，" `*ptr = 17;` "）。
 
     相反，如果 *num* 是一个类型为 int 的变量，那么 &num 就表示一个指向 num 的指针。也就是说，&num 的值是内存中存储 num 的地址。注意，&num 是一个类型为 `int*` 的表达式，而 `*&num` 是 num 的另一个名称。表达式 &num 可以读作“指向 num 的指针”或“num 的地址”。
 
-    当然，运算符 `&` 和 `*` 可以用于任何类型，不仅仅是 ***int***。还有一个名为 `void*` 的数据类型，代表未类型化指针。类型为 `void*` 的值是一个指针，它可以指向内存中的任何地方，无论那个位置存储的是什么。
+    当然，运算符 `&` 和 `*` 可以用于任何类型，不仅仅是 **int**。还有一个名为 `void*` 的数据类型，代表未类型化指针。类型为 `void*` 的值是一个指针，它可以指向内存中的任何地方，无论那个位置存储的是什么。
 
     指针类型经常用于函数参数。如果一个内存位置的指针作为参数传递给函数，那么函数就可以改变那个内存位置存储的值。例如，考虑以下代码：
 
-    ```c
-    void swap ( int *a, int *b ) {
-        int temp = *a;
-        *a = *b;
-        *b = temp;
-    }
-    ```
+    .. code-block:: c
 
-    参数 a 和 b 的类型是 `int*`，所以传入函数的任何实际值都必须是指向 int 的指针类型。假设 x 和 y 是类型为 ***int*** 的变量：
+        void swap ( int *a, int *b ) {
+            int temp = *a;
+            *a = *b;
+            *b = temp;
+        }
+    
 
-    ```c
-    int x, y;
-    ```
+    参数 a 和 b 的类型是 `int*`，所以传入函数的任何实际值都必须是指向 int 的指针类型。假设 x 和 y 是类型为 **int** 的变量：
+
+    .. code-block:: c
+
+        int x, y;
+    
 
     那么 `&x` 和 `&y` 是指向 int 的指针，所以它们可以作为参数传递给 swap：
 
-    ```c
-    swap( &x, &y );
-    ```
+    .. code-block:: c
+
+        swap( &x, &y );
+    
 
     在函数内部，a 是 x 的指针，这使得 `*a` 成为 x 的另一个名称。同样，`*b` 是 y 的另一个名称。所以，例如，语句 `*a = *b`; 将 y 的值复制到 x 中。最终的结果是交换或交换存储在 x 和 y 中的值。在 Java 或 JavaScript 中，不可能编写类似的函数来交换两个整型变量的值。
 
-    顺便说一下，在声明 int `*a` 中，`*` 与 a 关联，而不是与 int 关联。声明的意图是说 `*a` 表示一个 ***int***，这使得 a 成为指向 int 的指针。将声明写成 `int*` a 是合法的，但可能会引起误解，因为：
+    顺便说一下，在声明 int `*a` 中，`*` 与 a 关联，而不是与 int 关联。声明的意图是说 `*a` 表示一个 **int**，这使得 a 成为指向 int 的指针。将声明写成 `int*` a 是合法的，但可能会引起误解，因为：
 
-    ```c
-    int* a, b;
-    ```
+    .. code-block:: c
+
+        int* a, b;
+    
 
     声明 a 为指向 int 的指针，b 为 int。要声明两个指针，你必须说：
 
-    ```c
-    int *a, *b;
-    ```
+    .. code-block:: c
+
+        int *a, *b;
+    
 
     ----
 
-    在 C 语言中，数组和指针关系密切。然而，你可以在不担心指针的情况下使用数组。例如，创建一个包含 5 个 ***int*** 的数组，可以这样写：
+    在 C 语言中，数组和指针关系密切。然而，你可以在不担心指针的情况下使用数组。例如，创建一个包含 5 个 **int** 的数组，可以这样写：
 
-    ```c
-    int A[5];
-    ```
+    .. code-block:: c
+
+        int A[5];
+    
 
     （注意 "[5]" 与变量名 A 相关联，而不是与类型名 "int"。）有了这个声明，你可以使用数组元素 A[0] 到 A[4] 作为整型变量。C 语言中的数组不会自动初始化。新数组的内容是未知的。你可以在声明数组时为它提供初始值。例如，下面的语句：
 
-    ```c
-    int B[] = { 2, 3, 5, 7, 9, 11, 13, 17, 19 };
-    ```
+    .. code-block:: c
+
+        int B[] = { 2, 3, 5, 7, 9, 11, 13, 17, 19 };
+    
 
     创建了一个长度为 9 的数组，包含 {} 之间的数字列表。如果为数组提供初始值，你不需要指定数组大小；它从值的列表中获取。数组不记得它的长度，也没有保护措施来防止尝试访问实际上位于数组外部的数组元素。
 
     取地址运算符 `&` 可以应用于数组元素。例如，如果 B 是上面声明的数组，那么 `&B[3]` 是存储 `B[3]` 的内存位置的地址。可以通过调用：
 
-    ```c
-    swap( &B[3], &B[4] );
-    ```
+    .. code-block:: c
+
+        swap( &B[3], &B[4] );
+    
 
     交换 B[3] 和 B[4] 的值。
 
     数组变量被视为指向数组的指针。也就是说，数组变量 B 的值是数组在内存中的地址。这意味着 B 和 `&B[0]` 是相同的。此外，指针变量可以像数组一样使用。例如，如果 p 是类型 `int*`，那么 `p[3]` 是 p 指向的整数后的第三个整数。如果我们定义：
 
-    ```c
-    int *p = &B[3];
-    ```
+    .. code-block:: c
+
+        int *p = &B[3];
+    
 
     那么 `p[0]` 与 `B[3]` 相同，`p[1]` 与 `B[4]` 相同，以此类推。
 
@@ -285,17 +312,18 @@ A.2.2  指针和数组
 
     ----
 
-    C 语言中的字符串本质上是一个 char 数组，但通常被视为类型 `char*`，即指向 ***char*** 的指针。按照惯例，字符串总是以一个空字符（ASCII 码 0）结束，以标记字符串的结尾。这是必要的，因为数组没有定义的长度。空字符对于字符串字面量是自动插入的。你可以用字符串字面量初始化类型为 char* 的变量：
+    C 语言中的字符串本质上是一个 char 数组，但通常被视为类型 `char*`，即指向 **char** 的指针。按照惯例，字符串总是以一个空字符（ASCII 码 0）结束，以标记字符串的结尾。这是必要的，因为数组没有定义的长度。空字符对于字符串字面量是自动插入的。你可以用字符串字面量初始化类型为 char* 的变量：
 
-    ```c
-    char *greet = "Hello World";
-    ```
+    .. code-block:: c
 
-    然后字符串中的字符由 `greet[0]`、`greet[1]`、...、`greet[10]` 给出。`greet[11]` 的值是零，以标记字符串的结尾。
+        char *greet = "Hello World";
+    
+
+    然后字符串中的字符由 `greet[0]`、 `greet[1]`、...、 `greet[10]` 给出。 `greet[11]` 的值是零，以标记字符串的结尾。
 
     使用定义在标准头文件 string.h 中的函数来操作字符串。例如，要测试两个字符串是否相等，可以使用 `strcmp(s1,s2)`。并且，复制字符串有函数 `strcpy(s1,s2)`。在 C 中使用字符串可能相当棘手，因为字符串表示为指针或数组，而且 C 不对空指针、错误的指针或数组索引越界进行检查。
 
-    顺便说一下，我现在可以解释 main() 例程的参数 int argc 和 char `**argv`。参数 argv 类型为 `char**` 是一个字符串数组（一个 * 表示数组，一个 * 表示字符串）。这个数组保存了用来运行程序的命令，`argv[0]` 保存程序的名称，其余的数组保存任何命令行参数。第一个参数 argc 的值是数组的长度。
+    顺便说一下，我现在可以解释 main() 例程的参数 int argc 和 char `**argv`。参数 argv 类型为 `char**` 是一个字符串数组（一个 * 表示数组，一个 * 表示字符串）。这个数组保存了用来运行程序的命令， `argv[0]` 保存程序的名称，其余的数组保存任何命令行参数。第一个参数 argc 的值是数组的长度。
 
 
 .. tab:: 英文
@@ -306,71 +334,80 @@ A.2.2  指针和数组
 
     Conversely, if *num* is a variable of type int, then &num represents a pointer that points to num. That is, the value of &num is the address in memory where num is stored. Note that &num is an expression of type `int*`, and `*&num` is another name for num. The expression &num can be read as "pointer to num" or "address of num."
 
-    Of course, the operators `&` and `*` work with any types, not just with ***int***. There is also a data type named `void*` that represents untyped pointers. A value of type `void*` is a pointer that can point anywhere in memory, regardless of what is stored at that location.
+    Of course, the operators `&` and `*` work with any types, not just with **int**. There is also a data type named `void*` that represents untyped pointers. A value of type `void*` is a pointer that can point anywhere in memory, regardless of what is stored at that location.
 
     Pointer types are often used for function parameters. If a pointer to a memory location is passed to a function as a parameter, then the function can change the value stored in that memory location. For example, consider
 
-    ```c
-    void swap ( int *a, int *b ) {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-    }
-    ```
+    .. code-block:: c
 
-    The parameters a and b are of type `int*`, so any actual values passed into the function must be of type pointer-to-int. Suppose that x and y are variables of type ***int***:
+        void swap ( int *a, int *b ) {
+        int temp = *a;
+        *a = *b;
+        *b = temp;
+        }
+    
 
-    ```c
-    int x,y;
-    ```
+    The parameters a and b are of type `int*`, so any actual values passed into the function must be of type pointer-to-int. Suppose that x and y are variables of type **int**:
+
+    .. code-block:: c
+
+        int x,y;
+    
 
     Then `&x` and `&y` are pointers to int, so they can be passed as parameters to swap:
 
-    ```c
-    swap( &x, &y );
-    ```
+    .. code-block:: c
+
+        swap( &x, &y );
+    
 
     Inside the function, a is a pointer to x, which makes `*a` another name for x. Similarly, `*b` is another name for y. So, for example, the statement `*a = *b`; copies the value of y into x. The net result is to swap, or interchange, the values stored in x and in y. In Java or JavaScript, it is impossible to write a similar method that swaps the values of two integer variables.
 
-    Note, by the way, that in the declaration int `*a`, the `*` is associated with a rather than with int. The intent of the declaration is to say that `*a` represents an ***int***, which makes a a pointer to int. It is legal, but misleading, to write the declaration as `int*` a. It is misleading because
+    Note, by the way, that in the declaration int `*a`, the `*` is associated with a rather than with int. The intent of the declaration is to say that `*a` represents an **int**, which makes a a pointer to int. It is legal, but misleading, to write the declaration as `int*` a. It is misleading because
 
-    ```c
-    int* a, b;
-    ```
+    .. code-block:: c
+
+        int* a, b;
+    
 
     declares a to be a pointer to int and b to be an int. To declare two pointers, you have to say
 
-    ```c
-    int *a, *b;
-    ```
+    .. code-block:: c
+
+        int *a, *b;
+    
 
     ----
 
-    Arrays and pointers are very closely related in C. However, it is possible to use arrays without worrying about pointers. For example, to create an array of 5 ***ints***, you can say
+    Arrays and pointers are very closely related in C. However, it is possible to use arrays without worrying about pointers. For example, to create an array of 5 **ints**, you can say
 
-    ```c
-    int A[5];
-    ```
+    .. code-block:: c
+
+        int A[5];
+    
 
     (Note that the "[5]" is associated with the variable name, A, rather than with the type name, "int".) With this declaration, you can use the array elements A[0] through A[4] as integer variables. Arrays in C are not automatically initialized. The contents of a new array are unknown. You can provide initial values for an array when you declare it. For example, the statement
 
-    ```c
-    int B[] = { 2, 3, 5, 7, 9, 11, 13, 17, 19 };
-    ```
+    .. code-block:: c
+
+        int B[] = { 2, 3, 5, 7, 9, 11, 13, 17, 19 };
+    
 
     creates an array of length 9 containing the numbers listed between { and }. If you provide initial values for the array, you do not have to specify the array size; it is taken from the list of values. An array does not remember its length, and there is no protection against trying to access array elements that actually lie outside of the array.
 
     The address operator, `&`, can be applied to array elements. For example, if B is the array from the above declaration, then `&B[3]` is the address of the location in memory where `B[3]` is stored. The values of `B[3]` and `B[4]` could be swapped by calling
 
-    ```c
-    swap( &B[3], &B[4] );
-    ```
+    .. code-block:: c
+
+        swap( &B[3], &B[4] );
+    
 
     An array variable is considered to be a pointer to the array. That is, the value of an array variable B is the address of the array in memory. This means that B and `&B[0]` are the same. Furthermore, a pointer variable can be used as if it is an array. For example, if p is of type `int*`, then `p[3]` is the third integer in memory after the integer to which p points. And if we define
 
-    ```c
-    int *p = &B[3];
-    ```
+    .. code-block:: c
+
+        int *p = &B[3];
+    
 
     then `p[0]` is the same as `B[3]`, `p[1]` is the same as `B[4]`, and so on.
 
@@ -378,11 +415,12 @@ A.2.2  指针和数组
 
     ----
 
-    A string in C is essentially an array of char but is usually thought of as being of type `char*`, that is, pointer to ***char***. By convention, a string always ends with a null character (ASCII code 0) to mark the end of the string. This is necessary because arrays do not have a defined length. The null character is inserted automatically for string literals. You can initialize a variable of type char* with a string literal:
+    A string in C is essentially an array of char but is usually thought of as being of type `char*`, that is, pointer to **char**. By convention, a string always ends with a null character (ASCII code 0) to mark the end of the string. This is necessary because arrays do not have a defined length. The null character is inserted automatically for string literals. You can initialize a variable of type char* with a string literal:
 
-    ```c
-    char *greet = "Hello World";
-    ```
+    .. code-block:: c
+
+        char *greet = "Hello World";
+    
 
     The characters in the string are then given by `greet[0]`, `greet[1]`, ..., `greet[10]`. The value of `greet[11]` is zero, to mark the end of the string.
 
@@ -401,90 +439,96 @@ A.2.3  数据结构
 
     C 语言没有类或对象。然而，它确实有一种表示复杂数据类型的方式：结构体（struct）。结构体类似于只包含变量而没有方法的类。它是一种将多个变量组合成一个单元的方式。例如：
 
-    ```c
-    struct color {
-        float r;
-        float g;
-        float b;
-    };
-    ```
+    .. code-block:: c
+
+        struct color {
+            float r;
+            float g;
+            float b;
+        };
+    
 
     有了这个定义，`struct color` 成为了一个可以用来声明变量、参数和函数返回类型的类型。例如：
 
-    ```c
-    struct color bg;
-    ```
+    .. code-block:: c
+
+        struct color bg;
+    
 
     有了这个声明，`bg` 是一个由三个浮点变量组成的结构体，可以分别引用为 `bg.r`、`bg.g` 和 `bg.b`。为了避免在类型名称中使用 "struct"，可以使用 `typedef` 声明结构体数据类型：
 
-    ```c
-    typedef struct {
-        float r;
-        float g;
-        float b;
-    } color;
-    ```
+    .. code-block:: c
+
+        typedef struct {
+            float r;
+            float g;
+            float b;
+        } color;
+    
 
     这定义了 `color` 而不是 `struct color` 作为类型的名称，这样变量就可以这样声明：
 
-    ```c
-    color bg;
-    ```
+    .. code-block:: c
+
+        color bg;
+    
 
     有时使用指向结构体的指针是有用的。例如，我们可以为结构体 `bg` 创建一个指针：
 
-    ```c
-    color *ptr = &bg;
-    ```
+    .. code-block:: c
 
-    有了这个定义，`*ptr` 是 `bg` 的另一个名称。结构体中的变量可以引用为 `(*ptr).r`、`(*ptr).g` 和 `(*ptr).b`。括号是必需的，因为 "." 运算符的优先级高于 "*" 运算符。但是这些变量也可以引用为 `ptr->r`、`ptr->g` 和 `ptr->b`。当使用指向结构体的指针来访问结构体中的变量时，使用 `->` 运算符代替点（.）运算符。
+        color *ptr = &bg;
+    
+
+    有了这个定义， `*ptr` 是 `bg` 的另一个名称。结构体中的变量可以引用为 `(*ptr).r`、 `(*ptr).g` 和 `(*ptr).b`。括号是必需的，因为 "." 运算符的优先级高于 "*" 运算符。但是这些变量也可以引用为 `ptr->r`、 `ptr->g` 和 `ptr->b`。当使用指向结构体的指针来访问结构体中的变量时，使用 `->` 运算符代替点（.）运算符。
 
     ----
 
-    要在 C 中实现动态数据结构，你需要能够动态分配内存。在 Java 和 JavaScript 中，可以使用 new 运算符来完成，但 C 不使用 new。相反，它有一个函数 `malloc(n)`，它在标准头文件 stdlib.h 中声明。malloc 的参数是一个整数，指定要分配的内存字节数。返回值是一个类型为 `void*` 的指针，指向新分配的内存块。（`void*` 指针可以赋给任何指针变量。）此外，由于 C 没有“垃圾回收”，你有责任释放你使用 malloc 分配的任何内存。这可以使用 `free(ptr)` 完成，其中 ptr 是被释放内存块的指针。我不会详细讨论动态数据结构，而是提供一个简短的程序来展示它们的使用。该程序使用链表来表示整数的栈：
+    要在 C 中实现动态数据结构，你需要能够动态分配内存。在 Java 和 JavaScript 中，可以使用 new 运算符来完成，但 C 不使用 new。相反，它有一个函数 `malloc(n)`，它在标准头文件 stdlib.h 中声明。malloc 的参数是一个整数，指定要分配的内存字节数。返回值是一个类型为 `void*` 的指针，指向新分配的内存块。（ `void*` 指针可以赋给任何指针变量。）此外，由于 C 没有“垃圾回收”，你有责任释放你使用 malloc 分配的任何内存。这可以使用 `free(ptr)` 完成，其中 ptr 是被释放内存块的指针。我不会详细讨论动态数据结构，而是提供一个简短的程序来展示它们的使用。该程序使用链表来表示整数的栈：
 
-    ```c
-    #include <stdio.h>   // 用于 printf 函数
-    #include <stdlib.h>  // 用于 malloc 和 free 函数
+    .. code-block:: c
 
-    typedef struct node listnode; // 预先声明 listnode 类型，以便
-    // 用于 next 的类型。
-    struct node {
-        int item;       // 列表中的一个项目。
-        listnode *next; // 指向列表中下一个项目的指针。
-    };
+        #include <stdio.h>   // 用于 printf 函数
+        #include <stdlib.h>  // 用于 malloc 和 free 函数
 
-    listnode *list = 0;  // 指向列表头部的指针，最初为空。
+        typedef struct node listnode; // 预先声明 listnode 类型，以便
+        // 用于 next 的类型。
+        struct node {
+            int item;       // 列表中的一个项目。
+            listnode *next; // 指向列表中下一个项目的指针。
+        };
 
-    void push( int item ) {  // 将项目添加到列表的头部
-        listnode *newnode;  // 指向一个新节点的指针，用于保存项目。
-        newnode = malloc( sizeof(listnode) ); // 为节点分配内存。
-        // (sizeof(listnode) 是 listnode 类型的值的字节数)
-        newnode->item = item;
-        newnode->next = list;  
-        list = newnode;  // 使 list 指向新节点。
-    }
+        listnode *list = 0;  // 指向列表头部的指针，最初为空。
 
-    int pop() {  // 从列表中移除并返回第一个项目
-        int item = list->item; // 要返回的项目。
-        listnode *oldnode = list;  // 保存将要删除节点的指针。
-        list = list->next;  // 将 list 指针推进到下一个项目。
-        free(oldnode); // 释放被删除节点使用的内存。
-        return item;
-    }
-
-    int main() {
-        int i;
-        for (i = 1; i < 1000000; i *= 2) {
-            // 将二的幂推入列表。
-            push(i);
+        void push( int item ) {  // 将项目添加到列表的头部
+            listnode *newnode;  // 指向一个新节点的指针，用于保存项目。
+            newnode = malloc( sizeof(listnode) ); // 为节点分配内存。
+            // (sizeof(listnode) 是 listnode 类型的值的字节数)
+            newnode->item = item;
+            newnode->next = list;  
+            list = newnode;  // 使 list 指向新节点。
         }
-        while (list) {
-            // 弹出并打印列表项目（倒序）。
-            printf("%d\n", pop());
+
+        int pop() {  // 从列表中移除并返回第一个项目
+            int item = list->item; // 要返回的项目。
+            listnode *oldnode = list;  // 保存将要删除节点的指针。
+            list = list->next;  // 将 list 指针推进到下一个项目。
+            free(oldnode); // 释放被删除节点使用的内存。
+            return item;
         }
-    }
-    ```
+
+        int main() {
+            int i;
+            for (i = 1; i < 1000000; i *= 2) {
+                // 将二的幂推入列表。
+                push(i);
+            }
+            while (list) {
+                // 弹出并打印列表项目（倒序）。
+                printf("%d\n", pop());
+            }
+        }
+    
 
     更复杂的数据结构，如场景图，可以包含几种不同类型的节点。对于这样的结构，你需要更高级的技术。一种方法是设计一个包含以下内容的结构体：数据结构中所有节点共有的数据；一个整型代码编号，表示它是几种可能的节点类型中的哪一种；以及一个 `void*` 指针，用于链接该类型节点所需的额外数据。使用 `void*` 指针意味着它可以指向任何类型的数据结构，代码编号将告诉你如何解释它指向的数据。一个比使用 `void*` 指针更好的选择是了解“联合体”（union），它类似于结构体，但更有用于表示多种数据类型。但是，如果你想使用复杂的数据结构，真正的解决方案可能是使用 C++ 而不是 C。
 
@@ -493,41 +537,46 @@ A.2.3  数据结构
 
     C does not have classes or objects. However, it does have a way to represent complex data types: a struct. A struct is similar to a class that contains only variables, with no methods. It is a way of grouping several variables into a unit. For example,
 
-    ```c
-    struct color {
-    float r;
-    float g;
-    float b;
-    };
-    ```
+    .. code-block:: c
+
+        struct color {
+        float r;
+        float g;
+        float b;
+        };
+    
 
     With this definition, struct color becomes a type that can be used to declare variables, parameters, and return types of functions. For example,
 
-    ```c
-    struct color bg;
-    ```
+    .. code-block:: c
+
+        struct color bg;
+    
 
     With this declaration, bg is a struct made up of three float variables that can be referred to as bg.r, bg.g, and bg.g. To avoid having the word "struct" as part of the type name, a struct datatype can be declared using typedef:
 
-    ```c
-    typedef struct {
-    float r;
-    float g;
-    float b;
-    } color;
-    ```
+    .. code-block:: c
+
+        typedef struct {
+        float r;
+        float g;
+        float b;
+        } color;
+    
 
     This defines *color*, rather than *struct color*, to be the name of the type, so that a variable can be declared as
 
-    ```c
-    color bg;
-    ```
+    .. code-block:: c
+
+        color bg;
+    
 
     It is sometimes useful to work with pointers to structs. For example, we can make a pointer to the struct bg:
 
-    ```c
-    color *ptr = &bg;
-    ```
+    .. code-block:: c
+
+        color *ptr = &bg;
+    
 
     When this definition, `*ptr` is another name for bg. The variables in the struct can be referred to as `(*ptr).r`, `(*ptr).g`, and `(*ptr).b`. The parentheses are necessary because the operator "." has a higher precedence than "\*". But the variables can also be referred to as `ptr->r`, `ptr->g`, and `ptr->b`. When a pointer-to-struct is used to access the variables in a struct, the operator `->` is used instead of the period (.) operator.
 
@@ -535,48 +584,49 @@ A.2.3  数据结构
 
     To implement dynamic data structures in C, you need to be able to allocate memory dynamically. In Java and JavaScript, that can be done using the new operator, but C does not use new. Instead, it has a function, `malloc(n)`, which is declared in the standard header file stdlib.h. The parameter to malloc is an integer that specifies the number of bytes of memory to be allocated. The return value is a pointer of type `void*` that points to the newly allocated block of memory. (A `void*` pointer can be assigned to any pointer variable.) Furthermore, since C does not have "garbage collection," you are responsible for freeing any memory that you allocate using malloc. That can be done using `free(ptr)`, where ptr is a pointer to the block of memory that is being freed. Rather than discuss dynamic data structures in detail, I present a short program to show how they can be used. The program uses a linked list to represent a stack of integers:
 
-    ```c
-    #include <stdio.h>   // for the printf function
-    #include <stdlib.h>  // for the malloc and free functions
+    .. code-block:: c
 
-    typedef struct node listnode; // Predeclare the listnode type, so it
-                                // can be used for the type of next.
-    struct node {
-    int item;       // An item in the list.
-    listnode *next; // Pointer to next item in list.
-    };
+        #include <stdio.h>   // for the printf function
+        #include <stdlib.h>  // for the malloc and free functions
 
-    listnode *list = 0;  // Pointer to head of list, initially null.
+        typedef struct node listnode; // Predeclare the listnode type, so it
+                                    // can be used for the type of next.
+        struct node {
+        int item;       // An item in the list.
+        listnode *next; // Pointer to next item in list.
+        };
 
-    void push( int item ) {  // Add item to head of list
-    listnode *newnode;  // Pointer to a new node to hold the item.
-    newnode = malloc( sizeof(listnode) ); // Allocate memory for the node.
-        // (sizeof(listnode) is the number of bytes for a value of type listnode)
-    newnode->item = item;
-    newnode->next = list;  
-    list = newnode;  // Makes list point to the new node.
-    }
+        listnode *list = 0;  // Pointer to head of list, initially null.
 
-    int pop() {  // Remove and return first item from list
-    int item = list->item; // The item to be returned.
-    listnode *oldnode = list;  // Save pointer to node that will be deleted.
-    list = list->next;  // Advance list pointer to next item.
-    free(oldnode); // Free the memory used by deleted node.
-    return item;
-    }
-
-    int main() {
-        int i;
-        for (i = 1; i < 1000000; i *= 2) {
-            // Push powers of two onto the list.
-            push(i);
+        void push( int item ) {  // Add item to head of list
+        listnode *newnode;  // Pointer to a new node to hold the item.
+        newnode = malloc( sizeof(listnode) ); // Allocate memory for the node.
+            // (sizeof(listnode) is the number of bytes for a value of type listnode)
+        newnode->item = item;
+        newnode->next = list;  
+        list = newnode;  // Makes list point to the new node.
         }
-        while (list) {
-            // Pop and print list items (in reverse order).
-        printf("%d\n", pop());
+
+        int pop() {  // Remove and return first item from list
+        int item = list->item; // The item to be returned.
+        listnode *oldnode = list;  // Save pointer to node that will be deleted.
+        list = list->next;  // Advance list pointer to next item.
+        free(oldnode); // Free the memory used by deleted node.
+        return item;
         }
-    }
-    ```
+
+        int main() {
+            int i;
+            for (i = 1; i < 1000000; i *= 2) {
+                // Push powers of two onto the list.
+                push(i);
+            }
+            while (list) {
+                // Pop and print list items (in reverse order).
+            printf("%d\n", pop());
+            }
+        }
+    
 
     A more complex data structure, such as a scene graph can contain several different kinds of nodes. For such structures, you need even more advanced techniques. One approach is to design a struct that includes the following: data common to all nodes in the data structure; an integer code number to say which of the several possible kinds of node it is; and a `void*` pointer to link to the extra data needed by nodes of that type. Using a `void*` pointer means it can point to any kind of data structure, and the code number will tell how to interpret the data that it points to. A better alternative to using a `void*` pointer is to learn about "union", something similar to a struct but more useful for representing multiple data types. But perhaps the real solution, if you want to work with complex data structures, is to use C++ instead of C.
 

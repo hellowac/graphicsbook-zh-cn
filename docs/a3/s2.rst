@@ -7,9 +7,9 @@ C.2 Inkscape 2D绘图程序
 
 .. tab:: 中文
 
-    Inkscape 是一个用于创建和编辑二维矢量图形图像的免费程序。我使用 Inkscape 创建了这本教科书的许多插图。作为一个矢量图形程序，Inkscape 不是存储像素的颜色，而是存储场景中对象的列表及其属性。它以 SVG（可缩放矢量图形）格式保存图像，SVG 格式在 [第 2.7 节](../c2/s7.md) 中有介绍。SVG 图像可以在许多标准图像查看器中打开，并且可以用于网络。Inkscape 在它创建的 SVG 文件中添加了一些额外数据，但这些数据将被其他程序忽略。
+    Inkscape 是一个用于创建和编辑二维矢量图形图像的免费程序。我使用 Inkscape 创建了这本教科书的许多插图。作为一个矢量图形程序，Inkscape 不是存储像素的颜色，而是存储场景中对象的列表及其属性。它以 SVG（可缩放矢量图形）格式保存图像，SVG 格式在 :ref:`c2.7` 中有介绍。SVG 图像可以在许多标准图像查看器中打开，并且可以用于网络。Inkscape 在它创建的 SVG 文件中添加了一些额外数据，但这些数据将被其他程序忽略。
 
-    Inkscape 可以从其网站 [inkscape.org](https://inkscape.org/) 下载。它适用于 Windows、Mac OS 和 Linux 系统。截至 2023 年 7 月，最新版本是 1.3。本节基于 Inkscape 1.1 编写，但对版本 1.3 仍然有效。
+    Inkscape 可以从其网站 `inkscape.org <https://inkscape.org/>`_ 下载。它适用于 Windows、Mac OS 和 Linux 系统。截至 2023 年 7 月，最新版本是 1.3。本节基于 Inkscape 1.1 编写，但对版本 1.3 仍然有效。
 
     ---
 
@@ -19,13 +19,14 @@ C.2 Inkscape 2D绘图程序
 
     一个包含 Inkscape 绘图工具的工具栏沿着窗口的左侧运行。根据你使用的 Inkscape 版本，你可能不会看到这里显示的完全相同的工具集。你最可能使用的工具在这张插图中被标记：
 
-    ![123](../../en/a3/inkscape-tools.png)
+    .. image:: ../en/a3/inkscape-tools.png
+       :align: center
 
     你还可以通过将鼠标悬停在图标上来获得工具的描述。（大多数界面元素也是如此。）学习一些键盘快捷键是个好主意，比如 F1 或 S 用于选择工具。
 
-    Inkscape 是一个用于创建和编辑二维矢量图形图像的免费程序。我使用 Inkscape 创建了这本教科书的许多插图。作为一个矢量图形程序，Inkscape 存储的是场景中对象的列表及其属性，而不是像素的颜色。它保存图像使用的是 SVG（可缩放矢量图形）格式，这种格式在 [第 2.7 节](../c2/s7.md) 中有所介绍。SVG 图像可以在许多标准图像查看器中打开，并且可以用于网络。Inkscape 在它创建的 SVG 文件中添加了一些额外数据，但这些数据将被其他程序忽略。
+    Inkscape 是一个用于创建和编辑二维矢量图形图像的免费程序。我使用 Inkscape 创建了这本教科书的许多插图。作为一个矢量图形程序，Inkscape 存储的是场景中对象的列表及其属性，而不是像素的颜色。它保存图像使用的是 SVG（可缩放矢量图形）格式，这种格式在 :ref:`c2.7` 中有所介绍。SVG 图像可以在许多标准图像查看器中打开，并且可以用于网络。Inkscape 在它创建的 SVG 文件中添加了一些额外数据，但这些数据将被其他程序忽略。
 
-    Inkscape 可以从其网站 [inkscape.org](https://inkscape.org/) 下载。它适用于 Windows、Mac OS 和 Linux 系统。截至 2023 年 7 月，最新版本是 1.3。本节内容基于 Inkscape 1.1 编写，但对 1.3 版本仍然适用。
+    Inkscape 可以从其网站 `inkscape.org <https://inkscape.org/>`_ 下载。它适用于 Windows、Mac OS 和 Linux 系统。截至 2023 年 7 月，最新版本是 1.3。本节内容基于 Inkscape 1.1 编写，但对 1.3 版本仍然适用。
 
     ---
 
@@ -35,7 +36,8 @@ C.2 Inkscape 2D绘图程序
 
     窗口左侧边缘的工具栏包含了 Inkscape 的绘图工具。你看到的工具集可能和这里显示的不完全相同，这取决于你使用的 Inkscape 版本。你最可能使用的工具在这张插图中被标记：
 
-    ![123](../../en/a3/inkscape-tools.png)
+    .. image:: ../en/a3/inkscape-tools.png
+       :align: center
 
     你还可以通过将鼠标悬停在图标上来获得工具的描述。（大多数界面元素也是如此。）学习一些键盘快捷键是个好主意，例如 F1 或 S 用于选择工具。
 
@@ -43,23 +45,26 @@ C.2 Inkscape 2D绘图程序
 
     选择工具是基础工具。它用于选择要编辑的形状以及移动所选形状。只有在你绘制了一些项目之后，它才有效。使用选择工具点击一个项目来选择它。通过使用选择工具拖动一个框围绕多个项目，可以选择多个项目。你也可以通过 shift 点击它们，或者通过 shift 拖动围绕一组项目来向选择中添加项目。
 
-    当多个项目被选择时，你可以将它们作为一个组进行操作。例如，你可以使用选择工具将组拖到新位置，或者你可以整体调整组的大小。你可以使用“对象”菜单中的“组合”命令将所选项目永久组合成复合项目；你可以使用“解组”命令来拆分复合项目。“组合”命令允许你进行分层图形操作（[第 2.4 节](../c2/s4.md)）；也就是说，你可以将复合对象组合成更高级别的复合对象。
+    当多个项目被选择时，你可以将它们作为一个组进行操作。例如，你可以使用选择工具将组拖到新位置，或者你可以整体调整组的大小。你可以使用“对象”菜单中的“组合”命令将所选项目永久组合成复合项目；你可以使用“解组”命令来拆分复合项目。“组合”命令允许你进行分层图形操作（ :ref:`c2.4` ）；也就是说，你可以将复合对象组合成更高级别的复合对象。
 
     当你选择一个项目或一组项目时，会出现围绕该项目的手柄。你可以拖动手柄来变换选择。按住控制键可以限制变换。例如，调整项目大小时，按住控制键将保持形状的纵横比。实际上有两组手柄，还有通过拖动“控制点”修改形状的可能性。以矩形为例：
 
-    ![123](../../en/a3/inkscape-handles.png)
+    .. image:: ../en/a3/inkscape-handles.png
+       :align: center
 
     对于矩形，小圆形控制点可以拖动以创建圆角。当你首次绘制形状时，控制点也会出现。要让它们消失，你可以切换到选择工具。
 
     Inkscape 中的形状可以描边和/或填充。你可以通过选择“对象”菜单中的“填充和描边”打开用于设置描边和填充属性的对话框。对话框适用于当前所选的对象或对象组。它有标签页用于设置描边颜色和填充颜色。还有一个“描边样式”标签页，你可以在那里设置描边宽度和其他属性。使用窗口底部附近的“颜色面板”可以快捷设置颜色：
 
-    ![123](../../en/a3/inkscape-info-bar.png)
+    .. image:: ../en/a3/inkscape-info-bar.png
+       :align: center
 
     如插图所示，颜色面板下方的状态栏包含有关当前所选形状和当前所选工具的信息。通过注意这个状态栏中的帮助文本，你可以学到很多如何使用 Inkscape 的方法！
 
     在绘图区域上方，你可以找到一个工具选项栏，其内容会根据所选工具而变化。例如，在选择了选择工具的选项中，你会发现一些用于旋转和翻转当前选择的图标，以及提升或降低选择（使其在其他形状之前或之后移动）的图标。将鼠标悬停在图标上以了解其作用。再次强调，注意选项工具栏可以帮助你学习如何使用 Inkscape！这里，例如，是使用星形/多边形工具时出现的星形/多边形工具选项栏的一部分，它适用于正在编辑的星形/多边形形状：
 
-    ![123](../../en/a3/inkscape-options.png)
+    .. image:: ../en/a3/inkscape-options.png
+       :align: center
 
     如你所见，除非你了解它的选项以及如何更改它们，否则你无法有效使用这个工具。如果不使用选项，你甚至无法将形状从默认的星形更改为多边形。通过更改“圆角”和“随机化”选项，星形/多边形工具可以产生各种有趣的形状。
 
@@ -69,7 +74,8 @@ C.2 Inkscape 2D绘图程序
 
     一旦你有了一个多边形路径，切换到控制点编辑工具（F2 或 N 键）来修改形状。（你可能需要点击一个形状以开始编辑它。）使用该工具，你可以拖动线段的中间使其变成曲线。你也可以拖动路径的节点。当你点击曲线段末端的节点时，会出现手柄，你可以拖动手柄末端的控制点来调整形状。（这与在 Gimp 中编辑贝塞尔路径非常相似。）你应该注意到控制点编辑工具的工具选项栏中的这四个按钮图标：
 
-    ![123](../../en/a3/inkscape-handle-types.png)
+    .. image:: ../en/a3/inkscape-handle-types.png
+       :align: center
 
     在选中一个节点的同时点击这些按钮之一，以设置该节点的手柄如何工作。左边的按钮允许你自由地分别调整两个手柄。这是默认设置。使用该设置，你可以得到一个尖锐的点或角落。第二个按钮强制控制点和节点在一条线上，使得在该节点处的形状是平滑的。第三个按钮通过强制两个控制手柄长度相同，使形状更加平滑。
 
@@ -83,7 +89,8 @@ C.2 Inkscape 2D绘图程序
 
     这里有一个你可以作为两个形状“差集”制作的形状示例。对于这个形状，一个正方形从一个圆中减去。我在形状后面添加了一个蓝色矩形，以便你可以看到实际上圆中有一个正方形的洞，而不仅仅是一个白色的正方形放在一个红色的圆上面：
 
-    ![123](../../en/a3/inkscape-set-difference.png)
+    .. image:: ../en/a3/inkscape-set-difference.png
+       :align: center
 
     “差集”是“路径”菜单中用于以各种方式组合两个形状的几个命令之一。其他操作包括“联合”、“交集”、“排除”和“分割”。（分割可以用来将一个形状切成两个独立的部分。）
 
@@ -94,9 +101,9 @@ C.2 Inkscape 2D绘图程序
 
 .. tab:: 英文
 
-    This section is a very brief introduction to Inkscape, a free program for creating and editing 2D vector graphics images. I used Inkscape to create many of the illustrations for this textbook. As a vector graphics program, instead of storing colors of pixels, Inkskape stores a list of the objects in a scene, together with their attributes. It saves images in the SVG (Scalable Vector Graphics) format, which is covered in [Section 2.7](../c2/s7.md). SVG images can be opened in many standard image viewers and can be used on the Web. Inkscape adds some extra data to the SVG files that it creates, but that data will be ignored by other programs.
+    This section is a very brief introduction to Inkscape, a free program for creating and editing 2D vector graphics images. I used Inkscape to create many of the illustrations for this textbook. As a vector graphics program, instead of storing colors of pixels, Inkskape stores a list of the objects in a scene, together with their attributes. It saves images in the SVG (Scalable Vector Graphics) format, which is covered in :ref:`Section 2.7 <c2.7>` . SVG images can be opened in many standard image viewers and can be used on the Web. Inkscape adds some extra data to the SVG files that it creates, but that data will be ignored by other programs.
 
-    Inkscape can be downloaded from its web site at [inkscape.org](https://inkscape.org/). It is available for Windows, Mac OS, and Linux. The latest version as of July, 2023 is 1.3. This section was written based on Inkscape 1.1, but it is still valid for version 1.3.
+    Inkscape can be downloaded from its web site at `inkscape.org <https://inkscape.org/>`_ . It is available for Windows, Mac OS, and Linux. The latest version as of July, 2023 is 1.3. This section was written based on Inkscape 1.1, but it is still valid for version 1.3.
 
     ----
 
@@ -106,7 +113,8 @@ C.2 Inkscape 2D绘图程序
 
     A toolbar that contains the Inkscape drawing tools runs along the left edge of the window. You might not see exactly the same set of tools that is shown here, depending the Inkscape version that you are using. The tools that you are most likely to use are labeled in this illustration:
 
-    ![123](../../en/a3/inkscape-tools.png)
+    .. image:: ../en/a3/inkscape-tools.png
+       :align: center
 
     You can also get a description of a tool by hovering your mouse over its icon. (The same is true for most interface elements.) It's a good idea to learn some of the keyboard equivalents, such as F1 or S for the select tool.
 
@@ -114,23 +122,26 @@ C.2 Inkscape 2D绘图程序
 
     The Select tool is fundamental. It is used to select shapes for editing and to move selected shapes. It is only useful after you've drawn some items. Click on an item with the Select tool to select it. Select multiple items by dragging a box around them with the Select tool. You can also add items to the selection by shift-clicking them, or by shift-dragging around a group of items.
 
-    When multiple items are selected, you can manipulate them as a group. For example, you can use the Select tool to drag the group to a new position, or you can resize the group as a whole. You can use the "Group" command in the "Object" menu to permanently group the selected items into a compound item; you can break up a compound item using the "Ungroup" command. The "Group" command allows you to do hierarchical graphics ([Section 2.4](../c2/s4.md)); that is, you can group compound objects into higher level compound objects.
+    When multiple items are selected, you can manipulate them as a group. For example, you can use the Select tool to drag the group to a new position, or you can resize the group as a whole. You can use the "Group" command in the "Object" menu to permanently group the selected items into a compound item; you can break up a compound item using the "Ungroup" command. The "Group" command allows you to do hierarchical graphics (:ref:`Section 2.4 <c2.4>`); that is, you can group compound objects into higher level compound objects.
 
     When you select an item, or group of items, handles appear around the item. You can drag the handles to transform the selection. Hold down the control key to constrain the transformation. For example, when resizing an item, holding down the control key will preserve the aspect ratio of the shape. There are actually two sets of handles, as well as the possibility of modifying the shape by dragging "control points." Using a rectangle as an example:
 
-    ![123](../../en/a3/inkscape-handles.png)
+    .. image:: ../en/a3/inkscape-handles.png
+       :align: center
 
     For a rectangle, the small round control points can be dragged to make rounded corners. The control points also appear when you first draw the shape. To make them go away, you can switch to the Select Tool.
 
     A shape in Inkscape can be stroked and/or filled. There is a dialog box for setting stroke and fill properties, which you can open by selecting "Fill and Stroke" from the "Object" menu. The dialog box applies to the currently selected object or objects. It has tabs for setting the stroke color and the fill color. There is also a "Stroke Style" tab, where you can set the stroke width and other attributes. There is a shortcut for setting colors, using the "Color Palette" near the bottom of the window:
 
-    ![123](../../en/a3/inkscape-info-bar.png)
+    .. image:: ../en/a3/inkscape-info-bar.png
+       :align: center
 
     The status bar under the color palette, as shown in the illustration, contains information about the currently selected shape and the currently selected tool. You can learn a lot about how to use Inkscape by paying attention to the help text in this status bar!
 
     Above the drawing area, you can find a tool options bar, whose content changes depending on which tool is selected. In the options for the Select Tool, for example, you'll find some icons for rotating and flipping the current selection, and for raising or lowering the selection (to move it in front of or behind other shapes). Hover your mouse over an icon to find out what it does. Again, paying attention to the options toolbar can help you learn how to use Inkscape! Here, for example, is part of the Star/Polygon tool options bar, which appears when the Star/Polygon tool is being used and applies to the star/polygon shape that is being edited:
 
-    ![123](../../en/a3/inkscape-options.png)
+    .. image:: ../en/a3/inkscape-options.png
+       :align: center
 
     As you can probably see, it's not possible to use this tool effectively unless you are aware of its options and how to change them. Without using the options, you can't even change a shape from the default star-shape into a polygon. The Star/Polygon tool can produce a wide variety of interesting shapes by changing the "Rounded" and "Randomized" options.
 
@@ -140,7 +151,8 @@ C.2 Inkscape 2D绘图程序
 
     Once you have the polygonal path, switch to the Control Point Editing Tool (F2 or N key) to modify the shape. (You might need to click a shape to begin editing it.) With that tool, you can drag the middle of a line segment to make it into a curve. You can also drag the path's nodes. When you click the node at an end of a curved segment, handles will appear, and you can drag the control points at the ends of the handles to adjust the shape. (This is all very much like editing Bezier paths in Gimp.) You should note these four button icons in the tool options bar for the Control Point Editing Tool:
 
-    ![123](../../en/a3/inkscape-handle-types.png)
+    .. image:: ../en/a3/inkscape-handle-types.png
+       :align: center
 
     Click one of these buttons while a node is selected to set how the handles for that node work. The left button allows you to freely adjust the two handles separately. This is the default setting. With that setting, you can get a sharp point or corner. The second button forces the control points and the node to lie on a line, giving a shape that is smooth at that node. The third button makes an even smoother shape by forcing the two control handles to have the same length.
 
@@ -153,8 +165,9 @@ C.2 Inkscape 2D绘图程序
     In fact, you can add arbitrary images to the scene, using the "Import" command in the "File" menu. You can also simply drag an image onto the Inkscape window to add it to the scene. Once an image is part of the scene, it can be scaled and rotated just like any other object.
 
     Here's an example of a shape that you can make as a "difference" of two shapes. For this shape, a square was subtracted from a circle. I added a blue rectangle behind the shape so that you can see that there's actually a square hole in the circle, not simply a white square on top of a red circle:
-
-    ![123](../../en/a3/inkscape-set-difference.png)
+ 
+    .. image:: ../en/a3/inkscape-set-difference.png
+       :align: center
 
     "Difference" is one of several commands in the "Path" menu for combining two shapes in various ways. Other operations include "Union", "Intersection", "Exclusion", and "Division". (Division can be used to cut a shape into two independent pieces.)
 

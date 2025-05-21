@@ -28,13 +28,15 @@ B.2.1 文本
 
     当文本对象被选中时，属性编辑器中选择对象数据属性的按钮会显示一个 "a"。点击 "a" 会显示各种有用的控件，其中一些在下图中展示：
 
-    ![123](../../en/a2/blender-text-buttons.png)
+    .. image:: ../en/a2/blender-text-buttons.png
+       :align: center
 
-    例如，有按钮可以控制多行文本是右对齐、左对齐还是居中对齐，还有数字输入来控制字符、单词和行间距。（这里没有显示 —— 在对象数据属性的“段落”部分中查找。）您还可以选择用于文本的字体。Blender 只有一个相当基本的内置字体，但您也可以从文件系统中选择字体文件来使用。Blender 可以处理 Postscript Type 1、True Type 和 Open Type 字体。要选择合适的字体文件，请点击“字体”部分中的小“文件夹”图标，如上图所示。您可以为“常规”、“粗体”、“斜体”和“粗斜体”样式设置不同的字体。在编辑文本对象时，有菜单命令可供选择样式，但默认情况下只使用“常规”样式的字体。（顺便说一下，您可以从 Google 字体网站 <www.google.com/fonts> 下载大量免费字体。）
+    例如，有按钮可以控制多行文本是右对齐、左对齐还是居中对齐，还有数字输入来控制字符、单词和行间距。（这里没有显示 —— 在对象数据属性的“段落”部分中查找。）您还可以选择用于文本的字体。Blender 只有一个相当基本的内置字体，但您也可以从文件系统中选择字体文件来使用。Blender 可以处理 Postscript Type 1、True Type 和 Open Type 字体。要选择合适的字体文件，请点击“字体”部分中的小“文件夹”图标，如上图所示。您可以为“常规”、“粗体”、“斜体”和“粗斜体”样式设置不同的字体。在编辑文本对象时，有菜单命令可供选择样式，但默认情况下只使用“常规”样式的字体。（顺便说一下，您可以从 Google 字体网站 https://www.google.com/fonts 下载大量免费字体。）
 
     一个有趣的特性是，您可以沿着曲线的形状排列文本。您需要一个曲线对象，您可以按照下一子节的描述创建它。您需要知道曲线对象的名称；您可能想要将名称更改为有意义的名称。选择文本对象。转到文本的对象数据控件，如上图所示。找到标记为 "Text on Curve"（在“字体”下的“转换”部分）的框，点击框左端的图标，并从可用曲线的弹出菜单中选择曲线。文本的基线将弯曲以匹配曲线的形状。如果您改变曲线的形状或缩放它，文本将遵循新的形状。您可能需要缩放文本和/或曲线以使其很好地适应。注意，文本不会跳到曲线上；它只是使用曲线对象的形状，无论曲线位于何处。曲线本身在渲染图像中不会可见。如果您不想在 3D 视图中看到曲线，您可以在 Blender 窗口右上角的场景图显示中关闭曲线的可见性。在下面的示例图像中，我使用了 Bezier Circle 作为 Text on Curve 特性，并使用一个圆从中心删除另一个圆来制作背景。我在背景上使用了 Checker 纹理作为材质。
 
-    ![123](../../en/a2/blender-text-on-curve.png)
+    .. image:: ../en/a2/blender-text-on-curve.png
+       :align: center
 
     一旦您有了文本，您可以像下一子节中对曲线的描述一样对其进行挤出和倒角，以获得漂亮的 3D 外观。上图中的文本已经进行了挤出和倒角处理，您可以看到 3D 文本对象在背景上的阴影。
 
@@ -47,13 +49,15 @@ B.2.1 文本
 
     When a text object is selected, the button for selecting the Object Data properties in the Properties Editor shows an "a". Clicking the "a" reveals various useful controls, some of which are shown in this picture:
 
-    ![123](../../en/a2/blender-text-buttons.png)
+    .. image::　../en/a2/blender-text-buttons.png
+       :align: center
 
-    For example, there are buttons to control whether multi-line text is Right, Left, or Center justified, and there are numeric inputs to control character, word, and line spacing. (Not shown here — look further down, in the "Paragraph" section of the Object Data properties.) You can also select the font to be used for the text. Blender has only one pretty basic built-in font, but you can select a font file from the file system to be used instead. Blender can work with Postscript Type 1, True Type, and Open Type fonts. To select a font file, click a small "folder" icon in the "Font" section, as shown above. You can set separate fonts for "Regular," "Bold," "Italic," and "BoldItalic" styles. There are menu commands available while editing a Text object for selecting the style, but by default only the "Regular" style font is used. (By the way, you can download lots of free fonts from Google Fonts at <www.google.com/fonts>.)
+    For example, there are buttons to control whether multi-line text is Right, Left, or Center justified, and there are numeric inputs to control character, word, and line spacing. (Not shown here — look further down, in the "Paragraph" section of the Object Data properties.) You can also select the font to be used for the text. Blender has only one pretty basic built-in font, but you can select a font file from the file system to be used instead. Blender can work with Postscript Type 1, True Type, and Open Type fonts. To select a font file, click a small "folder" icon in the "Font" section, as shown above. You can set separate fonts for "Regular," "Bold," "Italic," and "BoldItalic" styles. There are menu commands available while editing a Text object for selecting the style, but by default only the "Regular" style font is used. (By the way, you can download lots of free fonts from Google Fonts at https://www.google.com/fonts .)
 
     An interesting feature is that you can lay your text out along the shape of a curve. You need a curve object, which you can create as described in the next subsection. You need to know the name of the curve object; you might want to change the name to something meaningful. Select the text object. Go to the Object Data controls for the text, shown above. Find the box labeled "Text on Curve" (in the "Transform" section under "Font"), click the icon on the left end of the box, and select the curve from the popup menu of available curves. The baseline of the text will curve to match the shape of the curve. If you change the shape of the curve or scale it, the text will follow the new shape. You will likely have to scale the text and/or the curve to get it to fit nicely. Note that the text does not jump onto the curve; it just uses the curve object's shape, wherever the curve is located. The curve itself will not be visible in a rendered image. If you don't want to see the curve in the 3D View you can turn off the visibility of the curve in the scene graph display in the top right area of the Blender window. For the following sample image, I used a Bezier Circle for the Text on Curve feature, and I made the background using a circle with another circle deleted from its center. I used a Checker texture for the material on the background.
 
-    ![123](../../en/a2/blender-text-on-curve.png)
+    .. image:: ../en/a2/blender-text-on-curve.png
+       :align: center
 
     Once you have your text, you can extrude and bevel it, exactly as described in the next subsection for curves, to get a nice 3D appearance. The text in the above image has been extruded and beveled, and you can see the shadow of the 3D text object on the background.
 
@@ -82,7 +86,8 @@ B.2.2 曲线
 
     您可以通过挤出曲线来将闭合的 2D 区域内的 2D 区域扩展到第三维度。在曲线的“对象数据”控件中查找标记为“挤出”的数字输入（在“几何”下）。增加此框中的值将使曲线垂直于其所在平面延伸到 3D 对象。在“几何”下的“倒角”部分中，您将找到一个“深度”框和一个“分辨率”框。增加“深度”框中的值，从挤出曲线的 3D 形状上切掉一个边缘。“分辨率”框中的值决定了边缘的圆滑程度。对于下图中右侧的对象，我将一个贝塞尔圆放入另一个闭合的贝塞尔曲线内（在编辑模式下！），并将挤出、深度和分辨率设置为正值：
 
-    ![123](../../en/a2/blender-curves.png)
+    .. image:: ../en/a2/blender-curves.png
+       :align: center
 
     可以将文本对象转换为曲线。只需选择文本对象，右键单击以获得弹出菜单，然后从弹出菜单的“转换为”子菜单中选择“曲线”。（注意，您将无法将曲线转换回文本对象。）一旦您将文本转换为曲线，您就可以像编辑曲线一样编辑字符轮廓。此外，您可以向文本曲线添加其他曲线段。对于上图中左侧的对象，我创建了文本，将其转换为曲线，将其放入编辑模式，添加了一个贝塞尔圆，并操纵了圆的顶点，使圆围绕文本。文本的内部有效地从圆的内部减去。
 
@@ -105,7 +110,8 @@ B.2.2 曲线
 
     You can extend the 2D region inside a closed 2D curve into the third dimension by extruding the curve. Look in the curve's "Object Data" controls for a numerical input labeled "Extrude" (under "Geometry"). Increasing the value in this box extends the curve into a 3D object, perpendicularly to the plane in which it lies. In the "Bevel" section under "Geometry," you will find a "Depth" box and a "Resolution" box. Increase the value in the "Depth" box to cut an edge off the 3D shape of the extruded curve. The value in the "Resolution" box determines how rounded the edge is. For the object on the right in the following picture, I put a Bezier circle inside another closed Bezier curve (while in Edit Mode!) and set Extrude, Depth, and Resolution to be positive values:
 
-    ![123](../../en/a2/blender-curves.png)
+    .. image:: ../en/a2/blender-curves.png
+       :align: center
 
     It's possible to transform a Text object into a curve. Just select the text object, right-click to get a pop-up menu, and select "Curve" from the "Convert To" submenu of the popup menu. (Note, however, that you won't be able convert the curve back to a text object.) Once you've converted the text into a curve, you can edit the character outlines as curves. Furthermore, you can add other curve segments to the text curve. For the left object in the above picture, I created the text, converted it to a curve, put it into Edit Mode, added a Bezier circle, and manipulated the vertices of the circle so that the circle surrounded the text. The inside of the text was effectively subtracted from the interior of the circle.
 
@@ -122,13 +128,15 @@ B.2.3 比例编辑
 
     默认情况下，在编辑模式下变换网格对象的选定顶点（或边或面）时，只有选定的项会受到影响。这可能导致难看的、有尖峰的对象！但是，如果您启用了比例编辑，那么一个顶点会对邻近顶点施加一种力，例如，如果您拖动一个顶点，附近的顶点也会随之移动。在 3D 视图下方的标题面板中有一个小按钮，可以在编辑模式下启用比例编辑：
 
-    ![123](../../en/a2/blender-proportional-editing-buttons.png)
+    .. image:: ../en/a2/blender-proportional-editing-buttons.png
+       :align: center
 
     在图片中，小蓝按钮已被点击以启用比例编辑。在蓝色按钮右侧的弹出菜单允许您选择变换顶点对其他顶点将产生何种影响。
 
     当启用比例编辑并且您正在变换一些顶点时，3D 窗口中会出现一个圆圈，显示“影响半径”，即顶点施加的力所延伸的距离。您可以使用鼠标滚轮或“PageUp”和“PageDown”键来改变影响半径的大小。在以下图像中，一个 icosphere 处于编辑模式，一组顶点正在被拖动。白色圆圈显示了影响半径，您可以看到在该半径内的顶点已经向被拖动顶点的相同方向移动了一些。这次编辑产生的结果形状将比仅移动选定顶点时的形状要好看得多。
 
-    ![123](../../en/a2/blender-proportional-editing.jpg)
+    .. image:: ../en/a2/blender-proportional-editing.jpg
+       :align: center
 
     （尝试选择 UV 球体沿赤道的顶点，并启用比例编辑后放大选定的顶点。您可以制作出类似飞碟的形状！）
 
@@ -139,13 +147,15 @@ B.2.3 比例编辑
 
     By default, when you transform selected vertices (or edges or faces) of a mesh object in Edit Mode, only the selected items are affected. This can lead to ugly, spikey objects! But if you turn on Proportional Editing, then a vertex exerts a kind of force on neighboring vertices, so that for example if you drag a vertex, nearby vertices are pulled along with it. There is a small button in the header panel below the 3D view that turns on proportional editing in Edit Mode:
 
-    ![123](../../en/a2/blender-proportional-editing-buttons.png)
+    .. image::　../en/a2/blender-proportional-editing-buttons.png
+       :align: center
 
     In the picture, the small blue button has been clicked to enable proportional editing. The popup menu to the right of the blue button lets you select what kind of influence the transformed vertices will have on other vertices.
 
     When proportional editing is turned on and you are transforming some vertices, a circle appears in the 3D window to show the "radius of influence", that is, the distance over which the force exerted by a vertex extends. You can change the size of the radius of influence using the scroll wheel on the mouse or the "PageUp" and "PageDown" keys. In the following image, an icosphere is in Edit Mode and a group of vertices is being dragged. The white circle shows the radius of influence, and you can see that vertices within that radius have shifted somewhat in the same direction as the dragged vertices. The shape that results from this edit will be much nicer than if only the selected vertices were moved.
 
-    ![123](../../en/a2/blender-proportional-editing.jpg)
+    .. image:: ../en/a2/blender-proportional-editing.jpg
+       :align: center
 
     (Try selecting the vertices along equator of a UV Sphere and scaling the selection up, with proportional editing enabled. You can make something like a flying saucer shape!)
 
@@ -164,7 +174,8 @@ B.2.4 拉伸网格
 
     例如，我从网格立方体开始，挤出了各种面，并在挤出的过程中对每个挤出的面进行了缩放。以下是在 Blender 3D 窗口中的编辑模式下它的样子：
 
-    ![123](../../en/a2/blender-extrude.jpg)
+    .. image:: ../en/a2/blender-extrude.jpg
+       :align: center
 
 
 .. tab:: 英文
@@ -175,7 +186,8 @@ B.2.4 拉伸网格
 
     As an example, I started with a mesh cube and extruded various faces, scaling each extruded face along the way. Here is what it looked like in the Blender 3D window in Edit Mode:
 
-    ![123](../../en/a2/blender-extrude.jpg)
+    .. image:: ../en/a2/blender-extrude.jpg
+       :align: center
 
 .. _b.2.5:
 
@@ -188,7 +200,8 @@ B.2.5 网格修改器
 
     修改器是Blender中一个强大的功能，它可以在不实际修改底层几何体的情况下影响网格对象的渲染视图。要将修改器应用于对象，首先选择该对象。然后转到属性编辑器中的“修改器属性”控件。选择修改器控件的按钮看起来像一个扳手。点击“添加修改器”按钮，从大量可供添加到对象的修改器中进行选择。我只会说其中的一些，实际上我自己也只理解其中的一些。以下是在添加了两个修改器后的修改器控件的图片：
 
-    ![123](../../en/a2/blender-modifier-buttons.png)
+    .. image:: ../en/a2/blender-modifier-buttons.png
+       :align: center
 
     当您将多个修改器应用于一个网格时，它们将按列出的顺序一个接一个地应用。每个修改器都将前一个修改器的结果作为其起点。
 
@@ -202,7 +215,8 @@ B.2.5 网格修改器
 
     在下图中，我从单个“猴子”网格对象开始，它的材质使用“噪声”纹理作为其基础颜色。我给它应用了三个阵列修改器。第一个修改器将猴子变成X方向上的四只猴子的一行，X偏移为1.1，Y和Z偏移为0。将X偏移设置为1.1而不是1.0，可以在副本之间增加一些空间。第二个修改器在Y方向上复制了一行，形成了一个4x4的网格。第三个在Z方向上复制了网格，形成了一个3D的猴子阵列。
 
-    ![123](../../en/a2/blender-array-modifier.png)
+    .. image:: ../en/a2/blender-array-modifier.png
+       :align: center
 
 
     ----
@@ -217,7 +231,8 @@ B.2.5 网格修改器
 
     以下是一个应用于网格的位移修改器示例。我在网格上使用云彩纹理产生了棕色地形。要制作蓝色的“水”，我在与网格相同的位置添加了一个平面，并赋予它蓝色材质。
 
-    ![123](../../en/a2/blender-terrain.png)
+    .. image:: ../en/a2/blender-terrain.png
+       :align: center
 
     （顺便说一下，纹理属性中的纹理称为“旧版纹理”。它们在Blender的旧版本中用于材质，但我还没有找到在当前版本中这样做的方法。实际上，除了位移贴图之外，我还没有找到它们可以用于其他任何用途的东西。）
 
@@ -230,7 +245,8 @@ B.2.5 网格修改器
 
     Modifiers are a powerful feature that can affect the rendered view of a mesh object, without actually modifying the underlying geometry. To apply a modifier to an object, first select the object. Then go to the "Modifier Properties" controls in the Properties Editor. The button for selecting the Modifiers controls looks like a monkey wrench. Click the "Add Modifier" button to choose from a large selection of modifiers to be added to the object. I will mention only a few of them. In fact, I only understand a few of them myself. Here is a picture of the modifier controls after adding two modifiers:
 
-    ![123](../../en/a2/blender-modifier-buttons.png)
+    .. image:: ../en/a2/blender-modifier-buttons.png
+       :align: center
 
     When you apply several modifiers to a mesh, they will be applied one after the other in the order listed. Each modifier will take the result of the previous modifier as its starting point.
 
@@ -244,7 +260,8 @@ B.2.5 网格修改器
 
     In the picture shown below, I started with a single "Monkey" mesh object, with a material that uses the "Noise" texture for its base color. I applied **three** Array modifiers to it. The first modifier turned the monkey into a line of four monkeys in the X direction, with an X-offset of 1.1 and Y- and Z-offsets of 0. Setting the X-offset to 1.1 rather than 1.0 adds a little space between copies. The second modifier duplicated the line in the Y direction to give a 4-by-4 grid. The third duplicated the grid in the Z direction to give a 3D formation of monkeys.
 
-    ![123](../../en/a2/blender-array-modifier.png)
+    .. image:: ../en/a2/blender-array-modifier.png
+       :align: center
 
     ----
 
@@ -258,7 +275,8 @@ B.2.5 网格修改器
 
     Here is an example of a Displace modifier applied to a Grid. I used a Clouds texture on the grid to produce the brown terrain. To make the blue "water", I added a Plane in the same location as the grid and gave it a blue material.
 
-    ![123](../../en/a2/blender-terrain.png)
+    .. image:: ../en/a2/blender-terrain.png
+       :align: center
 
     (By the way, the textures in the Texture Properties are called "legacy textures." They were used for materials in older versions of Blender, but I haven't found a way to do that in the current version. In fact, I have not yet found anything that they can be used for other than displacement mapping.)
 
