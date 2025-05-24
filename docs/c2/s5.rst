@@ -29,9 +29,8 @@
 
     The original version of Java had a much smaller graphics API. It was tightly focused on pixels, and it used only integer coordinates. The API had subroutines for stroking and filling a variety of basic shapes, including lines, rectangles, ovals, and polygons (although Java uses the term draw instead of stroke). Its specification of the meaning of drawing operations was very precise on the pixel level. Integer coordinates are defined to refer to the lines between pixels. For example, a 12-by-8 pixel grid has x-coordinates from 0 to 12 and y-coordinates from 0 to 8, as shown below. The lines between pixels are numbered, not the pixels.
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/Java-pixel-graphics.png)
-    </figure>
+    .. image:: ../en/c2/Java-pixel-graphics.png
+       :align: center
 
     The command *fillRect(3,2,5,3)* fills the rectangle with upper left corner at (3,2), with width 5, and with height 3, as shown on the left above. The command *drawRect(3,2,5,3)* conceptually drags a "pen" around the outline of this rectangle. However, the pen is a 1-pixel square, and it is the upper left corner of the pen that moves along the outline. As the pen moves along the right edge of the rectangle, the pixels to the *right* of that edge are colored; as the pen moves along the bottom edge, the pixels below the edge are colored. The result is as shown on the right above. My point here is not to belabor the details, but to point out that having a precise specification of the meaning of graphical operations gives you very fine control over what happens on the pixel level.
 
@@ -189,9 +188,8 @@
 
     图像和字符串与其他形状一样受到变换的影响。变换是获得旋转文本和图像的唯一方法。例如，当对一些文本和图像应用旋转时，可能会发生以下情况：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/RotatedStringAndImage.jpg)
-    </figure>
+    .. image:: ../en/c2/RotatedStringAndImage.jpg
+       :align: center
 
 .. tab:: 英文
 
@@ -281,9 +279,8 @@
 
     Images and strings are subject to transforms in the same way as other shapes. Transforms are the only way to get rotated text and images. As an example, here is what can happen when you apply a rotation to some text and an image:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/RotatedStringAndImage.jpg)
-    </figure>
+    .. image:: ../en/c2/RotatedStringAndImage.jpg
+       :align: center
 
 .. _c2.5.3:
 
@@ -673,11 +670,8 @@
 
     像素操作用于实现示例程序的两个功能。首先，有一个“涂抹”工具。当用户使用此工具拖动时，就像涂抹湿漆一样。当用户首次单击鼠标时，从鼠标位置周围的一小块像素中复制颜色分量到数组中。随着用户移动鼠标，颜色从数组中混合到鼠标附近的像素颜色中，同时将这些颜色混合到数组中的颜色中。这是一个已经“涂抹”的小矩形：
 
-    <figure markdown="span">
-        ![
-
-    pixel-coordinates](../../en/c2/smudge.png)
-    </figure>
+    .. image:: ../en/c2/smudge.png
+       :align: center
 
     像素操作的第二个用途是实现“滤镜”。在这个程序中，滤镜是一种通过将每个像素的颜色替换为一个3x3像素方块的颜色的加权平均值来修改图像的操作。例如，“模糊”滤镜使用所有像素的平均权重，因此像素的颜色会更改为该像素及其邻居的颜色的简单平均值。使用不同的权重对每个像素进行操作可以产生一些引人注目的效果。
 
@@ -742,9 +736,8 @@
 
     Pixel operations are used to implement two features of the sample program. First, there is a "Smudge" tool. When the user drags with this tool, it's like smearing wet paint. When the user first clicks the mouse, the color components from a small square of pixels surrounding the mouse position are copied into arrays. As the user moves the mouse, color from the arrays is blended into the color of the pixels near the mouse position, while those colors are blended into the colors in the arrays. Here is a small rectangle that has been "smudged":
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/smudge.png)
-    </figure>
+    .. image:: ../en/c2/smudge.png
+       :align: center
 
     The second use of pixel manipulation is in implementing "filters." A filter, in this program, is an operation that modifies an image by replacing the color of each pixel with a weighted average of the colors of a 3-by-3 square of pixels. A "Blur" filter for example, uses equal weights for all pixels in the average, so the color of a pixel is changed to the simple average of the colors of that pixel and its neighbors. Using different weights for each pixel can produce some striking effects.
 

@@ -53,9 +53,8 @@
 
     让我们看一个小例子。假设我们想要绘制一个简单的二维图像，其中包含一个有两个车轮的手推车。
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/cart.png)
-    </figure>
+    .. image:: ../en/c2/cart.png
+       :align: center
 
     这辆手推车是下面示例中复杂场景的一部分。手推车的车身可以绘制为一对矩形。对于车轮，假设我们已经编写了一个子程序
 
@@ -147,9 +146,8 @@
 
     Let's look at a little example. Suppose that we want to draw a simple 2D image of a cart with two wheels.
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/cart.png)
-    </figure>
+    .. image:: ../en/c2/cart.png
+       :align: center
 
     This cart is used as one part of a complex scene in an example below. The body of the cart can be drawn as a pair of rectangles. For the wheels, suppose that we have written a subroutine
 
@@ -223,9 +221,8 @@
 
     从逻辑上讲，复杂场景的组件形成了一个结构。在这个结构中，每个对象都与其包含的子对象相关联。如果场景是分层的，那么结构就是分层的。这种结构被称为 **场景图(scene graph)** 。场景图是一种类似树的结构，根表示整个场景，根的子节点表示场景中的顶级对象，依此类推。我们可以可视化我们示例场景的场景图：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/scene-graph.png)
-    </figure>
+    .. image:: ../en/c2/scene-graph.png
+       :align: center
 
     在这个图中，一个单独的对象可以与一个或多个父对象有多个连接。每个连接表示该对象在其父对象中的一个实例。例如，“填充的正方形”对象在手推车和风车中作为子对象出现。它在手推车中使用了两次，在风车中使用了一次。（手推车包含两个红色矩形，它们被创建为具有非均匀缩放的正方形；风车的杆是一个缩放的正方形。）“填充的圆”在太阳中使用，并在轮子中使用了两次。“线”在太阳中使用了12次，在轮子中使用了12次；我画了一根粗箭头，标有12，表示12个连接。轮子又在手推车中使用了两次。（出于空间原因，我的图表中省略了场景中填充的正方形的两个出现：它们用于制作道路和道路中央的线。）
 
@@ -263,9 +260,8 @@
 
     Logically, the components of a complex scene form a structure. In this structure, each object is associated with the sub-objects that it contains. If the scene is hierarchical, then the structure is hierarchical. This structure is known as a scene graph. A scene graph is a tree-like structure, with the root representing the entire scene, the children of the root representing the top-level objects in the scene, and so on. We can visualize the scene graph for our sample scene:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/scene-graph.png)
-    </figure>
+    .. image:: ../en/c2/scene-graph.png
+       :align: center
 
     In this drawing, a single object can have several connections to one or more parent objects. Each connection represents one occurrence of the object in its parent object. For example, the "filled square" object occurs as a sub-object in the cart and in the windmill. It is used twice in the cart and once in the windmill. (The cart contains two red rectangles, which are created as squares with a non-uniform scaling; the pole of the windmill is made as a scaled square.) The "filled circle" is used in the sun and is used twice in the wheel. The "line" is used 12 times in the sun and 12 times in the wheel; I've drawn one thick arrow, marked with a 12, to represent 12 connections. The wheel, in turn, is used twice in the cart. (My diagram leaves out, for lack of space, two occurrences of the filled square in the scene: It is used to make the road and the line down the middle of the road.)
 
@@ -316,10 +312,8 @@
 
     让我们试着将这些全部结合起来,考虑一下如何应用于示例场景中前轮车轮的一个填充圆圈这样一个简单的对象。这里,我重新排列了该场景图的一部分,并添加了标签来显示应用于每个对象的建模变换:
 
-
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/hierarchical-transforms.png)
-    </figure>
+    .. image:: ../en/c2/hierarchical-transforms.png
+       :align: center
 
     轮子的旋转量和车的平移量被显示为变量，因为它们在动画的不同帧中是不同的。当计算机开始绘制场景时，生效的建模变换是恒等变换，即没有任何变换。在准备绘制车时，它通过将当前变换（恒等变换）推入堆栈来保存当前变换的副本。然后，它通过将车的建模变换scale(0.3,0.3)和translate(dx,0)与当前变换相乘来修改当前变换。当绘制轮子时，它再次将当前变换（整个车的建模变换）推入堆栈，并修改当前变换以考虑轮子的建模变换。类似地，当绘制填充圆时，它保存轮子的建模变换，然后应用圆的建模变换。
 
@@ -337,10 +331,8 @@
 
     Let's try to bring this all together by considering how it applies to a simple object in a complex scene: one of the filled circles that is part of the front wheel on the cart in our example scene. Here, I have rearranged part of the scene graph for that scene, and I've added labels to show the modeling transformations that are applied to each object:
 
-
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/hierarchical-transforms.png)
-    </figure>
+    .. image:: ../en/c2/hierarchical-transforms.png
+       :align: center
 
     The rotation amount for the wheel and the translation amount for the cart are shown as variables, since they are different in different frames of the animation. When the computer starts drawing the scene, the modeling transform that is in effect is the identity transform, that is, no transform at all. As it prepares to draw the cart, it saves a copy of the current transform (the identity) by pushing it onto the stack. It then modifies the current transform by multiplying it by the modeling transforms for the cart, scale(0.3,0.3) and translate(dx,0). When it comes to drawing the wheel, it again pushes the current transform (the modeling transform for the cart as a whole) onto the stack, and it modifies the current transform to take the wheel's modeling transforms into account. Similarly, when it comes to the filled circle, it saves the modeling transform for the wheel, and then applies the modeling transform for the circle.
 

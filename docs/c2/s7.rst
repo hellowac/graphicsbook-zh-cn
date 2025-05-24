@@ -100,17 +100,15 @@
 
     这是该示例生成的图像：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/first-svg-example.svg)
-    </figure>
+    .. image:: ../en/c2/first-svg-example.svg
+       :align: center
 
     对于此示例的绘图坐标系，x 范围从 0 到 3，y 范围从 0 到 2。所有用于绘制的值，包括描边宽度和字体大小，都是以这个坐标系来给出的。请记住，你可以使用任何你觉得方便的坐标系！顺便提一下，未被绘制形状覆盖的图像部分将是透明的。
 
     这是另一个示例，其中包含多种形状。此示例的源代码有很多注释。它使用了我们将在本节的其余部分中讨论的特性。
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/svg-starter.svg)
-    </figure>
+    .. image:: ../en/c2/svg-starter.svg
+       :align: center
 
     你可以查看源代码，[svg/svg-starter.svg](../../../en/source/svg/svg-starter.svg)。（例如，在文本编辑器中打开它，或者在网页浏览器中打开它并使用浏览器的“查看源代码”命令。）
 
@@ -184,17 +182,15 @@
 
     and here's the image that is produced by this example:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/first-svg-example.svg)
-    </figure>
+    .. image:: ../en/c2/first-svg-example.svg
+       :align: center
 
     In the drawing coordinate system for this example, x ranges from 0 to 3, and y ranges from 0 to 2. All values used for drawing, including stroke width and font size, are given in terms of this coordinate system. Remember that you can use any coordinate system that you find convenient! Note, by the way, that parts of the image that are not covered by the shapes that are drawn will be transparent.
 
     Here's another example, with a larger variety of shapes. The source code for this example has a lot of comments. It uses features that we will discuss in the remainer of this section.
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/svg-starter.svg)
-    </figure>
+    .. image:: ../en/c2/svg-starter.svg
+       :align: center
 
     You can take a look at the source code, [svg/svg-starter.svg](../../../en/source/svg/svg-starter.svg). (For example, open it in a text editor, or open it in a web browser and use the browser's "view source" command.)
 
@@ -495,9 +491,8 @@
 
     嵌套的形状使用 `fill="none" stroke="black" stroke-width="2"` 作为属性的默认值。可以通过为元素指定不同的值来覆盖默认值，就像在此示例中为 `<path>` 元素的 `stroke-width` 属性所做的那样。在组中设置 `transform="scale(1,−1)"` 将整个图像垂直翻转。我之所以这样做，仅因为我更喜欢使用一个坐标系统，其中 y 从下到上增加，而不是从上到下增加。以下是此组生成的简单线描绘的脸部图案：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/svg-face.svg)
-    </figure>
+    .. image:: ../en/c2/svg-face.svg
+       :align: center
 
     现在，假设我们想在场景中包含多个对象的多个副本。不应该需要重复绘制对象的代码。像可重用子例程一样会很好。事实上，SVG 有非常相似的东西：你可以在 `<defs>` 元素内定义可重用对象。在 `<defs>` 中定义的对象不会添加到场景中，但可以使用单个命令将对象的副本添加到场景中。为了使其工作，对象必须具有用于标识它的 id 属性。例如，我们可以定义一个看起来像加号的对象：
 
@@ -562,9 +557,8 @@
 
     向图像添加了一个轮子的副本和四个车的副本。这四个车具有不同的颜色和变换。以下是图像：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/svg-hierarchy.svg)
-    </figure>
+    .. image:: ../en/c2/svg-hierarchy.svg
+       :align: center
 
 .. tab:: 英文
 
@@ -583,9 +577,8 @@
 
     The nested shapes use fill="none" stroke="black" stroke-width="2" for the default values of the attributes. The default can be overridden by specifying a different value for the element, as is done for the stroke-width of the <path> element in this example. Setting transform="scale(1,−1)" for the group flips the entire image vertically. I do this only because I am more comfortable working in a coordinate system in which y increases from bottom-to-top rather than top-to-bottom. Here is the simple line drawing of a face that is produced by this group:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/svg-face.svg)
-    </figure>
+    .. image:: ../en/c2/svg-face.svg
+       :align: center
 
     Now, suppose that we want to include multiple copies of an object in a scene. It shouldn't be necessary to repeat the code for drawing the object. It would be nice to have something like reusable subroutines. In fact, SVG has something very similar: You can define reusable objects inside a `<defs>` element. An object that is defined inside `<defs>` is not added to the scene, but copies of the object can be added to the scene with a single command. For this to work, the object must have an id attribute to identify it. For example, we could define an object that looks like a plus sign:
 
@@ -648,9 +641,8 @@
 
     The SVG file goes on to add one copy of the wheel and four copies of the cart to the image. The four carts have different colors and transforms. Here is the image:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/svg-hierarchy.svg)
-    </figure>
+    .. image:: ../en/c2/svg-hierarchy.svg
+       :align: center
 
 .. _c2.7.5:
 
@@ -663,9 +655,8 @@
 
     SVG 有许多高级功能，我这里不会讨论，但我想提一下一个：动画。几乎可以对 SVG 对象的任何属性进行动画，包括几何形状、样式和变换。动画的语法本身相当复杂，我只会做一些例子。但我会告诉你足够的内容来产生一个相当复杂的层次动画，就像在 [Subsection 2.4.1](./s4.md#241--构建复杂对象) 中讨论和用作演示的 "cart-and-windmills" 示例。该动画的 SVG 版本可以在 [svg/cart-and-windmills.svg](../../../en/source/svg/cart-and-windmills.svg) 中找到。这是它的样子，尽管某些网络浏览器可能不会显示动画，因为有些浏览器没有正确或完全实现 SVG 动画：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/cart-and-windmills.svg)
-    </figure>
+    .. image:: ../en/c2/cart-and-windmills.svg
+       :align: center
 
     形状元素的许多属性都可以通过在形状元素的内容中添加 <animate> 元素来进行动画处理。以下是一个示例，使一个矩形从左向右移动图像：
 
@@ -705,15 +696,13 @@
 
     该动画显示了一个由绿色三角形和棕色矩形组成的不断增长的 "树"。在动画中，变换从 *scale*(0,0) 到 *scale*(0.4,0.7)。动画在图像加载后的 3 秒后开始，持续 15 秒。在动画结束时，树以最终缩放比冻结。`<g>` 元素上的 *transform* 属性指定了直到动画开始时生效的缩放。（缩放因子为 0 会将对象折叠为大小为零，使其不可见。）你可以在示例文件 [svg/first-svg-animation.svg](../../../en/source/svg/first-svg-animation.svg) 中找到这个示例，以及一个移动的矩形和一个关键帧动画。以下是动画本身。要查看不断增长的树，你可能需要重新加载此页面或在单独的窗口中查看图像：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/first-svg-animation.svg)
-    </figure>
+    .. image:: ../en/c2/first-svg-animation.svg
+       :align: center
 
     你可以在 SVG 文件的 `<defs>` 部分创建动画对象，并且可以将动画应用于 `<use>` 元素。这使得创建分层动画成为可能。这里有一个简单的例子：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/hierarchical-animation.svg)
-    </figure>
+    .. image:: ../en/c2/hierarchical-animation.svg
+       :align: center
 
     这个示例显示了一个旋转的六边形，每个六边形顶点都有一个旋转的正方形。六边形是由一个对象的六个副本构成的，每个副本应用了不同的旋转。（六边形右侧的图像显示了基本对象的一个副本。）正方形被定义为一个带有自己旋转的动画对象。它被用作六边形中的一个子对象。施加在六边形上的旋转也适用于正方形，覆盖了它自己内置的旋转。这就是这个示例是分层动画的原因。
 
@@ -723,9 +712,8 @@
 
     SVG has a number of advanced features that I won't discuss here, but I do want to mention one: animation. It is possible to animate almost any property of an SVG object, including geometry, style, and transforms. The syntax for animation is itself fairly complex, and I will only do a few examples. But I will tell you enough to produce a fairly complex hierarchical animation like the "cart-and-windmills" example that was discussed and used as a demo in [Subsection 2.4.1](./s4.md#241--构建复杂对象). An SVG version of that animation can be found in [svg/cart-and-windmills.svg](../../../en/source/svg/cart-and-windmills.svg). Here is what it looks like, although some web browsers might not show the animation, since some browsers do not implement SVG animations correctly or at all:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/cart-and-windmills.svg)
-    </figure>
+    .. image:: ../en/c2/cart-and-windmills.svg
+       :align: center
 
     Many attributes of a shape element can be animated by adding an <animate> element to the content of the shape element. Here is an example that makes a rectangle move across the image from left to right:
 
@@ -765,15 +753,13 @@
 
     The animation shows a growing "tree" made from a green triangle and a brown rectangle. In the animation, the transform goes from *scale*(0,0) to *scale*(0.4,0.7). The animation starts 3 seconds after the image loads and lasts 15 seconds. At the end of the animation, the tree freezes at its final scale. The *transform* attribute on the `<g>` element specifies the scale that is in effect until the animation starts. (A scale factor of 0 collapses the object to size zero, so that it is invisible.) You can find this example, along with a moving rectangle and a keyframe animation, in the sample file [svg/first-svg-animation.svg](../../../en/source/svg/first-svg-animation.svg). Here is the animation itself. To see the growing trees, you might have to reload this page or view the image in a separate window:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/first-svg-animation.svg)
-    </figure>
+    .. image:: ../en/c2/specifying-rects.svg
+       :align: center
 
     You can create animated objects in the `<defs>` section of an SVG file, and you can apply animation to `<use>` elements. This makes it possible to create hierarchical animations. Here is a simple example:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/hierarchical-animation.svg)
-    </figure>
+    .. image:: ../en/c2/hierarchical-animation
+       :align: center
 
     The example shows a rotating hexagon with a rotating square at each vertex of the hexagon. The hexagon is constructed from six copies of one object, with a different rotation applied to each copy. (A copy of the basic object is shown in the image to the right of the hexagon.) The square is defined as an animated object with its own rotation. It is used as a sub-object in the hexagon. The rotation that is applied to the hexagon applies to the square, on top of its own built-in rotation. That's what makes this an example of hierarchical animation.
 

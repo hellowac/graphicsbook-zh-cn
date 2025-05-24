@@ -26,9 +26,8 @@
 
     对于二维图形，世界位于一个平面上。不可能显示整个无限平面的图像。我们需要在平面上选择一些矩形区域来显示在图像中。让我们称这个矩形区域为窗口，或称为 **视窗(window)** 。坐标变换用于将窗口映射到视口中。
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/coordinate-transformation-2d.png)
-    </figure>
+    .. image:: ../en/c2/coordinate-transformation-2d.png
+       :align: center
 
     在这个图示中， **T** 代表坐标变换。 **T** 是一个函数，它接受窗口中的世界坐标(x,y)并将它们映射到视口中的像素坐标 **T(x,y)** 。在这个例子中，你可以检查到：
 
@@ -40,18 +39,15 @@
 
     我们以这种方式使用坐标变换是因为它允许我们选择一个对于描述我们想要显示的场景而言是自然的世界坐标系，而这比直接使用视口坐标更容易。沿着同样的思路，假设我们想要定义一些复杂的对象，并假设在我们的场景中会有几个该对象的副本。或者也许我们正在制作一个动画，并且希望该对象在不同帧中有不同的位置。我们希望选择一些方便的坐标系，并将其用于一劳永逸地定义对象。我们用于定义对象的坐标称为该对象的 **对象坐标(object coordinates)** 。当我们想要将对象放置到场景中时，我们需要将用于定义对象的对象坐标转换为我们用于场景的世界坐标系。我们需要的转换称为 **建模变换(modeling transformation)** 。这张图片说明了一个在其自己的对象坐标系中定义的对象，然后通过三种不同的建模变换映射到世界坐标系中：
 
-
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/modeling2d-1.png)
-    </figure>
+    .. image:: ../en/c2/modeling2d-1.png
+       :align: center
 
     记住，为了查看场景，还会有另一个转换，将对象从世界坐标中的视窗映射到视口中。
 
     现在，请记住，视窗的选择决定了图像中显示场景的哪一部分。移动、调整大小，甚至旋转窗口都会给场景带来不同的视图。假设我们制作了几张同一辆汽车的图片：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/modeling-or-viewing-2d.png)
-    </figure>
+    .. image:: ../en/c2/modeling-or-viewing-2d.png
+       :align: center
 
     这张图片上部的图像和左下角的图像之间发生了什么？实际上，有两种可能性：要么汽车向右移动，要么定义场景的视窗向左移动。这一点很重要，请确保你理解了它。（试试用你的手机相机。把它对准一些物体，向左走一步，注意一下相机取景器中的物体会发生什么变化：它们在照片中向右移动！）同样，在顶部图片和底部中间的图片之间会发生什么？要么汽车逆时针旋转，要么窗口顺时针旋转。（再次尝试使用相机——你可能想拍两张实际照片以便比较。）最后，从顶部图片到右下角的图片的变化可能是因为汽车变小了，也可能是因为窗口变大了。（在你的相机上，更大的窗口意味着你看到了更大的视野，你可以通过给相机加上变焦或者从你正在观看的物体后退来实现这一点。）
 
@@ -82,10 +78,8 @@
 
     For 2D graphics, the world lies in a plane. It's not possible to show a picture of the entire infinite plane. We need to pick some rectangular area in the plane to display in the image. Let's call that rectangular area the window, or view **window**. A coordinate transform is used to map the window to the viewport.
 
-
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/coordinate-transformation-2d.png)
-    </figure>
+    .. image:: ../en/c2/coordinate-transformation-2d.png
+       :align: center
 
     In this illustration, **T** represents the coordinate transformation. **T** is a function that takes world coordinates (x,y) in some window and maps them to pixel coordinates **T**(x,y) in the viewport. (I've drawn the viewport and window with different sizes to emphasize that they are not the same thing, even though they show the same objects, but in fact they don't even exist in the same space, so it doesn't really make sense to compare their sizes.) In this example, as you can check,
 
@@ -97,19 +91,15 @@
 
     We use coordinate transformations in this way because it allows us to choose a world coordinate system that is natural for describing the scene that we want to display, and it is easier to do that than to work directly with viewport coordinates. Along the same lines, suppose that we want to define some complex object, and suppose that there will be several copies of that object in our scene. Or maybe we are making an animation, and we would like the object to have different positions in different frames. We would like to choose some convenient coordinate system and use it to define the object once and for all. The coordinates that we use to define an object are called object coordinates for the object. When we want to place the object into a scene, we need to transform the object coordinates that we used to define the object into the world coordinate system that we are using for the scene. The transformation that we need is called a modeling transformation. This picture illustrates an object defined in its own object coordinate system and then mapped by three different modeling transformations into the world coordinate system:
 
-
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/modeling2d-1.png)
-    </figure>
+    .. image:: ../en/c2/modeling2d-1.png
+       :align: center
 
     Remember that in order to view the scene, there will be another transformation that maps the object from a view window in world coordinates into the viewport.
 
     Now, keep in mind that the choice of a view window tells which part of the scene is shown in the image. Moving, resizing, or even rotating the window will give a different view of the scene. Suppose we make several images of the same car:
 
-
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/modeling-or-viewing-2d.png)
-    </figure>
+    .. image:: ../en/c2/modeling-or-viewing-2d.png
+       :align: center
 
     What happened between making the top image in this illustration and making the image on the bottom left? In fact, there are two possibilities: Either the car was moved to the right, or the view window that defines the scene was moved to the left. This is important, so be sure you understand it. (Try it with your cell phone camera. Aim it at some objects, take a step to the left, and notice what happens to the objects in the camera's viewfinder: They move to the right in the picture!) Similarly, what happens between the top picture and the middle picture on the bottom? Either the car rotated counterclockwise, or the window was rotated clockwise. (Again, try it with a camera—you might want to take two actual photos so that you can compare them.) Finally, the change from the top picture to the one on the bottom right could happen because the car got smaller or because the window got larger. (On your camera, a bigger window means that you are seeing a larger field of view, and you can get that by applying a zoom to the camera or by backing up away from the objects that you are viewing.)
 
@@ -158,9 +148,8 @@
 
     的函数来应用平移变换。平移将应用于在给出命令后绘制的所有内容。也就是说，对于所有后续的绘图操作，e 将被添加到 x 坐标，f 将被添加到 y 坐标。让我们看一个例子。假设你使用以 (0,0) 为中心的坐标绘制一个“F”。如果在绘制“F”之前说 translate(4,2)，那么在实际使用坐标之前，“F”的每个点都将水平移动 4 个单位，垂直移动 2 个单位，因此在平移之后，“F”将位于 (4,2)：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/translate-2d.png)
-    </figure>
+    .. image:: ../en/c2/translate-2d.png
+       :align: center
 
     这张图片中浅灰色的“F”显示了在没有平移的情况下会绘制什么；深红色的“F”显示了应用了平移 (4,2) 后绘制的相同的“F”。顶部的箭头显示了“F”的左上角已向右移动 4 个单位，向上移动 2 个单位。在“F”中的每个点都受到相同的位移影响。请注意，在我的例子中，我假设 y 坐标从下到上递增。也就是说，y 轴朝上。
 
@@ -185,9 +174,8 @@
 
     to apply a translate transformation. The translation would apply to everything that is drawn after the command is given. That is, for all subsequent drawing operations, e would be added to the x-coordinate and f would be added to the y-coordinate. Let's look at an example. Suppose that you draw an "F" using coordinates in which the "F" is centered at (0,0). If you say translate(4,2) before drawing the "F", then every point of the "F" will be moved horizontally by 4 units and vertically by 2 units before the coordinates are actually used, so that after the translation, the "F" will be centered at (4,2):
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/translate-2d.png)
-    </figure>
+    .. image:: ../en/c2/translate-2d.png
+       :align: center
 
     The light gray "F" in this picture shows what would be drawn without the translation; the dark red "F" shows the same "F" drawn after applying a translation by (4,2). The top arrow shows that the upper left corner of the "F" has been moved over 4 units and up 2 units. Every point in the "F" is subjected to the same displacement. Note that in my examples, I am assuming that the y-coordinate increases from bottom to top. That is, the y-axis points up.
 
@@ -213,9 +201,8 @@
 
     也就是说，在仿射变换的一般公式中，e = f = 0，a = d = cos(r)，b = -sin(r)，c = sin(r)。这里有一个图示，说明了绕原点旋转负 135 度的角度：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/translate-2d.png)
-    </figure>
+    .. image:: ../en/c2/translate-2d.png
+       :align: center
 
     再次，浅灰色的“F”是原始形状，深红色的“F”是应用旋转后的形状。箭头显示了原始“F”的左上角是如何移动的。
 
@@ -232,9 +219,8 @@
 
     That is, in the general formula for an affine transform, e = f = 0, a = d = cos(r), b = -sin(r), and c = sin(r). Here is a picture that illustrates a rotation about the origin by the angle negative 135 degrees:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/translate-2d.png)
-    </figure>
+    .. image:: ../en/c2/translate-2d.png
+       :align: center
 
     Again, the light gray "F" is the original shape, and the dark red "F" is the shape that results if you apply the rotation. The arrow shows how the upper left corner of the original "F" has been moved.
 
@@ -258,9 +244,8 @@
 
     假设角度是以度为单位测量的。然后平移将应用于所有后续的绘制。但是，由于旋转命令，你在平移之后绘制的东西是旋转的对象。也就是说，平移应用于已经旋转过的对象。下图的左侧是一个例子，在这个例子中，浅灰色的“F”是原始形状，红色的“F”显示了将这两个变换应用于原始形状的结果。原始“F”首先被旋转了90度角度，然后向右移动了4个单位。
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/rotate-and-translate-2d.png)
-    </figure>
+    .. image:: ../en/c2/rotate-and-translate-2d.png
+       :align: center
 
     请注意，变换是以与代码中给出的顺序相反的顺序应用于对象的（因为代码中的第一个变换是应用于已经受到第二个变换影响的对象）。还请注意，应用变换的顺序很重要。如果我们在这个例子中颠倒两个变换的应用顺序，通过以下方式：
 
@@ -292,9 +277,8 @@
 
     Assume that angles are measured in degrees. The translation will then apply to all subsequent drawing. But, because of the rotation command, the things that you draw after the translation are rotated objects. That is, the translation applies to objects that have already been rotated. An example is shown on the left in the illustration below, where the light gray "F" is the original shape, and red "F" shows the result of applying the two transforms to the original. The original "F" was first rotated through a 90 degree angle, and then moved 4 units to the right.
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/rotate-and-translate-2d.png)
-    </figure>
+    .. image:: ../en/c2/rotate-and-translate-2d.png
+       :align: center
 
     Note that transforms are applied to objects in the reverse of the order in which they are given in the code (because the first transform in the code is applied to an object that has already been affected by the second transform). And note that the order in which the transforms are applied is important. If we reverse the order in which the two transforms are applied in this example, by saying
 
@@ -333,9 +317,8 @@
 
     如果将此变换应用于以原点为中心的形状，则会将形状在水平方向上拉伸 a 倍，垂直方向上拉伸 d 倍。以下是一个示例，原始的浅灰色“F”在水平方向上按 3 倍，垂直方向上按 2 倍进行缩放，得到最终的深红色“F”：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/scale-2d.png)
-    </figure>
+    .. image:: ../en/c2/scale-2d.png
+       :align: center
 
     常见情况是水平和垂直缩放因子相同，称为 **均匀缩放(uniform scaling)** 。均匀缩放拉伸或收缩一个形状而不会扭曲它。
 
@@ -360,9 +343,8 @@
 
     If you apply this transform to a shape that is centered at the origin, it will stretch the shape by a factor of a horizontally and d vertically. Here is an example, in which the original light gray "F" is scaled by a factor of 3 horizontally and 2 vertically to give the final dark red "F":
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/scale-2d.png)
-    </figure>
+    .. image:: ../en/c2/scale-2d.png
+       :align: center
 
     The common case where the horizontal and vertical scaling factors are the same is called **uniform scaling**. Uniform scaling stretches or shrinks a shape without distorting it.
 
@@ -387,9 +369,8 @@
 
     我们将再看一个基本变换类型， **剪切变换** 。尽管必要时可以通过旋转和缩放来构建剪切，但如何做到这一点并不是很明显。剪切会“倾斜”对象。水平剪切会将事物向左（负剪切）或向右（正剪切）倾斜。垂直剪切会使它们向上或向下倾斜。以下是水平剪切的示例：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/shear-2d.png)
-    </figure>
+    .. image:: ../en/c2/shear-2d.png
+       :align: center
 
     水平剪切不会移动 x 轴。每条水平线都会根据该线上的 y 值移动到左侧或右侧。当将水平剪切应用于点 (x,y) 时，得到的结果点 (x1,y1) 由以下公式给出：
 
@@ -411,9 +392,8 @@
 
     We will look at one more type of basic transform, a **shearing transform**. Although shears can in fact be built up out of rotations and scalings if necessary, it is not really obvious how to do so. A shear will "tilt" objects. A horizontal shear will tilt things towards the left (for negative shear) or right (for positive shear). A vertical shear tilts them up or down. Here is an example of horizontal shear:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/shear-2d.png)
-    </figure>
+    .. image:: ../en/c2/shear-2d.png
+       :align: center
 
     A horizontal shear does not move the x-axis. Every other horizontal line is moved to the left or to the right by an amount that is proportional to the y-value along that line. When a horizontal shear is applied to a point (x,y), the resulting point (x1,y1) is given by
 
@@ -565,9 +545,8 @@
 
     这确实很好，但存在一个严重的问题： **平移不是线性变换**。为了将平移纳入这个框架，我们首先做一些看起来有点奇怪的事情：我们不再将二维点表示为一对数字 (x,y)，而是表示为三个数字的三元组 (x,y,1)。也就是说，我们在第三个坐标位置添加了一个 1。然后，结果是我们可以将旋转、缩放和平移——因此任何仿射变换——在二维空间中表示为一个 3×3 矩阵的乘法。我们需要的矩阵具有包含 (0,0,1) 的底部一行。将 (x,y,1) 乘以这样的矩阵会得到一个新向量 (x1,y1,1)。我们忽略额外的坐标，并将其视为将 (x,y) 转换为 (x1,y1)。有关记录，2D 平移 (Ta,b)、缩放 (Sa,b) 和旋转 (Rd) 的 3×3 矩阵如下所示：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/transform-matrices-2d.png)
-    </figure>
+    .. image:: ../en/c2/transform-matrices-2d.png
+       :align: center
 
     你可以将这些矩阵的乘法与上面给出的平移、缩放和旋转公式进行比较。但在进行图形编程时，你不需要自己执行这些乘法。目前，你应该从这次讨论中带走的重要观点是，一系列变换可以合并成单个变换。计算机只需要跟踪一个矩阵，我们可以称之为“当前矩阵”或“当前变换”。为了实现诸如 translate(a,b) 或 rotate(d) 等变换命令，计算机只需将当前矩阵乘以代表变换的矩阵。
 
@@ -597,8 +576,7 @@
 
     This is really nice, but there is a gaping problem: **Translation is not a linear transformation**. To bring translation into this framework, we do something that looks a little strange at first: Instead of representing a point in 2D as a pair of numbers (x,y), we represent it as the triple of numbers (x,y,1). That is, we add a one as the third coordinate. It then turns out that we can then represent rotation, scaling, and translation—and hence any affine transformation—on 2D space as multiplication by a 3-by-3 matrix. The matrices that we need have a bottom row containing (0,0,1). Multiplying (x,y,1) by such a matrix gives a new vector (x1,y1,1). We ignore the extra coordinate and consider this to be a transformation of (x,y) into (x1,y1). For the record, the 3-by-3 matrices for translation (Ta,b), scaling (Sa,b), and rotation (Rd) in 2D are
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/transform-matrices-2d.png)
-    </figure>
+    .. image:: ../en/c2/transform-matrices-2d.png
+       :align: center
 
     You can compare multiplication by these matrices to the formulas given above for translation, scaling, and rotation. But when doing graphics programming, you won't need to do the multiplication yourself. For now, the important idea that you should take away from this discussion is that a sequence of transformations can be combined into a single transformation. The computer only needs to keep track of a single matrix, which we can call the "current matrix" or "current transformation." To implement transform commands such as translate(a,b) or rotate(d), the computer simply multiplies the current matrix by the matrix that represents the transform.

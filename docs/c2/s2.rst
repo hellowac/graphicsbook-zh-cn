@@ -28,10 +28,8 @@
 
     线条可以具有其他影响其外观的 **属性(attributes)** 。一个问题是，宽线的末端应该发生什么？通过在线的末端添加一个圆角的“帽子”，可以改善外观。也可以通过将线延长线宽的一半来使用方形帽子。另一个问题是，当两条线作为较大形状的一部分相交时，线应该如何连接？许多图形系统支持由短划线和点组成的线条。这个示例展示了一些可能性：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/line-attributes.png)
-        
-    </figure>
+    .. image:: ../en/c2/line-attributes.png
+       :align: center
 
     左边是三条宽线，分别没有帽子、圆帽和方帽。几何线段显示为虚线。（没有帽子的样式称为“平头(butt)”）右边是四条具有不同点划线样式的线条。中间是三种不同的线段连接样式：尖角、圆角和斜角。
 
@@ -39,10 +37,8 @@
 
     基本矩形形状的边是垂直和水平的。（倾斜的矩形通常需要应用旋转(rotation)来制作。）这样的矩形可以通过两个点（x1，y1）和（x2，y2）来指定，这些点给出了矩形的对角线的端点之一。或者，可以给出宽度和高度，以及一个基准点（x，y）。在这种情况下，宽度和高度必须是正数，否则矩形为空。如果y从上到下增加，基准点（x，y）将是矩形的左上角，如果y从下到上增加，它将是矩形的左下角。
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/specifying-rects.png)
-        
-    </figure>
+    .. image:: ../en/c2/specifying-rects.png
+       :align: center
 
     假设您已经给定了点(x1,y1)和(x2,y2)，并且您想要绘制由它们确定的矩形。假设您可以使用的唯一绘制矩形的命令是需要一个点(x,y)、一个宽度和一个高度的命令。对于该命令，x必须是x1和x2中较小的值，宽度可以计算为x1减去x2的绝对值。y和高度的计算方法类似。伪代码如下：
 
@@ -57,17 +53,13 @@
 
     矩形的一个常见变体是允许圆角。对于一个"round rect"，角被替换为椭圆弧。圆角的程度可以通过给出椭圆的水平半径和垂直半径来指定。下面是一些圆角矩形的例子。对于右边的形状，椭圆的两个半径被显示出来:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/round-rects.png)
-        
-    </figure>
+    .. image:: ../en/c2/round-rects.png
+       :align: center
 
     我的最后一个基本形状是椭圆（也称为椭圆形）。椭圆是一个有两个半径的闭合曲线。对于一个基本的椭圆，我们假设半径是垂直和水平的。可以通过给出刚好包含它的矩形来指定这样的椭圆。或者可以通过给出它的中心点和垂直半径以及水平半径的长度来指定。在这个示例中，左边的椭圆显示了它的包含矩形以及它的中心点和半径:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/ovals.png)
-        
-    </figure>
+    .. image:: ../en/c2/ovals.png
+       :align: center
 
     右边的椭圆是一个圆。圆只是两个半径长度相等的椭圆。
 
@@ -106,10 +98,8 @@
 
     Lines can have other attributes, or properties, that affect their appearance. One question is, what should happen at the end of a wide line? Appearance might be improved by adding a rounded "cap" on the ends of the line. A square cap—that is, extending the line by half of the line width—might also make sense. Another question is, when two lines meet as part of a larger shape, how should the lines be joined? And many graphics systems support lines that are patterns of dashes and dots. This illustration shows some of the possibilities:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/line-attributes.png)
-        
-    </figure>
+    .. image:: ../en/c2/line-attributes.png
+       :align: center
 
     On the left are three wide lines with no cap, a round cap, and a square cap. The geometric line segment is shown as a dotted line. (The no-cap style is called "butt.") To the right are four lines with different patterns of dots and dashes. In the middle are three different styles of line joins: mitered, rounded, and beveled.
 
@@ -118,10 +108,8 @@
 
     The basic rectangular shape has sides that are vertical and horizontal. (A tilted rectangle generally has to be made by applying a rotation.) Such a rectangle can be specified with two points, (x1,y1) and (x2,y2), that give the endpoints of one of the diagonals of the rectangle. Alternatively, the width and the height can be given, along with a single base point, (x,y). In that case, the width and height have to be positive, or the rectangle is empty. The base point (x,y) will be the upper left corner of the rectangle if y increases from top to bottom, and it will be the lower left corner of the rectangle if y increases from bottom to top.
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/specifying-rects.png)
-        
-    </figure>
+    .. image:: ../en/c2/specifying-rects.png
+       :align: center
 
     Suppose that you are given points (x1,y1) and (x2,y2), and that you want to draw the rectangle that they determine. And suppose that the only rectangle-drawing command that you have available is one that requires a point (x,y), a width, and a height. For that command, x must be the smaller of x1 and x2, and the width can be computed as the absolute value of x1 minus x2. And similarly for y and the height. In pseudocode,
 
@@ -136,17 +124,13 @@
 
     A common variation on rectangles is to allow rounded corners. For a "round rect," the corners are replaced by elliptical arcs. The degree of rounding can be specified by giving the horizontal radius and vertical radius of the ellipse. Here are some examples of round rects. For the shape at the right, the two radii of the ellipse are shown:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/round-rects.png)
-        
-    </figure>
+    .. image:: ../en/c2/round-rects.png
+       :align: center
 
     My final basic shape is the oval. (An oval is also called an ellipse.) An oval is a closed curve that has two radii. For a basic oval, we assume that the radii are vertical and horizontal. An oval with this property can be specified by giving the rectangle that just contains it. Or it can be specified by giving its center point and the lengths of its vertical radius and its horizontal radius. In this illustration, the oval on the left is shown with its containing rectangle and with its center point and radii:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/ovals.png)
-        
-    </figure>
+    .. image:: ../en/c2/ovals.png
+       :align: center
 
     The oval on the right is a circle. A circle is just an oval in which the two radii have the same length.
 
@@ -190,17 +174,15 @@
 
     当一个形状与自身相交时，就像下面插图中的两个形状一样，不太清楚应该如何定义形状的内部。事实上，至少有两个不同的规则可以用来填充这样的形状。这两个规则都基于一个叫做“ **绕数(winding number)** ”的东西。关于一个点的绕数大致是指形状以正方向绕该点旋转的次数，这里我认为正方向是逆时针方向。当绕数为负数时，表示绕数方向相反。在插图中，左边的形状按照所示方向进行描绘，并且每个区域的绕数在区域内显示为一个数字。
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/fill-rules.png)
-    </figure>
+    .. image:: ../en/c2/fill-rules.png
+       :align: center
 
     这些形状也用两种填充规则进行了填充。对于中间的形状，填充规则是对具有非零绕数的任何区域进行着色。对于右边显示的形状，规则是对绕数为奇数的任何区域进行着色；绕数为偶数的区域不填充。
 
     仍然有一个问题，即形状应该用什么来填充。当然，可以用颜色来填充，但也可以使用其他类型的填充，包括 **图案(patterns)** 和 **渐变(gradients)** 。图案是一个图像，通常是一个小图像。当用于填充形状时，图案可以根据需要水平和垂直重复，以覆盖整个形状。渐变类似，它是一种让颜色从一个点到另一个点变化的方式，但不是从图像中获取颜色，而是计算得出。基本思想有很多变化，但总是有一条线段沿着它的颜色变化。颜色在线段的端点处指定，可能还在其他点处指定；在这些点之间，颜色进行 **插值(interpolated)** 。颜色也可以外推到包含线段的线上的其他点，但位于线段之外；这可以通过从线段重复图案或者简单地从最近的端点延伸颜色来完成。对于 **线性渐变(linear gradient)** ，颜色沿着与基本线段垂直的线保持恒定，因此您会得到以该方向的实色线条。在 **径向渐变(radial gradient)** 中，颜色沿着以线段的一个端点为中心的圆保持恒定。这还没有穷尽所有可能性。为了让您了解图案和渐变的外观，这里有一个形状，用两种渐变和两种图案填充：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/filled-shapes.png)
-    </figure>
+    .. image:: ../en/c2/filled-shapes.png
+       :align: center
 
     第一个形状使用仅由两种颜色定义的简单线性渐变进行填充，而第二个形状使用径向渐变进行填充。
 
@@ -208,9 +190,8 @@
 
     最后，我要提到，为了绘制文本，可以将文本视为一个形状。形状的边界是字符的轮廓。文本通过填充该形状来绘制。在某些图形系统中，还可以描绘定义文本的形状的轮廓。在下面的插图中，顶部显示了字符串"Graphics"，使用图案进行填充，下方则使用渐变进行填充，并用纯黑色描边：
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/filled-text.png)
-    </figure>
+    .. image:: ../en/c2/filled-text.png
+       :align: center
 
 .. tab:: 英文
 
@@ -218,17 +199,15 @@
 
     When a shape intersects itself, like the two shapes in the illustration below, it's not entirely clear what should count as the interior of the shape. In fact, there are at least two different rules for filling such a shape. Both are based on something called the winding number. The winding number of a shape about a point is, roughly, how many times the shape winds around the point in the positive direction, which I take here to be counterclockwise. Winding number can be negative when the winding is in the opposite direction. In the illustration, the shapes on the left are traced in the direction shown, and the winding number about each region is shown as a number inside the region.
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/fill-rules.png)
-    </figure>
+    .. image:: ../en/c2/fill-rules.png
+       :align: center
 
     The shapes are also shown filled using the two fill rules. For the shapes in the center, the fill rule is to color any region that has a non-zero winding number. For the shapes shown on the right, the rule is to color any region whose winding number is odd; regions with even winding number are not filled.
 
     There is still the question of what a shape should be filled with. Of course, it can be filled with a color, but other types of fill are possible, including patterns and gradients. A pattern is an image, usually a small image. When used to fill a shape, a pattern can be repeated horizontally and vertically as necessary to cover the entire shape. A gradient is similar in that it is a way for color to vary from point to point, but instead of taking the colors from an image, they are computed. There are a lot of variations to the basic idea, but there is always a line segment along which the color varies. The color is specified at the endpoints of the line segment, and possibly at additional points; between those points, the color is interpolated. The color can also be extrapolated to other points on the line that contains the line segment but lying outside the line segment; this can be done either by repeating the pattern from the line segment or by simply extending the color from the nearest endpoint. For a linear gradient, the color is constant along lines perpendicular to the basic line segment, so you get lines of solid color going in that direction. In a radial gradient, the color is constant along circles centered at one of the endpoints of the line segment. And that doesn't exhaust the possibilities. To give you an idea what patterns and gradients can look like, here is a shape, filled with two gradients and two patterns:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/filled-shapes.png)
-    </figure>
+    .. image:: ../en/c2/filled-shapes.png
+       :align: center
 
     The first shape is filled with a simple linear gradient defined by just two colors, while the second shape uses a radial gradient.
 
@@ -236,9 +215,8 @@
 
     Finally, I will mention that a string of text can be considered to be a shape for the purpose of drawing it. The boundary of the shape is the outline of the characters. The text is drawn by filling that shape. In some graphics systems, it is also possible to stroke the outline of the shape that defines the text. In the following illustration, the string "Graphics" is shown, on top, filled with a pattern and, below that, filled with a gradient and stroked with solid black:
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/filled-text.png)
-    </figure>
+    .. image:: ../en/c2/filled-text.png
+       :align: center
 
 .. _c2.2.3:
 
@@ -253,9 +231,8 @@
 
     在一个 **正多边形(regular polygon)** 中，所有的边长相等，所有边之间的角度也相等。正方形和等边三角形是正多边形的例子。 **凸多边形(convex polygon)** 具有这样的属性：无论两个点是否在多边形内部或边上，连接这些点的整条线段也在多边形内部或边上。直观地说，凸多边形在边界上没有"凹陷"。（凹陷是任何形状的属性，不仅仅是多边形的属性。）
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/convexity.png)
-    </figure>
+    .. image:: ../en/c2/convexity.png
+       :align: center
 
     有时候，多边形需要是"简单"的，这意味着多边形没有自相交。也就是说，所有的顶点都是不同的，一条边只能在其端点处与另一条边相交。而且通常要求多边形是"平面"的，也就是说所有的顶点都位于同一个平面上。（当然，在2D图形中，一切都位于同一个平面上，所以这不是一个问题。但在3D中就成为一个问题。）
 
@@ -301,9 +278,8 @@
 
     一个三次贝塞尔曲线段由两个端点和两个 **控制点(control points)** 定义。要理解它是如何工作的，最好想象一下画笔如何绘制曲线段。画笔从第一个端点开始，朝着第一个控制点的方向。控制点与端点的距离控制了画笔开始绘制曲线的速度。第二个控制点控制了画笔在到达曲线的第二个端点时的方向和速度。满足这些条件的三次曲线是唯一的。
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/cubic-bezier-curves.png)
-    </figure>
+    .. image:: ../en/c2/cubic-bezier-curves.png
+       :align: center
 
     上图显示了三个三次贝塞尔曲线段。右侧的两个曲线段在一个端点处连接起来形成一个更长的曲线。曲线以粗黑线绘制。端点显示为黑色点，控制点显示为蓝色方块，每个控制点与相应的端点之间用细红线连接。（通常，只会绘制曲线，除非在允许用户手动编辑曲线的界面中。）请注意，在一个端点处，曲线段与连接端点和控制点的线相切。请注意，两个曲线段相交处可能会有一个尖锐的点或拐角。然而，如果选择了适当的控制点，一个段会平滑地过渡到下一个段。
 
@@ -331,9 +307,8 @@
 
     In a regular polygon, all the sides are the same length and all the angles between sides are equal. Squares and equilateral triangles are examples of regular polygons. A convex polygon has the property that whenever two points are inside or on the polygon, then the entire line segment between those points is also inside or on the polygon. Intuitively, a convex polygon has no "indentations" along its boundary. (Concavity can be a property of any shape, not just of polygons.)
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/convexity.png)
-    </figure>
+    .. image:: ../en/c2/convexity.png
+       :align: center
 
     Sometimes, polygons are required to be "simple," meaning that the polygon has no self-intersections. That is, all the vertices are different, and a side can only intersect another side at its endpoints. And polygons are usually required to be "planar," meaning that all the vertices lie in the same plane. (Of course, in 2D graphics, everything lies in the same plane, so this is not an issue. However, it does become an issue in 3D.)
 
@@ -379,9 +354,8 @@
 
     A cubic Bezier curve segment is defined by the two endpoints of the segment together with two control points. To understand how it works, it's best to think about how a pen would draw the curve segment. The pen starts at the first endpoint, headed in the direction of the first control point. The distance of the control point from the endpoint controls the speed of the pen as it starts drawing the curve. The second control point controls the direction and speed of the pen as it gets to the second endpoint of the curve. There is a unique cubic curve that satisfies these conditions.
 
-    <figure markdown="span">
-        ![pixel-coordinates](../../en/c2/cubic-bezier-curves.png)
-    </figure>
+    .. image:: ../en/c2/cubic-bezier-curves.png
+       :align: center
 
     The illustration above shows three cubic Bezier curve segments. The two curve segments on the right are connected at an endpoint to form a longer curve. The curves are drawn as thick black lines. The endpoints are shown as black dots and the control points as blue squares, with a thin red line connecting each control point to the corresponding endpoint. (Ordinarily, only the curve would be drawn, except in an interface that lets the user edit the curve by hand.) Note that at an endpoint, the curve segment is tangent to the line that connects the endpoint to the control point. Note also that there can be a sharp point or corner where two curve segments meet. However, one segment will merge smoothly into the next if control points are properly chosen.
 
