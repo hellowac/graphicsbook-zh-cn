@@ -48,6 +48,7 @@
    a1/index.rst
    a2/index.rst
    a3/index.rst
+   a4/index.rst
 
    glossary.rst
 
